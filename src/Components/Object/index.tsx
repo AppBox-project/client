@@ -1,0 +1,344 @@
+import React, { useEffect, useState } from "react";
+import uniqid from "uniqid";
+import Server from "../../Utils/Server";
+import Loading from "../Loading";
+import {
+  Typography,
+  IconButton,
+  Grid,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Button,
+  TextField,
+  Paper
+} from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
+import styles from "./styles.module.scss";
+import { TypeType } from "../../Utils/Types";
+
+const ViewObject: React.FC<{
+  objectTypeId: string;
+  layoutId: string;
+  appId: string;
+  objectId?: string;
+}> = ({ objectTypeId, layoutId, appId, objectId }) => {
+  const [objectType, setObjectType] = useState<TypeType>();
+  const [object, setObject] = useState();
+  const [mode, setMode] = useState(objectId ? "view" : "edit");
+  const [toChange, setToChange] = useState({});
+
+  const save = () => {
+    if (toChange !== {}) {
+      if (objectId) {
+        const requestId = uniqid();
+        Server.emit("updateObject", {
+          requestId,
+          objectId: object._id,
+          type: objectType.key,
+          toChange
+        });
+        Server.on(`receive-${requestId}`, response => {
+          if (response.success) {
+            setMode("view");
+            setToChange({});
+          } else {
+            console.log(response);
+          }
+        });
+      } else {
+        console.log("insertee objectee");
+      }
+    } else {
+      console.log("Nothing to save");
+    }
+  };
+
+  // Lifecycle
+  useEffect(() => {
+    // -> Object types
+    const requestId = uniqid();
+    Server.emit("listenForObjectTypes", {
+      requestId,
+      filter: { key: objectTypeId }
+    });
+    Server.on(`receive-${requestId}`, response => {
+      setObjectType(response[0]);
+    });
+
+    // Objects
+    const dataRequestId = uniqid();
+    if (objectId) {
+      Server.emit("listenForObjects", {
+        requestId: dataRequestId,
+        type: objectTypeId,
+        filter: { _id: objectId }
+      });
+      Server.on(`receive-${dataRequestId}`, response => {
+        if (response.success) {
+          setObject(response.data[0]);
+        } else {
+          console.log(response);
+        }
+      });
+    }
+    return () => {
+      Server.emit("unlistenForObjectTypes", { requestId });
+      if (objectId) {
+        Server.emit("unlistenForObjects", { requestId: dataRequestId });
+      }
+    };
+  }, [objectTypeId]);
+
+  // UI
+  if (!objectType || (!object && objectId)) return <Loading />;
+
+  return (
+    <div
+      onKeyDown={event => {
+        if (
+          mode === "edit" &&
+          event.ctrlKey &&
+          String.fromCharCode(event.which).toLowerCase() === "s"
+        ) {
+          event.preventDefault();
+          save();
+        }
+      }}
+    >
+      {objectId && (
+        <Grid container>
+          <Grid item xs={8}>
+            <Typography variant="h5">
+              <Link to={`/${appId}/${objectTypeId}`}>
+                <IconButton>
+                  <FaAngleLeft />
+                </IconButton>
+              </Link>
+              {object.data[objectType.primary]}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} style={{ textAlign: "right" }}>
+            <div style={{ textAlign: "right", width: "100%" }}>
+              {mode === "edit" && (
+                <Button
+                  startIcon={<IoMdClose />}
+                  onClick={() => {
+                    setMode("view");
+                    setToChange({});
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                startIcon={mode === "view" ? <FaEdit /> : <FaSave />}
+                variant={mode === "view" ? "outlined" : "contained"}
+                color="primary"
+                onClick={() => {
+                  if (mode === "view") {
+                    setMode("edit");
+                  } else {
+                    save();
+                  }
+                }}
+              >
+                {mode === "view" ? "Edit" : "Save"}
+              </Button>
+            </div>
+          </Grid>
+        </Grid>
+      )}
+      {objectType.layouts[layoutId] ? (
+        objectType.layouts[layoutId].map(layoutItem => {
+          return (
+            <LayoutItem
+              layoutItem={layoutItem}
+              objectType={objectType}
+              mode={mode}
+              setMode={setMode}
+              setToChange={setToChange}
+              toChange={toChange}
+              object={object}
+            />
+          );
+        })
+      ) : (
+        <>Layout {layoutId} not found </>
+      )}
+    </div>
+  );
+};
+
+const LayoutItem: React.FC<{
+  layoutItem: any;
+  objectType: TypeType;
+  mode: string;
+  toChange: any;
+  setToChange: (any) => void;
+  setMode: (string) => void;
+  object: any;
+}> = ({
+  layoutItem,
+  objectType,
+  mode,
+  toChange,
+  setMode,
+  object,
+  setToChange
+}) => {
+  switch (layoutItem.type) {
+    case "GridContainer":
+      return (
+        <Grid container>
+          {layoutItem.items.map(layoutItem => {
+            return (
+              <LayoutItem
+                layoutItem={layoutItem}
+                objectType={objectType}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+              />
+            );
+          })}
+        </Grid>
+      );
+    case "GridItem":
+      return (
+        <Grid item xs={layoutItem.xs}>
+          {layoutItem.items.map(layoutItem => {
+            return (
+              <LayoutItem
+                layoutItem={layoutItem}
+                objectType={objectType}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+              />
+            );
+          })}
+        </Grid>
+      );
+    case "Paper":
+      return (
+        <Paper className="paper">
+          {layoutItem.items.map(layoutItem => {
+            return (
+              <LayoutItem
+                layoutItem={layoutItem}
+                objectType={objectType}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+              />
+            );
+          })}
+        </Paper>
+      );
+    case "HTML":
+      return <div dangerouslySetInnerHTML={{ __html: layoutItem.content }} />;
+    case "Group":
+      return (
+        <ExpansionPanel key={layoutItem.id} defaultExpanded={true}>
+          <ExpansionPanelSummary
+            expandIcon={<FaAngleDown />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+          >
+            <Typography variant="h6">General settings</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Grid container>
+              {layoutItem.items.map(layoutItem => {
+                return (
+                  <LayoutItem
+                    layoutItem={layoutItem}
+                    objectType={objectType}
+                    mode={mode}
+                    setMode={setMode}
+                    setToChange={setToChange}
+                    toChange={toChange}
+                    object={object}
+                  />
+                );
+              })}
+            </Grid>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      );
+    case "Field":
+      const field = objectType.fields[layoutItem.field];
+      return (
+        <Grid
+          item
+          xs={layoutItem.xs}
+          key={layoutItem.field}
+          className={
+            layoutItem.field in toChange &&
+            toChange[layoutItem.field] !== null &&
+            styles.changed
+          }
+          style={{ padding: mode === "edit" ? "0 5px" : 0 }}
+        >
+          {mode === "view" ? (
+            <Grid container>
+              <Grid item xs={6} className={styles.fieldName}>
+                <div
+                  onDoubleClick={() => {
+                    setMode("edit");
+                  }}
+                >
+                  <Typography variant="button">{field.name}</Typography>
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <div
+                  onDoubleClick={() => {
+                    setMode("edit");
+                  }}
+                  style={{ cursor: "alias" }}
+                >
+                  {field.type === "password"
+                    ? "???"
+                    : object.data[layoutItem.field]}
+                </div>
+              </Grid>
+            </Grid>
+          ) : (
+            <TextField
+              fullWidth
+              label={field.name}
+              margin="normal"
+              type={field.type && field.type}
+              value={
+                !object
+                  ? toChange[layoutItem.field]
+                  : layoutItem.field in toChange
+                  ? toChange[layoutItem.field]
+                  : object.data[layoutItem.field]
+              }
+              onChange={event => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: event.target.value
+                });
+              }}
+            />
+          )}
+        </Grid>
+      );
+    default:
+      return <>Unknown layoutItem type:{layoutItem.type}</>;
+  }
+};
+
+export default ViewObject;

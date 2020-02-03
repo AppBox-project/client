@@ -1,0 +1,48 @@
+.appbar {
+  width: 64px;
+  height: 100vh;
+  z-index: 500;
+
+  & .item {
+    width: 64px;
+    max-width: 100%;
+    text-align: center;
+    display: flex;
+    transition: all 0.15s;
+  }
+}
+
+.appSpace {
+  position: absolute;
+  width: calc(100vw - 64px);
+  height: 100vh;
+  left: 64px;
+  top: 0;
+}
+
+.shadow {
+  bottom: 0px;
+  z-index: 100;
+  height: 100vh;
+  left: 54px;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  transition-duration: 0.22s;
+  transition-property: left, opacity, width;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  width: 10px;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.2) 0px,
+    rgba(0, 0, 0, 0.2) 1px,
+    rgba(0, 0, 0, 0.1) 1px,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.active {
+  background-color: rgb(244, 245, 247);
+  z-index: 999;
+}

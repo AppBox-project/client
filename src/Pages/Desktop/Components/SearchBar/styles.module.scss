@@ -1,0 +1,23 @@
+.root {
+  position: absolute;
+  top: 0;
+  width: calc(100vw - 64px);
+  left: 64px;
+  height: 64px;
+  text-align: center;
+  padding: 5px;
+  z-index: 999;
+}
+
+.leftInput {
+  & fieldset {
+    border-radius: 6px 0 0 6px;
+    border-right: 0;
+  }
+}
+
+.rightInput {
+  & fieldset {
+    border-radius: 0 6px 6px 0;
+  }
+}

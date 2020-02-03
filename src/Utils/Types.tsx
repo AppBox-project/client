@@ -1,0 +1,44 @@
+export interface UserType {
+  data: {
+    username: string;
+    password: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+  };
+  objectId: string;
+}
+
+export interface TypeType {
+  key: string;
+  name: string;
+  name_plural: string;
+  primary: string;
+  fields: any;
+  overviews: any;
+  layouts: any;
+  buttons: any;
+  permissions: {
+    read: [string];
+    create: [string];
+    delete: [string];
+  };
+}
+
+export interface ColorType {
+  r: number;
+  g: number;
+  b: number;
+}
+
+export interface AppType {
+  data: {
+    id: string;
+    name: string;
+    color: ColorType;
+    icon: string;
+    menu_type: string;
+    pages?: {};
+  };
+  objectId: string;
+}
