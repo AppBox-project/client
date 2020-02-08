@@ -19,11 +19,10 @@ import { IoMdClose } from "react-icons/io";
 import styles from "./styles.module.scss";
 import { TypeType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import LoginPage from "../../Pages/Login";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
-  layoutId: string;
+  layoutId?: string;
   appId: string;
   objectId?: string;
   onSuccess?: () => void;
@@ -173,21 +172,23 @@ const ViewObject: React.FC<{
           </Grid>
         </Grid>
       )}
-      {objectType.layouts[layoutId] ? (
-        objectType.layouts[layoutId].map((layoutItem, id) => {
-          return (
-            <LayoutItem
-              key={id}
-              layoutItem={layoutItem}
-              objectType={objectType}
-              mode={mode}
-              setMode={setMode}
-              setToChange={setToChange}
-              toChange={toChange}
-              object={object}
-            />
-          );
-        })
+      {objectType.layouts[layoutId ? layoutId : "default"] ? (
+        objectType.layouts[layoutId ? layoutId : "default"].map(
+          (layoutItem, id) => {
+            return (
+              <LayoutItem
+                key={id}
+                layoutItem={layoutItem}
+                objectType={objectType}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+              />
+            );
+          }
+        )
       ) : (
         <>Layout {layoutId} not found </>
       )}

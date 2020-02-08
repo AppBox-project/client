@@ -1,3 +1,5 @@
+import { FC } from "react";
+
 export interface UserType {
   data: {
     username: string;
@@ -41,4 +43,11 @@ export interface AppType {
     pages?: {};
   };
   objectId: string;
+}
+export interface AppContextType {
+  appId: string;
+  app: AppType;
+  isReady: Promise<unknown>;
+  appCode: any;
+  actions: [{ label: string; key: string; component: FC }];
 }

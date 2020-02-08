@@ -22,7 +22,7 @@ import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
 import ViewObject from "../Object/index";
 
 const Overview: React.FC<{
-  layoutId: string;
+  layoutId?: string;
   objectTypeId: string;
   appId: string;
 }> = ({ layoutId, objectTypeId, appId }) => {
@@ -43,7 +43,7 @@ const Overview: React.FC<{
     });
     Server.on(`receive-${requestId}`, response => {
       setObjectType(response[0]);
-      setLayout(response[0].overviews[layoutId]);
+      setLayout(response[0].overviews[layoutId ? layoutId : "default"]);
     });
 
     // Objects

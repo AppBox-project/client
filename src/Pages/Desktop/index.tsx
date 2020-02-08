@@ -17,7 +17,7 @@ import SearchBar from "./Components/SearchBar";
 import { Switch, Route } from "react-router-dom";
 import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
-import App from "../../Components/Apps/App";
+import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import { GiCardboardBox } from "react-icons/gi";
 
 const Desktop: React.FC = () => {
@@ -30,23 +30,9 @@ const Desktop: React.FC = () => {
       <div className={styles.appSpace}>
         <Switch>
           <Route
-            path="/:appId/:actionId/:detailId"
-            render={params => {
-              return <App {...params} setCurrentApp={setCurrentApp} />;
-            }}
-          />
-          <Route
-            path="/:appId/:actionId"
-            exact
-            render={params => {
-              return <App {...params} setCurrentApp={setCurrentApp} />;
-            }}
-          />
-          <Route
             path="/:appId"
-            exact
             render={params => {
-              return <App {...params} setCurrentApp={setCurrentApp} />;
+              return <AppRenderer {...params} setCurrentApp={setCurrentApp} />;
             }}
           />
           <Route path="/" exact component={StartPage} />
@@ -127,40 +113,38 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           </motion.div>
         </Grid>
         <Grid item xs={10} className={styles.item}>
-          <motion.div variants={item} style={{ width: 64 }}>
-            <Grid container direction="column" style={{ height: "100%" }}>
-              {apps.map(app => {
-                const Icon = icons[app.data.icon];
-                return (
-                  <Grid
-                    item
-                    xs={1}
-                    className={`${styles.item} ${currentApp === app.data.id &&
-                      styles.active}`}
-                    key={app._id}
-                  >
-                    <motion.div variants={item} style={{ width: 64 }}>
-                      <Tooltip placement="right" title={app.data.name}>
-                        <Link to={`/${app.data.id}`} className="no-link">
-                          <IconButton>
-                            <Avatar
-                              variant="rounded"
-                              style={{
-                                transition: "all 1s",
-                                backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`
-                              }}
-                            >
-                              <Icon />
-                            </Avatar>
-                          </IconButton>
-                        </Link>
-                      </Tooltip>
-                    </motion.div>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </motion.div>
+          <Grid container direction="column" style={{ height: "100%" }}>
+            {apps.map(app => {
+              const Icon = icons[app.data.icon];
+              return (
+                <Grid
+                  item
+                  xs={1}
+                  className={`${styles.item} ${currentApp === app.data.id &&
+                    styles.active}`}
+                  key={app._id}
+                >
+                  <motion.div variants={item} style={{ width: 64 }}>
+                    <Tooltip placement="right" title={app.data.name}>
+                      <Link to={`/${app.data.id}`} className="no-link">
+                        <IconButton>
+                          <Avatar
+                            variant="rounded"
+                            style={{
+                              transition: "all 1s",
+                              backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`
+                            }}
+                          >
+                            <Icon />
+                          </Avatar>
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                  </motion.div>
+                </Grid>
+              );
+            })}
+          </Grid>
         </Grid>
 
         <Grid
