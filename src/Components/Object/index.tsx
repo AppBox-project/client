@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
@@ -18,17 +18,21 @@ import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import styles from "./styles.module.scss";
 import { TypeType } from "../../Utils/Types";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import LoginPage from "../../Pages/Login";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
   layoutId: string;
   appId: string;
   objectId?: string;
-}> = ({ objectTypeId, layoutId, appId, objectId }) => {
+  onSuccess?: () => void;
+}> = ({ objectTypeId, layoutId, appId, objectId, onSuccess }) => {
   const [objectType, setObjectType] = useState<TypeType>();
   const [object, setObject] = useState();
   const [mode, setMode] = useState(objectId ? "view" : "edit");
   const [toChange, setToChange] = useState({});
+  const [feedback, setFeedback] = useState();
 
   const save = () => {
     if (toChange !== {}) {
@@ -44,12 +48,27 @@ const ViewObject: React.FC<{
           if (response.success) {
             setMode("view");
             setToChange({});
+            setFeedback(null);
+            if (onSuccess) onSuccess();
           } else {
-            console.log(response);
+            setFeedback(response.feedback);
           }
         });
       } else {
-        console.log("insertee objectee");
+        const requestId = uniqid();
+        Server.emit("insertObject", {
+          requestId,
+          type: objectType.key,
+          object: toChange
+        });
+        Server.on(`receive-${requestId}`, response => {
+          console.log(response);
+          if (response.success) {
+            if (onSuccess) onSuccess();
+          } else {
+            setFeedback(response.feedback);
+          }
+        });
       }
     } else {
       console.log("Nothing to save");
@@ -105,6 +124,9 @@ const ViewObject: React.FC<{
         ) {
           event.preventDefault();
           save();
+        } else if (event.which === 27) {
+          setMode("view");
+          setToChange({});
         }
       }}
     >
@@ -152,9 +174,10 @@ const ViewObject: React.FC<{
         </Grid>
       )}
       {objectType.layouts[layoutId] ? (
-        objectType.layouts[layoutId].map(layoutItem => {
+        objectType.layouts[layoutId].map((layoutItem, id) => {
           return (
             <LayoutItem
+              key={id}
               layoutItem={layoutItem}
               objectType={objectType}
               mode={mode}
@@ -167,6 +190,54 @@ const ViewObject: React.FC<{
         })
       ) : (
         <>Layout {layoutId} not found </>
+      )}
+      {feedback && (
+        <Alert severity="error">
+          <AlertTitle>Errors!</AlertTitle>
+          <ul>
+            {feedback.map(fb => {
+              let reason = "Unknown error";
+              switch (fb.reason) {
+                case "missing-required":
+                  reason = `${
+                    objectType.fields[fb.field].name
+                  } can't be empty.`;
+                  break;
+                case "not-unique":
+                  reason = `${
+                    objectType.fields[fb.field].name
+                  } needs to be unique, but isn't.`;
+                  break;
+                case "no-email":
+                  reason = `${
+                    objectType.fields[fb.field].name
+                  } isn't a valid e-mailadress.`;
+                  break;
+                case "too-short":
+                  reason = `${
+                    objectType.fields[fb.field].name
+                  } should be over ${fb.minLength}  characters.`;
+                  break;
+                default:
+                  reason = "huh";
+                  break;
+              }
+              return <li key={`${fb.reason}-${fb.field}`}>{reason}</li>;
+            })}
+          </ul>
+        </Alert>
+      )}
+      {!objectId && (
+        <div style={{ float: "right" }}>
+          <Button
+            color="primary"
+            onClick={() => {
+              save();
+            }}
+          >
+            Save
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -193,9 +264,10 @@ const LayoutItem: React.FC<{
     case "GridContainer":
       return (
         <Grid container>
-          {layoutItem.items.map(layoutItem => {
+          {layoutItem.items.map((layoutItem, id) => {
             return (
               <LayoutItem
+                key={id}
                 layoutItem={layoutItem}
                 objectType={objectType}
                 mode={mode}
@@ -211,9 +283,10 @@ const LayoutItem: React.FC<{
     case "GridItem":
       return (
         <Grid item xs={layoutItem.xs}>
-          {layoutItem.items.map(layoutItem => {
+          {layoutItem.items.map((layoutItem, id) => {
             return (
               <LayoutItem
+                key={id}
                 layoutItem={layoutItem}
                 objectType={objectType}
                 mode={mode}
@@ -229,9 +302,10 @@ const LayoutItem: React.FC<{
     case "Paper":
       return (
         <Paper className="paper">
-          {layoutItem.items.map(layoutItem => {
+          {layoutItem.items.map((layoutItem, id) => {
             return (
               <LayoutItem
+                key={layoutItem}
                 layoutItem={layoutItem}
                 objectType={objectType}
                 mode={mode}
@@ -258,9 +332,10 @@ const LayoutItem: React.FC<{
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <Grid container>
-              {layoutItem.items.map(layoutItem => {
+              {layoutItem.items.map((layoutItem, id) => {
                 return (
                   <LayoutItem
+                    key={id}
                     layoutItem={layoutItem}
                     objectType={objectType}
                     mode={mode}
@@ -277,12 +352,14 @@ const LayoutItem: React.FC<{
       );
     case "Field":
       const field = objectType.fields[layoutItem.field];
+
       return (
         <Grid
           item
           xs={layoutItem.xs}
           key={layoutItem.field}
           className={
+            object &&
             layoutItem.field in toChange &&
             toChange[layoutItem.field] !== null &&
             styles.changed

@@ -8,16 +8,17 @@ import {
   Grid,
   Button,
   Dialog,
-  DialogTitle,
   DialogContent,
-  DialogActions
+  IconButton,
+  MenuItem,
+  Menu
 } from "@material-ui/core";
 import { TypeType } from "../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
 import { Link } from "react-router-dom";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
 import ViewObject from "../Object/index";
 
 const Overview: React.FC<{
@@ -29,6 +30,8 @@ const Overview: React.FC<{
   const [layout, setLayout] = useState();
   const [objects, setObjects] = useState();
   const [dialogContent, setDialogContent] = useState();
+  const [anchorEl, setAnchorEl] = useState();
+  const [selected, setSelected] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -78,27 +81,34 @@ const Overview: React.FC<{
           >
             <Grid item xs={3} style={{ textAlign: "right", margin: 5 }}>
               {layout.buttons.map(buttonInfo => {
-                const button = objectType.buttons[buttonInfo];
-                return (
-                  <Button
-                    key={buttonInfo}
-                    variant="outlined"
-                    onClick={() => {
-                      setDialogContent(
-                        <ViewObject
-                          objectTypeId={objectType.key}
-                          layoutId={button.layout}
-                          appId={appId}
-                        />
-                      );
-                    }}
-                    startIcon={
-                      button.type === "create" && <IoIosAddCircleOutline />
-                    }
-                  >
-                    {button.label ? button.label : `New ${objectType.name}`}
-                  </Button>
-                );
+                if (objectType.buttons) {
+                  if (objectType.buttons[buttonInfo]) {
+                    const button = objectType.buttons[buttonInfo];
+                    return (
+                      <Button
+                        key={buttonInfo}
+                        variant="outlined"
+                        onClick={() => {
+                          setDialogContent(
+                            <ViewObject
+                              objectTypeId={objectType.key}
+                              layoutId={button.layout}
+                              appId={appId}
+                              onSuccess={() => {
+                                setDialogContent(undefined);
+                              }}
+                            />
+                          );
+                        }}
+                        startIcon={
+                          button.type === "create" && <IoIosAddCircleOutline />
+                        }
+                      >
+                        {button.label ? button.label : `New ${objectType.name}`}
+                      </Button>
+                    );
+                  }
+                }
               })}
             </Grid>
           </Grid>
@@ -109,26 +119,7 @@ const Overview: React.FC<{
             }}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
             <DialogContent>{dialogContent}</DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  setDialogContent(undefined);
-                }}
-                color="primary"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  setDialogContent(undefined);
-                }}
-                color="primary"
-              >
-                Subscribe
-              </Button>
-            </DialogActions>
           </Dialog>
         </>
       )}
@@ -142,6 +133,11 @@ const Overview: React.FC<{
                 </TableCell>
               );
             })}
+            {layout.actions && layout.actions.length > 0 && (
+              <TableCell>
+                <div style={{ float: "right" }}>&nbsp;</div>
+              </TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -161,9 +157,46 @@ const Overview: React.FC<{
                     </TableCell>
                   );
                 })}
+                {layout.actions && layout.actions.length > 0 && (
+                  <TableCell>
+                    <div style={{ float: "right" }}>
+                      <IconButton
+                        onClick={event => {
+                          setSelected(object._id);
+                          setAnchorEl(event.currentTarget);
+                        }}
+                      >
+                        <IoMdMore />
+                      </IconButton>
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             );
           })}
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+          >
+            <MenuItem
+              onClick={() => {
+                const requestId = uniqid();
+                Server.emit("deleteObject", { objectId: selected, requestId });
+                Server.on(`receive-${requestId}`, response => {
+                  if (response.success) {
+                    setAnchorEl(null);
+                  } else {
+                    console.log(response);
+                  }
+                });
+              }}
+            >
+              Delete
+            </MenuItem>
+          </Menu>
         </TableBody>
       </Table>
     </>
