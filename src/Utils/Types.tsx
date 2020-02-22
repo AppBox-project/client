@@ -58,4 +58,11 @@ export interface AppContextType {
   ) => Promise<{} | string>;
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
+  getTypes: (filter: {}) => Promise<{} | string>;
+}
+
+export interface UIType {
+  Loading: React.FC;
+  AnimationContainer: React.FC;
+  AnimationItem: React.FC;
 }

@@ -154,9 +154,11 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           style={{ alignItems: "flex-end" }}
         >
           <motion.div variants={item}>
-            <IconButton style={{ width: 64 }}>
-              <Avatar>{user.data.first_name}</Avatar>
-            </IconButton>
+            <Link to={`/data-explorer/user/${user._id}`}>
+              <IconButton style={{ width: 64 }}>
+                <Avatar>{user.data.first_name}</Avatar>
+              </IconButton>
+            </Link>
           </motion.div>
         </Grid>
       </Grid>

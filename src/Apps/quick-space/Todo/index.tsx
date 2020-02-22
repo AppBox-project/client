@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, UIType } from "../../../Utils/Types";
 import {
   List,
   ListItem,
@@ -16,7 +16,7 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
   action
 }) => {
   const [todos, setTodos] = useState();
-  const UI = context.UI;
+  const UI: UIType = context.UI;
   const [newTodo, setNewTodo] = useState("");
 
   // Lifecycle
