@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { AppContextType, UIType, TypeType } from "../../../../Utils/Types";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import AppActionManageObjectTabObject from "./Tabs/Object";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
   action: string;
-  match: { path; isExact: boolean };
-}> = ({ context, action, match: { path, isExact } }) => {
+  match: { isExact: boolean };
+}> = ({ context, action, match: { isExact } }) => {
   // Global
   const UI: UIType = context.UI;
   const currentTab = isExact
     ? "object"
-    : location.href.split(`object-manager/${action}/`)[1];
+    : window.location.href.split(`object-manager/${action}/`)[1];
 
   // States & hooks
   const [model, setModel] = useState<TypeType | void>();
@@ -20,8 +21,12 @@ const AppActionManageObject: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getTypes({ key: action }).then(response => {
-      setModel(response[0]);
+    context.getTypes({ key: action }, response => {
+      if (response.success) {
+        setModel(response.data[0]);
+      } else {
+        console.log(response.reason);
+      }
     });
   }, [action]);
 
@@ -44,7 +49,9 @@ const AppActionManageObject: React.FC<{
           <Tab label="Permissions" value="permissions" />
         </Tabs>
       </AppBar>
-      {currentTab === "object" && "object"}
+      {currentTab === "object" && (
+        <AppActionManageObjectTabObject model={model} UI={UI} />
+      )}
       {currentTab === "fields" && "fields"}
       {currentTab === "layouts" && "layouts"}
       {currentTab === "overviews" && "overviews"}

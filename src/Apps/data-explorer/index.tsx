@@ -11,23 +11,22 @@ export default class App {
 
   getActions = () => {
     return new Promise(resolve => {
-      this.context.getTypes({}).then(
-        results => {
-          const response = [];
-          results.map(result => {
-            response.push({
+      this.context.getTypes({}, response => {
+        if (response.success) {
+          const actions = [];
+          response.data.map(result => {
+            actions.push({
               label: result.name_plural,
               key: result.key,
               component: AppActionObject
             });
           });
-          resolve(response);
-        },
-        error => {
-          console.log("Something went wrong", error);
+          resolve(actions);
+        } else {
+          console.log("Something went wrong", response.reason);
           resolve([{ key: "a", label: "A", component: FourOhFour }]);
         }
-      );
+      });
     });
   };
 }

@@ -3,6 +3,7 @@ import uniqid from "uniqid";
 import { AppType } from "../../../Utils/Types";
 import Loading from "../../Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
+import * as Forms from "./AppUI/Forms";
 
 export class AppContext {
   appId: string;
@@ -15,7 +16,7 @@ export class AppContext {
 
   constructor(appId) {
     this.appId = appId;
-    this.UI = { Loading, AnimationContainer, AnimationItem };
+    this.UI = { Loading, AnimationContainer, AnimationItem, Forms };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();
       this.dataListeners = [
@@ -54,30 +55,22 @@ export class AppContext {
     });
   };
 
-  getTypes = filter => {
-    return new Promise((resolve, reject) => {
-      if (typeof filter === "object") {
-        const requestId = uniqid();
-        this.dataListeners.push({
-          requestId,
-          unlistenAction: "appUnlistensForObjectTypes"
-        });
-        Server.emit("appListensForObjectTypes", {
-          requestId,
-          appId: this.appId,
-          filter
-        });
-        Server.on(`receive-${requestId}`, response => {
-          if (response.success) {
-            resolve(response.data);
-          } else {
-            reject(response.reason);
-          }
-        });
-      } else {
-        reject("Filter should be object");
-      }
-    });
+  getTypes = (filter, then) => {
+    if (typeof filter === "object") {
+      const requestId = uniqid();
+      this.dataListeners.push({
+        requestId,
+        unlistenAction: "appUnlistensForObjectTypes"
+      });
+      Server.emit("appListensForObjectTypes", {
+        requestId,
+        appId: this.appId,
+        filter
+      });
+      Server.on(`receive-${requestId}`, then);
+    } else {
+      then({ success: false, reason: "Filter should be object" });
+    }
   };
 
   getObjects = (type, filter, then) => {
