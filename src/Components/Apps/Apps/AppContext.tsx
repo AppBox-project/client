@@ -102,15 +102,44 @@ export class AppContext {
   };
 
   addObject = (type, object) => {
-    const requestId = uniqid();
-    Server.emit("appInsertsObject", {
-      requestId,
-      type,
-      object,
-      appId: this.appId
+    return new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("appInsertsObject", {
+        requestId,
+        type,
+        object,
+        appId: this.appId
+      });
+      Server.on(`receive-${requestId}`, response => {
+        if (response.success) {
+          resolve();
+        } else {
+          if (response.feedback) {
+            reject(response.feedback);
+          } else {
+            reject(response.reason);
+          }
+        }
+      });
     });
-    Server.on(`receive-${requestId}`, response => {
-      console.log(response);
+  };
+
+  deleteObjects = (type, filter) => {
+    return new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("appDeletesObject", {
+        requestId,
+        type,
+        filter,
+        appId: this.appId
+      });
+      Server.on(`receive-${requestId}`, response => {
+        if (response.success) {
+          resolve();
+        } else {
+          reject(response.reason);
+        }
+      });
     });
   };
 }

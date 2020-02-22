@@ -56,5 +56,6 @@ export interface AppContextType {
     filter: {},
     then: (response: any) => void
   ) => Promise<{} | string>;
-  addObject: (type: string, objects: {}) => Promise<boolean | string>;
+  addObject: (type: string, object: {}) => Promise<boolean | string>;
+  deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
 }

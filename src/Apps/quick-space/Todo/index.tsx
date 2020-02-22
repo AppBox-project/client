@@ -43,7 +43,12 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
             value={newTodo}
             onKeyDown={e => {
               if (e.key === "Enter") {
-                context.addObject("qs-todo", { action: newTodo });
+                context.addObject("qs-todo", { action: newTodo }).then(
+                  () => {},
+                  reason => {
+                    console.log(reason);
+                  }
+                );
                 setNewTodo("");
               }
             }}
@@ -59,7 +64,18 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
                 <ListItem button>
                   <ListItemText>{todo.data.action}</ListItemText>
                   <ListItemSecondaryAction>
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        context
+                          .deleteObjects("qs-todo", { _id: todo._id })
+                          .then(
+                            () => {},
+                            reason => {
+                              console.log(reason);
+                            }
+                          );
+                      }}
+                    >
                       <FaTrash />
                     </IconButton>
                   </ListItemSecondaryAction>
