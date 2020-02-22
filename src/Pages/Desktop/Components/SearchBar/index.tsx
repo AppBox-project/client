@@ -38,13 +38,13 @@ const SearchBar: React.FC<{ style: any }> = ({ style }) => {
                   return "";
                 }
           }
-          style={{ display: "inline-block" }}
+          style={{ display: "inline-block", width: 100 }}
           renderInput={params => (
             <TextField
               {...params}
               label="Type"
               variant="outlined"
-              style={{ width: 150 }}
+              style={{ width: 100 }}
             />
           )}
         />
