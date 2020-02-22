@@ -50,4 +50,11 @@ export interface AppContextType {
   isReady: Promise<unknown>;
   appCode: any;
   actions: [{ label: string; key: string; component: FC }];
+  UI: any;
+  getObjects: (
+    type: string,
+    filter: {},
+    then: (response: any) => void
+  ) => Promise<{} | string>;
+  addObject: (type: string, objects: {}) => Promise<boolean | string>;
 }

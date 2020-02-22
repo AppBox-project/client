@@ -33,6 +33,7 @@ const App: React.FC<{
     return () => {
       setCurrentApp(null);
       setAppcontext(null);
+      context.unload();
     };
   }, [appId]);
 

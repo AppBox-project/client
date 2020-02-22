@@ -1,6 +1,8 @@
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
 import { AppType } from "../../../Utils/Types";
+import Loading from "../../Loading";
+import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 
 export class AppContext {
   appId: string;
@@ -8,11 +10,20 @@ export class AppContext {
   isReady: Promise<unknown>;
   appCode: any;
   actions: [{ label: string; key: string }];
+  UI: any;
+  dataListeners: [{ requestId: string; unlistenAction: string }];
 
   constructor(appId) {
     this.appId = appId;
+    this.UI = { Loading, AnimationContainer, AnimationItem };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();
+      this.dataListeners = [
+        {
+          requestId,
+          unlistenAction: "unlistenForObjects"
+        }
+      ];
       Server.emit("listenForObjects", {
         requestId,
         type: "app",
@@ -36,9 +47,10 @@ export class AppContext {
     });
   }
 
-  getData = (type, filter) => {
-    return new Promise((resolve, reject) => {
-      console.log(typeof filter);
+  // Close active listeners for app
+  unload = () => {
+    this.dataListeners.map(listener => {
+      Server.emit(listener.unlistenAction, { requestId: listener.requestId });
     });
   };
 
@@ -46,6 +58,10 @@ export class AppContext {
     return new Promise((resolve, reject) => {
       if (typeof filter === "object") {
         const requestId = uniqid();
+        this.dataListeners.push({
+          requestId,
+          unlistenAction: "appUnlistensForObjectTypes"
+        });
         Server.emit("appListensForObjectTypes", {
           requestId,
           appId: this.appId,
@@ -61,6 +77,40 @@ export class AppContext {
       } else {
         reject("Filter should be object");
       }
+    });
+  };
+
+  getObjects = (type, filter, then) => {
+    if (typeof filter === "object") {
+      const requestId = uniqid();
+      this.dataListeners.push({
+        requestId,
+        unlistenAction: "appUnlistensForObjects"
+      });
+      Server.emit("appListensForObjects", {
+        requestId,
+        appId: this.appId,
+        type,
+        filter
+      });
+      Server.on(`receive-${requestId}`, response => {
+        then(response);
+      });
+    } else {
+      then({ success: false, reason: "filter-should-be-object" });
+    }
+  };
+
+  addObject = (type, object) => {
+    const requestId = uniqid();
+    Server.emit("appInsertsObject", {
+      requestId,
+      type,
+      object,
+      appId: this.appId
+    });
+    Server.on(`receive-${requestId}`, response => {
+      console.log(response);
     });
   };
 }
