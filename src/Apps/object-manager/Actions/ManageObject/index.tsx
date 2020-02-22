@@ -3,6 +3,7 @@ import { AppContextType, UIType, TypeType } from "../../../../Utils/Types";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AppActionManageObjectTabObject from "./Tabs/Object";
+import AppActionManageObjectTabFields from "./Tabs/Fields";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -34,25 +35,34 @@ const AppActionManageObject: React.FC<{
   if (!model) return <UI.Loading />;
   return (
     <>
-      <AppBar position="static">
-        <Tabs
-          value={currentTab}
-          onChange={(event, value) => {
-            history.push(`/object-manager/${action}/${value}`);
-          }}
-          aria-label="simple tabs example"
-        >
-          <Tab label="Object" value="object" />
-          <Tab label="Fields" value="fields" />
-          <Tab label="Lay-outs" value="layouts" />
-          <Tab label="Overviews" value="overviews" />
-          <Tab label="Permissions" value="permissions" />
-        </Tabs>
-      </AppBar>
+      <Tabs
+        value={currentTab}
+        onChange={(event, value) => {
+          history.push(`/object-manager/${action}/${value}`);
+        }}
+        centered
+        aria-label="simple tabs example"
+      >
+        <Tab label="Object" value="object" />
+        <Tab label="Fields" value="fields" />
+        <Tab label="Lay-outs" value="layouts" />
+        <Tab label="Overviews" value="overviews" />
+        <Tab label="Permissions" value="permissions" />
+      </Tabs>
       {currentTab === "object" && (
-        <AppActionManageObjectTabObject model={model} UI={UI} />
+        <AppActionManageObjectTabObject
+          model={model}
+          UI={UI}
+          context={context}
+        />
       )}
-      {currentTab === "fields" && "fields"}
+      {currentTab === "fields" && (
+        <AppActionManageObjectTabFields
+          model={model}
+          UI={UI}
+          context={context}
+        />
+      )}
       {currentTab === "layouts" && "layouts"}
       {currentTab === "overviews" && "overviews"}
       {currentTab === "permissions" && "permissions"}

@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { Grid, Paper, Typography, Button } from "@material-ui/core";
-import { TypeType, UIType } from "../../../../../../Utils/Types";
+import {
+  TypeType,
+  UIType,
+  AppContextType
+} from "../../../../../../Utils/Types";
 
 const AppActionManageObjectTabObject: React.FC<{
   model: TypeType;
   UI: UIType;
-}> = ({ model, UI }) => {
+  context: AppContextType;
+}> = ({ model, UI, context }) => {
   // States & Hooks
   const [newModel, setNewModel] = useState();
 
@@ -26,7 +31,7 @@ const AppActionManageObjectTabObject: React.FC<{
                 setNewModel({ ...newModel, name: value });
               }}
             />
-          </Grid>{" "}
+          </Grid>
           <Grid item xs={6}>
             <UI.Forms.TextInput
               label="Name (Plural)"
@@ -42,7 +47,7 @@ const AppActionManageObjectTabObject: React.FC<{
             fullWidth
             color="primary"
             onClick={() => {
-              console.log(newModel);
+              context.updateModel(model.key, newModel, model._id);
             }}
           >
             Save

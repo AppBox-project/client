@@ -15,16 +15,18 @@ const AppUITextField: React.FC<{
   }, [value]);
   // UI
   return (
-    <TextField
-      fullWidth
-      margin="normal"
-      label={label}
-      value={newValue}
-      onChange={event => {
-        setNewValue(event.target.value);
-        if (onChange) onChange(event.target.value);
-      }}
-    />
+    <div style={{ margin: 5 }}>
+      <TextField
+        fullWidth
+        margin="normal"
+        label={label}
+        value={newValue}
+        onChange={event => {
+          setNewValue(event.target.value);
+          if (onChange) onChange(event.target.value);
+        }}
+      />
+    </div>
   );
 };
 

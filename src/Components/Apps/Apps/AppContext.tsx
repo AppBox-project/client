@@ -135,4 +135,24 @@ export class AppContext {
       });
     });
   };
+
+  updateModel = (type, newModel, id) => {
+    return new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("appUpdatesModel", {
+        requestId,
+        type,
+        id,
+        newModel,
+        appId: this.appId
+      });
+      Server.on(`receive-${requestId}`, response => {
+        if (response.success) {
+          resolve();
+        } else {
+          reject(response.reason);
+        }
+      });
+    });
+  };
 }

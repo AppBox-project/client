@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
-import { Typography, List, ListItem } from "@material-ui/core";
+import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import Loading from "../../Loading";
 import styles from "./styles.module.scss";
 import { motion } from "framer-motion";
@@ -47,6 +47,7 @@ const App: React.FC<{
           {appContext.actions.map(action => {
             return (
               <Route
+                key={action.key}
                 path={`/${appId}/${action.key}`}
                 render={props => {
                   const Component = action.component;
@@ -78,7 +79,7 @@ const ActionMenu: React.FC<{
       transition: {
         duration: 0.2,
         when: "beforeChildren",
-        staggerChildren: 0.12,
+        staggerChildren: 0.08,
         ease: "easeOut"
       }
     },
@@ -124,7 +125,7 @@ const ActionMenu: React.FC<{
                 style={{ color: "rgb(66, 82, 110)" }}
               >
                 <ListItem button selected={currentPage === action.key}>
-                  {action.label}
+                  <ListItemText>{action.label}</ListItemText>
                 </ListItem>
               </Link>
             </motion.div>

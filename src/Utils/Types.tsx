@@ -25,6 +25,7 @@ export interface TypeType {
     create: [string];
     delete: [string];
   };
+  _id: any;
 }
 
 export interface ColorType {
@@ -58,6 +59,7 @@ export interface AppContextType {
   ) => Promise<{} | string>;
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
+  updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
   getTypes: (
     filter: {},
     then: (response: {
