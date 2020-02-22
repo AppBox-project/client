@@ -20,7 +20,7 @@ const AppActionManageObjectTabFields: React.FC<{
           <List>
             {map(model.fields, (field, key) => {
               return (
-                <UI.AnimationItem>
+                <UI.AnimationItem key={key}>
                   <Link to={`/object-manager/${model.key}/fields/${key}`}>
                     <ListItem button>
                       <ListItemText>{field.name}</ListItemText>

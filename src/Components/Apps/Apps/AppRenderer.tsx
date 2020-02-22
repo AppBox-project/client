@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import uniqid from "uniqid";
-import Server from "../../../Utils/Server";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import Loading from "../../Loading";
 import styles from "./styles.module.scss";
 import { motion } from "framer-motion";
-import { AppType, TypeType, AppContextType } from "../../../Utils/Types";
+import { AppContextType } from "../../../Utils/Types";
 import { Link, Route, Switch } from "react-router-dom";
 
 import { AppContext } from "./AppContext";
@@ -51,6 +49,7 @@ const App: React.FC<{
                 path={`/${appId}/${action.key}`}
                 render={props => {
                   const Component = action.component;
+                  setCurrentPage(action.key);
                   return (
                     <Component
                       {...props}
