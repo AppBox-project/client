@@ -6,6 +6,7 @@ import {
 } from "../../../../../../Utils/Types";
 import { Grid, List, ListItem, ListItemText } from "@material-ui/core";
 import { map } from "lodash";
+import { Link } from "react-router-dom";
 
 const AppActionManageObjectTabFields: React.FC<{
   model: TypeType;
@@ -15,15 +16,21 @@ const AppActionManageObjectTabFields: React.FC<{
   return (
     <Grid container>
       <Grid item xs={3}>
-        <List>
-          {map(model.fields, field => {
-            return (
-              <ListItem button>
-                <ListItemText>{field.name}</ListItemText>
-              </ListItem>
-            );
-          })}
-        </List>
+        <UI.AnimationContainer>
+          <List>
+            {map(model.fields, (field, key) => {
+              return (
+                <UI.AnimationItem>
+                  <Link to={`/object-manager/${model.key}/fields/${key}`}>
+                    <ListItem button>
+                      <ListItemText>{field.name}</ListItemText>
+                    </ListItem>
+                  </Link>
+                </UI.AnimationItem>
+              );
+            })}
+          </List>
+        </UI.AnimationContainer>
       </Grid>
       <Grid item xs={9} style={{ padding: 15 }}>
         Right

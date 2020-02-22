@@ -14,6 +14,8 @@ const AppActionManageObject: React.FC<{
   const UI: UIType = context.UI;
   const currentTab = isExact
     ? "object"
+    : window.location.href.split(`object-manager/${action}/`)[1].match("/")
+    ? window.location.href.split(`object-manager/${action}/`)[1].split("/")[0]
     : window.location.href.split(`object-manager/${action}/`)[1];
 
   // States & hooks

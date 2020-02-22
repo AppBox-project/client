@@ -111,6 +111,7 @@ const ActionMenu: React.FC<{
             textAlign: "center",
             color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
           }}
+          className="cursor"
         >
           {context.app.data.name}
         </Typography>
