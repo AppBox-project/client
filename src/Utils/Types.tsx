@@ -39,6 +39,9 @@ export interface TypeType {
     read: [string];
     create: [string];
     delete: [string];
+    modifyOwn: [string];
+    write: [string];
+    deleteOwn: [string];
   };
   _id: any;
 }

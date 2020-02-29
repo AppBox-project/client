@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import AppActionManageObjectTabObject from "./Tabs/Object";
 import AppActionManageObjectTabFields from "./Tabs/Fields";
 import AppActionManageObjectTabOverviews from "./Tabs/Overviews";
+import AppActionManageObjectTabPermissions from "./Tabs/Permissions";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -74,7 +75,13 @@ const AppActionManageObject: React.FC<{
           context={context}
         />
       )}
-      {currentTab === "permissions" && "permissions"}
+      {currentTab === "permissions" && (
+        <AppActionManageObjectTabPermissions
+          model={model}
+          UI={UI}
+          context={context}
+        />
+      )}
     </>
   );
 };
