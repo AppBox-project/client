@@ -125,7 +125,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                   key={app._id}
                 >
                   <motion.div variants={item} style={{ width: 64 }}>
-                    <Tooltip placement="top" title={app.data.name}>
+                    <Tooltip placement="right" title={app.data.name}>
                       <Link to={`/${app.data.id}`} className="no-link">
                         <IconButton>
                           <Avatar

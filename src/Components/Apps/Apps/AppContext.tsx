@@ -1,7 +1,7 @@
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
 import { AppType } from "../../../Utils/Types";
-import Loading from "../../Loading";
+import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
 
@@ -13,9 +13,11 @@ export class AppContext {
   actions: [{ label: string; key: string }];
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
+  setDialog: any;
 
-  constructor(appId) {
+  constructor(appId, setDialog) {
     this.appId = appId;
+    this.setDialog = setDialog;
     this.UI = { Loading, AnimationContainer, AnimationItem, Forms };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();

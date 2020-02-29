@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button
+} from "@material-ui/core";
 import Loading from "../../Loading";
 import styles from "./styles.module.scss";
 import { motion } from "framer-motion";
 import { AppContextType } from "../../../Utils/Types";
 import { Link, Route, Switch } from "react-router-dom";
-
 import { AppContext } from "./AppContext";
 
 const App: React.FC<{
@@ -19,11 +28,16 @@ const App: React.FC<{
 }) => {
   const [appContext, setAppcontext] = useState<AppContextType>();
   const [currentPage, setCurrentPage] = useState();
+  const [dialog, setDialog] = useState({
+    display: false,
+    title: undefined,
+    content: undefined
+  });
 
   //Lifecycle
   useEffect(() => {
     setCurrentApp(appId);
-    const context = new AppContext(appId);
+    const context = new AppContext(appId, setDialog);
     context.isReady.then(() => {
       //@ts-ignore
       setAppcontext(context);
@@ -62,6 +76,18 @@ const App: React.FC<{
             );
           })}
         </Switch>
+        <Dialog
+          onClose={() => {
+            setDialog({ ...dialog, display: false });
+          }}
+          aria-labelledby="simple-dialog-title"
+          open={dialog.display}
+        >
+          {dialog.title && (
+            <DialogTitle id="simple-dialog-title">{dialog.title}</DialogTitle>
+          )}
+          {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
+        </Dialog>
       </div>
     </>
   );
@@ -104,16 +130,18 @@ const ActionMenu: React.FC<{
       className={styles.menu}
     >
       <motion.div variants={item}>
-        <Typography
-          variant="h6"
-          style={{
-            textAlign: "center",
-            color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
-          }}
-          className="cursor"
-        >
-          {context.app.data.name}
-        </Typography>
+        <Link to={`/${context.app.data.id}`}>
+          <Typography
+            variant="h6"
+            style={{
+              textAlign: "center",
+              color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
+            }}
+            className="cursor"
+          >
+            {context.app.data.name}
+          </Typography>
+        </Link>
       </motion.div>
       <List>
         {context.actions.map(action => {

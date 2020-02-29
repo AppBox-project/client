@@ -36,3 +36,14 @@ a {
 .cursor {
   cursor: default;
 }
+
+.input-container {
+  height: 80px;
+  position: relative;
+}
+.input-container-sub {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-0, -50%);
+}

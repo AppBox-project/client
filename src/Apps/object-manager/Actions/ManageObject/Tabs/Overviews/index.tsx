@@ -7,27 +7,27 @@ import {
 import { Grid, List, ListItem, ListItemText } from "@material-ui/core";
 import { map } from "lodash";
 import { Link, Switch, Route } from "react-router-dom";
-import AppActionManageObjectTabFieldsEditor from "./FieldEditor";
+import AppActionManageObjectOverviewEditor from "./OverviewEditor";
 
-const AppActionManageObjectTabFields: React.FC<{
+const AppActionManageObjectTabOverviews: React.FC<{
   model: TypeType;
   UI: UIType;
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // States & Hooks
-  const [currentField, setCurrentField] = useState();
+  const [currentOverview, setCurrentOverview] = useState();
   // UI
   return (
     <Grid container>
       <Grid item xs={2}>
         <UI.AnimationContainer>
           <List>
-            {map(model.fields, (field, key) => {
+            {map(model.overviews, (overview, key) => {
               return (
                 <UI.AnimationItem key={key}>
-                  <Link to={`/object-manager/${model.key}/fields/${key}`}>
-                    <ListItem button selected={currentField === key}>
-                      <ListItemText>{field.name}</ListItemText>
+                  <Link to={`/object-manager/${model.key}/overviews/${key}`}>
+                    <ListItem button selected={currentOverview === key}>
+                      <ListItemText>{key}</ListItemText>
                     </ListItem>
                   </Link>
                 </UI.AnimationItem>
@@ -39,15 +39,17 @@ const AppActionManageObjectTabFields: React.FC<{
       <Grid item xs={10} style={{ padding: 15 }}>
         <Switch>
           <Route
-            path="/object-manager/:object/fields/:fieldId"
+            path="/object-manager/:object/overviews/:overviewId"
             render={props => {
               return (
-                <AppActionManageObjectTabFieldsEditor
+                <AppActionManageObjectOverviewEditor
                   {...props}
                   UI={UI}
                   context={context}
-                  setCurrentField={setCurrentField}
+                  setCurrentOverview={setCurrentOverview}
+                  overviews={model.overviews}
                   fields={model.fields}
+                  model={model}
                 />
               );
             }}
@@ -58,4 +60,4 @@ const AppActionManageObjectTabFields: React.FC<{
   );
 };
 
-export default AppActionManageObjectTabFields;
+export default AppActionManageObjectTabOverviews;

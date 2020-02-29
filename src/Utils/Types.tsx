@@ -11,13 +11,28 @@ export interface UserType {
   objectId: string;
 }
 
+export interface ModelFieldType {
+  name: string;
+  required: boolean;
+  unique: boolean;
+  validations: [string];
+  transformations: [string];
+  type?: string;
+}
+
+export interface ModelOverviewType {
+  fields: [string];
+  buttons: [string];
+  actions: [string];
+}
+
 export interface TypeType {
   key: string;
   name: string;
   name_plural: string;
   primary: string;
-  fields: any;
-  overviews: any;
+  fields: [ModelFieldType];
+  overviews: [ModelOverviewType];
   layouts: any;
   buttons: any;
   permissions: {
@@ -45,6 +60,7 @@ export interface AppType {
   };
   objectId: string;
 }
+
 export interface AppContextType {
   appId: string;
   app: AppType;
@@ -60,6 +76,7 @@ export interface AppContextType {
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
+  setDialog: any;
   getTypes: (
     filter: {},
     then: (response: {
@@ -78,6 +95,11 @@ export interface UIType {
     TextInput: React.FC<{
       label: string;
       value: string;
+      onChange?: (value: String) => void;
+    }>;
+    CheckmarkInput: React.FC<{
+      label: string;
+      value: boolean;
       onChange?: (value: String) => void;
     }>;
   };

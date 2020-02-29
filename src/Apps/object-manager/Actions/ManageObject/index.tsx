@@ -4,6 +4,7 @@ import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AppActionManageObjectTabObject from "./Tabs/Object";
 import AppActionManageObjectTabFields from "./Tabs/Fields";
+import AppActionManageObjectTabOverviews from "./Tabs/Overviews";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -66,7 +67,13 @@ const AppActionManageObject: React.FC<{
         />
       )}
       {currentTab === "layouts" && "layouts"}
-      {currentTab === "overviews" && "overviews"}
+      {currentTab === "overviews" && (
+        <AppActionManageObjectTabOverviews
+          model={model}
+          UI={UI}
+          context={context}
+        />
+      )}
       {currentTab === "permissions" && "permissions"}
     </>
   );
