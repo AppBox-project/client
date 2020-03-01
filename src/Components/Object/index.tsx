@@ -20,6 +20,7 @@ import styles from "./styles.module.scss";
 import { TypeType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import FieldTypeInput from "./FieldTypes/Input";
+import FieldTypeRelationship from "./FieldTypes/Relationship";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -380,6 +381,21 @@ const LayoutItem: React.FC<{
         >
           {field.type === "input" && (
             <FieldTypeInput
+              mode={mode}
+              field={field}
+              object={object}
+              fieldKey={layoutItem.field}
+              setMode={setMode}
+              onChange={value => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: value
+                });
+              }}
+            />
+          )}
+          {field.type === "relationship" && (
+            <FieldTypeRelationship
               mode={mode}
               field={field}
               object={object}

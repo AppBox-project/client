@@ -20,6 +20,7 @@ export interface ModelFieldType {
   type?: string;
   typeArgs?: {
     type?: string;
+    relationshipTo?: string;
   };
 }
 
