@@ -385,6 +385,12 @@ const LayoutItem: React.FC<{
               object={object}
               fieldKey={layoutItem.field}
               setMode={setMode}
+              onChange={value => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: value
+                });
+              }}
             />
           )}
         </Grid>

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
+import Loading from "../../../Loading";
 
 const FieldTypeInput: React.FC<{
   mode: "view" | "edit";
@@ -8,9 +9,17 @@ const FieldTypeInput: React.FC<{
   object: any;
   fieldKey: string;
   setMode: (mode: "view" | "edit") => void;
-}> = ({ mode, field, object, fieldKey, setMode }) => {
-  console.log(field);
+  onChange: (value: any) => void;
+}> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
+  // Hooks
+  const [newValue, setNewValue] = useState();
+  // Lifecycle
+  useEffect(() => {
+    setNewValue(object.data[fieldKey]);
+  }, [fieldKey]);
 
+  // UI
+  if (!newValue) return <Loading />;
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div
@@ -37,14 +46,26 @@ const FieldTypeInput: React.FC<{
                   {field.typeArgs
                     ? field.typeArgs.type === "password"
                       ? "········"
-                      : object.data[fieldKey]
-                    : object.data[fieldKey]}
+                      : newValue
+                    : newValue}
                 </Typography>
               </Grid>
             </Grid>
           </div>
         )}
-        {mode === "edit" && "Edit"}
+        {mode === "edit" && (
+          <TextField
+            fullWidth
+            label={field.name}
+            margin="normal"
+            type={field.typeArgs ? field.typeArgs.type : "text"}
+            value={newValue}
+            onChange={event => {
+              setNewValue(event.target.value);
+              onChange(event.target.value);
+            }}
+          />
+        )}
       </div>
     </div>
   );
