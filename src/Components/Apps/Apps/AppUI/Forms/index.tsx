@@ -1,4 +1,5 @@
 import TextInput from "./TextInput";
 import CheckmarkInput from "./CheckmarkInput";
+import SelectInput from "./Select";
 
-export { TextInput, CheckmarkInput };
+export { TextInput, CheckmarkInput, SelectInput };

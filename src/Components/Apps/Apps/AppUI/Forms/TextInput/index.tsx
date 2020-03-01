@@ -4,8 +4,9 @@ import { TextField } from "@material-ui/core";
 const AppUITextField: React.FC<{
   label: string;
   value: string;
-  onChange?: (value: String) => void;
-}> = ({ label, value, onChange }) => {
+  onChange?: (value: string) => void;
+  multiline?: boolean;
+}> = ({ label, value, onChange, multiline }) => {
   // Global
   // States & Hooks
   const [newValue, setNewValue] = useState("");
@@ -25,6 +26,7 @@ const AppUITextField: React.FC<{
           margin="normal"
           label={label}
           value={newValue}
+          multiline={multiline}
           onChange={event => {
             setNewValue(event.target.value);
             if (onChange) onChange(event.target.value);

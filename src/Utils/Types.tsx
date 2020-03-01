@@ -98,12 +98,19 @@ export interface UIType {
     TextInput: React.FC<{
       label: string;
       value: string;
-      onChange?: (value: String) => void;
+      onChange?: (value: string) => void;
+      multiline?: boolean;
     }>;
     CheckmarkInput: React.FC<{
       label: string;
       value: boolean;
-      onChange?: (value: String) => void;
+      onChange?: (value: string) => void;
+    }>;
+    SelectInput: React.FC<{
+      label: string;
+      value: string;
+      options: { value: string; label: string }[];
+      onChange?: (value) => void;
     }>;
   };
 }

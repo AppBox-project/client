@@ -48,6 +48,7 @@ const AppActionManageObjectTabFields: React.FC<{
                   context={context}
                   setCurrentField={setCurrentField}
                   fields={model.fields}
+                  model={model}
                 />
               );
             }}
