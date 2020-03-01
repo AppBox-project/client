@@ -19,6 +19,7 @@ import { IoMdClose } from "react-icons/io";
 import styles from "./styles.module.scss";
 import { TypeType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import FieldTypeInput from "./FieldTypes/Input";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -29,7 +30,7 @@ const ViewObject: React.FC<{
 }> = ({ objectTypeId, layoutId, appId, objectId, onSuccess }) => {
   const [objectType, setObjectType] = useState<TypeType>();
   const [object, setObject] = useState();
-  const [mode, setMode] = useState(objectId ? "view" : "edit");
+  const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
   const [toChange, setToChange] = useState({});
   const [feedback, setFeedback] = useState();
 
@@ -133,11 +134,22 @@ const ViewObject: React.FC<{
         <Grid container>
           <Grid item xs={8}>
             <Typography variant="h5">
-              <Link to={`/${appId}/${objectTypeId}`}>
-                <IconButton>
-                  <FaAngleLeft />
+              {mode === "view" ? (
+                <Link to={`/${appId}/${objectTypeId}`}>
+                  <IconButton>
+                    <FaAngleLeft />
+                  </IconButton>
+                </Link>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    setMode("view");
+                  }}
+                >
+                  <IoMdClose />
                 </IconButton>
-              </Link>
+              )}
+
               {object.data[objectType.primary]}
             </Typography>
           </Grid>
@@ -247,7 +259,7 @@ const ViewObject: React.FC<{
 const LayoutItem: React.FC<{
   layoutItem: any;
   objectType: TypeType;
-  mode: string;
+  mode: "view" | "edit";
   toChange: any;
   setToChange: (any) => void;
   setMode: (string) => void;
@@ -353,7 +365,6 @@ const LayoutItem: React.FC<{
       );
     case "Field":
       const field = objectType.fields[layoutItem.field];
-
       return (
         <Grid
           item
@@ -367,49 +378,13 @@ const LayoutItem: React.FC<{
           }
           style={{ padding: mode === "edit" ? "0 5px" : 0 }}
         >
-          {mode === "view" ? (
-            <Grid container>
-              <Grid item xs={6} className={styles.fieldName}>
-                <div
-                  onDoubleClick={() => {
-                    setMode("edit");
-                  }}
-                >
-                  <Typography variant="button">{field.name}</Typography>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div
-                  onDoubleClick={() => {
-                    setMode("edit");
-                  }}
-                  style={{ cursor: "alias" }}
-                >
-                  {field.type === "password"
-                    ? "???"
-                    : object.data[layoutItem.field]}
-                </div>
-              </Grid>
-            </Grid>
-          ) : (
-            <TextField
-              fullWidth
-              label={field.name}
-              margin="normal"
-              type={field.type && field.type}
-              value={
-                !object
-                  ? toChange[layoutItem.field]
-                  : layoutItem.field in toChange
-                  ? toChange[layoutItem.field]
-                  : object.data[layoutItem.field]
-              }
-              onChange={event => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: event.target.value
-                });
-              }}
+          {field.type === "input" && (
+            <FieldTypeInput
+              mode={mode}
+              field={field}
+              object={object}
+              fieldKey={layoutItem.field}
+              setMode={setMode}
             />
           )}
         </Grid>

@@ -47,3 +47,14 @@ a {
   top: 50%;
   transform: translate(-0, -50%);
 }
+
+.view-container {
+  height: 30px;
+  position: relative;
+}
+.view-container-sub {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-0, -50%);
+}

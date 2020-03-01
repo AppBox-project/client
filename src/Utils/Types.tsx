@@ -18,6 +18,9 @@ export interface ModelFieldType {
   validations: [string];
   transformations: [string];
   type?: string;
+  typeArgs?: {
+    type?: string;
+  };
 }
 
 export interface ModelOverviewType {

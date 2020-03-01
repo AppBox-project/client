@@ -109,6 +109,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     value={field.type}
                     options={[
                       { value: "input", label: "Input" },
+                      { value: "boolean", label: "Boolean" },
                       { value: "options", label: "Options" },
                       { value: "textinput", label: "Text input" },
                       { value: "formula", label: "Formula" },
