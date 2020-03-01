@@ -6,6 +6,7 @@ import Select from "react-select";
 import Server from "../../../../Utils/Server";
 import uniqid from "uniqid";
 import { filter } from "lodash";
+import { Link } from "react-router-dom";
 
 const FieldTypeRelationship: React.FC<{
   mode: "view" | "edit";
@@ -48,7 +49,11 @@ const FieldTypeRelationship: React.FC<{
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="body2">{newValue}</Typography>
+                <Link
+                  to={`/data-explorer/${field.typeArgs.relationshipTo}/${newValue}`}
+                >
+                  <Typography variant="body2">{newValue}</Typography>
+                </Link>
               </Grid>
             </Grid>
           </div>

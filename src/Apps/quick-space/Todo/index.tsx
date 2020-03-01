@@ -6,24 +6,34 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  TextField
+  TextField,
+  Grid,
+  Tabs,
+  Tab
 } from "@material-ui/core";
 import { FaTrash } from "react-icons/fa";
-import { map } from "lodash";
+import { Link, Switch, Route, useHistory } from "react-router-dom";
 
-const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
-  context,
-  action
-}) => {
-  const [todos, setTodos] = useState();
+const AppActionTodo: React.FC<{
+  match: { isExact: boolean };
+  context: AppContextType;
+  action: string;
+}> = ({ context, action, match: { isExact } }) => {
+  // General
+  const currentTab = isExact
+    ? ""
+    : window.location.href.split(`quick-space/todo/`)[1];
+  const history = useHistory();
+
+  // Hooks
+  const [projects, setProjects] = useState([]);
   const UI: UIType = context.UI;
-  const [newTodo, setNewTodo] = useState("");
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-todo", {}, response => {
+    context.getObjects("qs-todo-project", {}, response => {
       if (response.success) {
-        setTodos(response.data);
+        setProjects(response.data);
       } else {
         console.log(response.reason);
       }
@@ -31,10 +41,76 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
   }, []);
 
   // UI
-  if (!todos) return <UI.Loading />;
+  if (projects === undefined) return <UI.Loading />;
   return (
     <div style={{ padding: 15 }}>
-      <UI.AnimationContainer>
+      <Tabs
+        value={currentTab}
+        onChange={(event, value) => {
+          history.push(`/quick-space/todo/${value}`);
+        }}
+        centered
+        aria-label="simple tabs example"
+      >
+        {projects.map(project => {
+          return (
+            <Tab
+              label={project.data.name}
+              value={project._id}
+              key={project._id}
+            />
+          );
+        })}
+      </Tabs>
+      <Switch>
+        <Route
+          path="/quick-space/todo/:projectId"
+          render={props => {
+            return <TodoList {...props} context={context} UI={UI} />;
+          }}
+        />
+      </Switch>
+    </div>
+  );
+};
+
+export default AppActionTodo;
+
+const TodoList: React.FC<{
+  match: { params: { projectId } };
+  context: AppContextType;
+  UI: UIType;
+}> = ({
+  match: {
+    params: { projectId }
+  },
+  context,
+  UI
+}) => {
+  // Hooks
+  const [todos, setTodos] = useState();
+  const [newTodo, setNewTodo] = useState("");
+
+  // Lifecycle
+  useEffect(() => {
+    context.getObjects("qs-todo", { "data.project": projectId }, response => {
+      if (response.success) {
+        setTodos(response.data);
+      } else {
+        console.log(response.reason);
+      }
+    });
+
+    return () => {
+      setTodos(undefined);
+    };
+  }, [projectId]);
+
+  // UI
+  if (todos === undefined) return <UI.Loading />;
+  return (
+    <UI.AnimationContainer>
+      <List>
         <UI.AnimationItem>
           <TextField
             fullWidth
@@ -43,12 +119,14 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
             value={newTodo}
             onKeyDown={e => {
               if (e.key === "Enter") {
-                context.addObject("qs-todo", { action: newTodo }).then(
-                  () => {},
-                  reason => {
-                    console.log(reason);
-                  }
-                );
+                context
+                  .addObject("qs-todo", { action: newTodo, project: projectId })
+                  .then(
+                    () => {},
+                    reason => {
+                      console.log(reason);
+                    }
+                  );
                 setNewTodo("");
               }
             }}
@@ -57,36 +135,58 @@ const AppActionTodo: React.FC<{ context: AppContextType; action: string }> = ({
             }}
           />
         </UI.AnimationItem>
-        <List>
-          {map(todos, (todo, key) => {
-            return (
-              <UI.AnimationItem key={key}>
-                <ListItem button>
-                  <ListItemText>{todo.data.action}</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      onClick={() => {
-                        context
-                          .deleteObjects("qs-todo", { _id: todo._id })
-                          .then(
-                            () => {},
-                            reason => {
-                              console.log(reason);
-                            }
-                          );
-                      }}
-                    >
-                      <FaTrash />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </UI.AnimationItem>
-            );
-          })}
-        </List>
-      </UI.AnimationContainer>
-    </div>
+        {todos.map(todo => {
+          return (
+            <UI.AnimationItem>
+              <ListItem button>
+                <ListItemText>{todo.data.action}</ListItemText>
+                <ListItemSecondaryAction>
+                  <IconButton
+                    onClick={() => {
+                      context.deleteObjects("qs-todo", { _id: todo._id }).then(
+                        () => {},
+                        reason => {
+                          console.log(reason);
+                        }
+                      );
+                    }}
+                  >
+                    <FaTrash />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            </UI.AnimationItem>
+          );
+        })}
+      </List>
+    </UI.AnimationContainer>
   );
-};
 
-export default AppActionTodo;
+  /*return <List>
+  {map(todos, (todo, key) => {
+    return (
+      <UI.AnimationItem key={key}>
+        <ListItem button>
+          <ListItemText>{todo.data.action}</ListItemText>
+          <ListItemSecondaryAction>
+            <IconButton
+              onClick={() => {
+                context
+                  .deleteObjects("qs-todo", { _id: todo._id })
+                  .then(
+                    () => {},
+                    reason => {
+                      console.log(reason);
+                    }
+                  );
+              }}
+            >
+              <FaTrash />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </UI.AnimationItem>
+    );
+  })}
+</List>*/
+};
