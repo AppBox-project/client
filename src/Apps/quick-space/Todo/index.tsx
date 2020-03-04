@@ -31,13 +31,21 @@ const AppActionTodo: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-todo-project", {}, response => {
-      if (response.success) {
-        setProjects(response.data);
-      } else {
-        console.log(response.reason);
+    const projectRequest = context.getObjects(
+      "qs-todo-project",
+      {},
+      response => {
+        if (response.success) {
+          setProjects(response.data);
+        } else {
+          console.log(response.reason);
+        }
       }
-    });
+    );
+
+    return () => {
+      projectRequest.stop();
+    };
   }, []);
 
   // UI
@@ -93,16 +101,21 @@ const TodoList: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-todo", { "data.project": projectId }, response => {
-      if (response.success) {
-        setTodos(response.data);
-      } else {
-        console.log(response.reason);
+    const todosRequest = context.getObjects(
+      "qs-todo",
+      { "data.project": projectId },
+      response => {
+        if (response.success) {
+          setTodos(response.data);
+        } else {
+          console.log(response.reason);
+        }
       }
-    });
+    );
 
     return () => {
       setTodos(undefined);
+      todosRequest.stop();
     };
   }, [projectId]);
 

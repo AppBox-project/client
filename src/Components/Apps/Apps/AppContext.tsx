@@ -70,6 +70,8 @@ export class AppContext {
         filter
       });
       Server.on(`receive-${requestId}`, then);
+      // Return the controller element with a stop() function
+      return new AppDataController("appUnlistensForObjectTypes", requestId);
     } else {
       then({ success: false, reason: "Filter should be object" });
     }
@@ -91,6 +93,8 @@ export class AppContext {
       Server.on(`receive-${requestId}`, response => {
         then(response);
       });
+      // Return the controller element with a stop() function
+      return new AppDataController("appUnlistensForObjects", requestId);
     } else {
       then({ success: false, reason: "filter-should-be-object" });
     }
@@ -156,5 +160,20 @@ export class AppContext {
         }
       });
     });
+  };
+}
+
+// Pass this back to the app to allow cancelling listeners
+// -> If this is not called by the app, all listeners will be cancelled on app unload
+class AppDataController {
+  cancelCommand: string;
+  requestId: string;
+  constructor(cancelCommand, requestId) {
+    this.cancelCommand = cancelCommand;
+    this.requestId = requestId;
+  }
+
+  stop = () => {
+    Server.emit(this.cancelCommand, { requestId: this.requestId });
   };
 }

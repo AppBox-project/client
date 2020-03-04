@@ -79,7 +79,7 @@ export interface AppContextType {
     type: string,
     filter: {},
     then: (response: any) => void
-  ) => Promise<{} | string>;
+  ) => AppRequestController;
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
@@ -91,7 +91,11 @@ export interface AppContextType {
       reason?: string;
       data?: [any];
     }) => void
-  ) => void;
+  ) => AppRequestController;
+}
+
+export interface AppRequestController {
+  stop: () => void;
 }
 
 export interface UIType {
