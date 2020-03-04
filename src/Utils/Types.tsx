@@ -83,7 +83,7 @@ export interface AppContextType {
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
-  setDialog: any;
+  setDialog: (dialog: dialogType) => void;
   getTypes: (
     filter: {},
     then: (response: {
@@ -94,6 +94,21 @@ export interface AppContextType {
   ) => AppRequestController;
 }
 
+export interface dialogType {
+  display: boolean;
+  title?: string;
+  content?: any;
+  form?: [
+    {
+      key: string;
+      label: string;
+      type?: "input";
+      value: string;
+      xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    }
+  ];
+  buttons?: [{ label: string; onClick: (response) => void }];
+}
 export interface AppRequestController {
   stop: () => void;
 }

@@ -53,7 +53,38 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
       <Grid container style={{ width: "100%" }}>
         <Grid item xs={12}>
           <UI.AnimationItem>
-            <Typography variant="h5">{field.name}</Typography>
+            <Grid container style={{ marginBottom: 15 }}>
+              <Grid item xs={10}>
+                <Typography variant="h5">{field.name}</Typography>
+              </Grid>
+              <Grid item xs={2} style={{ textAlign: "right" }}>
+                <Button
+                  onClick={() => {
+                    context.setDialog({
+                      display: true,
+                      title: "Change key",
+                      content:
+                        "Changing the key is usually not required, and requires you to update the layouts and overviews. Any data may be lost.",
+                      form: [
+                        { key: "newKey", label: "New key", value: fieldId }
+                      ],
+                      buttons: [
+                        {
+                          label: "Change",
+                          onClick: response => {
+                            if (response.newKey) {
+                              console.log(response.newKey);
+                            }
+                          }
+                        }
+                      ]
+                    });
+                  }}
+                >
+                  Change key
+                </Button>
+              </Grid>
+            </Grid>
           </UI.AnimationItem>
           <UI.AnimationItem>
             <Paper className="paper" style={{ margin: "0 0 15px 0" }}>

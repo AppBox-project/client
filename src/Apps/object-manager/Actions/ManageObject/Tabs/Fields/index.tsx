@@ -4,10 +4,17 @@ import {
   UIType,
   AppContextType
 } from "../../../../../../Utils/Types";
-import { Grid, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon
+} from "@material-ui/core";
 import { map } from "lodash";
 import { Link, Switch, Route } from "react-router-dom";
 import AppActionManageObjectTabFieldsEditor from "./FieldEditor";
+import { FaPlus } from "react-icons/fa";
 
 const AppActionManageObjectTabFields: React.FC<{
   model: TypeType;
@@ -22,6 +29,23 @@ const AppActionManageObjectTabFields: React.FC<{
       <Grid item xs={2}>
         <UI.AnimationContainer>
           <List>
+            <UI.AnimationItem>
+              <ListItem
+                button
+                onClick={() => {
+                  context.setDialog({
+                    display: true,
+                    title: "New field",
+                    content: <>Test</>
+                  });
+                }}
+              >
+                <ListItemIcon>
+                  <FaPlus />
+                </ListItemIcon>
+                <ListItemText>New field</ListItemText>
+              </ListItem>
+            </UI.AnimationItem>
             {map(model.fields, (field, key) => {
               return (
                 <UI.AnimationItem key={key}>
