@@ -98,15 +98,13 @@ export interface dialogType {
   display: boolean;
   title?: string;
   content?: any;
-  form?: [
-    {
-      key: string;
-      label: string;
-      type?: "input";
-      value: string;
-      xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-    }
-  ];
+  form?: {
+    key: string;
+    label: string;
+    type?: "input";
+    value?: string;
+    xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  }[];
   buttons?: [{ label: string; onClick: (response) => void }];
 }
 export interface AppRequestController {

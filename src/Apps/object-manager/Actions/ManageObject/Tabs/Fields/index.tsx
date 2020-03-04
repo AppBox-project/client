@@ -36,7 +36,28 @@ const AppActionManageObjectTabFields: React.FC<{
                   context.setDialog({
                     display: true,
                     title: "New field",
-                    content: <>Test</>
+                    form: [
+                      { key: "key", label: "Field key" },
+                      { key: "name", label: "Field name" }
+                    ],
+                    buttons: [
+                      {
+                        label: "Add",
+                        onClick: response => {
+                          context.updateModel(
+                            model.key,
+                            {
+                              ...model,
+                              fields: {
+                                ...model.fields,
+                                [response.key]: { name: response.name }
+                              }
+                            },
+                            model._id
+                          );
+                        }
+                      }
+                    ]
                   });
                 }}
               >

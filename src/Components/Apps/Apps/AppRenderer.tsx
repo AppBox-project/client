@@ -82,6 +82,8 @@ const App: React.FC<{
             }}
             aria-labelledby="simple-dialog-title"
             open={dialog.display}
+            maxWidth="xs"
+            fullWidth
           >
             {dialog.title && (
               <DialogTitle id="simple-dialog-title">{dialog.title}</DialogTitle>
