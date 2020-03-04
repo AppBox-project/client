@@ -161,6 +161,30 @@ export class AppContext {
       });
     });
   };
+
+  updateObject = (type, newObject, id) => {
+    return new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("appUpdatesObject", {
+        requestId,
+        type,
+        id,
+        newObject,
+        appId: this.appId
+      });
+      Server.on(`receive-${requestId}`, response => {
+        if (response.success) {
+          resolve();
+        } else {
+          if (response.reason) {
+            reject(response.reason);
+          } else {
+            reject(response.feedback);
+          }
+        }
+      });
+    });
+  };
 }
 
 // Pass this back to the app to allow cancelling listeners

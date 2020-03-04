@@ -83,6 +83,7 @@ export interface AppContextType {
   addObject: (type: string, object: {}) => Promise<boolean | string>;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
+  updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
   setDialog: (dialog: dialogType) => void;
   getTypes: (
     filter: {},

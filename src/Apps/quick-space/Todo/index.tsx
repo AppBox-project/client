@@ -7,12 +7,15 @@ import {
   ListItemSecondaryAction,
   IconButton,
   TextField,
-  Grid,
   Tabs,
-  Tab
+  Tab,
+  Typography,
+  ListItemIcon,
+  Checkbox
 } from "@material-ui/core";
-import { FaTrash } from "react-icons/fa";
-import { Link, Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
+import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const AppActionTodo: React.FC<{
   match: { isExact: boolean };
@@ -149,57 +152,96 @@ const TodoList: React.FC<{
           />
         </UI.AnimationItem>
         {todos.map(todo => {
-          return (
-            <UI.AnimationItem>
-              <ListItem button>
-                <ListItemText>{todo.data.action}</ListItemText>
-                <ListItemSecondaryAction>
-                  <IconButton
-                    onClick={() => {
-                      context.deleteObjects("qs-todo", { _id: todo._id }).then(
-                        () => {},
-                        reason => {
-                          console.log(reason);
-                        }
-                      );
-                    }}
-                  >
-                    <FaTrash />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </UI.AnimationItem>
-          );
+          if (!todo.data.done) {
+            return (
+              <UI.AnimationItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Checkbox
+                      onChange={() => {
+                        context
+                          .updateObject("qs-todo", { done: true }, todo._id)
+                          .then(
+                            () => {},
+                            feedback => {
+                              console.log(feedback);
+                            }
+                          );
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>{todo.data.action}</ListItemText>
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      onClick={() => {
+                        context
+                          .deleteObjects("qs-todo", { _id: todo._id })
+                          .then(
+                            () => {},
+                            reason => {
+                              console.log(reason);
+                            }
+                          );
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </UI.AnimationItem>
+            );
+          }
+        })}
+      </List>
+      <UI.AnimationItem>
+        <Typography variant="subtitle2" style={{ marginTop: 15 }}>
+          Completed
+        </Typography>
+      </UI.AnimationItem>
+      <List>
+        {todos.map(todo => {
+          if (todo.data.done) {
+            return (
+              <UI.AnimationItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <Checkbox
+                      checked={true}
+                      onChange={() => {
+                        context
+                          .updateObject("qs-todo", { done: false }, todo._id)
+                          .then(
+                            () => {},
+                            feedback => {
+                              console.log(feedback);
+                            }
+                          );
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>{todo.data.action}</ListItemText>
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      onClick={() => {
+                        context
+                          .deleteObjects("qs-todo", { _id: todo._id })
+                          .then(
+                            () => {},
+                            reason => {
+                              console.log(reason);
+                            }
+                          );
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </UI.AnimationItem>
+            );
+          }
         })}
       </List>
     </UI.AnimationContainer>
   );
-
-  /*return <List>
-  {map(todos, (todo, key) => {
-    return (
-      <UI.AnimationItem key={key}>
-        <ListItem button>
-          <ListItemText>{todo.data.action}</ListItemText>
-          <ListItemSecondaryAction>
-            <IconButton
-              onClick={() => {
-                context
-                  .deleteObjects("qs-todo", { _id: todo._id })
-                  .then(
-                    () => {},
-                    reason => {
-                      console.log(reason);
-                    }
-                  );
-              }}
-            >
-              <FaTrash />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </UI.AnimationItem>
-    );
-  })}
-</List>*/
 };
