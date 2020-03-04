@@ -10,7 +10,6 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Button,
-  TextField,
   Paper
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -21,6 +20,7 @@ import { TypeType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import FieldTypeInput from "./FieldTypes/Input";
 import FieldTypeRelationship from "./FieldTypes/Relationship";
+import FieldTypeBoolean from "./FieldTypes/Boolean";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -381,6 +381,21 @@ const LayoutItem: React.FC<{
         >
           {field.type === "input" && (
             <FieldTypeInput
+              mode={mode}
+              field={field}
+              object={object}
+              fieldKey={layoutItem.field}
+              setMode={setMode}
+              onChange={value => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: value
+                });
+              }}
+            />
+          )}
+          {field.type === "boolean" && (
+            <FieldTypeBoolean
               mode={mode}
               field={field}
               object={object}
