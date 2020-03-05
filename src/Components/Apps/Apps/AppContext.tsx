@@ -4,6 +4,7 @@ import { AppType } from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
+import AppActionManageObjectTabFieldsEditor from "../../../Apps/object-manager/Actions/ManageObject/Tabs/Fields/FieldEditor";
 
 export class AppContext {
   appId: string;
@@ -183,6 +184,30 @@ export class AppContext {
           }
         }
       });
+    });
+  };
+
+  setFieldDependencies = (context, dependencies, fieldId) => {
+    return new Promise((resolve, reject) => {
+      if (this.appId === "object-manager") {
+        const requestId = uniqid();
+        Server.emit("setFormulaDependencies", {
+          requestId,
+          context,
+          dependencies,
+          fieldId,
+          appId: this.appId
+        });
+        Server.on(`receive-${requestId}`, response => {
+          if (response.success) {
+            resolve();
+          } else {
+            reject(response.reason);
+          }
+        });
+      } else {
+        reject("restricted-to-core-app");
+      }
     });
   };
 }

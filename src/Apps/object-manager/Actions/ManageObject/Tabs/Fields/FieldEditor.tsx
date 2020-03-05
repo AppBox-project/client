@@ -36,6 +36,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
   // Global
   // States & Hooks
   const [field, setField] = useState();
+  const [formulaDeps, setFormulaDeps] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -222,8 +223,19 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   </Grid>
                 )}
                 {field.type === "formula" && (
-                  <Grid item xs={6}>
-                    <FormulaEditor />
+                  <Grid item xs={12}>
+                    <FormulaEditor
+                      formulaContext={model.key}
+                      onChange={(formula, deps) => {
+                        setFormulaDeps(deps);
+
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, formula }
+                        });
+                      }}
+                      value={field.typeArgs ? field.typeArgs.formula : ""}
+                    />
                   </Grid>
                 )}
 
@@ -280,6 +292,19 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     },
                     model._id
                   );
+
+                  if (formulaDeps) {
+                    context
+                      .setFieldDependencies(model.key, formulaDeps, fieldId)
+                      .then(
+                        yes => {
+                          console.log(yes);
+                        },
+                        no => {
+                          console.log(no);
+                        }
+                      );
+                  }
                 }}
               >
                 Save
