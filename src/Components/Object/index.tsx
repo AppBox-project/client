@@ -21,6 +21,7 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import FieldTypeInput from "./FieldTypes/Input";
 import FieldTypeRelationship from "./FieldTypes/Relationship";
 import FieldTypeBoolean from "./FieldTypes/Boolean";
+import FieldTypeFormula from "./FieldTypes/Formula";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -411,6 +412,21 @@ const LayoutItem: React.FC<{
           )}
           {field.type === "relationship" && (
             <FieldTypeRelationship
+              mode={mode}
+              field={field}
+              object={object}
+              fieldKey={layoutItem.field}
+              setMode={setMode}
+              onChange={value => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: value
+                });
+              }}
+            />
+          )}
+          {field.type === "formula" && (
+            <FieldTypeFormula
               mode={mode}
               field={field}
               object={object}

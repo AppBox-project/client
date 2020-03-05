@@ -19,10 +19,11 @@
   - [ ] Apps
   - [ ] System
 - [ ] Better app context
-  - [ ] Data interactions
-    - [ ] Subscribing to data
-    - [ ] Cancelling listeners before the app closes
-    - [ ] Updating data
+  - [X] Data interactions
+    - [X] Subscribing to data
+    - [X] Cancelling listeners before the app closes
+    - [X] Updating data
+  - [ ] More UI elements
 - [ ] Layouts
   - [x] Desktop-layout
   - [ ] Mobile layout
@@ -35,6 +36,8 @@
   - [ ] Automations
   - [x] Relationships
   - [ ] Formulas
+    - [ ] Local (within objects)
+    - [ ] Following the relationship model
   - [ ] Improved permissions system
     - [ ] Global controls
     - [ ] Per-field controls
