@@ -26,7 +26,7 @@ const FormulaEditor: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setNewValue(value ? value : "Hello {{ project_r.name }}");
+    setNewValue(value ? value : "{{ project_r.owner_r.first_name }}");
     Server.on(`receive-${requestId}`, response => {
       setPreview(response);
     });
@@ -52,10 +52,11 @@ const FormulaEditor: React.FC<{
             setDependencies(depList);
             onChange(newValue, depList);
 
-            Server.emit("parseFormula", {
+            Server.emit("testFormula", {
               formula: newValue,
               requestId,
-              formulaContext
+              context: formulaContext,
+              dependencies: depList
             });
           }}
         >
