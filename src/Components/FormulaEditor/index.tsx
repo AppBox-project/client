@@ -5,7 +5,9 @@ import {
   Button,
   List,
   ListItemText,
-  ListItem
+  ListItem,
+  ListSubheader,
+  Tooltip
 } from "@material-ui/core";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
@@ -79,15 +81,21 @@ const FormulaEditor: React.FC<{
       </Grid>
       {dependencies.length > 0 && (
         <Grid item xs={12}>
-          <List>
-            {dependencies.map(dep => {
-              return (
-                <ListItem key={dep}>
-                  <ListItemText>{dep}</ListItemText>
-                </ListItem>
-              );
-            })}
-          </List>
+          <Tooltip
+            title="The formula will be recalculated when one of it's dependencies changes."
+            placement="left"
+          >
+            <List>
+              <ListSubheader>Formula dependencies</ListSubheader>
+              {dependencies.map(dep => {
+                return (
+                  <ListItem key={dep}>
+                    <ListItemText>{dep}</ListItemText>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Tooltip>
         </Grid>
       )}
     </Grid>
