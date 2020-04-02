@@ -231,7 +231,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
 
                         setField({
                           ...field,
-                          typeArgs: { ...field.typeArgs, formula }
+                          typeArgs: {
+                            ...field.typeArgs,
+                            formula,
+                            dependencies: formulaDeps
+                          }
                         });
                       }}
                       value={field.typeArgs ? field.typeArgs.formula : ""}
