@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-import { FaGripHorizontal, FaHome } from "react-icons/fa";
+import { FaGripHorizontal, FaTimes, FaHome } from "react-icons/fa";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../../Components/Loading";
@@ -10,6 +9,8 @@ import { Switch, Route } from "react-router-dom";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
+import { SpeedDial, SpeedDialAction } from "@material-ui/lab";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
@@ -17,6 +18,7 @@ const MobileLayout: React.FC = () => {
   const currentTab = window.location.href.split("/")[3]
     ? window.location.href.split("/")[3]
     : "home";
+  const [fabOpen, setFabOpen] = useState(false);
 
   // Lifecycle
   useEffect(() => {
@@ -49,37 +51,53 @@ const MobileLayout: React.FC = () => {
         />
         <Route component={FourOhFour} />
       </Switch>
-      <BottomNavigation
-        style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}
-        value={currentTab}
-        showLabels
-        onChange={(event, value) => {
-          history.push(`/${value}`);
+      <SpeedDial
+        ariaLabel="Apps"
+        icon={
+          <SpeedDialIcon icon={<FaGripHorizontal />} openIcon={<FaHome />} />
+        }
+        onClose={() => {
+          setFabOpen(false);
+        }}
+        onOpen={() => {
+          setFabOpen(true);
+        }}
+        open={fabOpen}
+        direction="up"
+        style={{ position: "absolute", bottom: 15, right: 15 }}
+        FabProps={{
+          size: "medium",
+          onClick: () => {
+            setFabOpen(false);
+            history.push("/");
+          },
         }}
       >
-        <BottomNavigationAction
-          label="Home"
-          value="home"
-          icon={<FaHome style={{ height: 25, width: 25 }} />}
-        />
-
-        {apps.map((app) => {
-          const Icon = icons[app.data.icon];
-          return (
-            <BottomNavigationAction
-              label={app.data.name}
-              value={app.data.id}
-              icon={<Icon style={{ height: 25, width: 25 }} />}
-            />
-          );
-        })}
-
-        <BottomNavigationAction
-          label="All apps"
-          value="apps"
-          icon={<FaGripHorizontal style={{ height: 25, width: 25 }} />}
-        />
-      </BottomNavigation>
+        {
+          //@ts-ignore
+          apps.map((app) => {
+            const Icon = icons[app.data.icon];
+            return (
+              <SpeedDialAction
+                key={app.data.id}
+                icon={<Icon style={{ height: 25, width: 25 }} />}
+                tooltipTitle={app.data.name}
+                tooltipPlacement="left"
+                FabProps={{
+                  style: {
+                    backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                    color: "white",
+                  },
+                }}
+                onClick={() => {
+                  setFabOpen(false);
+                  history.push(`/${app.data.id}`);
+                }}
+              />
+            );
+          })
+        }
+      </SpeedDial>
     </>
   );
 };

@@ -31,11 +31,13 @@
     - [ ] Design layout
     - [ ] Make existing properties more responsive
     - [ ] PWA
+- [ ] Improve app logic
+  - [ ] EVery app will have it's own desktop
 - [ ] Make apps
   - [ ] Quick space
     - [ ] To-do
     - [ ] Notes 
-    - [ ] 
+    - [ ] File / dropzone
   - [ ] All-purpose CRM app
   - [ ] Website builder
 - [ ] Data model improvements
