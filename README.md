@@ -11,7 +11,8 @@
 - [x] Datamodel + realtime data
 - [x] Interface with pluggable apps
 - [ ] Security test
-- [ ] Make accessible via the web
+- [x] Make accessible via the web
+  - [x] Package as docker container
 - [ ] App store
   - [ ] Browsing apps
   - [ ] Installing apps
@@ -27,17 +28,23 @@
 - [ ] Layouts
   - [x] Desktop-layout
   - [ ] Mobile layout
+    - [ ] Design layout
+    - [ ] Make existing properties more responsive
+    - [ ] PWA
 - [ ] Make apps
-  - [ ] Notes / management app
+  - [ ] Quick space
+    - [ ] To-do
+    - [ ] Notes 
+    - [ ] 
   - [ ] All-purpose CRM app
   - [ ] Website builder
 - [ ] Data model improvements
   - [ ] Object level validations
   - [ ] Automations
   - [x] Relationships
-  - [ ] Formulas
-    - [ ] Local (within objects)
-    - [ ] Following the relationship model
+  - [x] Formulas
+    - [x] Local (within objects)
+    - [x] Following the relationship model
   - [ ] Improved permissions system
     - [ ] Global controls
     - [ ] Per-field controls
