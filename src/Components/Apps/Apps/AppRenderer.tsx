@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from "react";
 import {
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  Grid
+  Grid,
+  Hidden,
 } from "@material-ui/core";
 import Loading from "../../Loading";
-import styles from "./styles.module.scss";
-import { motion } from "framer-motion";
 import { AppContextType, dialogType } from "../../../Utils/Types";
 import { Link, Route, Switch } from "react-router-dom";
 import { AppContext } from "./AppContext";
 import { TextInput } from "./AppUI/Forms";
+import AppUIDesktop from "./AppUI/DesktopLayout";
+import AppUIMobile from "./AppUI/MobileLayout";
+import styles from "./styles.module.scss";
 
 const App: React.FC<{
   match: { params: { appId } };
   setCurrentApp: (string) => void;
 }> = ({
   match: {
-    params: { appId }
+    params: { appId },
   },
-  setCurrentApp
+  setCurrentApp,
 }) => {
   const [appContext, setAppcontext] = useState<AppContextType>();
   const [currentPage, setCurrentPage] = useState();
@@ -52,15 +50,20 @@ const App: React.FC<{
   if (!appContext) return <Loading />;
   return (
     <>
-      <ActionMenu context={appContext} currentPage={currentPage} />
+      <Hidden xsDown>
+        <AppUIDesktop appContext={appContext} currentPage={currentPage} />
+      </Hidden>
+      <Hidden smUp>
+        <AppUIMobile appContext={appContext} currentPage={currentPage} />
+      </Hidden>
       <div className={styles.app}>
         <Switch>
-          {appContext.actions.map(action => {
+          {appContext.actions.map((action) => {
             return (
               <Route
                 key={action.key}
                 path={`/${appId}/${action.key}`}
-                render={props => {
+                render={(props) => {
                   const Component = action.component;
                   setCurrentPage(action.key);
                   return (
@@ -91,7 +94,7 @@ const App: React.FC<{
             {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
             {dialog.form && (
               <Grid container style={{ width: "90%", marginLeft: 25 }}>
-                {dialog.form.map(formItem => {
+                {dialog.form.map((formItem) => {
                   return (
                     <Grid
                       item
@@ -105,10 +108,10 @@ const App: React.FC<{
                             ? dialogFormContent[formItem.key]
                             : formItem.value
                         }
-                        onChange={value => {
+                        onChange={(value) => {
                           setDialogFormContent({
                             ...dialogFormContent,
-                            [formItem.key]: value
+                            [formItem.key]: value,
                           });
                         }}
                       />
@@ -119,7 +122,7 @@ const App: React.FC<{
             )}
             {dialog.buttons && (
               <DialogActions>
-                {dialog.buttons.map(button => {
+                {dialog.buttons.map((button) => {
                   return (
                     <Button
                       key={button.label}
@@ -140,77 +143,6 @@ const App: React.FC<{
         )}
       </div>
     </>
-  );
-};
-
-const ActionMenu: React.FC<{
-  context: AppContextType;
-  currentPage: string;
-}> = ({ context, currentPage }) => {
-  const list = {
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.2,
-        when: "beforeChildren",
-        staggerChildren: 0.08,
-        ease: "easeOut"
-      }
-    },
-    hidden: {
-      opacity: 0,
-      x: -25,
-      transition: {
-        when: "afterChildren"
-      }
-    }
-  };
-
-  const item = {
-    visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: 10 }
-  };
-
-  return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={list}
-      className={styles.menu}
-    >
-      <motion.div variants={item}>
-        <Link to={`/${context.app.data.id}`}>
-          <Typography
-            variant="h6"
-            style={{
-              textAlign: "center",
-              color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
-            }}
-            className="cursor"
-          >
-            {context.app.data.name}
-          </Typography>
-        </Link>
-      </motion.div>
-      <List>
-        {context.actions.map(action => {
-          return (
-            <motion.div variants={item} key={action.key}>
-              <Link
-                className="no-link"
-                to={`/${context.app.data.id}/${action.key}`}
-                style={{ color: "rgb(66, 82, 110)" }}
-              >
-                <ListItem button selected={currentPage === action.key}>
-                  <ListItemText>{action.label}</ListItemText>
-                </ListItem>
-              </Link>
-            </motion.div>
-          );
-        })}
-      </List>
-    </motion.div>
   );
 };
 

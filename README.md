@@ -18,7 +18,10 @@
   - [ ] Installing apps
 - [ ] OTA updates
   - [ ] Apps
-  - [ ] System
+  - [x] System
+    - [x] Simple git pull update
+    - [ ] Better update UI
+    - [ ] Changelogs
 - [ ] Better app context
   - [X] Data interactions
     - [X] Subscribing to data
@@ -32,11 +35,16 @@
     - [ ] Make existing properties more responsive
     - [ ] PWA
 - [ ] Improve app logic
-  - [ ] EVery app will have it's own desktop
+  - [ ] Every app will have it's own desktop
 - [ ] Make apps
   - [ ] Quick space
+    - [ ] Eventually: clone onenote
     - [ ] To-do
-    - [ ] Notes 
+    - [ ] Notes
+      - [ ] Base version
+      - [ ] Mobile friendly
+      - [ ] Drag and drop order
+      - [ ] Subto-do's
     - [ ] File / dropzone
   - [ ] All-purpose CRM app
   - [ ] Website builder
