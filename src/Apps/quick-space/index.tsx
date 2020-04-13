@@ -1,6 +1,7 @@
 import React from "react";
 import AppActionTodo from "./Todo";
 import FourOhFour from "../../Components/FourOhFour";
+import AppQSActionNotes from "./Notes";
 
 export default class App {
   context: any;
@@ -10,12 +11,12 @@ export default class App {
   }
 
   getActions = () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       resolve([
         { key: "overview", label: "Overview", component: FourOhFour },
-        { key: "notes", label: "Quick notes", component: FourOhFour },
+        { key: "notes", label: "Quick notes", component: AppQSActionNotes },
         { key: "todo", label: "Todo", component: AppActionTodo },
-        { key: "files", label: "Files", component: FourOhFour }
+        { key: "files", label: "Files", component: FourOhFour },
       ]);
     });
   };

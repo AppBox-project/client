@@ -12,11 +12,12 @@ import {
   Typography,
   ListItemIcon,
   Checkbox,
+  Tooltip,
 } from "@material-ui/core";
 import { Switch, Route, useHistory } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-const AppActionTodo: React.FC<{
+const AppQSActionTodo: React.FC<{
   match: { isExact: boolean };
   context: AppContextType;
   action: string;
@@ -33,17 +34,13 @@ const AppActionTodo: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const projectRequest = context.getObjects(
-      "qs-todo-project",
-      {},
-      (response) => {
-        if (response.success) {
-          setProjects(response.data);
-        } else {
-          console.log(response.reason);
-        }
+    const projectRequest = context.getObjects("qs-project", {}, (response) => {
+      if (response.success) {
+        setProjects(response.data);
+      } else {
+        console.log(response.reason);
       }
-    );
+    });
 
     return () => {
       projectRequest.stop();
@@ -64,6 +61,8 @@ const AppActionTodo: React.FC<{
           history.push(`/quick-space/todo/${value}`);
         }}
         centered
+        indicatorColor="primary"
+        textColor="primary"
         aria-label="Project overview"
       >
         {projects.map((project) => {
@@ -88,7 +87,7 @@ const AppActionTodo: React.FC<{
   );
 };
 
-export default AppActionTodo;
+export default AppQSActionTodo;
 
 const TodoList: React.FC<{
   match: { params: { projectId } };
@@ -175,22 +174,6 @@ const TodoList: React.FC<{
                     />
                   </ListItemIcon>
                   <ListItemText>{todo.data.action}</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      onClick={() => {
-                        context
-                          .deleteObjects("qs-todo", { _id: todo._id })
-                          .then(
-                            () => {},
-                            (reason) => {
-                              console.log(reason);
-                            }
-                          );
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
                 </ListItem>
               </UI.AnimationItem>
             );
@@ -226,20 +209,23 @@ const TodoList: React.FC<{
                   </ListItemIcon>
                   <ListItemText>{todo.data.action}</ListItemText>
                   <ListItemSecondaryAction>
-                    <IconButton
-                      onClick={() => {
-                        context
-                          .deleteObjects("qs-todo", { _id: todo._id })
-                          .then(
-                            () => {},
-                            (reason) => {
-                              console.log(reason);
-                            }
-                          );
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <Tooltip title="Permently delete" placement="left">
+                      <IconButton
+                        color="primary"
+                        onClick={() => {
+                          context
+                            .deleteObjects("qs-todo", { _id: todo._id })
+                            .then(
+                              () => {},
+                              (reason) => {
+                                console.log(reason);
+                              }
+                            );
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
               </UI.AnimationItem>
