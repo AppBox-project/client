@@ -5,33 +5,19 @@ import {
   ThemeProvider,
   Hidden,
 } from "@material-ui/core";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import uniqid from "uniqid";
-import Overview from "./Components/Overview";
 import LoginPage from "./Pages/Login";
 import Desktop from "./Pages/Desktop";
 import { BrowserRouter } from "react-router-dom";
 import Server from "./Utils/Server";
 import MobileLayout from "./Pages/Mobile";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#ff4400",
-    },
-    secondary: {
-      light: "#0066ff",
-      main: "#0044ff",
-      contrastText: "#ffcc00",
-    },
-    contrastThreshold: 3,
-    tonalOffset: 0.2,
-  },
-});
-
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
+  const [gTheme] = useGlobal<any>("theme");
 
+  const theme = createMuiTheme(gTheme);
   // Lifecycle
   useEffect(() => {
     let userRequest;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useGlobal, useEffect, useState } from "reactn";
 import {
   Dialog,
   DialogTitle,
@@ -30,6 +30,7 @@ const App: React.FC<{
   const [currentPage, setCurrentPage] = useState();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState();
+  const [gTheme, setgTheme] = useGlobal<any>("theme");
 
   //Lifecycle
   useEffect(() => {
@@ -38,6 +39,16 @@ const App: React.FC<{
     context.isReady.then(() => {
       //@ts-ignore
       setAppcontext(context);
+      setgTheme({
+        ...gTheme,
+        palette: {
+          ...gTheme.palette,
+          primary: {
+            ...gTheme.palette.primary,
+            main: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
+          },
+        },
+      });
     });
     return () => {
       setCurrentApp(null);
