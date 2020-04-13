@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   TypeType,
   UIType,
-  AppContextType
+  AppContextType,
 } from "../../../../../../Utils/Types";
 import {
   Paper,
@@ -10,9 +10,8 @@ import {
   Typography,
   List,
   ListItemText,
-  ListItem
+  ListItem,
 } from "@material-ui/core";
-import { FaPlus } from "react-icons/fa";
 
 const AppActionManageObjectTabPermissions: React.FC<{
   model: TypeType;
@@ -24,41 +23,41 @@ const AppActionManageObjectTabPermissions: React.FC<{
     {
       key: "read",
       label: "Read",
-      description: "Allows the user to read all data."
+      description: "Allows the user to read all data.",
     },
     {
       key: "create",
       label: "Create",
-      description: "Allows the user to create new entries."
+      description: "Allows the user to create new entries.",
     },
     {
       key: "modifyOwn",
       label: "Modify (own)",
-      description: "Allows the user to modify entries they've made themselves."
+      description: "Allows the user to modify entries they've made themselves.",
     },
     {
       key: "write",
       label: "Write",
-      description: "Gives the user full write permission."
+      description: "Gives the user full write permission.",
     },
     {
       key: "delete",
       label: "Delete",
-      description: "Gives the user full delete permissions"
+      description: "Gives the user full delete permissions",
     },
     {
       key: "deleteOwn",
       label: "Delete (own)",
-      description: "Allows the user to delete entries they've made themselves"
-    }
+      description: "Allows the user to delete entries they've made themselves",
+    },
   ];
   // States & Hooks
-  const [currentOverview, setCurrentOverview] = useState();
+
   // UI
   return (
     <UI.AnimationContainer>
       <Grid container style={{ marginTop: 15 }}>
-        {permissions.map(permission => {
+        {permissions.map((permission) => {
           return (
             <Grid item xs={2} key={permission.key}>
               <UI.AnimationItem>
@@ -87,7 +86,7 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
       <Typography variant="subtitle2">{permission.description}</Typography>
       <List>
         {groupList.length > 0 ? (
-          groupList.map(group => {
+          groupList.map((group) => {
             return <UI.Forms.TextInput label="Group" value={group} />;
           })
         ) : (

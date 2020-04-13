@@ -14,7 +14,6 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import { Switch, Route, useHistory } from "react-router-dom";
-import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const AppActionTodo: React.FC<{
@@ -162,6 +161,7 @@ const TodoList: React.FC<{
                 <ListItem>
                   <ListItemIcon>
                     <Checkbox
+                      color="primary"
                       onChange={() => {
                         context
                           .updateObject("qs-todo", { done: true }, todo._id)
@@ -210,6 +210,7 @@ const TodoList: React.FC<{
                 <ListItem>
                   <ListItemIcon>
                     <Checkbox
+                      color="primary"
                       checked={true}
                       onChange={() => {
                         context

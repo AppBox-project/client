@@ -10,7 +10,7 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   Button,
-  Paper
+  Paper,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
@@ -44,9 +44,9 @@ const ViewObject: React.FC<{
           requestId,
           objectId: object._id,
           type: objectType.key,
-          toChange
+          toChange,
         });
-        Server.on(`receive-${requestId}`, response => {
+        Server.on(`receive-${requestId}`, (response) => {
           if (response.success) {
             setMode("view");
             setToChange({});
@@ -61,9 +61,9 @@ const ViewObject: React.FC<{
         Server.emit("insertObject", {
           requestId,
           type: objectType.key,
-          object: toChange
+          object: toChange,
         });
-        Server.on(`receive-${requestId}`, response => {
+        Server.on(`receive-${requestId}`, (response) => {
           console.log(response);
           if (response.success) {
             if (onSuccess) onSuccess();
@@ -83,9 +83,9 @@ const ViewObject: React.FC<{
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
       requestId,
-      filter: { key: objectTypeId }
+      filter: { key: objectTypeId },
     });
-    Server.on(`receive-${requestId}`, response => {
+    Server.on(`receive-${requestId}`, (response) => {
       setObjectType(response[0]);
     });
 
@@ -95,9 +95,9 @@ const ViewObject: React.FC<{
       Server.emit("listenForObjects", {
         requestId: dataRequestId,
         type: objectTypeId,
-        filter: { _id: objectId }
+        filter: { _id: objectId },
       });
-      Server.on(`receive-${dataRequestId}`, response => {
+      Server.on(`receive-${dataRequestId}`, (response) => {
         if (response.success) {
           setObject(response.data[0]);
         } else {
@@ -118,7 +118,7 @@ const ViewObject: React.FC<{
 
   return (
     <div
-      onKeyDown={event => {
+      onKeyDown={(event) => {
         if (
           mode === "edit" &&
           event.ctrlKey &&
@@ -210,7 +210,7 @@ const ViewObject: React.FC<{
         <Alert severity="error">
           <AlertTitle>Errors!</AlertTitle>
           <ul>
-            {feedback.map(fb => {
+            {feedback.map((fb) => {
               let reason = "Unknown error";
               switch (fb.reason) {
                 case "missing-required":
@@ -273,7 +273,7 @@ const LayoutItem: React.FC<{
   toChange,
   setMode,
   object,
-  setToChange
+  setToChange,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -297,7 +297,14 @@ const LayoutItem: React.FC<{
       );
     case "GridItem":
       return (
-        <Grid item xs={layoutItem.xs}>
+        <Grid
+          item
+          xs={layoutItem.xs}
+          sm={layoutItem.sm}
+          md={layoutItem.md}
+          lg={layoutItem.lg}
+          xl={layoutItem.xl}
+        >
           {layoutItem.items.map((layoutItem, id) => {
             return (
               <LayoutItem
@@ -371,6 +378,10 @@ const LayoutItem: React.FC<{
         <Grid
           item
           xs={layoutItem.xs}
+          sm={layoutItem.sm}
+          md={layoutItem.md}
+          lg={layoutItem.lg}
+          xl={layoutItem.xl}
           key={layoutItem.field}
           className={
             object &&
@@ -387,10 +398,10 @@ const LayoutItem: React.FC<{
               object={object}
               fieldKey={layoutItem.field}
               setMode={setMode}
-              onChange={value => {
+              onChange={(value) => {
                 setToChange({
                   ...toChange,
-                  [layoutItem.field]: value
+                  [layoutItem.field]: value,
                 });
               }}
             />
@@ -402,10 +413,10 @@ const LayoutItem: React.FC<{
               object={object}
               fieldKey={layoutItem.field}
               setMode={setMode}
-              onChange={value => {
+              onChange={(value) => {
                 setToChange({
                   ...toChange,
-                  [layoutItem.field]: value
+                  [layoutItem.field]: value,
                 });
               }}
             />
@@ -417,10 +428,10 @@ const LayoutItem: React.FC<{
               object={object}
               fieldKey={layoutItem.field}
               setMode={setMode}
-              onChange={value => {
+              onChange={(value) => {
                 setToChange({
                   ...toChange,
-                  [layoutItem.field]: value
+                  [layoutItem.field]: value,
                 });
               }}
             />
@@ -432,10 +443,10 @@ const LayoutItem: React.FC<{
               object={object}
               fieldKey={layoutItem.field}
               setMode={setMode}
-              onChange={value => {
+              onChange={(value) => {
                 setToChange({
                   ...toChange,
-                  [layoutItem.field]: value
+                  [layoutItem.field]: value,
                 });
               }}
             />
