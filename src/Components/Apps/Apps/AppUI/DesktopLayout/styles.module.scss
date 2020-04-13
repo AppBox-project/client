@@ -16,3 +16,10 @@
   z-index: 100;
   border-right: 1px solid #dcdddf;
 }
+.app {
+  position: absolute;
+  top: 64px;
+  left: 240px;
+  width: calc(100vw - 304px);
+  height: calc(100vh - 64px);
+}

@@ -10,12 +10,10 @@ import {
 } from "@material-ui/core";
 import Loading from "../../Loading";
 import { AppContextType, dialogType } from "../../../Utils/Types";
-import { Link, Route, Switch } from "react-router-dom";
 import { AppContext } from "./AppContext";
 import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
-import styles from "./styles.module.scss";
 
 const App: React.FC<{
   match: { params: { appId } };

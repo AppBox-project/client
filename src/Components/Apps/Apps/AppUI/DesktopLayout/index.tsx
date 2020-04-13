@@ -1,9 +1,10 @@
 import React from "react";
 import { AppContextType } from "../../../../../Utils/Types";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, Switch, Route } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import { AppContext } from "../../AppContext";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   appContext,
@@ -13,6 +14,29 @@ const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   return (
     <>
       <ActionMenu context={appContext} currentPage={currentPage} />
+      <div className={styles.app}>
+        <Switch>
+          {appContext.actions.map((action) => {
+            return (
+              <Route
+                key={action.key}
+                path={`/${appContext.appId}/${action.key}`}
+                render={(props) => {
+                  const Component = action.component;
+                  setCurrentPage(action.key);
+                  return (
+                    <Component
+                      {...props}
+                      context={appContext}
+                      action={action.key}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
+        </Switch>
+      </div>
     </>
   );
 };
