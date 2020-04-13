@@ -40,7 +40,7 @@ const AppUIMobile: React.FC<{
         </Toolbar>
         <Tabs
           aria-label="App actions"
-          centered
+          scrollButtons="on"
           value={currentAction}
           onChange={(event, newValue) => {
             history.push(`/${appContext.appId}/${newValue}`);
