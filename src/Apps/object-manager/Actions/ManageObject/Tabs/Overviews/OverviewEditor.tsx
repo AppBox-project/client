@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  UIType,
   AppContextType,
   ModelOverviewType,
   ModelFieldType,
-  TypeType
+  TypeType,
+  UIType,
 } from "../../../../../../Utils/Types";
 import {
   Paper,
@@ -20,49 +20,48 @@ import {
   IconButton,
   ListItemAvatar,
   TableRow,
-  Fab
+  Fab,
 } from "@material-ui/core";
 import {
   FaAngleUp,
   FaAngleDown,
   FaAngleLeft,
   FaAngleRight,
-  FaSave
+  FaSave,
 } from "react-icons/fa";
 import { map, filter, indexOf } from "lodash";
 
 const AppActionManageObjectOverviewEditor: React.FC<{
-  match: { params: { object; overviewId } };
-  setCurrentOverview: (overview: string) => void;
-  UI: UIType;
+  match: { params: { detailId } };
+  setCurrentItem: (item: string) => void;
   context: AppContextType;
-  overviews: [ModelOverviewType];
   fields: [ModelFieldType];
   model: TypeType;
 }> = ({
   match: {
-    params: { overviewId }
+    params: { detailId },
   },
   context,
-  UI,
   fields,
-  overviews,
-  setCurrentOverview,
-  model
+  setCurrentItem,
+  model,
 }) => {
   // Global
+  const UI: UIType = context.UI;
 
   // States & Hooks
   const [overview, setOverview] = useState<ModelOverviewType>();
 
   // Lifecycle
   useEffect(() => {
-    setCurrentOverview(overviewId);
-    setOverview(overviews[overviewId]);
+    setCurrentItem(detailId);
+    setOverview(model.overviews[detailId]);
     return () => {
-      setCurrentOverview(null);
+      setCurrentItem(null);
     };
-  }, [overviewId]);
+  }, [detailId]);
+
+  console.log(overview);
 
   if (!overview) return <UI.Loading />;
   return (
@@ -73,8 +72,8 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  {overview.fields.map(fieldId => {
-                    const field: ModelFieldType = fields[fieldId];
+                  {overview.fields.map((fieldId) => {
+                    const field: ModelFieldType = model.fields[fieldId];
                     return <TableCell key={fieldId}>{field.name}</TableCell>;
                   })}
                 </TableRow>
@@ -102,7 +101,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                                     newFields.push(key);
                                     setOverview({
                                       ...overview,
-                                      fields: newFields
+                                      fields: newFields,
                                     });
                                   }}
                                 >
@@ -123,8 +122,8 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 <Paper className="paper">
                   <Typography variant="h6">Selected</Typography>
                   <List>
-                    {overview.fields.map(fieldId => {
-                      const field: ModelFieldType = fields[fieldId];
+                    {overview.fields.map((fieldId) => {
+                      const field: ModelFieldType = model.fields[fieldId];
                       return (
                         <ListItem key={fieldId}>
                           {overview.fields.length > 1 && (
@@ -133,9 +132,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                                 onClick={() => {
                                   setOverview({
                                     ...overview,
-                                    fields: filter(overview.fields, o => {
+                                    fields: filter(overview.fields, (o) => {
                                       return o !== fieldId;
-                                    })
+                                    }),
                                   });
                                 }}
                               >
@@ -155,7 +154,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                                   newFields[i - 1] = fieldId;
                                   setOverview({
                                     ...overview,
-                                    fields: newFields
+                                    fields: newFields,
                                   });
                                 }}
                               >
@@ -173,7 +172,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                                   newFields[i + 1] = fieldId;
                                   setOverview({
                                     ...overview,
-                                    fields: newFields
+                                    fields: newFields,
                                   });
                                 }}
                               >
@@ -191,7 +190,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
           </Grid>
         </div>
       </UI.AnimationContainer>
-      {overviews[overviewId] !== overview && (
+      {model.overviews[detailId] !== overview && (
         <div style={{ position: "absolute", right: 15, bottom: 15 }}>
           <UI.AnimationContainer>
             <Fab
@@ -201,7 +200,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                   model.key,
                   {
                     ...model,
-                    overviews: { ...model.overviews, [overviewId]: overview }
+                    overviews: { ...model.overviews, [detailId]: overview },
                   },
                   model._id
                 );

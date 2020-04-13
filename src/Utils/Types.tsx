@@ -84,7 +84,11 @@ export interface AppContextType {
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
   updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
-  setFieldDependencies: (context, dependencies, fieldId) => Promise<boolean | string>;
+  setFieldDependencies: (
+    context,
+    dependencies,
+    fieldId
+  ) => Promise<boolean | string>;
   setDialog: (dialog: dialogType) => void;
   getTypes: (
     filter: {},
@@ -117,6 +121,14 @@ export interface UIType {
   Loading: React.FC;
   AnimationContainer: React.FC;
   AnimationItem: React.FC;
+  ListDetailLayout: React.FC<{
+    list: { label: string; id: string; url?: string }[];
+    baseUrl: string;
+    customNavComponent?;
+    DetailComponent: React.FC;
+    detailComponentProps?: {};
+    context: AppContextType;
+  }>;
   Forms: {
     TextInput: React.FC<{
       label: string;

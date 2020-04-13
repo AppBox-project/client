@@ -4,7 +4,7 @@ import { AppType } from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
-import AppActionManageObjectTabFieldsEditor from "../../../Apps/object-manager/Actions/ManageObject/Tabs/Fields/FieldEditor";
+import ListDetailLayout from "./AppUI/ListDetailLayout";
 
 export class AppContext {
   appId: string;
@@ -19,27 +19,33 @@ export class AppContext {
   constructor(appId, setDialog) {
     this.appId = appId;
     this.setDialog = setDialog;
-    this.UI = { Loading, AnimationContainer, AnimationItem, Forms };
+    this.UI = {
+      Loading,
+      AnimationContainer,
+      AnimationItem,
+      Forms,
+      ListDetailLayout,
+    };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();
       this.dataListeners = [
         {
           requestId,
-          unlistenAction: "unlistenForObjects"
-        }
+          unlistenAction: "unlistenForObjects",
+        },
       ];
       Server.emit("listenForObjects", {
         requestId,
         type: "app",
-        filter: { "data.id": appId }
+        filter: { "data.id": appId },
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           this.app = response.data[0];
-          import(`../../../Apps/${this.appId}/index.tsx`).then(app => {
+          import(`../../../Apps/${this.appId}/index.tsx`).then((app) => {
             const AppCode = app.default;
             this.appCode = new AppCode(this);
-            this.appCode.getActions().then(actions => {
+            this.appCode.getActions().then((actions) => {
               this.actions = actions;
               resolve();
             });
@@ -53,7 +59,7 @@ export class AppContext {
 
   // Close active listeners for app
   unload = () => {
-    this.dataListeners.map(listener => {
+    this.dataListeners.map((listener) => {
       Server.emit(listener.unlistenAction, { requestId: listener.requestId });
     });
   };
@@ -63,12 +69,12 @@ export class AppContext {
       const requestId = uniqid();
       this.dataListeners.push({
         requestId,
-        unlistenAction: "appUnlistensForObjectTypes"
+        unlistenAction: "appUnlistensForObjectTypes",
       });
       Server.emit("appListensForObjectTypes", {
         requestId,
         appId: this.appId,
-        filter
+        filter,
       });
       Server.on(`receive-${requestId}`, then);
       // Return the controller element with a stop() function
@@ -83,15 +89,15 @@ export class AppContext {
       const requestId = uniqid();
       this.dataListeners.push({
         requestId,
-        unlistenAction: "appUnlistensForObjects"
+        unlistenAction: "appUnlistensForObjects",
       });
       Server.emit("appListensForObjects", {
         requestId,
         appId: this.appId,
         type,
-        filter
+        filter,
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         then(response);
       });
       // Return the controller element with a stop() function
@@ -108,9 +114,9 @@ export class AppContext {
         requestId,
         type,
         object,
-        appId: this.appId
+        appId: this.appId,
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           resolve();
         } else {
@@ -131,9 +137,9 @@ export class AppContext {
         requestId,
         type,
         filter,
-        appId: this.appId
+        appId: this.appId,
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           resolve();
         } else {
@@ -151,9 +157,9 @@ export class AppContext {
         type,
         id,
         newModel,
-        appId: this.appId
+        appId: this.appId,
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           resolve();
         } else {
@@ -171,9 +177,9 @@ export class AppContext {
         type,
         id,
         newObject,
-        appId: this.appId
+        appId: this.appId,
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           resolve();
         } else {
@@ -197,9 +203,9 @@ export class AppContext {
           context,
           dependencies,
           fieldId,
-          appId: this.appId
+          appId: this.appId,
         });
-        Server.on(`receive-${requestId}`, response => {
+        Server.on(`receive-${requestId}`, (response) => {
           if (response.success) {
             resolve();
           } else {

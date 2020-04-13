@@ -28,6 +28,8 @@
     - [X] Cancelling listeners before the app closes
     - [X] Updating data
   - [ ] More UI elements
+    - [ ] Pre-made UI lay-outs
+      - [x] ListDetail-Layout
 - [ ] Layouts
   - [x] Desktop-layout
   - [ ] Mobile layout
@@ -38,13 +40,13 @@
   - [ ] Every app will have it's own desktop
 - [ ] Make apps
   - [ ] Quick space
-    - [ ] Eventually: clone onenote
-    - [ ] To-do
     - [ ] Notes
-      - [ ] Base version
-      - [ ] Mobile friendly
+      - [ ] Eventually: clone onenote
+    - [ ] To-do
+      - [x] Base version
+      - [x] Mobile friendly
       - [ ] Drag and drop order
-      - [ ] Subto-do's
+      - [ ] Sub to-do's
     - [ ] File / dropzone
   - [ ] All-purpose CRM app
   - [ ] Website builder
