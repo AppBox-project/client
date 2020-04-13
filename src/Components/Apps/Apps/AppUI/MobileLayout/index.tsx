@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Button,
   Tabs,
   Tab,
 } from "@material-ui/core";
@@ -54,28 +53,34 @@ const AppUIMobile: React.FC<{
           })}
         </Tabs>
       </AppBar>
-
-      <Switch>
-        {appContext.actions.map((action) => {
-          return (
-            <Route
-              key={action.key}
-              path={`/${appContext.appId}/${action.key}`}
-              render={(props) => {
-                const Component = action.component;
-                setCurrentPage(action.key);
-                return (
-                  <Component
-                    {...props}
-                    context={appContext}
-                    action={action.key}
-                  />
-                );
-              }}
-            />
-          );
-        })}
-      </Switch>
+      <div
+        style={{
+          height: "calc(100vh - 104px)",
+          overflowInline: "scroll",
+        }}
+      >
+        <Switch>
+          {appContext.actions.map((action) => {
+            return (
+              <Route
+                key={action.key}
+                path={`/${appContext.appId}/${action.key}`}
+                render={(props) => {
+                  const Component = action.component;
+                  setCurrentPage(action.key);
+                  return (
+                    <Component
+                      {...props}
+                      context={appContext}
+                      action={action.key}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
+        </Switch>
+      </div>
     </>
   );
 };
