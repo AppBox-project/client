@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import { FaGripHorizontal, FaTimes, FaHome } from "react-icons/fa";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
@@ -19,7 +19,9 @@ const MobileLayout: React.FC = () => {
     ? window.location.href.split("/")[3]
     : "home";
   const [fabOpen, setFabOpen] = useState(false);
+  const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
 
+  // UI
   // Lifecycle
   useEffect(() => {
     const requestId = uniqid();
@@ -31,8 +33,11 @@ const MobileLayout: React.FC = () => {
         console.log(response);
       }
     });
+    setIsMobile(true);
+
     return () => {
       Server.emit("unlistenForObjects", { requestId });
+      setIsMobile(undefined);
     };
   }, []);
 

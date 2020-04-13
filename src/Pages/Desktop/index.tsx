@@ -23,7 +23,17 @@ import SettingsPage from "../Settings";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState();
+  const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
 
+  // Lifecycle
+  useEffect(() => {
+    setIsMobile(false);
+    return () => {
+      setIsMobile(undefined);
+    };
+  }, []);
+
+  // UI
   return (
     <>
       <AppBar currentApp={currentApp} />

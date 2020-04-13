@@ -33,7 +33,6 @@ import { map, filter, indexOf } from "lodash";
 
 const AppActionManageObjectOverviewEditor: React.FC<{
   match: { params: { detailId } };
-  setCurrentItem: (item: string) => void;
   context: AppContextType;
   fields: [ModelFieldType];
   model: TypeType;
@@ -43,7 +42,6 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   },
   context,
   fields,
-  setCurrentItem,
   model,
 }) => {
   // Global
@@ -54,11 +52,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setCurrentItem(detailId);
     setOverview(model.overviews[detailId]);
-    return () => {
-      setCurrentItem(null);
-    };
   }, [detailId]);
 
   console.log(overview);

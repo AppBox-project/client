@@ -6,6 +6,7 @@ import "./Style.scss";
 
 setGlobal({
   user: undefined,
+  isMobile: undefined,
   theme: {
     palette: {
       primary: {
