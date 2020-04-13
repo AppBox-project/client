@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import styles from "./styles.module.scss";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
 
-const AppUIDesktop: React.FC<{ appContext; currentPage }> = ({
+const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   appContext,
   currentPage,
+  setCurrentPage,
 }) => {
   return (
     <>

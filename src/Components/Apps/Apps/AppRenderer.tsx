@@ -65,97 +65,82 @@ const App: React.FC<{
   return (
     <>
       <Hidden xsDown>
-        <AppUIDesktop appContext={appContext} currentPage={currentPage} />
+        <AppUIDesktop
+          setCurrentPage={setCurrentPage}
+          appContext={appContext}
+          currentPage={currentPage}
+        />
       </Hidden>
       <Hidden smUp>
-        <AppUIMobile appContext={appContext} currentPage={currentPage} />
+        <AppUIMobile
+          setCurrentPage={setCurrentPage}
+          appContext={appContext}
+          currentPage={currentPage}
+        />
       </Hidden>
-      <div className={styles.app}>
-        <Switch>
-          {appContext.actions.map((action) => {
-            return (
-              <Route
-                key={action.key}
-                path={`/${appId}/${action.key}`}
-                render={(props) => {
-                  const Component = action.component;
-                  setCurrentPage(action.key);
-                  return (
-                    <Component
-                      {...props}
-                      context={appContext}
-                      action={action.key}
-                    />
-                  );
-                }}
-              />
-            );
-          })}
-        </Switch>
-        {dialog !== undefined && (
-          <Dialog
-            onClose={() => {
-              setDialog({ ...dialog, display: false });
-            }}
-            aria-labelledby="simple-dialog-title"
-            open={dialog.display}
-            maxWidth="xs"
-            fullWidth
-          >
-            {dialog.title && (
-              <DialogTitle id="simple-dialog-title">{dialog.title}</DialogTitle>
-            )}
-            {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
-            {dialog.form && (
-              <Grid container style={{ width: "90%", marginLeft: 25 }}>
-                {dialog.form.map((formItem) => {
-                  return (
-                    <Grid
-                      item
-                      xs={formItem.xs ? formItem.xs : 12}
-                      key={formItem.key}
-                    >
-                      <TextInput
-                        label={formItem.label}
-                        value={
-                          dialogFormContent !== undefined
-                            ? dialogFormContent[formItem.key]
-                            : formItem.value
-                        }
-                        onChange={(value) => {
-                          setDialogFormContent({
-                            ...dialogFormContent,
-                            [formItem.key]: value,
-                          });
-                        }}
-                      />
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            )}
-            {dialog.buttons && (
-              <DialogActions>
-                {dialog.buttons.map((button) => {
-                  return (
-                    <Button
-                      key={button.label}
-                      onClick={() => {
-                        setDialog({ ...dialog, display: false });
-                        button.onClick(
-                          dialogFormContent ? dialogFormContent : {}
-                        );
+      {dialog !== undefined && (
+        <Dialog
+          onClose={() => {
+            setDialog({ ...dialog, display: false });
+          }}
+          aria-labelledby="simple-dialog-title"
+          open={dialog.display}
+          maxWidth="xs"
+          fullWidth
+        >
+          {dialog.title && (
+            <DialogTitle id="simple-dialog-title">{dialog.title}</DialogTitle>
+          )}
+          {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
+          {dialog.form && (
+            <Grid container style={{ width: "90%", marginLeft: 25 }}>
+              {dialog.form.map((formItem) => {
+                return (
+                  <Grid
+                    item
+                    xs={formItem.xs ? formItem.xs : 12}
+                    key={formItem.key}
+                  >
+                    <TextInput
+                      label={formItem.label}
+                      value={
+                        dialogFormContent !== undefined
+                          ? dialogFormContent[formItem.key]
+                          : formItem.value
+                      }
+                      onChange={(value) => {
+                        setDialogFormContent({
+                          ...dialogFormContent,
+                          [formItem.key]: value,
+                        });
                       }}
-                    >
-                      {button.label}
-                    </Button>
-                  );
-                })}
-              </DialogActions>
-            )}
-          </Dialog>
-        )}
-      </div>
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
+          {dialog.buttons && (
+            <DialogActions>
+              {dialog.buttons.map((button) => {
+                return (
+                  <Button
+                    key={button.label}
+                    onClick={() => {
+                      setDialog({ ...dialog, display: false });
+                      button.onClick(
+                        dialogFormContent ? dialogFormContent : {}
+                      );
+                    }}
+                  >
+                    {button.label}
+                  </Button>
+                );
+              })}
+            </DialogActions>
+          )}
+        </Dialog>
+      )}
     </>
   );
 };
