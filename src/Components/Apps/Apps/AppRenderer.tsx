@@ -39,13 +39,16 @@ const App: React.FC<{
     context.isReady.then(() => {
       //@ts-ignore
       setAppcontext(context);
+      const newColor = `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`;
+      var metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", newColor);
       setgTheme({
         ...gTheme,
         palette: {
           ...gTheme.palette,
           primary: {
             ...gTheme.palette.primary,
-            main: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
+            main: newColor,
           },
         },
       });
