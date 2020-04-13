@@ -6,7 +6,7 @@ import {
   IconButton,
   Avatar,
   CircularProgress,
-  Tooltip
+  Tooltip,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -19,6 +19,7 @@ import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import { GiCardboardBox } from "react-icons/gi";
+import SettingsPage from "../Settings";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState();
@@ -29,9 +30,10 @@ const Desktop: React.FC = () => {
       <SearchBar style={{ left: currentApp ? 304 : 64 }} />
       <div className={styles.appSpace}>
         <Switch>
+          <Route path="/settings" component={SettingsPage} />
           <Route
             path="/:appId"
-            render={params => {
+            render={(params) => {
               return <AppRenderer {...params} setCurrentApp={setCurrentApp} />;
             }}
           />
@@ -52,20 +54,20 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         duration: 0.3,
         when: "beforeChildren",
         staggerChildren: 0.1,
-        ease: "easeOut"
-      }
+        ease: "easeOut",
+      },
     },
     hidden: {
       opacity: 0,
       x: -10,
       transition: {
-        when: "afterChildren"
-      }
-    }
+        when: "afterChildren",
+      },
+    },
   };
   const item = {
     visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: 10 }
+    hidden: { opacity: 0, y: 10 },
   };
   const [user] = useGlobal<any>("user");
   const [apps, setApps] = useState();
@@ -74,7 +76,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   useEffect(() => {
     const requestId = uniqid();
     Server.emit("listenForObjects", { requestId, type: "app", filter: {} });
-    Server.on(`receive-${requestId}`, response => {
+    Server.on(`receive-${requestId}`, (response) => {
       if (response.success) {
         setApps(response.data);
       } else {
@@ -114,14 +116,15 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         </Grid>
         <Grid item xs={10} className={styles.item}>
           <Grid container direction="column" style={{ height: "100%" }}>
-            {apps.map(app => {
+            {apps.map((app) => {
               const Icon = icons[app.data.icon];
               return (
                 <Grid
                   item
                   xs={1}
-                  className={`${styles.item} ${currentApp === app.data.id &&
-                    styles.active}`}
+                  className={`${styles.item} ${
+                    currentApp === app.data.id && styles.active
+                  }`}
                   key={app._id}
                 >
                   <motion.div variants={item} style={{ width: 64 }}>
@@ -132,7 +135,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                             variant="rounded"
                             style={{
                               transition: "all 1s",
-                              backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`
+                              backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
                             }}
                           >
                             <Icon />
@@ -154,7 +157,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           style={{ alignItems: "flex-end" }}
         >
           <motion.div variants={item}>
-            <Link to={`/data-explorer/user/${user._id}`}>
+            <Link to="/settings">
               <IconButton style={{ width: 64 }}>
                 <Avatar>{user.data.first_name}</Avatar>
               </IconButton>
