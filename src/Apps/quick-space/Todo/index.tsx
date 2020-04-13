@@ -11,7 +11,7 @@ import {
   Tab,
   Typography,
   ListItemIcon,
-  Checkbox
+  Checkbox,
 } from "@material-ui/core";
 import { Switch, Route, useHistory } from "react-router-dom";
 import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
@@ -37,7 +37,7 @@ const AppActionTodo: React.FC<{
     const projectRequest = context.getObjects(
       "qs-todo-project",
       {},
-      response => {
+      (response) => {
         if (response.success) {
           setProjects(response.data);
         } else {
@@ -52,7 +52,11 @@ const AppActionTodo: React.FC<{
   }, []);
 
   // UI
-  if (projects === undefined) return <UI.Loading />;
+  if (projects === undefined || projects.length < 1) return <UI.Loading />;
+  if (currentTab === "") {
+    history.push(`/quick-space/todo/${projects[0]._id}`);
+    return <UI.Loading />;
+  }
   return (
     <div style={{ padding: 15 }}>
       <Tabs
@@ -61,9 +65,9 @@ const AppActionTodo: React.FC<{
           history.push(`/quick-space/todo/${value}`);
         }}
         centered
-        aria-label="simple tabs example"
+        aria-label="Project overview"
       >
-        {projects.map(project => {
+        {projects.map((project) => {
           return (
             <Tab
               label={project.data.name}
@@ -76,7 +80,7 @@ const AppActionTodo: React.FC<{
       <Switch>
         <Route
           path="/quick-space/todo/:projectId"
-          render={props => {
+          render={(props) => {
             return <TodoList {...props} context={context} UI={UI} />;
           }}
         />
@@ -93,10 +97,10 @@ const TodoList: React.FC<{
   UI: UIType;
 }> = ({
   match: {
-    params: { projectId }
+    params: { projectId },
   },
   context,
-  UI
+  UI,
 }) => {
   // Hooks
   const [todos, setTodos] = useState();
@@ -107,7 +111,7 @@ const TodoList: React.FC<{
     const todosRequest = context.getObjects(
       "qs-todo",
       { "data.project": projectId },
-      response => {
+      (response) => {
         if (response.success) {
           setTodos(response.data);
         } else {
@@ -133,25 +137,25 @@ const TodoList: React.FC<{
             margin="normal"
             label="Add todo"
             value={newTodo}
-            onKeyDown={e => {
+            onKeyDown={(e) => {
               if (e.key === "Enter") {
                 context
                   .addObject("qs-todo", { action: newTodo, project: projectId })
                   .then(
                     () => {},
-                    reason => {
+                    (reason) => {
                       console.log(reason);
                     }
                   );
                 setNewTodo("");
               }
             }}
-            onChange={e => {
+            onChange={(e) => {
               setNewTodo(e.target.value);
             }}
           />
         </UI.AnimationItem>
-        {todos.map(todo => {
+        {todos.map((todo) => {
           if (!todo.data.done) {
             return (
               <UI.AnimationItem>
@@ -163,7 +167,7 @@ const TodoList: React.FC<{
                           .updateObject("qs-todo", { done: true }, todo._id)
                           .then(
                             () => {},
-                            feedback => {
+                            (feedback) => {
                               console.log(feedback);
                             }
                           );
@@ -178,7 +182,7 @@ const TodoList: React.FC<{
                           .deleteObjects("qs-todo", { _id: todo._id })
                           .then(
                             () => {},
-                            reason => {
+                            (reason) => {
                               console.log(reason);
                             }
                           );
@@ -199,7 +203,7 @@ const TodoList: React.FC<{
         </Typography>
       </UI.AnimationItem>
       <List>
-        {todos.map(todo => {
+        {todos.map((todo) => {
           if (todo.data.done) {
             return (
               <UI.AnimationItem>
@@ -212,7 +216,7 @@ const TodoList: React.FC<{
                           .updateObject("qs-todo", { done: false }, todo._id)
                           .then(
                             () => {},
-                            feedback => {
+                            (feedback) => {
                               console.log(feedback);
                             }
                           );
@@ -227,7 +231,7 @@ const TodoList: React.FC<{
                           .deleteObjects("qs-todo", { _id: todo._id })
                           .then(
                             () => {},
-                            reason => {
+                            (reason) => {
                               console.log(reason);
                             }
                           );
