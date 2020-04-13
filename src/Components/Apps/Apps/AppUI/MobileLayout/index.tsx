@@ -48,7 +48,9 @@ const AppUIMobile: React.FC<{
         >
           <Tab value="home" label="Home" />
           {appContext.actions.map((action) => {
-            return <Tab value={action.key} label={action.label} />;
+            return (
+              <Tab key={action.key} value={action.key} label={action.label} />
+            );
           })}
         </Tabs>
       </AppBar>

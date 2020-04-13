@@ -3,7 +3,7 @@ import {
   UIType,
   ModelFieldType,
   AppContextType,
-  TypeType
+  TypeType,
 } from "../../../../../../Utils/Types";
 import {
   Paper,
@@ -12,43 +12,37 @@ import {
   Button,
   ListItem,
   List,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import FormulaEditor from "../../../../../../Components/FormulaEditor";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
-  match: { params: { object; fieldId } };
-  setCurrentField: (field: string) => void;
-  UI: UIType;
+  match: { params: { detailId } };
   context: AppContextType;
-  fields: [ModelFieldType];
   model: TypeType;
 }> = ({
   match: {
-    params: { fieldId }
+    params: { detailId },
   },
   context,
-  UI,
-  fields,
-  setCurrentField,
-  model
+  model,
 }) => {
   // Global
+  const UI: UIType = context.UI;
+
   // States & Hooks
   const [field, setField] = useState();
   const [formulaDeps, setFormulaDeps] = useState();
 
   // Lifecycle
   useEffect(() => {
-    setCurrentField(fieldId);
-    setField(fields[fieldId]);
-    return () => {
-      setCurrentField(null);
-    };
-  }, [fieldId]);
+    //@ts-ignore
+    setField(model.fields[detailId]);
+  }, [detailId]);
 
   // UI
   if (!field) return <UI.Loading />;
+
   return (
     <UI.AnimationContainer>
       <Grid container style={{ width: "100%" }}>
@@ -67,18 +61,18 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       content:
                         "Changing the key is usually not required, and requires you to update the layouts and overviews. Any data may be lost.",
                       form: [
-                        { key: "newKey", label: "New key", value: fieldId }
+                        { key: "newKey", label: "New key", value: detailId },
                       ],
                       buttons: [
                         {
                           label: "Change",
-                          onClick: response => {
+                          onClick: (response) => {
                             if (response.newKey) {
                               console.log(response.newKey);
                             }
-                          }
-                        }
-                      ]
+                          },
+                        },
+                      ],
                     });
                   }}
                 >
@@ -100,7 +94,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <UI.Forms.TextInput
                     label="Name"
                     value={field.name}
-                    onChange={value => {
+                    onChange={(value) => {
                       setField({ ...field, name: value });
                     }}
                   />
@@ -109,7 +103,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <UI.Forms.CheckmarkInput
                     label="Required"
                     value={field.required}
-                    onChange={value => {
+                    onChange={(value) => {
                       setField({ ...field, required: value });
                     }}
                   />
@@ -118,7 +112,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <UI.Forms.CheckmarkInput
                     label="Unique"
                     value={field.unique}
-                    onChange={value => {
+                    onChange={(value) => {
                       setField({ ...field, unique: value });
                     }}
                   />
@@ -145,9 +139,9 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "options", label: "Options" },
                       { value: "textinput", label: "Text input" },
                       { value: "formula", label: "Formula" },
-                      { value: "relationship", label: "Relationship" }
+                      { value: "relationship", label: "Relationship" },
                     ]}
-                    onChange={value => {
+                    onChange={(value) => {
                       setField({ ...field, type: value });
                     }}
                   />
@@ -161,12 +155,12 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         { value: "text", label: "Text" },
                         { value: "password", label: "Password" },
                         { value: "email", label: "E-mail" },
-                        { value: "number", label: "Number" }
+                        { value: "number", label: "Number" },
                       ]}
-                      onChange={value => {
+                      onChange={(value) => {
                         setField({
                           ...field,
-                          typeArgs: { ...field.typeArgs, type: value }
+                          typeArgs: { ...field.typeArgs, type: value },
                         });
                       }}
                     />
@@ -183,12 +177,12 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         options={[
                           { value: "dropdown", label: "Dropdown" },
                           { value: "radio", label: "Radio buttons" },
-                          { value: "checkmarks", label: "Checkmarks" }
+                          { value: "checkmarks", label: "Checkmarks" },
                         ]}
-                        onChange={value => {
+                        onChange={(value) => {
                           setField({
                             ...field,
-                            typeArgs: { ...field.typeArgs, display: value }
+                            typeArgs: { ...field.typeArgs, display: value },
                           });
                         }}
                       />
@@ -201,7 +195,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         label="Options"
                         multiline
                         value={field.typeArgs ? field.typeArgs.options : ""}
-                        onChange={value => {
+                        onChange={(value) => {
                           setField({ ...field, options: value });
                         }}
                       />
@@ -213,10 +207,10 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     <UI.Forms.CheckmarkInput
                       label="With markdown?"
                       value={field.typeArgs ? field.typeArgs.markdown : false}
-                      onChange={value => {
+                      onChange={(value) => {
                         setField({
                           ...field,
-                          typeArgs: { ...field.typeArgs, markdown: value }
+                          typeArgs: { ...field.typeArgs, markdown: value },
                         });
                       }}
                     />
@@ -234,8 +228,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                           typeArgs: {
                             ...field.typeArgs,
                             formula,
-                            dependencies: formulaDeps
-                          }
+                            dependencies: formulaDeps,
+                          },
                         });
                       }}
                       value={field.typeArgs ? field.typeArgs.formula : ""}
@@ -251,10 +245,13 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       value={
                         field.typeArgs ? field.typeArgs.relationshipTo : ""
                       }
-                      onChange={value => {
+                      onChange={(value) => {
                         setField({
                           ...field,
-                          typeArgs: { ...field.typeArgs, relationshipTo: value }
+                          typeArgs: {
+                            ...field.typeArgs,
+                            relationshipTo: value,
+                          },
                         });
                       }}
                     />
@@ -280,7 +277,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             />
           </UI.AnimationItem>
         </Grid>
-        {field !== fields[fieldId] && (
+        {field !== model.fields[detailId] && (
           <Grid item xs={12}>
             <UI.AnimationItem>
               <Button
@@ -292,19 +289,19 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     model.key,
                     {
                       ...model,
-                      fields: { ...model.fields, [fieldId]: field }
+                      fields: { ...model.fields, [detailId]: field },
                     },
                     model._id
                   );
 
                   if (formulaDeps) {
                     context
-                      .setFieldDependencies(model.key, formulaDeps, fieldId)
+                      .setFieldDependencies(model.key, formulaDeps, detailId)
                       .then(
-                        yes => {
+                        (yes) => {
                           console.log(yes);
                         },
-                        no => {
+                        (no) => {
                           console.log(no);
                         }
                       );
@@ -330,14 +327,14 @@ const ValidationsList: React.FC<{
       <Typography variant="h5">Validations</Typography>
       <List>
         {validations ? (
-          validations.map(validation => {
+          validations.map((validation) => {
             return (
               <ListItem
                 button
                 onClick={() => {
                   context.setDialog({
                     display: true,
-                    title: "Transformation"
+                    title: "Transformation",
                   });
                 }}
               >
@@ -362,7 +359,7 @@ const TransformationsList: React.FC<{
       <Typography variant="h5">Transformations</Typography>
       <List>
         {transformations ? (
-          transformations.map(transformation => {
+          transformations.map((transformation) => {
             return (
               <ListItem>
                 <ListItemText>{transformation}</ListItemText>
@@ -390,10 +387,10 @@ const ListObjectTypes: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getTypes({}, response => {
+    context.getTypes({}, (response) => {
       if (response.success) {
         const t = [];
-        response.data.map(rd => {
+        response.data.map((rd) => {
           t.push({ value: rd.key, label: rd.name });
         });
         setObjectTypes(t);

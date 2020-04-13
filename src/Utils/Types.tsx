@@ -128,6 +128,7 @@ export interface UIType {
     DetailComponent: React.FC;
     detailComponentProps?: {};
     context: AppContextType;
+    addFunction?: () => void;
   }>;
   Forms: {
     TextInput: React.FC<{

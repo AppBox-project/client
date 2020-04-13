@@ -22,15 +22,13 @@ const AppActionManageObjectTabOverviews: React.FC<{
 
   // UI
   return (
-    <>
-      <UI.ListDetailLayout
-        list={list}
-        baseUrl={`/object-manager/${model.key}/overviews`}
-        DetailComponent={AppActionManageObjectOverviewEditor}
-        context={context}
-        detailComponentProps={{ model }}
-      />
-    </>
+    <UI.ListDetailLayout
+      list={list}
+      baseUrl={`/object-manager/${model.key}/overviews`}
+      DetailComponent={AppActionManageObjectOverviewEditor}
+      context={context}
+      detailComponentProps={{ model }}
+    />
   );
 };
 

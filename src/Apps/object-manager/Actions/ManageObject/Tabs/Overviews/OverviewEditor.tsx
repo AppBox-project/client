@@ -55,8 +55,6 @@ const AppActionManageObjectOverviewEditor: React.FC<{
     setOverview(model.overviews[detailId]);
   }, [detailId]);
 
-  console.log(overview);
-
   if (!overview) return <UI.Loading />;
   return (
     <>
