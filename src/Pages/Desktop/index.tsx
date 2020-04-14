@@ -81,6 +81,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   };
   const [user] = useGlobal<any>("user");
   const [apps, setApps] = useState();
+  const [theme] = useGlobal<any>("theme");
 
   // Lifecycle
   useEffect(() => {
@@ -105,7 +106,8 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       initial="hidden"
       animate="visible"
       variants={list}
-      className={`${styles.appbar} bg`}
+      className={styles.appbar}
+      style={{ backgroundColor: theme.palette.primary.main }}
     >
       <div className={styles.shadow} />
       <Grid
