@@ -10,7 +10,7 @@ setGlobal({
   theme: {
     palette: {
       primary: {
-        main: "#ff4400",
+        main: "#0247a1",
       },
       secondary: {
         light: "#0066ff",

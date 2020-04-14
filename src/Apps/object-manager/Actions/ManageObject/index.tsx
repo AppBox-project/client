@@ -45,6 +45,8 @@ const AppActionManageObject: React.FC<{
           history.push(`/object-manager/${action}/${value}`);
         }}
         centered
+        indicatorColor="primary"
+        textColor="primary"
         aria-label="simple tabs example"
       >
         <Tab label="Object" value="object" />
