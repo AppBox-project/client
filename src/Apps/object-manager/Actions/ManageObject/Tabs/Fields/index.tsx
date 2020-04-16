@@ -26,8 +26,8 @@ const AppActionManageObjectTabFields: React.FC<{
 
   // States & Hooks
   const list = [];
-  map(model.fields, (overview, key) => {
-    list.push({ label: key, id: key, url: key });
+  map(model.fields, (field, key) => {
+    list.push({ label: field.name, id: key, url: key });
   });
 
   // UI

@@ -17,34 +17,64 @@ const AppQSActionNotes: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-project", {}, (response) => {
-      if (response.success) {
-        // Map projects for treeview
-        const newProjects = [];
-        response.data.map((project) => {
-          if (!project.data.parent) {
-            const subItems = [];
-            filter(response.data, (o) => {
-              return o.data.parent === project._id;
-            }).map((subProject) => {
-              subItems.push({
-                key: subProject._id,
-                label: subProject.data.name,
-                icon: FaTasks,
-              });
-            });
+    context.getObjects("qs-project", {}, (projectResponse) => {
+      context.getObjects("qs-memo", {}, (memoResponse) => {
+        if (projectResponse.success) {
+          if (memoResponse.success) {
+            // Map projects for treeview
+            const newProjects = [];
+            projectResponse.data.map((project) => {
+              if (!project.data.parent) {
+                const subItems = [];
+                // Subprojects
+                filter(projectResponse.data, (o) => {
+                  return o.data.parent === project._id;
+                }).map((subProject) => {
+                  // Subprojects memos
+                  const subMemos = [];
+                  filter(memoResponse.data, (o) => {
+                    return o.data.project === subProject._id;
+                  }).map((subMemo) => {
+                    subMemos.push({
+                      key: subMemo._id,
+                      label: subMemo.data.title,
+                      icon: FaStickyNote,
+                    });
+                  });
 
-            newProjects.push({
-              value: project._id,
-              label: project.data.name,
-              subItems,
+                  subItems.push({
+                    key: subProject._id,
+                    label: subProject.data.name,
+                    icon: FaTasks,
+                    subItems: subMemos.length > 0 ? subMemos : undefined,
+                  });
+                });
+                // Submemos
+                filter(memoResponse.data, (o) => {
+                  return o.data.project === project._id;
+                }).map((subProject) => {
+                  subItems.push({
+                    key: subProject._id,
+                    label: subProject.data.title,
+                    icon: FaStickyNote,
+                  });
+                });
+
+                newProjects.push({
+                  value: project._id,
+                  label: project.data.name,
+                  subItems,
+                });
+              }
             });
+            setProjects(newProjects);
+          } else {
+            console.log(memoResponse);
           }
-        });
-        setProjects(newProjects);
-      } else {
-        console.log(response);
-      }
+        } else {
+          console.log(projectResponse);
+        }
+      });
     });
   }, []);
 
