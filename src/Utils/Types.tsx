@@ -130,6 +130,7 @@ export interface UIType {
   AnimationItem: React.FC;
   TreeView: React.FC<{
     items: TreeViewDataItem[];
+    linkTo: string;
   }>;
   ListDetailLayout: React.FC<{
     mode?: "normal" | "tree";
@@ -155,10 +156,11 @@ export interface UIType {
       onChange?: (value: string) => void;
     }>;
     SelectInput: React.FC<{
-      label: string;
-      value: string;
+      label?: string;
+      value?: string;
       options: { value: string; label: string }[];
       onChange?: (value) => void;
+      style?;
     }>;
   };
 }

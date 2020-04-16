@@ -20,7 +20,6 @@ const RenderChildren: React.FC<{ items: DataItem[]; linkTo?: string }> = ({
 }) => {
   // Vars
   const history = useHistory();
-  const [isMobile] = useGlobal<any>("isMobile");
 
   // UI
   return (

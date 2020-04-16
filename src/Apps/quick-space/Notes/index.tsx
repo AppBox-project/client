@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
 import { TreeView, TreeItem } from "@material-ui/lab";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import MailIcon from "@material-ui/icons/Mail";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Label from "@material-ui/icons/Label";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import InfoIcon from "@material-ui/icons/Info";
-import ForumIcon from "@material-ui/icons/Forum";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
+import { filter } from "lodash";
 import AppQSNotesDetail from "./NotesDetail";
+import AppQSNotesNavigation from "./Navigation";
+import { FaStickyNote, FaProjectDiagram, FaTasks } from "react-icons/fa";
 
 const AppQSActionNotes: React.FC<{
   match: { isExact: boolean };
@@ -19,12 +13,35 @@ const AppQSActionNotes: React.FC<{
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
   const [projects, setProjects] = useState();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
     context.getObjects("qs-project", {}, (response) => {
       if (response.success) {
-        setProjects(response.data);
+        // Map projects for treeview
+        const newProjects = [];
+        response.data.map((project) => {
+          if (!project.data.parent) {
+            const subItems = [];
+            filter(response.data, (o) => {
+              return o.data.parent === project._id;
+            }).map((subProject) => {
+              subItems.push({
+                key: subProject._id,
+                label: subProject.data.name,
+                icon: FaTasks,
+              });
+            });
+
+            newProjects.push({
+              value: project._id,
+              label: project.data.name,
+              subItems,
+            });
+          }
+        });
+        setProjects(newProjects);
       } else {
         console.log(response);
       }
@@ -33,50 +50,16 @@ const AppQSActionNotes: React.FC<{
 
   // UI
   if (!projects) return <context.UI.Loading />;
+
   return (
-    <>
-      <context.UI.ListDetailLayout
-        baseUrl="/quick-space/notes"
-        mode="tree"
-        treeList={[
-          {
-            key: "test",
-            label: "test",
-            icon: DeleteIcon,
-            subItems: [
-              {
-                key: "sub1",
-                label: "sub1",
-                icon: DeleteIcon,
-                subItems: [
-                  {
-                    key: "subsub1",
-                    label: "subsub1",
-                    icon: DeleteIcon,
-                    subItems: [
-                      {
-                        key: "subsub1",
-                        label: "subsub1",
-                        icon: DeleteIcon,
-                      },
-                      {
-                        key: "subsub2",
-                        label: "subsub2",
-                        icon: DeleteIcon,
-                      },
-                    ],
-                  },
-                  { key: "subsub2", label: "subsub2", icon: DeleteIcon },
-                ],
-              },
-            ],
-          },
-          { key: "test2", label: "test2", icon: DeleteIcon },
-        ]}
-        context={context}
-        DetailComponent={AppQSNotesDetail}
-      />
-    </>
+    <context.UI.ListDetailLayout
+      baseUrl="quick-space/notes"
+      customNavComponent={
+        <AppQSNotesNavigation context={context} projects={projects} />
+      }
+      DetailComponent={AppQSNotesDetail}
+      context={context}
+    />
   );
 };
 

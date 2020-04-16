@@ -5,15 +5,16 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 
 const AppUISelect: React.FC<{
   label: string;
-  value: string;
+  value?: string;
   options: { value: string; label: string }[];
   onChange?: (value) => void;
-}> = ({ label, value, onChange, options }) => {
+  style?;
+}> = ({ label, value, onChange, options, style }) => {
   // Global
   // States & Hooks
   const [newValue, setNewValue] = useState("");
@@ -24,18 +25,18 @@ const AppUISelect: React.FC<{
 
   // UI
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth style={style}>
       <InputLabel>{label}</InputLabel>
       <Select
         fullWidth
         value={newValue}
-        onChange={event => {
+        onChange={(event) => {
           //@ts-ignore
           setNewValue(event.target.value);
-          onChange(event.target.value);
+          if (onChange) onChange(event.target.value);
         }}
       >
-        {options.map(option => {
+        {options.map((option) => {
           return (
             <MenuItem value={option.value} key={option.value}>
               {option.label}
