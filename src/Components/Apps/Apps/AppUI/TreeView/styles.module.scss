@@ -1,0 +1,17 @@
+.label {
+  font-weight: inherit;
+  color: inherit;
+}
+
+.labelRoot {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+.labelIcon {
+  margin-right: 8;
+}
+.labelText {
+  font-weight: inherit;
+  flex-grow: 1;
+}
