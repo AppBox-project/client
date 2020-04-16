@@ -74,7 +74,7 @@ export interface AppContextType {
   isReady: Promise<unknown>;
   appCode: any;
   actions: [{ label: string; key: string; component: FC }];
-  UI: any;
+  UI: UIType;
   getObjects: (
     type: string,
     filter: {},
@@ -117,12 +117,24 @@ export interface AppRequestController {
   stop: () => void;
 }
 
+export interface TreeViewDataItem {
+  key: string;
+  label: string;
+  icon: React.FC;
+  subItems?: TreeViewDataItem[];
+}
+
 export interface UIType {
   Loading: React.FC;
   AnimationContainer: React.FC;
   AnimationItem: React.FC;
+  TreeView: React.FC<{
+    items: TreeViewDataItem[];
+  }>;
   ListDetailLayout: React.FC<{
-    list: { label: string; id: string; url?: string }[];
+    mode?: "normal" | "tree";
+    list?: { label: string; id: string; url?: string }[];
+    treeList?: TreeViewDataItem[];
     baseUrl: string;
     customNavComponent?;
     DetailComponent: React.FC;

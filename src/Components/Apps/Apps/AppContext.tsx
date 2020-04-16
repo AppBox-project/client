@@ -5,6 +5,7 @@ import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
 import ListDetailLayout from "./AppUI/ListDetailLayout";
+import TreeView from "./AppUI/TreeView";
 
 export class AppContext {
   appId: string;
@@ -25,6 +26,7 @@ export class AppContext {
       AnimationItem,
       Forms,
       ListDetailLayout,
+      TreeView,
     };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();
