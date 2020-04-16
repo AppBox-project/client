@@ -169,7 +169,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           style={{ alignItems: "flex-end" }}
         >
           <motion.div variants={item}>
-            <Link to="/settings">
+            <Link to="/settings/update">
               <IconButton style={{ width: 64 }}>
                 <Avatar>{user.data.first_name}</Avatar>
               </IconButton>
