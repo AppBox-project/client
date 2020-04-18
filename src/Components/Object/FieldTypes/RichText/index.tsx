@@ -51,7 +51,11 @@ const FieldTypeRichText: React.FC<{
           </div>
         )}
         {mode === "edit" && (
-          <>{field.typeArgs.type === "drafting" && <InputDrafting />}</>
+          <>
+            {field.typeArgs.type === "drafting" && (
+              <InputDrafting placeholder={field.name} mode="inline" />
+            )}
+          </>
         )}
       </div>
     </div>
