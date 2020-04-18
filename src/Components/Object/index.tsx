@@ -22,6 +22,7 @@ import FieldTypeInput from "./FieldTypes/Input";
 import FieldTypeRelationship from "./FieldTypes/Relationship";
 import FieldTypeBoolean from "./FieldTypes/Boolean";
 import FieldTypeFormula from "./FieldTypes/Formula";
+import FieldTypeRichText from "./FieldTypes/RichText";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -423,6 +424,21 @@ const LayoutItem: React.FC<{
           )}
           {field.type === "relationship" && (
             <FieldTypeRelationship
+              mode={mode}
+              field={field}
+              object={object}
+              fieldKey={layoutItem.field}
+              setMode={setMode}
+              onChange={(value) => {
+                setToChange({
+                  ...toChange,
+                  [layoutItem.field]: value,
+                });
+              }}
+            />
+          )}
+          {field.type === "richtext" && (
+            <FieldTypeRichText
               mode={mode}
               field={field}
               object={object}

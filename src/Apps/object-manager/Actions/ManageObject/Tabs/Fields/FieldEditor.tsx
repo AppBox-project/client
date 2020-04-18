@@ -137,7 +137,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "input", label: "Input" },
                       { value: "boolean", label: "Boolean" },
                       { value: "options", label: "Options" },
-                      { value: "textinput", label: "Text input" },
+                      { value: "richtext", label: "Rich text" },
                       { value: "formula", label: "Formula" },
                       { value: "relationship", label: "Relationship" },
                     ]}
@@ -202,15 +202,20 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     </Grid>
                   </>
                 )}
-                {field.type === "textinput" && (
+                {field.type === "richtext" && (
                   <Grid item xs={6}>
-                    <UI.Forms.CheckmarkInput
-                      label="With markdown?"
-                      value={field.typeArgs ? field.typeArgs.markdown : false}
+                    richtext
+                    <UI.Forms.SelectInput
+                      label="Type"
+                      value={field.typeArgs ? field.typeArgs.type : "regular"}
+                      options={[
+                        { value: "regular", label: "Regular" },
+                        { value: "drafting", label: "Drafting" },
+                      ]}
                       onChange={(value) => {
                         setField({
                           ...field,
-                          typeArgs: { ...field.typeArgs, markdown: value },
+                          typeArgs: { ...field.typeArgs, type: value },
                         });
                       }}
                     />
