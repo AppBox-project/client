@@ -149,6 +149,7 @@ export interface UIType {
       value: string;
       onChange?: (value: string) => void;
       multiline?: boolean;
+      style?: {};
     }>;
     CheckmarkInput: React.FC<{
       label: string;

@@ -4,6 +4,8 @@ import { TreeView, TreeItem } from "@material-ui/lab";
 import { filter } from "lodash";
 import AppQSNotesNavigation from "./Navigation";
 import { Grid } from "@material-ui/core";
+import { Route } from "react-router-dom";
+import AppQSNotesDetail from "./NotesDetail";
 
 const AppQSActionNotes: React.FC<{
   match: { isExact: boolean };
@@ -14,6 +16,7 @@ const AppQSActionNotes: React.FC<{
   const [projects, setProjects] = useState();
   const [flatProjects, setFlatProjects] = useState();
   const [memos, setMemos] = useState();
+  const [selectedMemo, setSelectedMemo] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -60,12 +63,27 @@ const AppQSActionNotes: React.FC<{
   if (!projects || !memos) return <context.UI.Loading />;
   return (
     <Grid container>
-      <Grid item xs={5}>
+      <Grid item xs={12} md={6} lg={4}>
         <AppQSNotesNavigation
           memos={memos}
           flatProjects={flatProjects}
           projects={projects}
           context={context}
+          selectedMemo={selectedMemo}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={8}>
+        <Route
+          path="/quick-space/notes/:noteId"
+          component={(props) => {
+            return (
+              <AppQSNotesDetail
+                {...props}
+                setSelectedMemo={setSelectedMemo}
+                context={context}
+              />
+            );
+          }}
         />
       </Grid>
     </Grid>

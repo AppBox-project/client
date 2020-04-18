@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { AppContextType } from "../../../Utils/Types";
-import { find, findIndex } from "lodash";
+import { find, filter } from "lodash";
 import {
   Grid,
   ListItem,
@@ -11,16 +11,8 @@ import {
   Typography,
   ListItemIcon,
 } from "@material-ui/core";
-import { FaList, FaGripHorizontal } from "react-icons/fa";
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
+import { FaGripLines, FaStickyNote } from "react-icons/fa";
+import { useHistory } from "react-router-dom";
 
 const grid = 8;
 
@@ -29,11 +21,13 @@ const AppQSNotesNavigation: React.FC<{
   projects;
   memos;
   flatProjects;
-}> = ({ context, projects, memos, flatProjects }) => {
+  selectedMemo: string;
+}> = ({ context, projects, memos, flatProjects, selectedMemo }) => {
   // Vars
   const [projectOverview, setProjectOverview] = useState();
   const [selectedProject, setSelectedProject] = useState();
   const [project, setProject] = useState();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -67,9 +61,16 @@ const AppQSNotesNavigation: React.FC<{
 
   // UI
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container>
-        <Grid item xs={6}>
+    <Grid container style={{ height: "calc(100vh - 64px)" }}>
+      <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
+        <Typography
+          variant="h6"
+          color="primary"
+          style={{ textAlign: "center" }}
+        >
+          Projects
+        </Typography>
+        <DragDropContext onDragEnd={onDragEnd}>
           <List>
             {projects.map((project) => {
               return (
@@ -99,6 +100,9 @@ const AppQSNotesNavigation: React.FC<{
                             >
                               {(draggableProvided, draggableSnapshot) => (
                                 <ListItem
+                                  selected={
+                                    subproject.value === selectedProject
+                                  }
                                   ref={draggableProvided.innerRef}
                                   {...draggableProvided.draggableProps}
                                   {...draggableProvided.dragHandleProps}
@@ -108,7 +112,7 @@ const AppQSNotesNavigation: React.FC<{
                                   }}
                                 >
                                   <ListItemIcon>
-                                    <FaGripHorizontal />
+                                    <FaGripLines />
                                   </ListItemIcon>
                                   <ListItemText>
                                     {subproject.label}
@@ -126,9 +130,11 @@ const AppQSNotesNavigation: React.FC<{
               );
             })}
           </List>
-        </Grid>
-        <Grid item xs={6}>
-          {project && (
+        </DragDropContext>
+      </Grid>
+      <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
+        {project && (
+          <>
             <Typography
               variant="h6"
               color="primary"
@@ -136,48 +142,55 @@ const AppQSNotesNavigation: React.FC<{
             >
               {project.data.name}
             </Typography>
-          )}
-        </Grid>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="memos">
+                {(droppableProvided, droppableSnapshot) => (
+                  <div
+                    ref={droppableProvided.innerRef}
+                    style={{
+                      transition: "all 1s",
+                      padding: grid,
+                    }}
+                  >
+                    {filter(memos, (o) => {
+                      return o.data.project === project._id;
+                    }).map((memo, index) => {
+                      return (
+                        <Draggable
+                          key={memo._id}
+                          draggableId={memo._id}
+                          index={index}
+                        >
+                          {(draggableProvided, draggableSnapshot) => (
+                            <ListItem
+                              onClick={() => {
+                                history.push(`/quick-space/notes/${memo._id}`);
+                              }}
+                              selected={selectedMemo == memo._id}
+                              ref={draggableProvided.innerRef}
+                              {...draggableProvided.draggableProps}
+                              {...draggableProvided.dragHandleProps}
+                              button
+                            >
+                              <ListItemIcon>
+                                <FaStickyNote />
+                              </ListItemIcon>
+                              <ListItemText>{memo.data.title}</ListItemText>
+                            </ListItem>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                    {droppableProvided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </>
+        )}
       </Grid>
-    </DragDropContext>
+    </Grid>
   );
 };
-
-/*<Droppable droppableId="droppable">
-              {(droppableProvided, droppableSnapshot) => (
-                <div
-                  ref={droppableProvided.innerRef}
-                  style={{
-                    transition: "all 1s",
-                    padding: grid,
-                  }}
-                >
-                  {subprojects.map((subproject, index) => {
-                    return (
-                      <Draggable
-                        key={subproject.value}
-                        draggableId={subproject.value}
-                        index={index}
-                      >
-                        {(draggableProvided, draggableSnapshot) => (
-                          <ListItem
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                            button
-                            onClick={() => {
-                              setSubprojectId(subproject.value);
-                            }}
-                          >
-                            <ListItemText>{subproject.label}</ListItemText>
-                          </ListItem>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                  {droppableProvided.placeholder}
-                </div>
-              )}
-            </Droppable> */
 
 export default AppQSNotesNavigation;

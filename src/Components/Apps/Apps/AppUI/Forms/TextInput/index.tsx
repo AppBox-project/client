@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TextField } from "@material-ui/core";
+import { TextField, InputBase } from "@material-ui/core";
+import styles from "./styles.module.scss";
 
 const AppUITextField: React.FC<{
   label: string;
@@ -15,26 +16,7 @@ const AppUITextField: React.FC<{
     setNewValue(value);
   }, [value]);
   // UI
-  return (
-    <div className="input-container">
-      <div
-        className="input-container-sub"
-        style={{ width: "100%", paddingRight: 5 }}
-      >
-        <TextField
-          fullWidth
-          margin="normal"
-          label={label}
-          value={newValue}
-          multiline={multiline}
-          onChange={event => {
-            setNewValue(event.target.value);
-            if (onChange) onChange(event.target.value);
-          }}
-        />
-      </div>
-    </div>
-  );
+  return <input type="text" className={styles.input} placeholder={label} />;
 };
 
 export default AppUITextField;
