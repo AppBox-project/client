@@ -53,7 +53,14 @@ const FieldTypeRichText: React.FC<{
         {(mode === "edit" || !mode) && (
           <>
             {field.typeArgs.type === "drafting" && (
-              <InputDrafting placeholder={field.name} mode="inline" />
+              <InputDrafting
+                placeholder={field.name}
+                mode="inline"
+                value={object.data[fieldKey]}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
             )}
           </>
         )}

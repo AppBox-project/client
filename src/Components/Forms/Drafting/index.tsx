@@ -7,18 +7,24 @@ import styles from "./styles.module.scss";
 const InputDrafting: React.FC<{
   placeholder?: string;
   mode?: "normal" | "inline";
-}> = ({ placeholder, mode }) => {
+  onChange: (value: string) => void;
+  value: string;
+}> = ({ placeholder, mode, onChange, value }) => {
   // Vars
-  const [value, setValue] = useState("");
-  console.log(mode, !mode || mode == "normal" ? "snow" : "bubble");
+  const [newValue, setNewValue] = useState(value);
+
+  // Lifecycle
 
   // UI
   return (
     <div style={{ height: 300, marginTop: 300 }}>
       <ReactQuill
         theme={!mode || mode == "normal" ? "snow" : "bubble"}
-        value={value}
-        onChange={setValue}
+        value={newValue}
+        onChange={(val) => {
+          setNewValue(val);
+          onChange(val);
+        }}
         placeholder={placeholder}
         modules={{
           toolbar: [

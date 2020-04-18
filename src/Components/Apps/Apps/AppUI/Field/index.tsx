@@ -45,14 +45,7 @@ const AppUiField: React.FC<{
   if (!field || !object) return <Loading />;
   return (
     <div style={style}>
-      <Field
-        field={field}
-        object={object}
-        fieldId={fieldId}
-        onChange={(newVal) => {
-          console.log(newVal);
-        }}
-      />
+      <Field field={field} object={object} fieldId={fieldId} />
     </div>
   );
 };

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { ModelFieldType, TypeType } from "../../Utils/Types";
 import FieldTypeInput from "../Object/FieldTypes/Input";
 import FieldTypeBoolean from "../Object/FieldTypes/Boolean";
 import FieldTypeRelationship from "../Object/FieldTypes/Relationship";
 import FieldTypeRichText from "../Object/FieldTypes/RichText";
 import FieldTypeFormula from "../Object/FieldTypes/Formula";
+import { debounce } from "lodash";
+import Server from "../../Utils/Server";
+import uniqid from "uniqid";
 
 const Field: React.FC<{
   field: ModelFieldType;
@@ -12,8 +15,21 @@ const Field: React.FC<{
   object: TypeType;
   fieldId: string;
   setMode?: (mode: "view" | "edit") => void;
-  onChange;
-}> = ({ field, mode, object, fieldId, setMode, onChange }) => {
+}> = ({ field, mode, object, fieldId, setMode }) => {
+  var onChangeHandler = debounce((value) => {
+    const requestId = uniqid();
+    Server.emit("updateObject", {
+      requestId,
+      //@ts-ignore
+      type: object.objectId,
+      objectId: object._id,
+      toChange: { [fieldId]: value },
+    });
+    Server.on(`receive-${requestId}`, (response) => {
+      console.log(response);
+    });
+  }, 1000);
+
   return (
     <>
       {field.type === "input" && (
@@ -23,7 +39,7 @@ const Field: React.FC<{
           object={object}
           fieldKey={fieldId}
           setMode={setMode}
-          onChange={onChange}
+          onChange={onChangeHandler}
         />
       )}
       {field.type === "boolean" && (
@@ -33,7 +49,7 @@ const Field: React.FC<{
           object={object}
           fieldKey={fieldId}
           setMode={setMode}
-          onChange={onChange}
+          onChange={onChangeHandler}
         />
       )}
       {field.type === "relationship" && (
@@ -43,7 +59,7 @@ const Field: React.FC<{
           object={object}
           fieldKey={fieldId}
           setMode={setMode}
-          onChange={onChange}
+          onChange={onChangeHandler}
         />
       )}
       {field.type === "richtext" && (
@@ -53,7 +69,7 @@ const Field: React.FC<{
           object={object}
           fieldKey={fieldId}
           setMode={setMode}
-          onChange={onChange}
+          onChange={onChangeHandler}
         />
       )}
       {field.type === "formula" && (
@@ -63,7 +79,7 @@ const Field: React.FC<{
           object={object}
           fieldKey={fieldId}
           setMode={setMode}
-          onChange={onChange}
+          onChange={onChangeHandler}
         />
       )}
     </>
