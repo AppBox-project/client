@@ -12,6 +12,7 @@ const AppQSActionNotes: React.FC<{
 }> = ({ context, action, match: { isExact } }) => {
   //Vars
   const [projects, setProjects] = useState();
+  const [flatProjects, setFlatProjects] = useState();
   const [memos, setMemos] = useState();
 
   // Lifecycle
@@ -39,6 +40,7 @@ const AppQSActionNotes: React.FC<{
         });
         //@ts-ignore
         setProjects(newProjects);
+        setFlatProjects(response.data);
       } else {
         console.log(response);
       }
@@ -58,9 +60,10 @@ const AppQSActionNotes: React.FC<{
   if (!projects || !memos) return <context.UI.Loading />;
   return (
     <Grid container>
-      <Grid item xs={3}>
+      <Grid item xs={5}>
         <AppQSNotesNavigation
           memos={memos}
+          flatProjects={flatProjects}
           projects={projects}
           context={context}
         />

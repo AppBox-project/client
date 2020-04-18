@@ -1,11 +1,17 @@
-// disabling flowtype to keep this example super simple
-// It matches
-/* eslint-disable flowtype/require-valid-file-annotation */
-
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { AppContextType } from "../../../Utils/Types";
-import { findIndex } from "lodash";
+import { find, findIndex } from "lodash";
+import {
+  Grid,
+  ListItem,
+  ListItemText,
+  List,
+  ListSubheader,
+  Typography,
+  ListItemIcon,
+} from "@material-ui/core";
+import { FaList, FaGripHorizontal } from "react-icons/fa";
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -22,117 +28,156 @@ const AppQSNotesNavigation: React.FC<{
   context: AppContextType;
   projects;
   memos;
-}> = ({ context, projects, memos }) => {
+  flatProjects;
+}> = ({ context, projects, memos, flatProjects }) => {
   // Vars
-  const [items, setItems] = useState([
-    { id: "item-1", content: "item 1" },
-    { id: "item-2", content: "item 2" },
-    { id: "item-3", content: "item 3" },
-    { id: "item-4", content: "item 4" },
-  ]);
-  const [projectId, setProjectId] = useState(projects[0].value);
+  const [projectOverview, setProjectOverview] = useState();
+  const [selectedProject, setSelectedProject] = useState();
   const [project, setProject] = useState();
-  const [subprojects, setSubprojects] = useState();
-  const [subprojectId, setSubprojectId] = useState();
-  const [subproject, setSubproject] = useState();
 
   // Lifecycle
   useEffect(() => {
-    const index = findIndex(projects, (o) => {
-      return o.value === projectId;
-    });
-    setProject(projects[index]);
-    setSubprojects(projects[index].subprojects);
-    if (projects[index].subprojects) {
-      setSubprojectId(projects[index].subprojects[0].value);
-      setSubproject(
-        projects[index].subprojects[projects[index].subprojects[0].value]
-      );
-    }
-  }, [projectId]);
-
+    setProjectOverview(projects);
+  }, [projects]);
+  useEffect(() => {
+    setProject(
+      find(flatProjects, (o) => {
+        return o._id == selectedProject;
+      })
+    );
+  }, [selectedProject]);
   // Functions
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
     }
 
-    const newItems = reorder(
-      items,
-      result.source.index,
-      result.destination.index
-    );
+    // Remove source
+    const removed = find(projectOverview, (o) => {
+      return o.value === result.source.droppableId;
+    }).subprojects.splice(result.source.index, 1)[0];
 
-    // @ts-ignore
-    setItems(newItems);
+    // Add to destination
+    console.log(result.destination.index);
+
+    find(projectOverview, (o) => {
+      return o.value === result.destination.droppableId;
+    }).subprojects.splice(result.destination.index, 0, removed);
   };
 
   // UI
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div style={{ margin: 15 }}>
-        <context.UI.Forms.SelectInput
-          options={projects}
-          value={projectId}
-          onChange={(value) => {
-            setProjectId(value);
-          }}
-        />
-        {subprojects && (
-          <context.UI.Forms.SelectInput
-            options={subprojects}
-            value={subprojectId}
-            onChange={(value) => {
-              setSubprojectId(value);
-            }}
-          />
-        )}
-      </div>
+      <Grid container>
+        <Grid item xs={6}>
+          <List>
+            {projects.map((project) => {
+              return (
+                <>
+                  <ListSubheader
+                    onClick={() => {
+                      setSelectedProject(project.value);
+                    }}
+                  >
+                    {project.label}
+                  </ListSubheader>
+                  <Droppable droppableId={project.value}>
+                    {(droppableProvided, droppableSnapshot) => (
+                      <div
+                        ref={droppableProvided.innerRef}
+                        style={{
+                          transition: "all 1s",
+                          padding: grid,
+                        }}
+                      >
+                        {project.subprojects.map((subproject, index) => {
+                          return (
+                            <Draggable
+                              key={subproject.value}
+                              draggableId={subproject.value}
+                              index={index}
+                            >
+                              {(draggableProvided, draggableSnapshot) => (
+                                <ListItem
+                                  ref={draggableProvided.innerRef}
+                                  {...draggableProvided.draggableProps}
+                                  {...draggableProvided.dragHandleProps}
+                                  button
+                                  onClick={() => {
+                                    setSelectedProject(subproject.value);
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <FaGripHorizontal />
+                                  </ListItemIcon>
+                                  <ListItemText>
+                                    {subproject.label}
+                                  </ListItemText>
+                                </ListItem>
+                              )}
+                            </Draggable>
+                          );
+                        })}
+                        {droppableProvided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </>
+              );
+            })}
+          </List>
+        </Grid>
+        <Grid item xs={6}>
+          {project && (
+            <Typography
+              variant="h6"
+              color="primary"
+              style={{ textAlign: "center" }}
+            >
+              {project.data.name}
+            </Typography>
+          )}
+        </Grid>
+      </Grid>
     </DragDropContext>
   );
 };
-/*      <Droppable droppableId="droppable">
-        {(droppableProvided, droppableSnapshot) => (
-          <div
-            ref={droppableProvided.innerRef}
-            style={{
-              transition: "all 1s",
-              padding: grid,
-            }}
-          >
-            {project.subProjects.map((item, index) => {
-              return (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(draggableProvided, draggableSnapshot) => (
-                    <div
-                      ref={draggableProvided.innerRef}
-                      {...draggableProvided.draggableProps}
-                      {...draggableProvided.dragHandleProps}
-                      style={{
-                        // some basic styles to make the items look a bit nicer
-                        userSelect: "none",
-                        padding: grid * 2,
-                        margin: `0 0 ${grid}px 0`,
-                        transition: "all 1s",
-                        // change background colour if dragging
-                        background: draggableSnapshot.isDragging
-                          ? "#ffffff"
-                          : "#eeeeee",
 
-                        // styles we need to apply on draggables
-                        ...draggableProvided.draggableProps.style,
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                  )}
-                </Draggable>
-              );
-            })}
-            {droppableProvided.placeholder}
-          </div>
-        )}
-      </Droppable>
- */
+/*<Droppable droppableId="droppable">
+              {(droppableProvided, droppableSnapshot) => (
+                <div
+                  ref={droppableProvided.innerRef}
+                  style={{
+                    transition: "all 1s",
+                    padding: grid,
+                  }}
+                >
+                  {subprojects.map((subproject, index) => {
+                    return (
+                      <Draggable
+                        key={subproject.value}
+                        draggableId={subproject.value}
+                        index={index}
+                      >
+                        {(draggableProvided, draggableSnapshot) => (
+                          <ListItem
+                            ref={draggableProvided.innerRef}
+                            {...draggableProvided.draggableProps}
+                            {...draggableProvided.dragHandleProps}
+                            button
+                            onClick={() => {
+                              setSubprojectId(subproject.value);
+                            }}
+                          >
+                            <ListItemText>{subproject.label}</ListItemText>
+                          </ListItem>
+                        )}
+                      </Draggable>
+                    );
+                  })}
+                  {droppableProvided.placeholder}
+                </div>
+              )}
+            </Droppable> */
+
 export default AppQSNotesNavigation;
