@@ -7,7 +7,9 @@ const AppUITextField: React.FC<{
   value: string;
   onChange?: (value: string) => void;
   multiline?: boolean;
-}> = ({ label, value, onChange, multiline }) => {
+  style?: {};
+  autoFocus?: boolean;
+}> = ({ label, value, onChange, multiline, style, autoFocus }) => {
   // Global
   // States & Hooks
   const [newValue, setNewValue] = useState("");
@@ -16,7 +18,15 @@ const AppUITextField: React.FC<{
     setNewValue(value);
   }, [value]);
   // UI
-  return <input type="text" className={styles.input} placeholder={label} />;
+  return (
+    <input
+      type="text"
+      className={styles.input}
+      placeholder={label}
+      style={style}
+      autoFocus={autoFocus}
+    />
+  );
 };
 
 export default AppUITextField;

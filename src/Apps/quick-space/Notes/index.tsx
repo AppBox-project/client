@@ -81,6 +81,8 @@ const AppQSActionNotes: React.FC<{
                 {...props}
                 setSelectedMemo={setSelectedMemo}
                 context={context}
+                Move
+                away
               />
             );
           }}

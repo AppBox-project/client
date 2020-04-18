@@ -40,20 +40,22 @@ const AppQSNotesDetail: React.FC<{
   // UI
   if (!note) return <context.UI.Loading />;
   return (
-    <>
-      <Typography variant="h6" color="primary" style={{ textAlign: "center" }}>
-        {note.data.title}
-      </Typography>
-      <div style={{ flex: 1 }}>
-        <context.UI.Forms.TextInput label="Title" value={note.data.title} />
-        <context.UI.Forms.TextInput
-          multiline={true}
-          label="Note"
-          value={note.data.body}
-          style={{ flex: 1 }}
-        />
-      </div>
-    </>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "column",
+        height: "calc(100vh - 64px)",
+      }}
+    >
+      <context.UI.Forms.TextInput label="Title" value={note.data.title} />
+      <context.UI.Forms.TextInput
+        multiline={true}
+        label="Note"
+        value={note.data.body}
+        autoFocus
+        style={{ flex: 1, paddingTop: 5 }}
+      />
+    </div>
   );
 };
 
