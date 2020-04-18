@@ -13,7 +13,7 @@ const FieldTypeRelationship: React.FC<{
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit") => void;
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
@@ -62,7 +62,7 @@ const FieldTypeRelationship: React.FC<{
           <RelationShipSelector
             field={field}
             value={newValue}
-            onChangeEvent={id => {
+            onChangeEvent={(id) => {
               setNewValue(id);
               onChange(id);
             }}
@@ -93,18 +93,18 @@ const RelationShipSelector: React.FC<{
 
     Server.emit("listenForObjectTypes", {
       requestId: requestIdForObject,
-      filter: { key: field.typeArgs.relationshipTo }
+      filter: { key: field.typeArgs.relationshipTo },
     });
-    Server.on(`receive-${requestIdForObject}`, response => {
+    Server.on(`receive-${requestIdForObject}`, (response) => {
       relationshipObject = response[0];
       Server.emit("listenForObjects", {
         requestId,
         type: field.typeArgs.relationshipTo,
-        filter: {}
+        filter: {},
       });
-      Server.on(`receive-${requestId}`, response => {
+      Server.on(`receive-${requestId}`, (response) => {
         const r = [];
-        response.data.map(rd => {
+        response.data.map((rd) => {
           r.push({ value: rd._id, label: rd.data[relationshipObject.primary] });
         });
         setResults(r);
@@ -126,11 +126,11 @@ const RelationShipSelector: React.FC<{
         isLoading={isLoading}
         options={results}
         value={
-          filter(results, o => {
+          filter(results, (o) => {
             return o.value === value;
           })[0]
         }
-        onChange={selected => {
+        onChange={(selected) => {
           // @ts-ignore
           onChangeEvent(selected.value);
         }}

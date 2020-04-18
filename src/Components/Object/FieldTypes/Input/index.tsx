@@ -8,7 +8,7 @@ const FieldTypeInput: React.FC<{
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit") => void;
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
@@ -60,7 +60,7 @@ const FieldTypeInput: React.FC<{
             margin="normal"
             type={field.typeArgs ? field.typeArgs.type : "text"}
             value={newValue}
-            onChange={event => {
+            onChange={(event) => {
               setNewValue(event.target.value);
               onChange(event.target.value);
             }}

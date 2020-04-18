@@ -143,6 +143,12 @@ export interface UIType {
     context: AppContextType;
     addFunction?: () => void;
   }>;
+  Field: React.FC<{
+    style: {};
+    modelId: string;
+    fieldId: string;
+    objectId: string;
+  }>;
   Forms: {
     TextInput: React.FC<{
       label: string;

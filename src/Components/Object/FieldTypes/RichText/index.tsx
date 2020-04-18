@@ -9,7 +9,7 @@ const FieldTypeRichText: React.FC<{
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit") => void;
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
@@ -50,7 +50,7 @@ const FieldTypeRichText: React.FC<{
             </Grid>
           </div>
         )}
-        {mode === "edit" && (
+        {(mode === "edit" || !mode) && (
           <>
             {field.typeArgs.type === "drafting" && (
               <InputDrafting placeholder={field.name} mode="inline" />

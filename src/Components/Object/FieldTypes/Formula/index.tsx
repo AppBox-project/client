@@ -7,7 +7,7 @@ const FieldTypeFormula: React.FC<{
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit") => void;
   onChange: (value: string) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   return (

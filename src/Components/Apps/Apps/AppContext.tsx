@@ -6,6 +6,7 @@ import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
 import ListDetailLayout from "./AppUI/ListDetailLayout";
 import TreeView from "./AppUI/TreeView";
+import AppUiField from "./AppUI/Field";
 
 export class AppContext {
   appId: string;
@@ -25,6 +26,7 @@ export class AppContext {
       AnimationContainer,
       AnimationItem,
       Forms,
+      Field: AppUiField,
       ListDetailLayout,
       TreeView,
     };

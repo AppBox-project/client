@@ -8,7 +8,7 @@ const FieldTypeBoolean: React.FC<{
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit") => void;
   onChange: (value: boolean) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
@@ -64,7 +64,7 @@ const FieldTypeBoolean: React.FC<{
               <Typography variant="body2">
                 <Checkbox
                   checked={newValue}
-                  onChange={event => {
+                  onChange={(event) => {
                     setNewValue(event.target.checked);
                     onChange(event.target.checked);
                   }}

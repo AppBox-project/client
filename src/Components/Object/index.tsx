@@ -23,6 +23,7 @@ import FieldTypeRelationship from "./FieldTypes/Relationship";
 import FieldTypeBoolean from "./FieldTypes/Boolean";
 import FieldTypeFormula from "./FieldTypes/Formula";
 import FieldTypeRichText from "./FieldTypes/RichText";
+import Field from "../Field";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -392,81 +393,19 @@ const LayoutItem: React.FC<{
           }
           style={{ padding: mode === "edit" ? "0 5px" : 0 }}
         >
-          {field.type === "input" && (
-            <FieldTypeInput
-              mode={mode}
-              field={field}
-              object={object}
-              fieldKey={layoutItem.field}
-              setMode={setMode}
-              onChange={(value) => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: value,
-                });
-              }}
-            />
-          )}
-          {field.type === "boolean" && (
-            <FieldTypeBoolean
-              mode={mode}
-              field={field}
-              object={object}
-              fieldKey={layoutItem.field}
-              setMode={setMode}
-              onChange={(value) => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: value,
-                });
-              }}
-            />
-          )}
-          {field.type === "relationship" && (
-            <FieldTypeRelationship
-              mode={mode}
-              field={field}
-              object={object}
-              fieldKey={layoutItem.field}
-              setMode={setMode}
-              onChange={(value) => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: value,
-                });
-              }}
-            />
-          )}
-          {field.type === "richtext" && (
-            <FieldTypeRichText
-              mode={mode}
-              field={field}
-              object={object}
-              fieldKey={layoutItem.field}
-              setMode={setMode}
-              onChange={(value) => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: value,
-                });
-              }}
-            />
-          )}
-          {field.type === "formula" && (
-            <FieldTypeFormula
-              mode={mode}
-              field={field}
-              object={object}
-              fieldKey={layoutItem.field}
-              setMode={setMode}
-              onChange={(value) => {
-                setToChange({
-                  ...toChange,
-                  [layoutItem.field]: value,
-                });
-              }}
-            />
-          )}
+          <Field
+            mode={mode}
+            field={field}
+            fieldId={layoutItem.field}
+            object={object}
+            setMode={setMode}
+            onChange={(value) => {
+              setToChange({
+                ...toChange,
+                [layoutItem.field]: value,
+              });
+            }}
+          />
         </Grid>
       );
     default:

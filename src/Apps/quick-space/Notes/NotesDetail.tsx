@@ -48,12 +48,11 @@ const AppQSNotesDetail: React.FC<{
       }}
     >
       <context.UI.Forms.TextInput label="Title" value={note.data.title} />
-      <context.UI.Forms.TextInput
-        multiline={true}
-        label="Note"
-        value={note.data.body}
-        autoFocus
+      <context.UI.Field
         style={{ flex: 1, paddingTop: 5 }}
+        modelId="qs-memo"
+        fieldId="body"
+        objectId={noteId}
       />
     </div>
   );
