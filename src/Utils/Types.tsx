@@ -144,10 +144,11 @@ export interface UIType {
     addFunction?: () => void;
   }>;
   Field: React.FC<{
-    style: {};
+    style?: {};
     modelId: string;
     fieldId: string;
     objectId: string;
+    mode: "view" | "edit" | "free";
   }>;
   Forms: {
     TextInput: React.FC<{

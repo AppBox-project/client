@@ -5,11 +5,11 @@ import Loading from "../../../Loading";
 import InputDrafting from "../../../Forms/Drafting";
 
 const FieldTypeRichText: React.FC<{
-  mode: "view" | "edit";
+  mode: "view" | "edit" | "free";
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode?: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
@@ -23,6 +23,22 @@ const FieldTypeRichText: React.FC<{
 
   // UI
   if (newValue === undefined) return <Loading />;
+  // @ts-ignore
+  if (mode === "free")
+    return (
+      <>
+        {field.typeArgs.type === "drafting" && (
+          <InputDrafting
+            placeholder={field.name}
+            mode="inline"
+            value={newValue}
+            onChange={(value) => {
+              onChange(value);
+            }}
+          />
+        )}
+      </>
+    );
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div
@@ -56,7 +72,7 @@ const FieldTypeRichText: React.FC<{
               <InputDrafting
                 placeholder={field.name}
                 mode="inline"
-                value={object.data[fieldKey]}
+                value={newValue}
                 onChange={(value) => {
                   onChange(value);
                 }}

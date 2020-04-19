@@ -3,11 +3,11 @@ import { Grid, Typography, Checkbox } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 
 const FieldTypeFormula: React.FC<{
-  mode: "view" | "edit";
+  mode: "view" | "edit" | "free";
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode?: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: string) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   return (

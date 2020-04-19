@@ -9,11 +9,11 @@ import { filter } from "lodash";
 import { Link } from "react-router-dom";
 
 const FieldTypeRelationship: React.FC<{
-  mode: "view" | "edit";
+  mode: "view" | "edit" | "free";
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode?: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks

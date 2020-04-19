@@ -40,21 +40,15 @@ const AppQSNotesDetail: React.FC<{
   // UI
   if (!note) return <context.UI.Loading />;
   return (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "column",
-        height: "calc(100vh - 64px)",
-      }}
-    >
+    <>
       <context.UI.Forms.TextInput label="Title" value={note.data.title} />
       <context.UI.Field
-        style={{ flex: 1, paddingTop: 5 }}
         modelId="qs-memo"
         fieldId="body"
         objectId={noteId}
+        mode="free"
       />
-    </div>
+    </>
   );
 };
 

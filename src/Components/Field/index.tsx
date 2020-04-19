@@ -11,10 +11,10 @@ import uniqid from "uniqid";
 
 const Field: React.FC<{
   field: ModelFieldType;
-  mode?: "view" | "edit";
+  mode?: "view" | "edit" | "free";
   object: TypeType;
   fieldId: string;
-  setMode?: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit" | "free") => void;
 }> = ({ field, mode, object, fieldId, setMode }) => {
   var onChangeHandler = debounce((value) => {
     const requestId = uniqid();
@@ -28,7 +28,7 @@ const Field: React.FC<{
     Server.on(`receive-${requestId}`, (response) => {
       console.log(response);
     });
-  }, 1000);
+  }, 2500);
 
   return (
     <>

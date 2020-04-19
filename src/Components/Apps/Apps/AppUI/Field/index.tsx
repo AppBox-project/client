@@ -6,11 +6,12 @@ import Loading from "../Loading";
 import Field from "../../../../Field";
 
 const AppUiField: React.FC<{
-  style: {};
+  style?: {};
   modelId: string;
   fieldId: string;
   objectId: string;
-}> = ({ style, modelId, fieldId, objectId }) => {
+  mode: "view" | "edit" | "free";
+}> = ({ style, modelId, fieldId, objectId, mode }) => {
   // Vars
   const [field, setField] = useState();
   const [object, setObject] = useState();
@@ -45,7 +46,7 @@ const AppUiField: React.FC<{
   if (!field || !object) return <Loading />;
   return (
     <div style={style}>
-      <Field field={field} object={object} fieldId={fieldId} />
+      <Field field={field} object={object} fieldId={fieldId} mode={mode} />
     </div>
   );
 };

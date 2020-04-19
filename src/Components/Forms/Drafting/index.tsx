@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
-import styles from "./styles.module.scss";
 
 const InputDrafting: React.FC<{
   placeholder?: string;
   mode?: "normal" | "inline";
   onChange: (value: string) => void;
-  value: string;
+  value?: string;
 }> = ({ placeholder, mode, onChange, value }) => {
   // Vars
   const [newValue, setNewValue] = useState(value);
@@ -17,7 +16,7 @@ const InputDrafting: React.FC<{
 
   // UI
   return (
-    <div style={{ height: 300, marginTop: 300 }}>
+    <>
       <ReactQuill
         theme={!mode || mode == "normal" ? "snow" : "bubble"}
         value={newValue}
@@ -25,6 +24,7 @@ const InputDrafting: React.FC<{
           setNewValue(val);
           onChange(val);
         }}
+        style={{ backgroundColor: "red", height: "100%", verticalAlign: "top" }}
         placeholder={placeholder}
         modules={{
           toolbar: [
@@ -48,7 +48,7 @@ const InputDrafting: React.FC<{
           ],
         }}
       />
-    </div>
+    </>
   );
 };
 

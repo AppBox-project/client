@@ -4,11 +4,11 @@ import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
 
 const FieldTypeBoolean: React.FC<{
-  mode: "view" | "edit";
+  mode: "view" | "edit" | "free";
   field: ModelFieldType;
   object: any;
   fieldKey: string;
-  setMode?: (mode: "view" | "edit") => void;
+  setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: boolean) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
