@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   TypeType,
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import { Grid, List, ListItem, ListItemText } from "@material-ui/core";
 import { map } from "lodash";
-import { Link, Switch, Route } from "react-router-dom";
 import AppActionManageObjectOverviewEditor from "./OverviewEditor";
 
 const AppActionManageObjectTabOverviews: React.FC<{
@@ -22,7 +20,7 @@ const AppActionManageObjectTabOverviews: React.FC<{
 
   // UI
   return (
-    <UI.ListDetailLayout
+    <UI.Layouts.ListDetailLayout
       list={list}
       baseUrl={`/object-manager/${model.key}/overviews`}
       DetailComponent={AppActionManageObjectOverviewEditor}

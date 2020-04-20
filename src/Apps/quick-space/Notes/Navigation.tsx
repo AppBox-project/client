@@ -29,6 +29,7 @@ const AppQSNotesNavigation: React.FC<{
   const [projectOverview, setProjectOverview] = useState();
   const [selectedProject, setSelectedProject] = useState();
   const [project, setProject] = useState();
+  const [activeMemos, setActiveMemos] = useState();
   const history = useHistory();
 
   // Lifecycle
@@ -41,7 +42,13 @@ const AppQSNotesNavigation: React.FC<{
         return o._id == selectedProject;
       })
     );
+    setActiveMemos(
+      filter(memos, (o) => {
+        return o.data.project === selectedProject;
+      })
+    );
   }, [selectedProject]);
+
   // Functions
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -60,12 +67,6 @@ const AppQSNotesNavigation: React.FC<{
       return o.value === result.destination.droppableId;
     }).subprojects.splice(result.destination.index, 0, removed);
   };
-
-  const activeMemos = project
-    ? filter(memos, (o) => {
-        return o.data.project === project._id;
-      })
-    : null;
 
   // UI
   return (
@@ -155,7 +156,7 @@ const AppQSNotesNavigation: React.FC<{
                 const result = activeMemos;
                 const [removed] = result.splice(swap.source.index, 1);
                 result.splice(swap.destination.index, 0, removed);
-                console.log(result);
+                setActiveMemos(result);
               }}
             >
               <List>

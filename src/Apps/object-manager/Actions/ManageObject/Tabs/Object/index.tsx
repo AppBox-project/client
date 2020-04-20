@@ -4,7 +4,7 @@ import { Grid, Paper, Typography, Button } from "@material-ui/core";
 import {
   TypeType,
   UIType,
-  AppContextType
+  AppContextType,
 } from "../../../../../../Utils/Types";
 
 const AppActionManageObjectTabObject: React.FC<{
@@ -18,8 +18,8 @@ const AppActionManageObjectTabObject: React.FC<{
   // UI
   return (
     <div className={styles.root}>
-      <UI.AnimationContainer>
-        <UI.AnimationItem>
+      <UI.Animations.AnimationContainer>
+        <UI.Animations.AnimationItem>
           <Paper className="paper">
             <Typography variant="h5" className="cursor">
               {model.name}
@@ -29,7 +29,7 @@ const AppActionManageObjectTabObject: React.FC<{
                 <UI.Forms.TextInput
                   label="Name"
                   value={model.name}
-                  onChange={value => {
+                  onChange={(value) => {
                     setNewModel({ ...newModel, name: value });
                   }}
                 />
@@ -38,7 +38,7 @@ const AppActionManageObjectTabObject: React.FC<{
                 <UI.Forms.TextInput
                   label="Name (Plural)"
                   value={model.name_plural}
-                  onChange={value => {
+                  onChange={(value) => {
                     setNewModel({ ...newModel, name_plural: value });
                   }}
                 />
@@ -56,8 +56,8 @@ const AppActionManageObjectTabObject: React.FC<{
               </Button>
             )}
           </Paper>
-        </UI.AnimationItem>
-      </UI.AnimationContainer>
+        </UI.Animations.AnimationItem>
+      </UI.Animations.AnimationContainer>
     </div>
   );
 };

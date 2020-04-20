@@ -127,9 +127,9 @@ const TodoList: React.FC<{
   // UI
   if (todos === undefined) return <UI.Loading />;
   return (
-    <UI.AnimationContainer>
+    <UI.Animations.AnimationContainer>
       <List>
-        <UI.AnimationItem>
+        <UI.Animations.AnimationItem>
           <TextField
             fullWidth
             margin="normal"
@@ -152,11 +152,11 @@ const TodoList: React.FC<{
               setNewTodo(e.target.value);
             }}
           />
-        </UI.AnimationItem>
+        </UI.Animations.AnimationItem>
         {todos.map((todo) => {
           if (!todo.data.done) {
             return (
-              <UI.AnimationItem>
+              <UI.Animations.AnimationItem>
                 <ListItem>
                   <ListItemIcon>
                     <Checkbox
@@ -175,21 +175,21 @@ const TodoList: React.FC<{
                   </ListItemIcon>
                   <ListItemText>{todo.data.action}</ListItemText>
                 </ListItem>
-              </UI.AnimationItem>
+              </UI.Animations.AnimationItem>
             );
           }
         })}
       </List>
-      <UI.AnimationItem>
+      <UI.Animations.AnimationItem>
         <Typography variant="subtitle2" style={{ marginTop: 15 }}>
           Completed
         </Typography>
-      </UI.AnimationItem>
+      </UI.Animations.AnimationItem>
       <List>
         {todos.map((todo) => {
           if (todo.data.done) {
             return (
-              <UI.AnimationItem>
+              <UI.Animations.AnimationItem>
                 <ListItem>
                   <ListItemIcon>
                     <Checkbox
@@ -228,11 +228,11 @@ const TodoList: React.FC<{
                     </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
-              </UI.AnimationItem>
+              </UI.Animations.AnimationItem>
             );
           }
         })}
       </List>
-    </UI.AnimationContainer>
+    </UI.Animations.AnimationContainer>
   );
 };

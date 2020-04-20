@@ -126,23 +126,25 @@ export interface TreeViewDataItem {
 
 export interface UIType {
   Loading: React.FC;
-  AnimationContainer: React.FC;
-  AnimationItem: React.FC;
-  TreeView: React.FC<{
-    items: TreeViewDataItem[];
-    linkTo: string;
-  }>;
-  ListDetailLayout: React.FC<{
-    mode?: "normal" | "tree";
-    list?: { label: string; id: string; url?: string }[];
-    treeList?: TreeViewDataItem[];
-    baseUrl: string;
-    customNavComponent?;
-    DetailComponent: React.FC;
-    detailComponentProps?: {};
-    context: AppContextType;
-    addFunction?: () => void;
-  }>;
+  Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
+  Layouts: {
+    TreeView: React.FC<{
+      items: TreeViewDataItem[];
+      linkTo: string;
+    }>;
+    ListDetailLayout: React.FC<{
+      mode?: "normal" | "tree";
+      list?: { label: string; id: string; url?: string }[];
+      treeList?: TreeViewDataItem[];
+      baseUrl: string;
+      customNavComponent?;
+      DetailComponent: React.FC;
+      detailComponentProps?: {};
+      context: AppContextType;
+      addFunction?: () => void;
+    }>;
+    SortableList: React.FC;
+  };
   Field: React.FC<{
     style?: {};
     modelId: string;

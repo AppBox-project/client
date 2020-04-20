@@ -58,8 +58,8 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   if (!overview) return <UI.Loading />;
   return (
     <>
-      <UI.AnimationContainer>
-        <UI.AnimationItem>
+      <UI.Animations.AnimationContainer>
+        <UI.Animations.AnimationItem>
           <div style={{ margin: "0 15px 15px 0" }}>
             <Table stickyHeader>
               <TableHead>
@@ -72,11 +72,11 @@ const AppActionManageObjectOverviewEditor: React.FC<{
               </TableHead>
             </Table>
           </div>
-        </UI.AnimationItem>
+        </UI.Animations.AnimationItem>
         <div style={{ marginTop: 15, height: 500 }}>
           <Grid container>
             <Grid item xs={6}>
-              <UI.AnimationItem>
+              <UI.Animations.AnimationItem>
                 <Paper className="paper" style={{ marginLeft: 0 }}>
                   <Typography variant="h6">Available</Typography>
                   <List>
@@ -107,10 +107,10 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                     })}
                   </List>
                 </Paper>
-              </UI.AnimationItem>
+              </UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={6}>
-              <UI.AnimationItem>
+              <UI.Animations.AnimationItem>
                 <Paper className="paper">
                   <Typography variant="h6">Selected</Typography>
                   <List>
@@ -177,14 +177,14 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                     })}
                   </List>
                 </Paper>
-              </UI.AnimationItem>
+              </UI.Animations.AnimationItem>
             </Grid>
           </Grid>
         </div>
-      </UI.AnimationContainer>
+      </UI.Animations.AnimationContainer>
       {model.overviews[detailId] !== overview && (
         <div style={{ position: "absolute", right: 15, bottom: 15 }}>
-          <UI.AnimationContainer>
+          <UI.Animations.AnimationContainer>
             <Fab
               color="primary"
               onClick={() => {
@@ -200,7 +200,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             >
               <FaSave />
             </Fab>
-          </UI.AnimationContainer>
+          </UI.Animations.AnimationContainer>
         </div>
       )}
     </>

@@ -7,6 +7,7 @@ import * as Forms from "./AppUI/Forms";
 import ListDetailLayout from "./AppUI/ListDetailLayout";
 import TreeView from "./AppUI/TreeView";
 import AppUiField from "./AppUI/Field";
+import SortableList from "../../UI/SortableList";
 
 export class AppContext {
   appId: string;
@@ -23,12 +24,11 @@ export class AppContext {
     this.setDialog = setDialog;
     this.UI = {
       Loading,
-      AnimationContainer,
-      AnimationItem,
+      Animations: { AnimationContainer, AnimationItem },
+
       Forms,
       Field: AppUiField,
-      ListDetailLayout,
-      TreeView,
+      Layouts: { ListDetailLayout, TreeView, SortableList },
     };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();

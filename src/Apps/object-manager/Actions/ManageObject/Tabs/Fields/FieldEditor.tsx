@@ -44,10 +44,10 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
   if (!field) return <UI.Loading />;
 
   return (
-    <UI.AnimationContainer>
+    <UI.Animations.AnimationContainer>
       <Grid container style={{ width: "100%" }}>
         <Grid item xs={12}>
-          <UI.AnimationItem>
+          <UI.Animations.AnimationItem>
             <Grid container style={{ marginBottom: 15 }}>
               <Grid item xs={10}>
                 <Typography variant="h5">{field.name}</Typography>
@@ -80,8 +80,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 </Button>
               </Grid>
             </Grid>
-          </UI.AnimationItem>
-          <UI.AnimationItem>
+          </UI.Animations.AnimationItem>
+          <UI.Animations.AnimationItem>
             <Paper className="paper" style={{ margin: "0 0 15px 0" }}>
               <Typography variant="h6">Options</Typography>
               <Grid container>
@@ -119,8 +119,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 </Grid>
               </Grid>
             </Paper>
-          </UI.AnimationItem>
-          <UI.AnimationItem>
+          </UI.Animations.AnimationItem>
+          <UI.Animations.AnimationItem>
             <Paper className="paper" style={{ margin: "0 0 15px 0" }}>
               <Typography variant="h6">Type</Typography>
               <Grid container>
@@ -264,27 +264,27 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
               </Grid>
             </Paper>
-          </UI.AnimationItem>
+          </UI.Animations.AnimationItem>
         </Grid>
         <Grid item xs={6}>
-          <UI.AnimationItem>
+          <UI.Animations.AnimationItem>
             <ValidationsList
               validations={field.validations}
               context={context}
             />
-          </UI.AnimationItem>
+          </UI.Animations.AnimationItem>
         </Grid>
         <Grid item xs={6}>
-          <UI.AnimationItem>
+          <UI.Animations.AnimationItem>
             <TransformationsList
               transformations={field.transformations}
               context={context}
             />
-          </UI.AnimationItem>
+          </UI.Animations.AnimationItem>
         </Grid>
         {field !== model.fields[detailId] && (
           <Grid item xs={12}>
-            <UI.AnimationItem>
+            <UI.Animations.AnimationItem>
               <Button
                 style={{ marginTop: 15 }}
                 fullWidth
@@ -315,11 +315,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
               >
                 Save
               </Button>
-            </UI.AnimationItem>
+            </UI.Animations.AnimationItem>
           </Grid>
         )}
       </Grid>
-    </UI.AnimationContainer>
+    </UI.Animations.AnimationContainer>
   );
 };
 

@@ -32,7 +32,7 @@ const AppActionManageObjectTabFields: React.FC<{
 
   // UI
   return (
-    <UI.ListDetailLayout
+    <UI.Layouts.ListDetailLayout
       list={list}
       baseUrl={`/object-manager/${model.key}/fields`}
       DetailComponent={AppActionManageObjectTabFieldsEditor}

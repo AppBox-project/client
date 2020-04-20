@@ -55,23 +55,23 @@ const AppActionManageObjectTabPermissions: React.FC<{
 
   // UI
   return (
-    <UI.AnimationContainer>
+    <UI.Animations.AnimationContainer>
       <Grid container style={{ marginTop: 15 }}>
         {permissions.map((permission) => {
           return (
             <Grid item xs={12} md={6} lg={2} key={permission.key}>
-              <UI.AnimationItem>
+              <UI.Animations.AnimationItem>
                 <AppActionManageObjectTabPermissionUI
                   permission={permission}
                   groupList={model.permissions[permission.key]}
                   UI={UI}
                 />
-              </UI.AnimationItem>
+              </UI.Animations.AnimationItem>
             </Grid>
           );
         })}
       </Grid>
-    </UI.AnimationContainer>
+    </UI.Animations.AnimationContainer>
   );
 };
 
