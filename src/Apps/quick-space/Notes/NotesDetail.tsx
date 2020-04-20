@@ -33,7 +33,7 @@ const AppQSNotesDetail: React.FC<{
 
     return () => {
       noteRequest.stop();
-      setSelectedMemo();
+      setSelectedMemo(undefined);
     };
   }, [noteId]);
 

@@ -10,8 +10,10 @@ import {
   ListSubheader,
   Typography,
   ListItemIcon,
+  Button,
+  Icon,
 } from "@material-ui/core";
-import { FaGripLines, FaStickyNote } from "react-icons/fa";
+import { FaGripLines, FaStickyNote, FaPlus } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 
 const grid = 8;
@@ -58,6 +60,12 @@ const AppQSNotesNavigation: React.FC<{
       return o.value === result.destination.droppableId;
     }).subprojects.splice(result.destination.index, 0, removed);
   };
+
+  const activeMemos = project
+    ? filter(memos, (o) => {
+        return o.data.project === project._id;
+      })
+    : null;
 
   // UI
   return (
@@ -142,49 +150,70 @@ const AppQSNotesNavigation: React.FC<{
             >
               {project.data.name}
             </Typography>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="memos">
-                {(droppableProvided, droppableSnapshot) => (
-                  <div
-                    ref={droppableProvided.innerRef}
-                    style={{
-                      transition: "all 1s",
-                      padding: grid,
-                    }}
-                  >
-                    {filter(memos, (o) => {
-                      return o.data.project === project._id;
-                    }).map((memo, index) => {
-                      return (
-                        <Draggable
-                          key={memo._id}
-                          draggableId={memo._id}
-                          index={index}
-                        >
-                          {(draggableProvided, draggableSnapshot) => (
-                            <ListItem
-                              onClick={() => {
-                                history.push(`/quick-space/notes/${memo._id}`);
-                              }}
-                              selected={selectedMemo == memo._id}
-                              ref={draggableProvided.innerRef}
-                              {...draggableProvided.draggableProps}
-                              {...draggableProvided.dragHandleProps}
-                              button
-                            >
-                              <ListItemIcon>
-                                <FaStickyNote />
-                              </ListItemIcon>
-                              <ListItemText>{memo.data.title}</ListItemText>
-                            </ListItem>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {droppableProvided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+            <DragDropContext
+              onDragEnd={(swap) => {
+                const result = activeMemos;
+                const [removed] = result.splice(swap.source.index, 1);
+                result.splice(swap.destination.index, 0, removed);
+                console.log(result);
+              }}
+            >
+              <List>
+                <Droppable droppableId="memos">
+                  {(droppableProvided, droppableSnapshot) => (
+                    <div
+                      ref={droppableProvided.innerRef}
+                      style={{
+                        transition: "all 1s",
+                      }}
+                    >
+                      {activeMemos.map((memo, index) => {
+                        return (
+                          <Draggable
+                            key={memo._id}
+                            draggableId={memo._id}
+                            index={index}
+                          >
+                            {(draggableProvided, draggableSnapshot) => (
+                              <ListItem
+                                onClick={() => {
+                                  history.push(
+                                    `/quick-space/notes/${memo._id}`
+                                  );
+                                }}
+                                selected={selectedMemo == memo._id}
+                                ref={draggableProvided.innerRef}
+                                {...draggableProvided.draggableProps}
+                                {...draggableProvided.dragHandleProps}
+                                button
+                              >
+                                <ListItemIcon>
+                                  <FaStickyNote />
+                                </ListItemIcon>
+                                <ListItemText>{memo.data.title}</ListItemText>
+                              </ListItem>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                      {droppableProvided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+                <ListItem
+                  button
+                  onClick={() => {
+                    context.addObject("qs-memo", {
+                      title: "Fresh note",
+                      project: selectedProject,
+                    });
+                  }}
+                >
+                  <ListItemIcon>
+                    <FaPlus />
+                  </ListItemIcon>
+                </ListItem>
+              </List>
             </DragDropContext>
           </>
         )}

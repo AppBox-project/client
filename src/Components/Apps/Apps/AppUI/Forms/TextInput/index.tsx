@@ -23,6 +23,11 @@ const AppUITextField: React.FC<{
       type="text"
       className={styles.input}
       placeholder={label}
+      value={newValue}
+      onChange={(event) => {
+        setNewValue(event.target.value);
+        onChange(event.target.value);
+      }}
       style={style}
       autoFocus={autoFocus}
     />

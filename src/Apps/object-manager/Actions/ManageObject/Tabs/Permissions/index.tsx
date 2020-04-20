@@ -59,7 +59,7 @@ const AppActionManageObjectTabPermissions: React.FC<{
       <Grid container style={{ marginTop: 15 }}>
         {permissions.map((permission) => {
           return (
-            <Grid item xs={2} key={permission.key}>
+            <Grid item xs={12} md={6} lg={2} key={permission.key}>
               <UI.AnimationItem>
                 <AppActionManageObjectTabPermissionUI
                   permission={permission}

@@ -40,7 +40,7 @@ const AppUiField: React.FC<{
         console.log(response);
       }
     });
-  }, []);
+  }, [objectId]);
 
   // UI
   if (!field || !object) return <Loading />;
