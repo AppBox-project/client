@@ -35,7 +35,7 @@ const AppQSNotesDetail: React.FC<{
       noteRequest.stop();
       setSelectedMemo();
     };
-  }, []);
+  }, [noteId]);
 
   // UI
   if (!note) return <context.UI.Loading />;
