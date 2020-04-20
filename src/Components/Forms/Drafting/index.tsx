@@ -24,7 +24,6 @@ const InputDrafting: React.FC<{
           setNewValue(val);
           onChange(val);
         }}
-        style={{ backgroundColor: "red", height: "100%", verticalAlign: "top" }}
         placeholder={placeholder}
         modules={{
           toolbar: [
