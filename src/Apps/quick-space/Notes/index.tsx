@@ -75,14 +75,12 @@ const AppQSActionNotes: React.FC<{
       <Grid item xs={12} md={6} lg={8}>
         <Route
           path="/quick-space/notes/:noteId"
-          component={(props) => {
+          render={(props) => {
             return (
               <AppQSNotesDetail
                 {...props}
                 setSelectedMemo={setSelectedMemo}
                 context={context}
-                Move
-                away
               />
             );
           }}
