@@ -15,11 +15,10 @@ const FieldTypeInput: React.FC<{
   const [newValue, setNewValue] = useState();
   // Lifecycle
   useEffect(() => {
-    setNewValue(object ? object.data[fieldKey] : "");
+    setNewValue(object.data[fieldKey]);
   }, [fieldKey]);
 
   // UI
-  if (newValue === undefined) return <Loading />;
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div

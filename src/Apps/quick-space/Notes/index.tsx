@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
-import { TreeView, TreeItem } from "@material-ui/lab";
-import { filter } from "lodash";
+import { filter, sortBy } from "lodash";
 import AppQSNotesNavigation from "./Navigation";
 import { Grid } from "@material-ui/core";
 import { Route } from "react-router-dom";
@@ -51,7 +50,7 @@ const AppQSActionNotes: React.FC<{
 
     context.getObjects("qs-memo", {}, (response) => {
       if (response.success) {
-        setMemos(response.data);
+        setMemos(sortBy(response.data, ["data.order"]));
       } else {
         console.log(response);
       }

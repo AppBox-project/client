@@ -18,11 +18,6 @@ import { IoMdClose } from "react-icons/io";
 import styles from "./styles.module.scss";
 import { TypeType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import FieldTypeInput from "./FieldTypes/Input";
-import FieldTypeRelationship from "./FieldTypes/Relationship";
-import FieldTypeBoolean from "./FieldTypes/Boolean";
-import FieldTypeFormula from "./FieldTypes/Formula";
-import FieldTypeRichText from "./FieldTypes/RichText";
 import Field from "../Field";
 
 const ViewObject: React.FC<{

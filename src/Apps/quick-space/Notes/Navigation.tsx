@@ -30,7 +30,6 @@ const AppQSNotesNavigation: React.FC<{
   const [selectedProject, setSelectedProject] = useState();
   const [project, setProject] = useState();
   const [activeMemos, setActiveMemos] = useState();
-  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {

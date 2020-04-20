@@ -39,6 +39,12 @@ const SortableList: React.FC<{
         const [removed] = result.splice(swap.source.index, 1);
         result.splice(swap.destination.index, 0, removed);
         setItems(result);
+        const order = {};
+        for (let x = 0; x < result.length; x++) {
+          //@ts-ignore
+          order[result[x]._id] = { order: x };
+        }
+        console.log(order);
       }}
     >
       <List>
