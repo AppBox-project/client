@@ -47,7 +47,7 @@ const AppQSNotesNavigation: React.FC<{
         return o.data.project === selectedProject;
       })
     );
-  }, [selectedProject]);
+  }, [selectedProject, memos]);
 
   // Functions
   const onDragEnd = (result) => {
@@ -151,71 +151,20 @@ const AppQSNotesNavigation: React.FC<{
             >
               {project.data.name}
             </Typography>
-            <DragDropContext
-              onDragEnd={(swap) => {
-                const result = activeMemos;
-                const [removed] = result.splice(swap.source.index, 1);
-                result.splice(swap.destination.index, 0, removed);
-                setActiveMemos(result);
+            <context.UI.Layouts.SortableList
+              listItems={activeMemos}
+              listTextPath="data.title"
+              baseUrl="/quick-space/notes"
+              linkToPath="_id"
+              ListIcon={FaStickyNote}
+              button
+              onAdd={() => {
+                context.addObject("qs-memo", {
+                  title: "Fresh note",
+                  project: selectedProject,
+                });
               }}
-            >
-              <List>
-                <Droppable droppableId="memos">
-                  {(droppableProvided, droppableSnapshot) => (
-                    <div
-                      ref={droppableProvided.innerRef}
-                      style={{
-                        transition: "all 1s",
-                      }}
-                    >
-                      {activeMemos.map((memo, index) => {
-                        return (
-                          <Draggable
-                            key={memo._id}
-                            draggableId={memo._id}
-                            index={index}
-                          >
-                            {(draggableProvided, draggableSnapshot) => (
-                              <ListItem
-                                onClick={() => {
-                                  history.push(
-                                    `/quick-space/notes/${memo._id}`
-                                  );
-                                }}
-                                selected={selectedMemo == memo._id}
-                                ref={draggableProvided.innerRef}
-                                {...draggableProvided.draggableProps}
-                                {...draggableProvided.dragHandleProps}
-                                button
-                              >
-                                <ListItemIcon>
-                                  <FaStickyNote />
-                                </ListItemIcon>
-                                <ListItemText>{memo.data.title}</ListItemText>
-                              </ListItem>
-                            )}
-                          </Draggable>
-                        );
-                      })}
-                      {droppableProvided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-                <ListItem
-                  button
-                  onClick={() => {
-                    context.addObject("qs-memo", {
-                      title: "Fresh note",
-                      project: selectedProject,
-                    });
-                  }}
-                >
-                  <ListItemIcon>
-                    <FaPlus />
-                  </ListItemIcon>
-                </ListItem>
-              </List>
-            </DragDropContext>
+            />
           </>
         )}
       </Grid>

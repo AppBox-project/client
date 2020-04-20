@@ -143,7 +143,15 @@ export interface UIType {
       context: AppContextType;
       addFunction?: () => void;
     }>;
-    SortableList: React.FC;
+    SortableList: React.FC<{
+      listItems: [];
+      listTextPath: string;
+      baseUrl: string;
+      linkToPath: string;
+      button?: true;
+      ListIcon?: React.FC;
+      onAdd: () => void;
+    }>;
   };
   Field: React.FC<{
     style?: {};

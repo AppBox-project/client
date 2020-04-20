@@ -13,6 +13,9 @@ const InputDrafting: React.FC<{
   const [newValue, setNewValue] = useState(value);
 
   // Lifecycle
+  useEffect(() => {
+    setNewValue(value);
+  }, [value]);
 
   // UI
   return (
