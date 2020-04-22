@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { TextField, InputBase } from "@material-ui/core";
 import styles from "./styles.module.scss";
 
 const AppUITextField: React.FC<{
@@ -26,7 +25,7 @@ const AppUITextField: React.FC<{
       value={newValue}
       onChange={(event) => {
         setNewValue(event.target.value);
-        onChange(event.target.value);
+        if (onChange) onChange(event.target.value);
       }}
       style={style}
       autoFocus={autoFocus}

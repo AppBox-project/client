@@ -41,7 +41,12 @@ const AppQSNotesDetail: React.FC<{
   if (!note) return <context.UI.Loading />;
   return (
     <>
-      <context.UI.Forms.TextInput label="Title" value={note.data.title} />
+      <context.UI.Field
+        modelId="qs-memo"
+        fieldId="title"
+        objectId={noteId}
+        mode="free"
+      />
       <context.UI.Field
         modelId="qs-memo"
         fieldId="body"

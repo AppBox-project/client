@@ -82,7 +82,7 @@ const AppQSNotesNavigation: React.FC<{
           <List>
             {projects.map((project) => {
               return (
-                <>
+                <div key={project._id}>
                   <ListSubheader
                     onClick={() => {
                       setSelectedProject(project.value);
@@ -134,7 +134,7 @@ const AppQSNotesNavigation: React.FC<{
                       </div>
                     )}
                   </Droppable>
-                </>
+                </div>
               );
             })}
           </List>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
+import AppUITextField from "../../../Apps/Apps/AppUI/Forms/TextInput";
 
 const FieldTypeInput: React.FC<{
   mode: "view" | "edit" | "free";
@@ -12,13 +13,25 @@ const FieldTypeInput: React.FC<{
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
-  const [newValue, setNewValue] = useState();
+  const [newValue, setNewValue] = useState("");
+
   // Lifecycle
   useEffect(() => {
     setNewValue(object.data[fieldKey]);
   }, [fieldKey]);
 
   // UI
+  if (mode === "free")
+    return (
+      <AppUITextField
+        label={field.name}
+        value={newValue}
+        onChange={(value) => {
+          setNewValue(value);
+          onChange(value);
+        }}
+      />
+    );
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div
