@@ -155,7 +155,6 @@ const AppQSNotesNavigation: React.FC<{
               listTextPath="data.title"
               baseUrl="/quick-space/notes"
               linkToPath="_id"
-              ListIcon={FaStickyNote}
               button
               onAdd={() => {
                 context.addObject("qs-memo", {
