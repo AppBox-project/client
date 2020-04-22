@@ -18,7 +18,7 @@ const FieldTypeInput: React.FC<{
   // Lifecycle
   useEffect(() => {
     setNewValue(object.data[fieldKey]);
-  }, [fieldKey]);
+  }, [fieldKey, object]);
 
   // UI
   if (mode === "free")

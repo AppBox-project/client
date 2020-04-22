@@ -19,7 +19,9 @@ const FieldTypeRichText: React.FC<{
     setNewValue(
       object ? (object.data[fieldKey] ? object.data[fieldKey] : "") : ""
     );
-  }, [fieldKey]);
+  }, [fieldKey, object]);
+
+  // Todo: changing value causes it to save (it's a change. Prevent this)
 
   // UI
   if (newValue === undefined) return <Loading />;

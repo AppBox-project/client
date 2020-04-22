@@ -89,9 +89,11 @@ const SortableList: React.FC<{
                         {...draggableProvided.draggableProps}
                         {...draggableProvided.dragHandleProps}
                       >
-                        <ListItemIcon>
-                          <ListIcon />
-                        </ListItemIcon>
+                        {ListIcon && (
+                          <ListItemIcon>
+                            <ListIcon />
+                          </ListItemIcon>
+                        )}
                         <ListItemText>
                           {get(listItem, listTextPath)}
                         </ListItemText>
