@@ -4,6 +4,8 @@ import { get } from "lodash";
 import { useHistory } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FaPlus } from "react-icons/fa";
+import Server from "../../../Utils/Server";
+import uniqid from "uniqid";
 
 const SortableList: React.FC<{
   listItems: [];
@@ -39,12 +41,18 @@ const SortableList: React.FC<{
         const [removed] = result.splice(swap.source.index, 1);
         result.splice(swap.destination.index, 0, removed);
         setItems(result);
-        const order = {};
+        const changes = {};
         for (let x = 0; x < result.length; x++) {
           //@ts-ignore
-          order[result[x]._id] = { order: x };
+          changes[result[x]._id] = { order: x };
         }
-        console.log(order);
+
+        // Batch update the order for all the items
+        const requestId = uniqid();
+        Server.emit("updateMany", { changes, requestId });
+        Server.on(`receive-${requestId}`, (response) => {
+          console.log(response);
+        });
       }}
     >
       <List>
