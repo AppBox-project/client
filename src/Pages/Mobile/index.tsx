@@ -5,7 +5,7 @@ import Server from "../../Utils/Server";
 import Loading from "../../Components/Loading";
 import * as icons from "react-icons/fa";
 import { useHistory } from "react-router-dom";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
@@ -17,9 +17,10 @@ import {
   IconButton,
   Typography,
   Button,
+  Avatar,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import SettingsPage from "../Settings";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
@@ -30,6 +31,7 @@ const MobileLayout: React.FC = () => {
   const [fabOpen, setFabOpen] = useState(false);
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gApp] = useGlobal<any>("app");
+  const [gUser] = useGlobal<any>("user");
 
   // UI
   // Lifecycle
@@ -63,14 +65,17 @@ const MobileLayout: React.FC = () => {
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             {gApp ? gApp.data.name : "AppBox"}
           </Typography>
-          <IconButton>
-            <MoreVertIcon style={{ color: "white" }} />
-          </IconButton>
+          <Link to="/settings/update">
+            <IconButton style={{ width: 64 }}>
+              <Avatar>{gUser.data.first_name}</Avatar>
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Switch>
         <Route path="/" exact component={StartPage} />
         <Route path="/apps" exact component={StartPage} />
+        <Route path="/settings" component={SettingsPage} />
         <Route path="/home" exact component={StartPage} />
         <Route
           path="/:appId"
