@@ -16,8 +16,13 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Button,
   Avatar,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsPage from "../Settings";
@@ -32,6 +37,7 @@ const MobileLayout: React.FC = () => {
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // UI
   // Lifecycle
@@ -59,7 +65,14 @@ const MobileLayout: React.FC = () => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => {
+              setDrawerOpen(!drawerOpen);
+            }}
+          >
             <MenuIcon />
           </IconButton>
           <Link to="/" style={{ color: "white", flexGrow: 1 }}>
@@ -74,6 +87,51 @@ const MobileLayout: React.FC = () => {
           </Link>
         </Toolbar>
       </AppBar>
+      <SwipeableDrawer
+        anchor="left"
+        open={drawerOpen}
+        onOpen={(event) => {
+          setDrawerOpen(true);
+        }}
+        onClose={(event) => {
+          setDrawerOpen(false);
+        }}
+      >
+        <List>
+          {
+            //@ts-ignore
+            apps.map((app) => {
+              const Icon = icons[app.data.icon];
+              return (
+                <ListItem
+                  key={app.data.key}
+                  button
+                  onClick={() => {
+                    history.push(`/${app.data.id}`);
+                    setDrawerOpen(false);
+                  }}
+                >
+                  <ListItemIcon>
+                    <Icon style={{ height: 25, width: 25 }} />
+                  </ListItemIcon>
+                  <ListItemText>{app.data.name}</ListItemText>
+                </ListItem>
+              );
+            })
+          }
+        </List>
+        <Divider />
+        <List>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <icons.FaMailBulk /> : <icons.FaMailchimp />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </SwipeableDrawer>
       <Switch>
         <Route path="/" exact component={StartPage} />
         <Route path="/apps" exact component={StartPage} />
@@ -87,53 +145,6 @@ const MobileLayout: React.FC = () => {
         />
         <Route component={FourOhFour} />
       </Switch>
-      <SpeedDial
-        ariaLabel="Apps"
-        icon={
-          <SpeedDialIcon icon={<FaGripHorizontal />} openIcon={<FaHome />} />
-        }
-        onClose={() => {
-          setFabOpen(false);
-        }}
-        onOpen={() => {
-          setFabOpen(true);
-        }}
-        open={fabOpen}
-        direction="up"
-        style={{ position: "absolute", bottom: 15, right: 15 }}
-        FabProps={{
-          size: "medium",
-          onClick: () => {
-            setFabOpen(false);
-            history.push("/");
-          },
-        }}
-      >
-        {
-          //@ts-ignore
-          apps.map((app) => {
-            const Icon = icons[app.data.icon];
-            return (
-              <SpeedDialAction
-                key={app.data.id}
-                icon={<Icon style={{ height: 25, width: 25 }} />}
-                tooltipTitle={app.data.name}
-                tooltipPlacement="left"
-                FabProps={{
-                  style: {
-                    backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                    color: "white",
-                  },
-                }}
-                onClick={() => {
-                  setFabOpen(false);
-                  history.push(`/${app.data.id}`);
-                }}
-              />
-            );
-          })
-        }
-      </SpeedDial>
     </>
   );
 };
