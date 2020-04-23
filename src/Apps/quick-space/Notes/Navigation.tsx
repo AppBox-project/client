@@ -60,7 +60,6 @@ const AppQSNotesNavigation: React.FC<{
     }).subprojects.splice(result.source.index, 1)[0];
 
     // Add to destination
-    console.log(result.destination.index);
 
     find(projectOverview, (o) => {
       return o.value === result.destination.droppableId;
@@ -82,7 +81,7 @@ const AppQSNotesNavigation: React.FC<{
           <List>
             {projects.map((project) => {
               return (
-                <div key={project._id}>
+                <div key={project.value}>
                   <ListSubheader
                     onClick={() => {
                       setSelectedProject(project.value);

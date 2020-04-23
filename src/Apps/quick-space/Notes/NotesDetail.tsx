@@ -5,12 +5,12 @@ import { AppContextType } from "../../../Utils/Types";
 const AppQSNotesDetail: React.FC<{
   setSelectedMemo;
   context: AppContextType;
-  match: { params: { noteId } };
+  match: { params: { detailId } };
 }> = ({
   setSelectedMemo,
   context,
   match: {
-    params: { noteId },
+    params: { detailId },
   },
 }) => {
   // Vars
@@ -18,10 +18,10 @@ const AppQSNotesDetail: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setSelectedMemo(noteId);
+    setSelectedMemo(detailId);
     const noteRequest = context.getObjects(
       "qs-memo",
-      { _id: noteId },
+      { _id: detailId },
       (response) => {
         if (response.success) {
           setNote(response.data[0]);
@@ -35,7 +35,7 @@ const AppQSNotesDetail: React.FC<{
       noteRequest.stop();
       setSelectedMemo(undefined);
     };
-  }, [noteId]);
+  }, [detailId]);
 
   // UI
   if (!note) return <context.UI.Loading />;
@@ -44,13 +44,13 @@ const AppQSNotesDetail: React.FC<{
       <context.UI.Field
         modelId="qs-memo"
         fieldId="title"
-        objectId={noteId}
+        objectId={detailId}
         mode="free"
       />
       <context.UI.Field
         modelId="qs-memo"
         fieldId="body"
-        objectId={noteId}
+        objectId={detailId}
         mode="free"
       />
     </>
