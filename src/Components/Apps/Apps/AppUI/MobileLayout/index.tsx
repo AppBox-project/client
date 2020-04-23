@@ -4,10 +4,16 @@ import {
   Tab,
   BottomNavigation,
   BottomNavigationAction,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaBaseballBall, FaLemon } from "react-icons/fa";
+import { FaBaseballBall, FaLemon, FaCompass } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -20,6 +26,8 @@ const AppUIMobile: React.FC<{
     : "home";
   const history = useHistory();
   const [gApp] = useGlobal<any>("app");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [gButtons, setgButtons] = useGlobal<any>("buttons");
 
   const actionsDisplayAs = gApp
     ? gApp.data.mobileSettings
@@ -29,25 +37,43 @@ const AppUIMobile: React.FC<{
       : "default"
     : "default";
 
+  useEffect(() => {
+    if (actionsDisplayAs === "menu") {
+      console.log("juh");
+
+      setgButtons({
+        ...gButtons,
+        toggleNavigate: {
+          label: "Explore actions",
+          icon: FaCompass,
+          action: () => {
+            setDrawerOpen(true);
+          },
+        },
+      });
+    }
+  }, [actionsDisplayAs]);
+
   return (
     <>
-      {actionsDisplayAs === "tabs" && (
-        <Tabs
-          aria-label="App actions"
-          scrollButtons="on"
-          value={currentAction}
-          onChange={(event, newValue) => {
-            history.push(`/${appContext.appId}/${newValue}`);
-          }}
-        >
-          <Tab value="home" label="Home" />
-          {appContext.actions.map((action) => {
-            return (
-              <Tab key={action.key} value={action.key} label={action.label} />
-            );
-          })}
-        </Tabs>
-      )}
+      {actionsDisplayAs === "tabs" ||
+        (actionsDisplayAs === "default" && (
+          <Tabs
+            aria-label="App actions"
+            scrollButtons="on"
+            value={currentAction}
+            onChange={(event, newValue) => {
+              history.push(`/${appContext.appId}/${newValue}`);
+            }}
+          >
+            <Tab value="home" label="Home" />
+            {appContext.actions.map((action) => {
+              return (
+                <Tab key={action.key} value={action.key} label={action.label} />
+              );
+            })}
+          </Tabs>
+        ))}
       <div
         style={{
           height: "calc(100vh - 104px)",
@@ -75,6 +101,37 @@ const AppUIMobile: React.FC<{
             );
           })}
         </Switch>
+        {actionsDisplayAs === "menu" && (
+          <SwipeableDrawer
+            anchor="right"
+            open={drawerOpen}
+            onOpen={(event) => {
+              setDrawerOpen(true);
+            }}
+            onClose={(event) => {
+              setDrawerOpen(false);
+            }}
+          >
+            <List>
+              {appContext.actions.map((action) => {
+                const Icon = action.icon;
+                return (
+                  <ListItem
+                    key={action.key}
+                    button
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      history.push(`/${appContext.appId}/${action.key}`);
+                    }}
+                  >
+                    <ListItemIcon>{Icon ? <Icon /> : <FaLemon />}</ListItemIcon>
+                    <ListItemText>{action.label}</ListItemText>
+                  </ListItem>
+                );
+              })}
+            </List>
+          </SwipeableDrawer>
+        )}
         {actionsDisplayAs === "bottom-navigation" && (
           <BottomNavigation
             value={currentAction}

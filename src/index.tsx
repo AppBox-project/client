@@ -8,6 +8,7 @@ setGlobal({
   user: undefined,
   isMobile: undefined,
   app: undefined,
+  buttons: {},
   theme: {
     palette: {
       primary: {

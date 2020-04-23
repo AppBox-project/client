@@ -8,6 +8,7 @@ import ListDetailLayout from "./AppUI/ListDetailLayout";
 import TreeView from "./AppUI/TreeView";
 import AppUiField from "./AppUI/Field";
 import SortableList from "../../UI/SortableList";
+import { useGlobal } from "reactn";
 
 export class AppContext {
   appId: string;

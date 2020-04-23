@@ -20,7 +20,7 @@ const SettingsPage: React.FC = () => {
         <div style={{ marginTop: 64 }} />
       </Hidden>
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item md={2} xs={12}>
           <List>
             <ListSubheader>Settings</ListSubheader>
             <Link to="/settings/update">
@@ -33,7 +33,7 @@ const SettingsPage: React.FC = () => {
             </Link>
           </List>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10}>
           <Switch>
             <Route path="/settings/update" component={SettingUpdate} />
             <Route component={FourOhFour} />

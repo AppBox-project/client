@@ -30,6 +30,7 @@ const App: React.FC<{
   const [dialogFormContent, setDialogFormContent] = useState();
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
+  const [gButtons, setgButtons] = useGlobal<any>("buttons");
 
   //Lifecycle
   useEffect(() => {
@@ -57,6 +58,7 @@ const App: React.FC<{
       setCurrentApp(null);
       setAppcontext(null);
       setgApp(null);
+      setgButtons({});
       context.unload();
     };
   }, [appId]);

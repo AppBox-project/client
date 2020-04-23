@@ -9,8 +9,6 @@ import { Switch, Route, Link } from "react-router-dom";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
-import { SpeedDial, SpeedDialAction } from "@material-ui/lab";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import {
   AppBar,
   Toolbar,
@@ -26,6 +24,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsPage from "../Settings";
+import { map } from "lodash";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
@@ -37,6 +36,7 @@ const MobileLayout: React.FC = () => {
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
+  const [gButtons] = useGlobal<any>("buttons");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // UI
@@ -58,9 +58,9 @@ const MobileLayout: React.FC = () => {
       setIsMobile(undefined);
     };
   }, []);
-  console.log(gApp);
 
   if (!apps) return <Loading />;
+
   return (
     <>
       <AppBar position="static">
@@ -80,11 +80,18 @@ const MobileLayout: React.FC = () => {
               {gApp ? gApp.data.name : "AppBox"}
             </Typography>
           </Link>
-          <Link to="/settings/update">
-            <IconButton style={{ width: 64 }}>
-              <Avatar>{gUser.data.first_name}</Avatar>
-            </IconButton>
-          </Link>
+          {map(gButtons, (button, id) => {
+            const Icon = button.icon;
+            return (
+              <IconButton
+                onClick={button.action}
+                style={{ color: "white" }}
+                key={id}
+              >
+                <Icon />
+              </IconButton>
+            );
+          })}
         </Toolbar>
       </AppBar>
       <SwipeableDrawer
@@ -120,17 +127,31 @@ const MobileLayout: React.FC = () => {
             })
           }
         </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
+        <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <Divider />
+          <List>
+            <ListItem
+              button
+              onClick={() => {
+                setDrawerOpen(false);
+                history.push("/settings");
+              }}
+            >
               <ListItemIcon>
-                {index % 2 === 0 ? <icons.FaMailBulk /> : <icons.FaMailchimp />}
+                <icons.FaCogs style={{ width: 24, height: 24 }} />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary="Settings" />
             </ListItem>
-          ))}
-        </List>
+            <ListItem button>
+              <ListItemIcon>
+                <Avatar style={{ width: 32, height: 32 }}>
+                  {gUser.data.first_name}
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText primary={gUser.data.full_name} />
+            </ListItem>
+          </List>
+        </div>
       </SwipeableDrawer>
       <Switch>
         <Route path="/" exact component={StartPage} />
