@@ -1,4 +1,4 @@
-import React, { useGlobal } from "reactn";
+import React, { useGlobal, useState, useEffect } from "reactn";
 import {
   Tabs,
   Tab,
@@ -13,7 +13,6 @@ import {
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
 import { FaBaseballBall, FaLemon, FaCompass } from "react-icons/fa";
-import { useState, useEffect } from "react";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -138,17 +137,22 @@ const AppUIMobile: React.FC<{
             onChange={(event, newValue) => {
               history.push(`/${appContext.appId}/${newValue}`);
             }}
-            showLabels
             style={{ bottom: 0, position: "absolute", width: "100%" }}
           >
             {appContext.actions.map((action) => {
-              const Icon = action.icon;
+              const Icon: React.FC<{ style }> = action.icon;
               return (
                 <BottomNavigationAction
                   key={action.key}
                   label={action.label}
                   value={action.key}
-                  icon={Icon ? <Icon /> : <FaLemon />}
+                  icon={
+                    Icon ? (
+                      <Icon style={{ height: 20, width: 20 }} />
+                    ) : (
+                      <FaLemon />
+                    )
+                  }
                 />
               );
             })}

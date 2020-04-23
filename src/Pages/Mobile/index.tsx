@@ -21,6 +21,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Icon,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsPage from "../Settings";
@@ -105,6 +106,26 @@ const MobileLayout: React.FC = () => {
         }}
       >
         <List>
+          <ListItem
+            button
+            onClick={() => {
+              history.push(`/`);
+              setDrawerOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <Icon color="primary">
+                <icons.FaBoxOpen style={{ width: 24, height: 24 }} />
+              </Icon>
+            </ListItemIcon>
+            <ListItemText>
+              <Typography color="primary" variant="h6">
+                AppBox
+              </Typography>
+            </ListItemText>
+          </ListItem>
+          <Divider />
+
           {
             //@ts-ignore
             apps.map((app) => {

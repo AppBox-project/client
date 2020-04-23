@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
-import Loading from "../../../Loading";
 import AppUITextField from "../../../Apps/Apps/AppUI/Forms/TextInput";
 
 const FieldTypeInput: React.FC<{
@@ -17,7 +16,7 @@ const FieldTypeInput: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setNewValue(object.data[fieldKey]);
+    setNewValue(object ? object.data[fieldKey] : "");
   }, [fieldKey, object]);
 
   // UI

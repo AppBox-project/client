@@ -11,15 +11,15 @@ import {
   DialogContent,
   IconButton,
   MenuItem,
-  Menu
+  Menu,
 } from "@material-ui/core";
-import { TypeType } from "../../Utils/Types";
+import { TypeType } from "../../../Utils/Types";
 import uniqid from "uniqid";
-import Server from "../../Utils/Server";
-import Loading from "../Loading";
+import Server from "../../../Utils/Server";
+import Loading from "../../Loading";
 import { Link } from "react-router-dom";
 import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
-import ViewObject from "../Object/index";
+import ViewObject from "../../Object/index";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -39,9 +39,9 @@ const Overview: React.FC<{
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
       requestId,
-      filter: { key: objectTypeId }
+      filter: { key: objectTypeId },
     });
-    Server.on(`receive-${requestId}`, response => {
+    Server.on(`receive-${requestId}`, (response) => {
       setObjectType(response[0]);
       setLayout(response[0].overviews[layoutId ? layoutId : "default"]);
     });
@@ -51,9 +51,9 @@ const Overview: React.FC<{
     Server.emit("listenForObjects", {
       requestId: dataRequestId,
       type: objectTypeId,
-      filter: {}
+      filter: {},
     });
-    Server.on(`receive-${dataRequestId}`, response => {
+    Server.on(`receive-${dataRequestId}`, (response) => {
       if (response.success) {
         setObjects(response.data);
       } else {
@@ -79,8 +79,8 @@ const Overview: React.FC<{
             justify="flex-end"
             alignItems="center"
           >
-            <Grid item xs={3} style={{ textAlign: "right", margin: 5 }}>
-              {layout.buttons.map(buttonInfo => {
+            <Grid item xs={12} md={3} style={{ textAlign: "right", margin: 5 }}>
+              {layout.buttons.map((buttonInfo) => {
                 if (objectType.buttons) {
                   if (objectType.buttons[buttonInfo]) {
                     const button = objectType.buttons[buttonInfo];
@@ -88,6 +88,7 @@ const Overview: React.FC<{
                       <Button
                         key={buttonInfo}
                         variant="outlined"
+                        fullWidth
                         onClick={() => {
                           setDialogContent(
                             <ViewObject
@@ -126,7 +127,7 @@ const Overview: React.FC<{
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {layout.fields.map(overviewItem => {
+            {layout.fields.map((overviewItem) => {
               return (
                 <TableCell key={overviewItem}>
                   {objectType.fields[overviewItem].name}
@@ -141,10 +142,10 @@ const Overview: React.FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {objects.map(object => {
+          {objects.map((object) => {
             return (
               <TableRow key={object._id}>
-                {layout.fields.map(overviewItem => {
+                {layout.fields.map((overviewItem) => {
                   return (
                     <TableCell key={overviewItem}>
                       <Link
@@ -161,7 +162,7 @@ const Overview: React.FC<{
                   <TableCell>
                     <div style={{ float: "right" }}>
                       <IconButton
-                        onClick={event => {
+                        onClick={(event) => {
                           setSelected(object._id);
                           setAnchorEl(event.currentTarget);
                         }}
@@ -185,7 +186,7 @@ const Overview: React.FC<{
               onClick={() => {
                 const requestId = uniqid();
                 Server.emit("deleteObject", { objectId: selected, requestId });
-                Server.on(`receive-${requestId}`, response => {
+                Server.on(`receive-${requestId}`, (response) => {
                   if (response.success) {
                     setAnchorEl(null);
                   } else {

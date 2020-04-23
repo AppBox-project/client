@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
-import Overview from "../../../Components/Overview";
+import Overview from "../../../Components/Object/Overview";
 import ViewObject from "../../../Components/Object";
 
 const AppActionObject: React.FC<{ action }> = ({ action }) => {
@@ -9,13 +9,13 @@ const AppActionObject: React.FC<{ action }> = ({ action }) => {
       <Switch>
         <Route
           path={`/data-explorer/${action}/:id`}
-          render={props => {
+          render={(props) => {
             return <DetailModule {...props} object={action} />;
           }}
         />
         <Route
           path={`/data-explorer/${action}`}
-          render={props => {
+          render={(props) => {
             return <OverviewModule {...props} object={action} />;
           }}
         />
@@ -31,8 +31,8 @@ const OverviewModule: React.FC<{ object: string }> = ({ object }) => {
 const DetailModule: React.FC<{ object: string; match: { params: { id } } }> = ({
   object,
   match: {
-    params: { id }
-  }
+    params: { id },
+  },
 }) => {
   return (
     <ViewObject objectTypeId={object} appId="data-explorer" objectId={id} />
