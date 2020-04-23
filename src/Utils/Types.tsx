@@ -1,5 +1,7 @@
 import { FC } from "react";
 
+export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
 export interface UserType {
   data: {
     username: string;
@@ -73,7 +75,7 @@ export interface AppContextType {
   app: AppType;
   isReady: Promise<unknown>;
   appCode: any;
-  actions: [{ label: string; key: string; component: FC }];
+  actions: [{ label: string; key: string; component: FC; icon?: React.FC }];
   UI: UIType;
   getObjects: (
     type: string,
@@ -142,6 +144,7 @@ export interface UIType {
       detailComponentProps?: {};
       context: AppContextType;
       addFunction?: () => void;
+      navWidth?: ColumnWidth;
     }>;
     SortableList: React.FC<{
       listItems: [];

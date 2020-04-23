@@ -2,6 +2,7 @@ import React from "react";
 import AppActionTodo from "./Todo";
 import FourOhFour from "../../Components/FourOhFour";
 import AppQSActionNotes from "./Notes";
+import { FaLemon, FaStickyNote, FaListAlt, FaFolderOpen } from "react-icons/fa";
 
 export default class App {
   context: any;
@@ -13,10 +14,30 @@ export default class App {
   getActions = () => {
     return new Promise((resolve) => {
       resolve([
-        { key: "overview", label: "Overview", component: FourOhFour },
-        { key: "notes", label: "Quick notes", component: AppQSActionNotes },
-        { key: "todo", label: "Todo", component: AppActionTodo },
-        { key: "files", label: "Files", component: FourOhFour },
+        {
+          key: "overview",
+          label: "Overview",
+          component: FourOhFour,
+          icon: FaLemon,
+        },
+        {
+          key: "notes",
+          label: "Quick notes",
+          component: AppQSActionNotes,
+          icon: FaStickyNote,
+        },
+        {
+          key: "todo",
+          label: "Todo",
+          component: AppActionTodo,
+          icon: FaListAlt,
+        },
+        {
+          key: "files",
+          label: "Files",
+          component: FourOhFour,
+          icon: FaFolderOpen,
+        },
       ]);
     });
   };

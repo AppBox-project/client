@@ -62,6 +62,7 @@ const AppQSActionNotes: React.FC<{
   if (!projects || !memos) return <context.UI.Loading />;
   return (
     <context.UI.Layouts.ListDetailLayout
+      navWidth={5}
       customNavComponent={
         <AppQSNotesNavigation
           memos={memos}
@@ -81,30 +82,4 @@ const AppQSActionNotes: React.FC<{
     />
   );
 };
-
-/*<Grid container>
-      <Grid item xs={12} md={6} lg={4}>
-        <AppQSNotesNavigation
-          memos={memos}
-          flatProjects={flatProjects}
-          projects={projects}
-          context={context}
-          selectedMemo={selectedMemo}
-        />
-      </Grid>
-      <Grid item xs={12} md={6} lg={8}>
-        <Route
-          path="/quick-space/notes/:noteId"
-          render={(props) => {
-            return (
-              <AppQSNotesDetail
-                {...props}
-                setSelectedMemo={setSelectedMemo}
-                context={context}
-              />
-            );
-          }}
-        />
-      </Grid>
-    </Grid> */
 export default AppQSActionNotes;

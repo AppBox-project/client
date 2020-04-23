@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaBaseballBall } from "react-icons/fa";
+import { FaBaseballBall, FaLemon } from "react-icons/fa";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -85,12 +85,13 @@ const AppUIMobile: React.FC<{
             style={{ bottom: 0, position: "absolute", width: "100%" }}
           >
             {appContext.actions.map((action) => {
+              const Icon = action.icon;
               return (
                 <BottomNavigationAction
                   key={action.key}
                   label={action.label}
                   value={action.key}
-                  icon={<FaBaseballBall />}
+                  icon={Icon ? <Icon /> : <FaLemon />}
                 />
               );
             })}

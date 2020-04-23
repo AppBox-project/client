@@ -3,7 +3,13 @@ import { AppContextType } from "../../../../../Utils/Types";
 import { motion } from "framer-motion";
 import { Link, Switch, Route } from "react-router-dom";
 import styles from "./styles.module.scss";
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from "@material-ui/core";
 import { AppContext } from "../../AppContext";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
@@ -93,6 +99,7 @@ const ActionMenu: React.FC<{
       </motion.div>
       <List>
         {context.actions.map((action) => {
+          const Icon = action.icon;
           return (
             <motion.div variants={item} key={action.key}>
               <Link
@@ -101,6 +108,11 @@ const ActionMenu: React.FC<{
                 style={{ color: "rgb(66, 82, 110)" }}
               >
                 <ListItem button selected={currentPage === action.key}>
+                  {Icon && (
+                    <ListItemIcon>
+                      <Icon />
+                    </ListItemIcon>
+                  )}
                   <ListItemText>{action.label}</ListItemText>
                 </ListItem>
               </Link>

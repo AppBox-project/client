@@ -9,7 +9,11 @@ import {
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
-import { AppContextType, TreeViewDataItem } from "../../../../../Utils/Types";
+import {
+  AppContextType,
+  TreeViewDataItem,
+  ColumnWidth,
+} from "../../../../../Utils/Types";
 import ActionBar from "../../../../ActionBar";
 import { FaPlus } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
@@ -29,6 +33,7 @@ const ListDetailLayout: React.FC<{
   detailComponentProps?: {};
   context: AppContextType;
   addFunction?: () => void;
+  navWidth?: ColumnWidth;
 }> = ({
   list,
   customNavComponent,
@@ -39,17 +44,21 @@ const ListDetailLayout: React.FC<{
   addFunction,
   mode,
   treeList,
+  navWidth,
 }) => {
   // Vars
   const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
   const [isMobile] = useGlobal<any>("isMobile");
+  const navigationWidth = navWidth ? navWidth : 3;
+  //@ts-ignore
+  const detailWidth: ColumnWidth = 12 - navigationWidth;
 
   // Lifecycle
   // UI
   return (
     <Grid container>
       {(!selectedItem || !isMobile) && (
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={navigationWidth}>
           {customNavComponent ? (
             customNavComponent
           ) : mode === "tree" ? (
@@ -65,7 +74,7 @@ const ListDetailLayout: React.FC<{
         </Grid>
       )}
       {selectedItem && (
-        <Grid item xs={12} md={9} style={{ padding: 15 }}>
+        <Grid item xs={12} md={detailWidth} style={{ padding: 15 }}>
           <Route
             path={`${baseUrl}/:detailId`}
             render={(props) => {
