@@ -11,6 +11,15 @@ import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
 import { SpeedDial, SpeedDialAction } from "@material-ui/lab";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
@@ -20,6 +29,7 @@ const MobileLayout: React.FC = () => {
     : "home";
   const [fabOpen, setFabOpen] = useState(false);
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
+  const [gApp] = useGlobal<any>("app");
 
   // UI
   // Lifecycle
@@ -40,10 +50,24 @@ const MobileLayout: React.FC = () => {
       setIsMobile(undefined);
     };
   }, []);
+  console.log(gApp);
 
   if (!apps) return <Loading />;
   return (
     <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" style={{ flexGrow: 1 }}>
+            {gApp ? gApp.data.name : "AppBox"}
+          </Typography>
+          <IconButton>
+            <MoreVertIcon style={{ color: "white" }} />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <Switch>
         <Route path="/" exact component={StartPage} />
         <Route path="/apps" exact component={StartPage} />

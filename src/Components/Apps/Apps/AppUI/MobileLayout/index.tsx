@@ -1,16 +1,13 @@
-import React from "react";
+import React, { useGlobal } from "reactn";
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
   Tabs,
   Tab,
+  BottomNavigation,
+  BottomNavigationAction,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
+import { FaBaseballBall } from "react-icons/fa";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -22,21 +19,19 @@ const AppUIMobile: React.FC<{
     ? window.location.href.split(`/${appContext.appId}/`)[1].split("/")[0]
     : "home";
   const history = useHistory();
+  const [gApp] = useGlobal<any>("app");
+
+  const actionsDisplayAs = gApp
+    ? gApp.data.mobileSettings
+      ? gApp.data.mobileSettings.actionsDisplayAs
+        ? gApp.data.mobileSettings.actionsDisplayAs
+        : "default"
+      : "default"
+    : "default";
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            {appContext.app.data.name}
-          </Typography>
-          <IconButton>
-            <MoreVertIcon style={{ color: "white" }} />
-          </IconButton>
-        </Toolbar>
+      {actionsDisplayAs === "tabs" && (
         <Tabs
           aria-label="App actions"
           scrollButtons="on"
@@ -52,7 +47,7 @@ const AppUIMobile: React.FC<{
             );
           })}
         </Tabs>
-      </AppBar>
+      )}
       <div
         style={{
           height: "calc(100vh - 104px)",
@@ -80,6 +75,27 @@ const AppUIMobile: React.FC<{
             );
           })}
         </Switch>
+        {actionsDisplayAs === "bottom-navigation" && (
+          <BottomNavigation
+            value={currentAction}
+            onChange={(event, newValue) => {
+              history.push(`/${appContext.appId}/${newValue}`);
+            }}
+            showLabels
+            style={{ bottom: 0, position: "absolute", width: "100%" }}
+          >
+            {appContext.actions.map((action) => {
+              return (
+                <BottomNavigationAction
+                  key={action.key}
+                  label={action.label}
+                  value={action.key}
+                  icon={<FaBaseballBall />}
+                />
+              );
+            })}
+          </BottomNavigation>
+        )}
       </div>
     </>
   );

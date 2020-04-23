@@ -29,6 +29,7 @@ const App: React.FC<{
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState();
   const [gTheme, setgTheme] = useGlobal<any>("theme");
+  const [gApp, setgApp] = useGlobal<any>("app");
 
   //Lifecycle
   useEffect(() => {
@@ -40,6 +41,7 @@ const App: React.FC<{
       const newColor = `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`;
       var metaThemeColor = document.querySelector("meta[name=theme-color]");
       metaThemeColor.setAttribute("content", newColor);
+      setgApp(context.app);
       setgTheme({
         ...gTheme,
         palette: {
@@ -54,6 +56,7 @@ const App: React.FC<{
     return () => {
       setCurrentApp(null);
       setAppcontext(null);
+      setgApp(null);
       context.unload();
     };
   }, [appId]);
