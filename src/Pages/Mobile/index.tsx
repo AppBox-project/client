@@ -62,9 +62,11 @@ const MobileLayout: React.FC = () => {
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            {gApp ? gApp.data.name : "AppBox"}
-          </Typography>
+          <Link to="/" style={{ color: "white", flexGrow: 1 }}>
+            <Typography variant="h6">
+              {gApp ? gApp.data.name : "AppBox"}
+            </Typography>
+          </Link>
           <Link to="/settings/update">
             <IconButton style={{ width: 64 }}>
               <Avatar>{gUser.data.first_name}</Avatar>
