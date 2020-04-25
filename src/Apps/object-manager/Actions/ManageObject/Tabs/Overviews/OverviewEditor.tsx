@@ -76,8 +76,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
         </UI.Animations.AnimationItem>
         <div style={{ marginTop: 15, height: 500 }}>
           <Grid container>
-            <Grid item xs={12} md={6} style={{ marginTop: 15 }}>
-              {" "}
+            <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
               <UI.Animations.AnimationItem>
                 <Paper className="paper">
                   <Typography variant="h6">Available</Typography>
@@ -111,7 +110,8 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </Paper>
               </UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={12} md={6} style={{ marginTop: 15 }}>
+            <Grid xs={12} md={1}></Grid>
+            <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
               <UI.Animations.AnimationItem>
                 <Paper className="paper">
                   <Typography variant="h6">Selected</Typography>

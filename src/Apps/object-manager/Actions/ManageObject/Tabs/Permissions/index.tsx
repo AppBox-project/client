@@ -88,7 +88,7 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
         {groupList.length > 0 ? (
           groupList.map((group) => {
             return (
-              <UI.Forms.TextInput label="Group" value={group} key={group} />
+              <UI.Inputs.TextInput label="Group" value={group} key={group} />
             );
           })
         ) : (

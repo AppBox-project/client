@@ -8,6 +8,7 @@ import ListDetailLayout from "./AppUI/ListDetailLayout";
 import TreeView from "./AppUI/TreeView";
 import AppUiField from "./AppUI/Field";
 import SortableList from "../../UI/SortableList";
+import InputSwitch from "../../Inputs/Switch";
 
 export class AppContext {
   appId: string;
@@ -26,7 +27,7 @@ export class AppContext {
       Loading,
       Animations: { AnimationContainer, AnimationItem },
 
-      Forms,
+      Inputs: { ...Forms, Switch: InputSwitch },
       Field: AppUiField,
       Layouts: { ListDetailLayout, TreeView, SortableList },
     };

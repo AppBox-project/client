@@ -91,7 +91,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   className="form-row"
                   style={{ display: "table-cell" }}
                 >
-                  <UI.Forms.TextInput
+                  <UI.Inputs.TextInput
                     label="Name"
                     value={field.name}
                     onChange={(value) => {
@@ -100,7 +100,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <UI.Forms.CheckmarkInput
+                  <UI.Inputs.CheckmarkInput
                     label="Required"
                     value={field.required}
                     onChange={(value) => {
@@ -109,7 +109,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <UI.Forms.CheckmarkInput
+                  <UI.Inputs.CheckmarkInput
                     label="Unique"
                     value={field.unique}
                     onChange={(value) => {
@@ -130,7 +130,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   className="form-row"
                   style={{ display: "table-cell" }}
                 >
-                  <UI.Forms.SelectInput
+                  <UI.Inputs.SelectInput
                     label="Field type"
                     value={field.type}
                     options={[
@@ -148,7 +148,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 </Grid>
                 {field.type === "input" && (
                   <Grid item xs={6}>
-                    <UI.Forms.SelectInput
+                    <UI.Inputs.SelectInput
                       label="Input type"
                       value={field.typeArgs ? field.typeArgs.type : "text"}
                       options={[
@@ -169,7 +169,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 {field.type === "options" && (
                   <>
                     <Grid item xs={6}>
-                      <UI.Forms.SelectInput
+                      <UI.Inputs.SelectInput
                         label="Display as"
                         value={
                           field.typeArgs ? field.typeArgs.display : "dropdown"
@@ -191,7 +191,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       {" "}
                     </Grid>
                     <Grid item xs={12}>
-                      <UI.Forms.TextInput
+                      <UI.Inputs.TextInput
                         label="Options"
                         multiline
                         value={field.typeArgs ? field.typeArgs.options : ""}
@@ -205,7 +205,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 {field.type === "richtext" && (
                   <Grid item xs={6}>
                     richtext
-                    <UI.Forms.SelectInput
+                    <UI.Inputs.SelectInput
                       label="Type"
                       value={field.typeArgs ? field.typeArgs.type : "regular"}
                       options={[
@@ -409,7 +409,7 @@ const ListObjectTypes: React.FC<{
   if (!objectTypes) return <UI.Loading />;
 
   return (
-    <UI.Forms.SelectInput
+    <UI.Inputs.SelectInput
       label="Relationship to"
       value={value}
       options={objectTypes}

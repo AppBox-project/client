@@ -26,7 +26,7 @@ const AppActionManageObjectTabObject: React.FC<{
             </Typography>
             <Grid container>
               <Grid item xs={6}>
-                <UI.Forms.TextInput
+                <UI.Inputs.TextInput
                   label="Name"
                   value={model.name}
                   onChange={(value) => {
@@ -35,7 +35,7 @@ const AppActionManageObjectTabObject: React.FC<{
                 />
               </Grid>
               <Grid item xs={6}>
-                <UI.Forms.TextInput
+                <UI.Inputs.TextInput
                   label="Name (Plural)"
                   value={model.name_plural}
                   onChange={(value) => {

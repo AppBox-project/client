@@ -1,6 +1,7 @@
 html,
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 .center {
@@ -31,7 +32,6 @@ a {
 }
 
 .paper {
-  margin: 0 15px;
   padding: 10px;
 }
 

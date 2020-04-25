@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
-import InputDrafting from "../../../Forms/Drafting";
+import InputDrafting from "../../../Inputs/Drafting";
 
 const FieldTypeRichText: React.FC<{
   mode: "view" | "edit" | "free";

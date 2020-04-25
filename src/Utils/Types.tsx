@@ -178,7 +178,7 @@ export interface UIType {
     onChange?: (value) => void;
     mode: "view" | "edit" | "free";
   }>;
-  Forms: {
+  Inputs: {
     TextInput: React.FC<{
       label: string;
       value: string;
@@ -196,6 +196,12 @@ export interface UIType {
       label?: string;
       value?: string;
       options: { value: string; label: string }[];
+      onChange?: (value) => void;
+      style?;
+    }>;
+    Switch: React.FC<{
+      label?: string;
+      value?: string;
       onChange?: (value) => void;
       style?;
     }>;
