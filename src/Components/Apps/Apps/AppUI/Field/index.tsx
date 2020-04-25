@@ -10,8 +10,10 @@ const AppUiField: React.FC<{
   modelId: string;
   fieldId: string;
   objectId: string;
+  directSave?: true;
   mode: "view" | "edit" | "free";
-}> = ({ style, modelId, fieldId, objectId, mode }) => {
+  onChange?: (value) => void;
+}> = ({ style, modelId, fieldId, objectId, mode, directSave }) => {
   // Vars
   const [field, setField] = useState();
   const [object, setObject] = useState();
@@ -46,7 +48,13 @@ const AppUiField: React.FC<{
   if (!field || !object) return <Loading />;
   return (
     <div style={style}>
-      <Field field={field} object={object} fieldId={fieldId} mode={mode} />
+      <Field
+        field={field}
+        object={object}
+        fieldId={fieldId}
+        mode={mode}
+        directSave={directSave}
+      />
     </div>
   );
 };

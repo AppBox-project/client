@@ -32,7 +32,7 @@ const Field: React.FC<{
   }, 2500);
   const onChangeHandler = (value) => {
     if (directSave) debouncedDirectSave(value);
-    onChange(value);
+    if (onChange) onChange(value);
   };
 
   return (
