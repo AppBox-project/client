@@ -46,12 +46,14 @@ const AppQSNotesDetail: React.FC<{
         fieldId="title"
         objectId={detailId}
         mode="free"
+        directSave
       />
       <context.UI.Field
         modelId="qs-memo"
         fieldId="body"
         objectId={detailId}
         mode="free"
+        directSave
       />
     </>
   );

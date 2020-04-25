@@ -161,6 +161,8 @@ export interface UIType {
     modelId: string;
     fieldId: string;
     objectId: string;
+    directSave?: true;
+    onChange?: (value) => void;
     mode: "view" | "edit" | "free";
   }>;
   Forms: {
