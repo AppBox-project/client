@@ -4,17 +4,8 @@ import {
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from "@material-ui/core";
 import { map } from "lodash";
-import { Link, Switch, Route } from "react-router-dom";
 import AppActionManageObjectTabFieldsEditor from "./FieldEditor";
-import { FaPlus } from "react-icons/fa";
 
 const AppActionManageObjectTabFields: React.FC<{
   model: TypeType;
@@ -22,7 +13,6 @@ const AppActionManageObjectTabFields: React.FC<{
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // States & Hooks
-  const [currentField, setCurrentField] = useState();
 
   // States & Hooks
   const list = [];

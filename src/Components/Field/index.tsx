@@ -12,15 +12,16 @@ import uniqid from "uniqid";
 const Field: React.FC<{
   field: ModelFieldType;
   mode?: "view" | "edit" | "free";
-  object: TypeType;
+  object;
   fieldId: string;
   setMode?: (mode: "view" | "edit" | "free") => void;
-}> = ({ field, mode, object, fieldId, setMode }) => {
-  var onChangeHandler = debounce((value) => {
+  directSave?: true;
+  onChange?: (value) => void;
+}> = ({ field, mode, object, fieldId, setMode, directSave, onChange }) => {
+  const debouncedDirectSave = debounce((value) => {
     const requestId = uniqid();
     Server.emit("updateObject", {
       requestId,
-      //@ts-ignore
       type: object.objectId,
       objectId: object._id,
       toChange: { [fieldId]: value },
@@ -29,6 +30,10 @@ const Field: React.FC<{
       console.log(response);
     });
   }, 2500);
+  const onChangeHandler = (value) => {
+    if (directSave) debouncedDirectSave(value);
+    onChange(value);
+  };
 
   return (
     <>
