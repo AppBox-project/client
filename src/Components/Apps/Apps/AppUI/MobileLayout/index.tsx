@@ -58,6 +58,7 @@ const AppUIMobile: React.FC<{
       {actionsDisplayAs === "tabs" ||
         (actionsDisplayAs === "default" && (
           <Tabs
+            variant="scrollable"
             aria-label="App actions"
             scrollButtons="on"
             value={currentAction}

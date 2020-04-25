@@ -47,7 +47,8 @@ const AppActionManageObject: React.FC<{
         }}
         indicatorColor="primary"
         textColor="primary"
-        aria-label="simple tabs example"
+        aria-label="Object aspects navigation"
+        variant="scrollable"
       >
         <Tab label="Object" value="object" />
         <Tab label="Fields" value="fields" />

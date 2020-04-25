@@ -25,6 +25,7 @@ const AppActionManageObjectTabAPI: React.FC<{
       baseUrl={`/object-manager/${model.key}/api`}
       context={context}
       DetailComponent={AppActionManageObjectTabAPIDetail}
+      detailComponentProps={{ model }}
     />
   );
 };
