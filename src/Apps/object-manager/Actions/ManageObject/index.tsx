@@ -49,7 +49,6 @@ const AppActionManageObject: React.FC<{
         textColor="primary"
         aria-label="Object aspects navigation"
         variant="scrollable"
-        centered
       >
         <Tab label="Object" value="object" />
         <Tab label="Fields" value="fields" />

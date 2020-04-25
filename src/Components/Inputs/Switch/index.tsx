@@ -26,7 +26,6 @@ const InputSwitch: React.FC<{
         setState(event.target.checked);
         if (onChange) onChange(event.target.checked);
       }}
-      name="checkedB"
       color="primary"
     />
   );

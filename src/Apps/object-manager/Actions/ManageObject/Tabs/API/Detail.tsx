@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Paper, Typography } from "@material-ui/core";
+import { Paper, Typography, Grid, Button } from "@material-ui/core";
 
 const typeInfo = {
   read: {
@@ -46,32 +46,138 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
   model,
 }) => {
   // Vars
+  const [newModel, setNewModel] = useState(model);
+  const [modelInfo, setModelInfo] = useState<any>();
   const isActive = model.api
     ? model.api[detailId]
       ? model.api[detailId].active
       : false
     : false;
+  const [hasChanged, setHasChanged] = useState(false);
+
+  // Lifecycle
+  useEffect(() => {
+    if (typeInfo[detailId]) {
+      setModelInfo(typeInfo[detailId]);
+    } else {
+      setModelInfo("error");
+    }
+  }, [detailId]);
+  useEffect(() => {
+    setNewModel(model);
+  }, [model]);
 
   // UI
+  if (!modelInfo) return <context.UI.Loading />;
+  if (modelInfo === "error") return <>Unknown API type</>;
   return (
-    <context.UI.Animations.AnimationContainer>
-      <context.UI.Animations.AnimationItem>
-        <div style={{ float: "right" }}>
-          <context.UI.Inputs.Switch />
-        </div>
-        <Typography variant="h4" style={{ marginBottom: 15 }}>
-          {typeInfo[detailId].title}
-        </Typography>
-        <Typography variant="body1">
-          {typeInfo[detailId].description}
-        </Typography>
-      </context.UI.Animations.AnimationItem>
-      <context.UI.Animations.AnimationItem>
-        <Paper className="paper" style={{ margin: "15px 0" }}>
-          <Typography variant="h6">Settings</Typography>
-        </Paper>
-      </context.UI.Animations.AnimationItem>
-    </context.UI.Animations.AnimationContainer>
+    <>
+      <context.UI.Animations.AnimationContainer>
+        <context.UI.Animations.AnimationItem>
+          <div style={{ float: "right" }}>
+            <context.UI.Inputs.Switch
+              label="Active"
+              value={isActive}
+              onChange={(active) => {
+                context.updateModel(
+                  model.key,
+                  {
+                    ...newModel,
+                    api: {
+                      ...newModel.api,
+                      [detailId]: { ...newModel.api[detailId], active },
+                    },
+                  },
+                  model._id
+                );
+              }}
+            />
+          </div>
+          <Typography variant="h4" style={{ marginBottom: 15 }}>
+            {modelInfo.title}
+          </Typography>
+          <Typography variant="body1">{modelInfo.description}</Typography>
+        </context.UI.Animations.AnimationItem>
+      </context.UI.Animations.AnimationContainer>
+      {isActive && (
+        <context.UI.Animations.AnimationContainer>
+          <Grid container>
+            <Grid item xs={12}>
+              <context.UI.Animations.AnimationItem>
+                <Paper className="paper" style={{ margin: "15px 0" }}>
+                  <Typography variant="h6">Settings</Typography>
+                </Paper>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <context.UI.Animations.AnimationItem>
+                <Paper className="paper" style={{ margin: "15px 0" }}>
+                  <Typography variant="h6">Log</Typography>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <context.UI.Inputs.SelectInput
+                        label="Access type"
+                        options={[
+                          { label: "Public access", value: "none" },
+                          { label: "User authentication", value: "user" },
+                        ]}
+                        value={
+                          model.api
+                            ? model.api[detailId]
+                              ? model.api[detailId].authentication
+                                ? model.api[detailId].authentication
+                                : "user"
+                              : "user"
+                            : "user"
+                        }
+                        onChange={(authentication) => {
+                          setHasChanged(true);
+
+                          setNewModel({
+                            ...newModel,
+                            api: {
+                              ...newModel.api,
+                              [detailId]: {
+                                ...newModel.api[detailId],
+                                authentication,
+                              },
+                            },
+                          });
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+            <Grid item xs={12} md={2} />
+            <Grid item xs={12} md={5}>
+              <context.UI.Animations.AnimationItem>
+                <Paper className="paper" style={{ margin: "15px 0" }}>
+                  <Typography variant="h6">Stats</Typography>
+                </Paper>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+          </Grid>
+        </context.UI.Animations.AnimationContainer>
+      )}
+      {hasChanged && (
+        <context.UI.Animations.AnimationContainer>
+          <context.UI.Animations.AnimationItem>
+            <Button
+              fullWidth
+              color="primary"
+              onClick={() => {
+                context.updateModel(model.key, newModel, model._id);
+                setHasChanged(false);
+              }}
+            >
+              Save
+            </Button>
+          </context.UI.Animations.AnimationItem>
+        </context.UI.Animations.AnimationContainer>
+      )}
+    </>
   );
 };
 

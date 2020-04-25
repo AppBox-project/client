@@ -1,4 +1,3 @@
-import React from "react";
 import FourOhFour from "../../Components/FourOhFour";
 import AppActionManageObject from "./Actions/ManageObject";
 
@@ -10,20 +9,20 @@ export default class App {
   }
 
   getActions = () => {
-    return new Promise(resolve => {
-      this.context.getTypes({}, response => {
+    return new Promise((resolve) => {
+      this.context.getTypes({}, (response) => {
         if (response.success) {
           const actions = [];
-          response.data.map(result => {
+          response.data.map((result) => {
             actions.push({
               label: result.name_plural,
               key: result.key,
-              component: AppActionManageObject
+              component: AppActionManageObject,
             });
           });
           resolve([
             { key: "new", label: "Add object", component: FourOhFour },
-            ...actions
+            ...actions,
           ]);
         } else {
           console.log("Something went wrong", response.reason);

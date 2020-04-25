@@ -34,7 +34,7 @@ export interface ModelOverviewType {
 interface ModelApiType {
   active: boolean;
   endpoint?: string;
-  public?: boolean;
+  authentication?: "none" | "user";
 }
 
 export interface ModelType {
