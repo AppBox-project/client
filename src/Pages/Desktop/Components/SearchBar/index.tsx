@@ -4,7 +4,7 @@ import { TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
-import { TypeType } from "../../../../Utils/Types";
+import { ModelType } from "../../../../Utils/Types";
 
 const SearchBar: React.FC<{ style: any }> = ({ style }) => {
   const [types, setTypes] = useState<any>();
@@ -13,7 +13,7 @@ const SearchBar: React.FC<{ style: any }> = ({ style }) => {
   useEffect(() => {
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", { filter: {}, requestId });
-    Server.on(`receive-${requestId}`, response => {
+    Server.on(`receive-${requestId}`, (response) => {
       setTypes([{ name_plural: "All" }, ...response]);
     });
     return () => {
@@ -31,15 +31,15 @@ const SearchBar: React.FC<{ style: any }> = ({ style }) => {
           loading={!types ? true : false}
           getOptionLabel={
             types
-              ? (option: TypeType) => {
+              ? (option: ModelType) => {
                   return option.name_plural;
                 }
-              : (option: TypeType) => {
+              : (option: ModelType) => {
                   return "";
                 }
           }
           style={{ display: "inline-block", width: 100 }}
-          renderInput={params => (
+          renderInput={(params) => (
             <TextField
               {...params}
               label="Type"
@@ -56,7 +56,7 @@ const SearchBar: React.FC<{ style: any }> = ({ style }) => {
           disableClearable
           loading
           style={{ display: "inline-block" }}
-          renderInput={params => (
+          renderInput={(params) => (
             <TextField
               {...params}
               label="Search"

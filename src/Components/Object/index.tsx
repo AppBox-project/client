@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import styles from "./styles.module.scss";
-import { TypeType } from "../../Utils/Types";
+import { ModelType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import Field from "../Field";
 
@@ -27,7 +27,7 @@ const ViewObject: React.FC<{
   objectId?: string;
   onSuccess?: () => void;
 }> = ({ objectTypeId, layoutId, appId, objectId, onSuccess }) => {
-  const [objectType, setObjectType] = useState<TypeType>();
+  const [objectType, setObjectType] = useState<ModelType>();
   const [object, setObject] = useState();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
   const [toChange, setToChange] = useState({});
@@ -257,7 +257,7 @@ const ViewObject: React.FC<{
 
 const LayoutItem: React.FC<{
   layoutItem: any;
-  objectType: TypeType;
+  objectType: ModelType;
   mode: "view" | "edit";
   toChange: any;
   setToChange: (any) => void;

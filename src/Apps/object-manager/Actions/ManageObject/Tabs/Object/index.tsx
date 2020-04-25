@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { Grid, Paper, Typography, Button } from "@material-ui/core";
 import {
-  TypeType,
+  ModelType,
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
 
 const AppActionManageObjectTabObject: React.FC<{
-  model: TypeType;
+  model: ModelType;
   UI: UIType;
   context: AppContextType;
 }> = ({ model, UI, context }) => {

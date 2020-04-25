@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, UIType, TypeType } from "../../../../Utils/Types";
+import { AppContextType, UIType, ModelType } from "../../../../Utils/Types";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AppActionManageObjectTabObject from "./Tabs/Object";
 import AppActionManageObjectTabFields from "./Tabs/Fields";
 import AppActionManageObjectTabOverviews from "./Tabs/Overviews";
 import AppActionManageObjectTabPermissions from "./Tabs/Permissions";
+import AppActionManageObjectTabAPI from "./Tabs/API";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -21,7 +22,7 @@ const AppActionManageObject: React.FC<{
     : window.location.href.split(`object-manager/${action}/`)[1];
 
   // States & hooks
-  const [model, setModel] = useState<TypeType | void>();
+  const [model, setModel] = useState<ModelType | void>();
   const history = useHistory();
 
   // Lifecycle
@@ -44,7 +45,6 @@ const AppActionManageObject: React.FC<{
         onChange={(event, value) => {
           history.push(`/object-manager/${action}/${value}`);
         }}
-        centered
         indicatorColor="primary"
         textColor="primary"
         aria-label="simple tabs example"
@@ -53,6 +53,7 @@ const AppActionManageObject: React.FC<{
         <Tab label="Fields" value="fields" />
         <Tab label="Lay-outs" value="layouts" />
         <Tab label="Overviews" value="overviews" />
+        <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
       </Tabs>
       {currentTab === "object" && (
@@ -83,6 +84,9 @@ const AppActionManageObject: React.FC<{
           UI={UI}
           context={context}
         />
+      )}
+      {currentTab === "api" && (
+        <AppActionManageObjectTabAPI model={model} UI={UI} context={context} />
       )}
     </>
   );

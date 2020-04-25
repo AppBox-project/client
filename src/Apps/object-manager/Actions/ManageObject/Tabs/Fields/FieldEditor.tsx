@@ -3,7 +3,7 @@ import {
   UIType,
   ModelFieldType,
   AppContextType,
-  TypeType,
+  ModelType,
 } from "../../../../../../Utils/Types";
 import {
   Paper,
@@ -19,7 +19,7 @@ import FormulaEditor from "../../../../../../Components/FormulaEditor";
 const AppActionManageObjectTabFieldsEditor: React.FC<{
   match: { params: { detailId } };
   context: AppContextType;
-  model: TypeType;
+  model: ModelType;
 }> = ({
   match: {
     params: { detailId },
@@ -99,7 +99,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     }}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <UI.Forms.CheckmarkInput
                     label="Required"
                     value={field.required}
@@ -108,7 +108,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     }}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <UI.Forms.CheckmarkInput
                     label="Unique"
                     value={field.unique}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ModelFieldType, TypeType } from "../../Utils/Types";
+import { ModelFieldType, ModelType } from "../../Utils/Types";
 import FieldTypeInput from "../Object/FieldTypes/Input";
 import FieldTypeBoolean from "../Object/FieldTypes/Boolean";
 import FieldTypeRelationship from "../Object/FieldTypes/Relationship";

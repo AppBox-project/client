@@ -3,7 +3,7 @@ import {
   AppContextType,
   ModelOverviewType,
   ModelFieldType,
-  TypeType,
+  ModelType,
   UIType,
 } from "../../../../../../Utils/Types";
 import {
@@ -35,7 +35,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   match: { params: { detailId } };
   context: AppContextType;
   fields: [ModelFieldType];
-  model: TypeType;
+  model: ModelType;
 }> = ({
   match: {
     params: { detailId },
@@ -56,6 +56,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   }, [detailId]);
 
   if (!overview) return <UI.Loading />;
+
   return (
     <>
       <UI.Animations.AnimationContainer>
@@ -80,7 +81,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 <Paper className="paper" style={{ marginLeft: 0 }}>
                   <Typography variant="h6">Available</Typography>
                   <List>
-                    {map(fields, (field, key: string) => {
+                    {map(model.fields, (field, key: string) => {
                       if (!overview.fields.includes(key)) {
                         return (
                           <ListItem key={key}>

@@ -4,7 +4,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Hidden,
   ListItemIcon,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
@@ -17,6 +16,7 @@ import {
 import ActionBar from "../../../../ActionBar";
 import { FaPlus } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
+import styles from "./styles.module.scss";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -105,34 +105,36 @@ const ListNav: React.FC<{ addFunction; baseUrl; selectedItem; list }> = ({
   list,
 }) => {
   return (
-    <List>
-      <AnimationContainer>
-        {addFunction && (
-          <AnimationItem>
-            <ListItem button onClick={addFunction}>
-              <ListItemIcon>
-                <FaPlus />
-              </ListItemIcon>
-              <ListItemText>Add new</ListItemText>
-            </ListItem>
-          </AnimationItem>
-        )}
-        {list.map((listItem) => {
-          return listItem.url ? (
-            <AnimationItem key={listItem.id}>
-              <Link to={`${baseUrl}/${listItem.url}`}>
-                <ListItem button selected={selectedItem === listItem.id}>
-                  <ListItemText>{listItem.label}</ListItemText>
-                </ListItem>
-              </Link>
+    <div className={styles.root}>
+      <List>
+        <AnimationContainer>
+          {addFunction && (
+            <AnimationItem>
+              <ListItem button onClick={addFunction}>
+                <ListItemIcon>
+                  <FaPlus />
+                </ListItemIcon>
+                <ListItemText>Add new</ListItemText>
+              </ListItem>
             </AnimationItem>
-          ) : (
-            <ListItem button>
-              <ListItemText>{listItem.label}</ListItemText>
-            </ListItem>
-          );
-        })}
-      </AnimationContainer>
-    </List>
+          )}
+          {list.map((listItem) => {
+            return listItem.url ? (
+              <AnimationItem key={listItem.id}>
+                <Link to={`${baseUrl}/${listItem.url}`}>
+                  <ListItem button selected={selectedItem === listItem.id}>
+                    <ListItemText>{listItem.label}</ListItemText>
+                  </ListItem>
+                </Link>
+              </AnimationItem>
+            ) : (
+              <ListItem button>
+                <ListItemText>{listItem.label}</ListItemText>
+              </ListItem>
+            );
+          })}
+        </AnimationContainer>
+      </List>
+    </div>
   );
 };

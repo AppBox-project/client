@@ -13,7 +13,7 @@ import {
   MenuItem,
   Menu,
 } from "@material-ui/core";
-import { TypeType } from "../../../Utils/Types";
+import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import Loading from "../../Loading";
@@ -26,7 +26,7 @@ const Overview: React.FC<{
   objectTypeId: string;
   appId: string;
 }> = ({ layoutId, objectTypeId, appId }) => {
-  const [objectType, setObjectType] = useState<TypeType>();
+  const [objectType, setObjectType] = useState<ModelType>();
   const [layout, setLayout] = useState();
   const [objects, setObjects] = useState();
   const [dialogContent, setDialogContent] = useState();

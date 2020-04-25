@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  TypeType,
+  ModelType,
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
@@ -8,7 +8,7 @@ import { map } from "lodash";
 import AppActionManageObjectOverviewEditor from "./OverviewEditor";
 
 const AppActionManageObjectTabOverviews: React.FC<{
-  model: TypeType;
+  model: ModelType;
   UI: UIType;
   context: AppContextType;
 }> = ({ model, UI, context }) => {

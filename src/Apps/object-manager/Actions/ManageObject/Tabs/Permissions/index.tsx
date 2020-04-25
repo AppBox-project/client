@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  TypeType,
+  ModelType,
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 
 const AppActionManageObjectTabPermissions: React.FC<{
-  model: TypeType;
+  model: ModelType;
   UI: UIType;
   context: AppContextType;
 }> = ({ model, UI, context }) => {

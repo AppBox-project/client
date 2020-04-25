@@ -31,8 +31,13 @@ export interface ModelOverviewType {
   buttons: [string];
   actions: [string];
 }
+interface ModelApiType {
+  active: boolean;
+  endpoint?: string;
+  public?: boolean;
+}
 
-export interface TypeType {
+export interface ModelType {
   key: string;
   name: string;
   name_plural: string;
@@ -41,6 +46,14 @@ export interface TypeType {
   overviews: [ModelOverviewType];
   layouts: any;
   buttons: any;
+  api?: {
+    read?: ModelApiType;
+    create?: ModelApiType;
+    modifyOwn?: ModelApiType;
+    write?: ModelApiType;
+    deleteOwn?: ModelApiType;
+    delete?: ModelApiType;
+  };
   permissions: {
     read: [string];
     create: [string];

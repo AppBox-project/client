@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  TypeType,
+  ModelType,
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
@@ -8,7 +8,7 @@ import { map } from "lodash";
 import AppActionManageObjectTabFieldsEditor from "./FieldEditor";
 
 const AppActionManageObjectTabFields: React.FC<{
-  model: TypeType;
+  model: ModelType;
   UI: UIType;
   context: AppContextType;
 }> = ({ model, UI, context }) => {
