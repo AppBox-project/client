@@ -24,4 +24,4 @@ yarn-error.log*
 
 # Apps-User
 /src/Apps-User/*
-!/src/Apps-User/*/.gitkeep 
+!/src/Apps-User/.gitkeep 
