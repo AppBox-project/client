@@ -106,13 +106,6 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
               <context.UI.Animations.AnimationItem>
                 <Paper className="paper" style={{ margin: "15px 0" }}>
                   <Typography variant="h6">Settings</Typography>
-                </Paper>
-              </context.UI.Animations.AnimationItem>
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <context.UI.Animations.AnimationItem>
-                <Paper className="paper" style={{ margin: "15px 0" }}>
-                  <Typography variant="h6">Log</Typography>
                   <Grid container>
                     <Grid item xs={6}>
                       <context.UI.Inputs.SelectInput
@@ -132,7 +125,6 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
                         }
                         onChange={(authentication) => {
                           setHasChanged(true);
-
                           setNewModel({
                             ...newModel,
                             api: {
@@ -147,6 +139,13 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
                       />
                     </Grid>
                   </Grid>
+                </Paper>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <context.UI.Animations.AnimationItem>
+                <Paper className="paper" style={{ margin: "15px 0" }}>
+                  <Typography variant="h6">Log</Typography>
                 </Paper>
               </context.UI.Animations.AnimationItem>
             </Grid>
