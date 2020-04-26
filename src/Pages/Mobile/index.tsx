@@ -140,7 +140,13 @@ const MobileLayout: React.FC = () => {
                   }}
                 >
                   <ListItemIcon>
-                    <Icon style={{ height: 25, width: 25 }} />
+                    <Icon
+                      style={{
+                        height: 25,
+                        width: 25,
+                        color: `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                      }}
+                    />
                   </ListItemIcon>
                   <ListItemText>{app.data.name}</ListItemText>
                 </ListItem>

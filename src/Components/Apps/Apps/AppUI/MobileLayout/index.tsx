@@ -38,8 +38,6 @@ const AppUIMobile: React.FC<{
 
   useEffect(() => {
     if (actionsDisplayAs === "menu") {
-      console.log("juh");
-
       setgButtons({
         ...gButtons,
         toggleNavigate: {
