@@ -12,17 +12,20 @@ const AppAHViewApp: React.FC<{
 }) => {
   // Vars
   const [app, setApp] = useState();
+
   // Lifecycle
   useEffect(() => {
     axios
-      .get(`https://appbox.vicvan.co/api/appbox-app/read/${appId}`)
+      .get(`https://appbox.vicvan.co/api/appbox-app/read/?key=${appId}`)
       .then((response) => {
-        setApp(response.data);
+        console.log(response);
+        setApp(response.data[0]);
       });
   }, []);
+
   // UI
   if (!app) return <context.UI.Loading />;
-  return <>{appId}</>;
+  return <>{app.data.name}</>;
 };
 
 export default AppAHViewApp;
