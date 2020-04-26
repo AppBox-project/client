@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
 import axios from "axios";
-import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
+import {
+  GridList,
+  GridListTile,
+  GridListTileBar,
+  Grid,
+  Paper,
+} from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { useHistory, Route, Switch } from "react-router-dom";
 import AppAHViewApp from "../ViewApp";
@@ -49,25 +55,24 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
   // UI
   if (apps === []) return <context.UI.Loading />;
   return (
-    <GridList cellHeight={300} cols={3}>
+    <Grid container>
       {apps.map((app) => {
         return (
-          <GridListTile
+          <Grid
+            item
+            xs={12}
+            md={3}
             key={app.data.key}
-            cols={2}
-            className={styles.appLink}
             onClick={() => {
               history.push(`/app-hub/browse/${app.data.key}`);
             }}
+            className={styles.appLink}
+            style={{ backgroundImage: `url(${app.data.banner})` }}
           >
-            <img src={app.data.banner} alt={app.data.name} />
-            <GridListTileBar
-              title={app.data.name}
-              subtitle={<span>by: {app.data.author}</span>}
-            />
-          </GridListTile>
+            <div>{app.data.name}</div>
+          </Grid>
         );
       })}
-    </GridList>
+    </Grid>
   );
 };
