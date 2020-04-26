@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Apps-User
+/src/Apps-User/*
+!/src/Apps-User/*/.gitkeep 
