@@ -47,7 +47,7 @@ export class AppContext {
       Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           this.app = response.data[0];
-          import(`../../../Apps/${this.appId}/index.tsx`).then((app) => {
+          import(`../../../Apps-Core/${this.appId}/index.tsx`).then((app) => {
             const AppCode = app.default;
             this.appCode = new AppCode(this);
             this.appCode.getActions().then((actions) => {
