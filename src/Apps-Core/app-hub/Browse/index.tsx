@@ -16,7 +16,7 @@ const AppAHBrowse: React.FC<{
       <Route
         path="/app-hub/browse/:appId"
         render={(props) => {
-          return <AppAHViewApp {...props} />;
+          return <AppAHViewApp context={context} {...props} />;
         }}
       />
       <Route
