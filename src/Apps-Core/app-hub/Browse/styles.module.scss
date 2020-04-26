@@ -1,0 +1,15 @@
+.appLink {
+  cursor: pointer;
+  img {
+    margin-top: -350px;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+
+  &:hover img {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+}
