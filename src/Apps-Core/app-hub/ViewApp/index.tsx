@@ -11,7 +11,7 @@ import {
   IconButton,
   CircularProgress,
 } from "@material-ui/core";
-import { FaDownload, FaAngleLeft } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
 
