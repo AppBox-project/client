@@ -116,6 +116,35 @@ export interface AppContextType {
   ) => AppRequestController;
 }
 
+export interface WidgetContextType {
+  appId: string;
+  app: AppType;
+  isReady: Promise<unknown>;
+  UI: UIType;
+  getObjects: (
+    type: string,
+    filter: {},
+    then: (response: any) => void
+  ) => AppRequestController;
+  addObject: (type: string, object: {}) => Promise<boolean | string>;
+  deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
+  updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
+  updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
+  setFieldDependencies: (
+    context,
+    dependencies,
+    fieldId
+  ) => Promise<boolean | string>;
+  getTypes: (
+    filter: {},
+    then: (response: {
+      success: boolean;
+      reason?: string;
+      data?: [any];
+    }) => void
+  ) => AppRequestController;
+}
+
 export interface dialogType {
   display: boolean;
   title?: string;
@@ -146,7 +175,7 @@ interface ListItem {
 }
 
 export interface UIType {
-  Loading: React.FC;
+  Loading: React.FC<{ label?: string }>;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
   Layouts: {
     TreeView: React.FC<{
