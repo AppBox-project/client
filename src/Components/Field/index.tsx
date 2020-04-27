@@ -17,19 +17,32 @@ const Field: React.FC<{
   setMode?: (mode: "view" | "edit" | "free") => void;
   directSave?: true;
   onChange?: (value) => void;
-}> = ({ field, mode, object, fieldId, setMode, directSave, onChange }) => {
-  const debouncedDirectSave = debounce((value) => {
-    const requestId = uniqid();
-    Server.emit("updateObject", {
-      requestId,
-      type: object.objectId,
-      objectId: object._id,
-      toChange: { [fieldId]: value },
-    });
-    Server.on(`receive-${requestId}`, (response) => {
-      console.log(response);
-    });
-  }, 2500);
+  directSaveDelay?: number;
+}> = ({
+  field,
+  mode,
+  object,
+  fieldId,
+  setMode,
+  directSave,
+  onChange,
+  directSaveDelay,
+}) => {
+  const debouncedDirectSave = debounce(
+    (value) => {
+      const requestId = uniqid();
+      Server.emit("updateObject", {
+        requestId,
+        type: object.objectId,
+        objectId: object._id,
+        toChange: { [fieldId]: value },
+      });
+      Server.on(`receive-${requestId}`, (response) => {
+        console.log(response);
+      });
+    },
+    directSaveDelay ? directSaveDelay : 2500
+  );
   const onChangeHandler = (value) => {
     if (directSave) debouncedDirectSave(value);
     if (onChange) onChange(value);
@@ -49,7 +62,7 @@ const Field: React.FC<{
       )}
       {field.type === "boolean" && (
         <FieldTypeBoolean
-          mode={mode}
+          mode={mode ? mode : "edit"}
           field={field}
           object={object}
           fieldKey={fieldId}
@@ -59,7 +72,7 @@ const Field: React.FC<{
       )}
       {field.type === "relationship" && (
         <FieldTypeRelationship
-          mode={mode}
+          mode={mode ? mode : "edit"}
           field={field}
           object={object}
           fieldKey={fieldId}
@@ -69,7 +82,7 @@ const Field: React.FC<{
       )}
       {field.type === "richtext" && (
         <FieldTypeRichText
-          mode={mode}
+          mode={mode ? mode : "edit"}
           field={field}
           object={object}
           fieldKey={fieldId}
@@ -79,7 +92,7 @@ const Field: React.FC<{
       )}
       {field.type === "formula" && (
         <FieldTypeFormula
-          mode={mode}
+          mode={mode ? mode : "edit"}
           field={field}
           object={object}
           fieldKey={fieldId}

@@ -43,7 +43,7 @@ const AppAHViewApp: React.FC<{
         if (response.success) {
           setCurrentTask(response.data[0]);
           if (response.data[0].data.progress === 100) {
-            location.reload();
+            window.location.reload();
           }
         } else {
           console.log(response);

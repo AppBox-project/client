@@ -22,6 +22,17 @@ const FieldTypeBoolean: React.FC<{
 
   // UI
   if (newValue === undefined) return <Loading />;
+
+  if (mode === "free")
+    return (
+      <Checkbox
+        checked={newValue}
+        onChange={(event) => {
+          setNewValue(event.target.checked);
+          onChange(event.target.checked);
+        }}
+      />
+    );
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div

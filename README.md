@@ -13,11 +13,14 @@
 - [ ] Security test
 - [x] Make accessible via the web
   - [x] Package as docker container
-- [ ] App store
-  - [ ] Browsing apps
-  - [ ] Installing apps
+- [X] App store
+  - [X] Browsing apps
+  - [X] Installing apps
 - [ ] OTA updates
   - [ ] Apps
+    - [ ] Improvements
+      - [ ] Batch update (with one build)
+      - [ ] Schedulable update (with one build)
   - [x] System
     - [x] Simple git pull update
     - [ ] Better update UI
@@ -32,16 +35,16 @@
       - [x] ListDetail-Layout
 - [ ] Layouts
   - [x] Desktop-layout
-  - [ ] Mobile layout
-    - [ ] Design layout
-    - [ ] Make existing properties more responsive
-    - [ ] PWA
+  - [X] Mobile layout
+    - [X] Design layout
+    - [X] Make existing properties more responsive
+    - [X] PWA
 - [ ] Improve app logic
   - [ ] Every app will have it's own desktop
 - [ ] Make apps
   - [ ] Quick space
-    - [ ] Notes
-      - [ ] Eventually: clone onenote
+    - [X] Notes
+      - [X] Eventually: clone onenote
     - [ ] To-do
       - [x] Base version
       - [x] Mobile friendly

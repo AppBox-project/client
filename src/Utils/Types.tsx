@@ -139,6 +139,11 @@ export interface TreeViewDataItem {
   icon: React.FC;
   subItems?: TreeViewDataItem[];
 }
+interface ListItem {
+  label: string;
+  id: string;
+  subItems?: ListItem[];
+}
 
 export interface UIType {
   Loading: React.FC;
@@ -150,7 +155,7 @@ export interface UIType {
     }>;
     ListDetailLayout: React.FC<{
       mode?: "normal" | "tree";
-      list?: { label: string; id: string; url?: string }[];
+      list?: ListItem[];
       treeList?: TreeViewDataItem[];
       baseUrl: string;
       customNavComponent?;
@@ -167,7 +172,8 @@ export interface UIType {
       linkToPath: string;
       button?: true;
       ListIcon?: React.FC;
-      onAdd: () => void;
+      listAction?: (id: string, object) => JSX.Element;
+      onAdd?: () => void;
     }>;
   };
   Field: React.FC<{
@@ -175,9 +181,11 @@ export interface UIType {
     modelId: string;
     fieldId: string;
     objectId: string;
+    object?;
     directSave?: true;
+    directSaveDelay?: number;
     onChange?: (value) => void;
-    mode: "view" | "edit" | "free";
+    mode?: "view" | "edit" | "free";
   }>;
   Inputs: {
     TextInput: React.FC<{

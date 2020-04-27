@@ -1,10 +1,11 @@
-import React, { useState, useGlobal } from "reactn";
+import React, { useGlobal } from "reactn";
 import {
   Grid,
   List,
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListSubheader,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -22,10 +23,15 @@ import styles from "./styles.module.scss";
  * This UI element provides a lay-out that consists of a list of items and a detail component.
  * On desktop these will be displayed next to one another. On mobile only one of the two will show up.
  */
+interface ListItem {
+  label: string;
+  id: string;
+  subItems?: ListItem[];
+}
 
 const ListDetailLayout: React.FC<{
   mode?: "normal" | "tree";
-  list?: { label: string; id: string; url?: string }[];
+  list?: ListItem[];
   treeList?: TreeViewDataItem[];
   baseUrl: string;
   customNavComponent?;
@@ -119,18 +125,34 @@ const ListNav: React.FC<{ addFunction; baseUrl; selectedItem; list }> = ({
             </AnimationItem>
           )}
           {list.map((listItem) => {
-            return listItem.url ? (
+            return (
               <AnimationItem key={listItem.id}>
-                <Link to={`${baseUrl}/${listItem.url}`}>
-                  <ListItem button selected={selectedItem === listItem.id}>
-                    <ListItemText>{listItem.label}</ListItemText>
-                  </ListItem>
-                </Link>
+                {listItem.subItems ? (
+                  <>
+                    <Link to={`${baseUrl}/${listItem.id}`}>
+                      <ListSubheader>{listItem.label}</ListSubheader>
+                    </Link>
+                    {listItem.subItems.map((subItem) => {
+                      return (
+                        <Link to={`${baseUrl}/${subItem.id}`} key={subItem.id}>
+                          <ListItem
+                            button
+                            selected={selectedItem === subItem.id}
+                          >
+                            <ListItemText>{subItem.label}</ListItemText>
+                          </ListItem>
+                        </Link>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <Link to={`${baseUrl}/${listItem.id}`}>
+                    <ListItem button selected={selectedItem === listItem.id}>
+                      <ListItemText>{listItem.label}</ListItemText>
+                    </ListItem>
+                  </Link>
+                )}
               </AnimationItem>
-            ) : (
-              <ListItem button>
-                <ListItemText>{listItem.label}</ListItemText>
-              </ListItem>
             );
           })}
         </AnimationContainer>

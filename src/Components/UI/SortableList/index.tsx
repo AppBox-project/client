@@ -11,6 +11,7 @@ const SortableList: React.FC<{
   listItems: [];
   listTextPath: string;
   ListIcon?: React.FC;
+  listAction?: (id: string, object) => JSX.Element;
   baseUrl: string;
   linkToPath: string;
   button: true;
@@ -22,6 +23,7 @@ const SortableList: React.FC<{
   linkToPath,
   button,
   ListIcon,
+  listAction,
   onAdd,
 }) => {
   // Vars
@@ -89,9 +91,13 @@ const SortableList: React.FC<{
                         {...draggableProvided.draggableProps}
                         {...draggableProvided.dragHandleProps}
                       >
-                        {ListIcon && (
+                        {(ListIcon || listAction) && (
                           <ListItemIcon>
-                            <ListIcon />
+                            {listAction ? (
+                              listAction(get(listItem, linkToPath), listItem)
+                            ) : (
+                              <ListIcon />
+                            )}
                           </ListItemIcon>
                         )}
                         <ListItemText>

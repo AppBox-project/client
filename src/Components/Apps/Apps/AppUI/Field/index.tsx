@@ -11,12 +11,23 @@ const AppUiField: React.FC<{
   fieldId: string;
   objectId: string;
   directSave?: true;
+  directSaveDelay?: number;
+  object?;
   mode: "view" | "edit" | "free";
   onChange?: (value) => void;
-}> = ({ style, modelId, fieldId, objectId, mode, directSave }) => {
+}> = ({
+  style,
+  object,
+  modelId,
+  fieldId,
+  objectId,
+  mode,
+  directSave,
+  directSaveDelay,
+}) => {
   // Vars
   const [field, setField] = useState();
-  const [object, setObject] = useState();
+  const [loadedObject, setLoadedObject] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -29,23 +40,25 @@ const AppUiField: React.FC<{
       setField(response[0].fields[fieldId]);
     });
 
-    const requestObjectId = uniqid();
-    Server.emit("listenForObjects", {
-      requestId: requestObjectId,
-      filter: { _id: objectId },
-      type: "qs-memo",
-    });
-    Server.on(`receive-${requestObjectId}`, (response) => {
-      if (response.success) {
-        setObject(response.data[0]);
-      } else {
-        console.log(response);
-      }
-    });
+    if (object) {
+      const requestObjectId = uniqid();
+      Server.emit("listenForObjects", {
+        requestId: requestObjectId,
+        filter: { _id: objectId },
+        type: "qs-memo",
+      });
+      Server.on(`receive-${requestObjectId}`, (response) => {
+        if (response.success) {
+          setLoadedObject(response.data[0]);
+        } else {
+          console.log(response);
+        }
+      });
+    }
   }, [objectId]);
 
   // UI
-  if (!field || !object) return <Loading />;
+  if (!field || (!object && !loadedObject)) return <Loading />;
   return (
     <div style={style}>
       <Field
@@ -54,6 +67,7 @@ const AppUiField: React.FC<{
         fieldId={fieldId}
         mode={mode}
         directSave={directSave}
+        directSaveDelay={directSaveDelay}
       />
     </div>
   );

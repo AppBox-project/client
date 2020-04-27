@@ -4,15 +4,19 @@
 }
 
 .background {
-  width: 100%;
+  width: 108%;
+  height: 108%;
   background-size: cover;
   filter: blur(8px);
-  height: 100%;
+  margin-top: -4%;
+  margin-left: -4%;
+  padding-top: 4%;
+  padding-left: 4%;
 }
 
 .container {
   position: relative;
-  top: -85vh;
+  top: -90vh;
   margin: 0 50px;
   padding: 15px;
 }
