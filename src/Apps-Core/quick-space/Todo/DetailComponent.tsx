@@ -15,6 +15,7 @@ const AppQSActionTodoDetail: React.FC<{
   // Vars
   const [todos, setTodos] = useState();
   const [doneTodos, setDoneTodos] = useState();
+  // Todo: performance optimization: already load model here so it doesn have to be loaded each checklist item
 
   // Lifecycle
   useEffect(() => {
