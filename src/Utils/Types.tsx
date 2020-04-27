@@ -77,6 +77,7 @@ export interface AppType {
     name: string;
     color: ColorType;
     icon: string;
+    core?: boolean;
     menu_type: string;
     pages?: {};
   };

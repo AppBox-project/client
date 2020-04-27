@@ -12,6 +12,9 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { FaDownload, FaAngleLeft } from "react-icons/fa";
+import Server from "../../../Utils/Server";
+import uniqid from "uniqid";
+
 const axios = require("axios");
 
 const AppAHViewApp: React.FC<{
@@ -25,7 +28,8 @@ const AppAHViewApp: React.FC<{
 }) => {
   // Vars
   const [app, setApp] = useState();
-  const [currentInstallStep, setCurrentInstallStep] = useState("normal");
+  const [requestId] = useState(uniqid());
+  const [currentTask, setCurrentTask] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -34,6 +38,15 @@ const AppAHViewApp: React.FC<{
       .then((response) => {
         setApp(response.data[0]);
       });
+    Server.on(`receive-${requestId}`, (taskId) => {
+      context.getObjects("system-task", { _id: taskId }, (response) => {
+        if (response.success) {
+          setCurrentTask(response.data[0]);
+        } else {
+          console.log(response);
+        }
+      });
+    });
   }, []);
 
   // UI
@@ -44,7 +57,7 @@ const AppAHViewApp: React.FC<{
         className={styles.background}
         style={{ backgroundImage: `url(${app.data.banner})` }}
       />
-      {currentInstallStep === "normal" && (
+      {!currentTask && (
         <Paper className={styles.container}>
           <Grid container>
             <Tooltip placement="right" title="Download and install">
@@ -52,7 +65,7 @@ const AppAHViewApp: React.FC<{
                 <Fab
                   color="primary"
                   onClick={() => {
-                    setCurrentInstallStep("Installing app");
+                    Server.emit("installApp", { requestId, appId });
                   }}
                 >
                   <FaDownload />
@@ -78,18 +91,23 @@ const AppAHViewApp: React.FC<{
           </Typography>
         </Paper>
       )}
-      {currentInstallStep !== "normal" && (
+      {currentTask && (
         <div className={"center"}>
           <CircularProgress
             color="primary"
             style={{ height: 250, width: 250 }}
+            thickness={2}
+            variant={
+              currentTask.data.progress === 0 ? "indeterminate" : "determinate"
+            }
+            value={currentTask.data.progress}
           />
           <br />
           <Typography
             variant="h6"
             style={{ textAlign: "center", position: "relative", top: -145 }}
           >
-            {currentInstallStep}
+            {currentTask.data.state}
           </Typography>
         </div>
       )}
