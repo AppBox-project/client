@@ -54,6 +54,7 @@ const AppQSActionTodoDetail: React.FC<{
           listItems={todos}
           linkToPath="_id"
           listTextPath="data.action"
+          listSubTextPath="data.description"
           baseUrl={`/quick-space/todo/${detailId}`}
           listAction={(id, object) => {
             return (
@@ -80,6 +81,7 @@ const AppQSActionTodoDetail: React.FC<{
               linkToPath="_id"
               listTextPath="data.action"
               baseUrl={`/quick-space/todo/${detailId}`}
+              listSubTextPath="data.description"
               listAction={(id, object) => {
                 return (
                   <context.UI.Field

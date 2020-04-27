@@ -10,6 +10,7 @@ import uniqid from "uniqid";
 const SortableList: React.FC<{
   listItems: [];
   listTextPath: string;
+  listSubTextPath?: string;
   ListIcon?: React.FC;
   listAction?: (id: string, object) => JSX.Element;
   baseUrl: string;
@@ -24,6 +25,7 @@ const SortableList: React.FC<{
   button,
   ListIcon,
   listAction,
+  listSubTextPath,
   onAdd,
 }) => {
   // Vars
@@ -34,6 +36,7 @@ const SortableList: React.FC<{
   useEffect(() => {
     setItems(listItems);
   }, [listItems]);
+  console.log(listSubTextPath);
 
   // UI
   return (
@@ -100,9 +103,10 @@ const SortableList: React.FC<{
                             )}
                           </ListItemIcon>
                         )}
-                        <ListItemText>
-                          {get(listItem, listTextPath)}
-                        </ListItemText>
+                        <ListItemText
+                          primary={get(listItem, listTextPath)}
+                          secondary={get(listItem, listSubTextPath)}
+                        />
                       </ListItem>
                     )}
                   </Draggable>

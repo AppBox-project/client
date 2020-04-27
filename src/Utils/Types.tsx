@@ -197,6 +197,7 @@ export interface UIType {
     SortableList: React.FC<{
       listItems: [];
       listTextPath: string;
+      listSubTextPath?: string;
       baseUrl: string;
       linkToPath: string;
       button?: true;
