@@ -42,6 +42,9 @@ const AppAHViewApp: React.FC<{
       context.getObjects("system-task", { _id: taskId }, (response) => {
         if (response.success) {
           setCurrentTask(response.data[0]);
+          if (response.data[0].data.progress === 100) {
+            location.reload();
+          }
         } else {
           console.log(response);
         }
