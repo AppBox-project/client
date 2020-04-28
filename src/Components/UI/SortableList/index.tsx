@@ -38,7 +38,6 @@ const SortableList: React.FC<{
   useEffect(() => {
     setItems(listItems);
   }, [listItems]);
-  console.log(listSubTextPath);
 
   // UI
   return (
@@ -87,13 +86,6 @@ const SortableList: React.FC<{
                     {(draggableProvided, draggableSnapshot) => (
                       <ListItem
                         button={button}
-                        onClick={() => {
-                          if (linkToPath)
-                            history.push(
-                              `${baseUrl}/${get(listItem, linkToPath)}`
-                            );
-                          if (onListItemClick) onListItemClick(listItem);
-                        }}
                         ref={draggableProvided.innerRef}
                         {...draggableProvided.draggableProps}
                         {...draggableProvided.dragHandleProps}
@@ -110,6 +102,13 @@ const SortableList: React.FC<{
                         <ListItemText
                           primary={get(listItem, listTextPath)}
                           secondary={get(listItem, listSubTextPath)}
+                          onClick={() => {
+                            if (linkToPath)
+                              history.push(
+                                `${baseUrl}/${get(listItem, linkToPath)}`
+                              );
+                            if (onListItemClick) onListItemClick(listItem);
+                          }}
                         />
                       </ListItem>
                     )}
