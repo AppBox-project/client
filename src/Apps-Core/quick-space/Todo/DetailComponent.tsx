@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
 import { filter } from "lodash";
-import { Grid, Paper, Typography } from "@material-ui/core";
+import { Grid, Paper, Typography, TextField } from "@material-ui/core";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -15,6 +15,7 @@ const AppQSActionTodoDetail: React.FC<{
   // Vars
   const [todos, setTodos] = useState();
   const [doneTodos, setDoneTodos] = useState();
+  const [newTodo, setNewTodo] = useState("");
   // Todo: performance optimization: already load model here so it doesn have to be loaded each checklist item
 
   // Lifecycle
@@ -50,6 +51,28 @@ const AppQSActionTodoDetail: React.FC<{
   return (
     <Grid container>
       <Grid item xs={12} md={8}>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Add todo"
+          value={newTodo}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              context
+                .addObject("qs-todo", { action: newTodo, project: detailId })
+                .then(
+                  () => {},
+                  (reason) => {
+                    console.log(reason);
+                  }
+                );
+              setNewTodo("");
+            }
+          }}
+          onChange={(e) => {
+            setNewTodo(e.target.value);
+          }}
+        />
         <context.UI.Layouts.SortableList
           listItems={todos}
           linkToPath="_id"
