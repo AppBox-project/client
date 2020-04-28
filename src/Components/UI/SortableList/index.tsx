@@ -14,9 +14,10 @@ const SortableList: React.FC<{
   ListIcon?: React.FC;
   listAction?: (id: string, object) => JSX.Element;
   baseUrl: string;
-  linkToPath: string;
+  linkToPath?: string;
   button: true;
   onAdd: () => void;
+  onListItemClick?: (object) => void;
 }> = ({
   listItems,
   listTextPath,
@@ -27,6 +28,7 @@ const SortableList: React.FC<{
   listAction,
   listSubTextPath,
   onAdd,
+  onListItemClick,
 }) => {
   // Vars
   const history = useHistory();
@@ -86,9 +88,11 @@ const SortableList: React.FC<{
                       <ListItem
                         button={button}
                         onClick={() => {
-                          history.push(
-                            `${baseUrl}/${get(listItem, linkToPath)}`
-                          );
+                          if (linkToPath)
+                            history.push(
+                              `${baseUrl}/${get(listItem, linkToPath)}`
+                            );
+                          if (onListItemClick) onListItemClick(listItem);
                         }}
                         ref={draggableProvided.innerRef}
                         {...draggableProvided.draggableProps}

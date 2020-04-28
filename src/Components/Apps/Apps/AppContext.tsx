@@ -1,6 +1,6 @@
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { AppType } from "../../../Utils/Types";
+import { AppType, ServerResponse } from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
@@ -9,6 +9,7 @@ import TreeView from "./AppUI/TreeView";
 import AppUiField from "./AppUI/Field";
 import SortableList from "../../UI/SortableList";
 import InputSwitch from "../../Inputs/Switch";
+import ObjectLayout from "./AppUI/ObjectLayout";
 
 export class AppContext {
   appId: string;
@@ -26,10 +27,9 @@ export class AppContext {
     this.UI = {
       Loading,
       Animations: { AnimationContainer, AnimationItem },
-
       Inputs: { ...Forms, Switch: InputSwitch },
       Field: AppUiField,
-      Layouts: { ListDetailLayout, TreeView, SortableList },
+      Layouts: { ListDetailLayout, TreeView, SortableList, ObjectLayout },
     };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();
@@ -73,6 +73,24 @@ export class AppContext {
     });
   };
 
+  // Returns a realtime connection listening for a model
+  getModel = (modelId: string, then: (response: ServerResponse) => void) => {
+    const requestId = uniqid();
+    this.dataListeners.push({
+      requestId,
+      unlistenAction: "appUnlistensForModel",
+    });
+    Server.emit("appListensForModel", {
+      requestId,
+      appId: this.appId,
+      modelId,
+    });
+    Server.on(`receive-${requestId}`, then);
+    // Return the controller element with a stop() function
+    return new AppDataController("appUnlistensForObjectTypes", requestId);
+  };
+
+  // Todo: legacy function: delete this
   getTypes = (filter, then) => {
     if (typeof filter === "object") {
       const requestId = uniqid();

@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type ServerResponse = { success: boolean; data?; reason?: string };
 
 export interface UserType {
   data: {
@@ -106,6 +107,11 @@ export interface AppContextType {
     fieldId
   ) => Promise<boolean | string>;
   setDialog: (dialog: dialogType) => void;
+  getModel: (
+    modelId: string,
+    then: (response: ServerResponse) => void
+  ) => AppRequestController;
+
   getTypes: (
     filter: {},
     then: (response: {
@@ -178,6 +184,11 @@ export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
   Layouts: {
+    ObjectLayout: React.FC<{
+      model?: ModelType;
+      modelId?: string;
+      layoutId: string;
+    }>;
     TreeView: React.FC<{
       items: TreeViewDataItem[];
       linkTo: string;
@@ -199,23 +210,25 @@ export interface UIType {
       listTextPath: string;
       listSubTextPath?: string;
       baseUrl: string;
-      linkToPath: string;
+      linkToPath?: string;
       button?: true;
       ListIcon?: React.FC;
       listAction?: (id: string, object) => JSX.Element;
+      onListItemClick?: (object) => void;
       onAdd?: () => void;
     }>;
   };
   Field: React.FC<{
     style?: {};
-    modelId: string;
+    modelId?: string;
+    field?;
     fieldId: string;
     objectId: string;
-    object?;
     directSave?: true;
     directSaveDelay?: number;
+    object?;
+    mode: "view" | "edit" | "free";
     onChange?: (value) => void;
-    mode?: "view" | "edit" | "free";
   }>;
   Inputs: {
     TextInput: React.FC<{

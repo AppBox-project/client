@@ -7,7 +7,7 @@ import Field from "../../../../Field";
 
 const AppUiField: React.FC<{
   style?: {};
-  modelId: string;
+  modelId?: string;
   field?;
   fieldId: string;
   objectId: string;

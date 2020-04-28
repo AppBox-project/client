@@ -16,7 +16,7 @@ const AppQSActionTodoDetail: React.FC<{
   const [todos, setTodos] = useState();
   const [doneTodos, setDoneTodos] = useState();
   const [newTodo, setNewTodo] = useState("");
-  // Todo: performance optimization: already load model here so it doesn have to be loaded each checklist item
+  const [model, setModel] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -25,9 +25,13 @@ const AppQSActionTodoDetail: React.FC<{
       { "data.project": detailId },
       (response) => {
         if (response.success) {
-          setTodos(sortBy(filter(response.data, (o) => {
-              return o.data.done !== true;
-            }), ["data.order"])
+          setTodos(
+            sortBy(
+              filter(response.data, (o) => {
+                return o.data.done !== true;
+              }),
+              ["data.order"]
+            )
           );
           setDoneTodos(
             filter(response.data, (o) => {
@@ -40,8 +44,17 @@ const AppQSActionTodoDetail: React.FC<{
       }
     );
 
+    const modelRequest = context.getModel("qs-todo", (response) => {
+      if (response.success) {
+        setModel(response.data);
+      } else {
+        console.log(response);
+      }
+    });
+
     return () => {
       todoRequest.stop();
+      modelRequest.stop();
     };
   }, [detailId]);
 
@@ -55,6 +68,7 @@ const AppQSActionTodoDetail: React.FC<{
           margin="normal"
           label="Add todo"
           value={newTodo}
+          style={{ margin: "0 15px", width: "95%" }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               context
@@ -78,10 +92,17 @@ const AppQSActionTodoDetail: React.FC<{
           listTextPath="data.action"
           listSubTextPath="data.description"
           baseUrl={`/quick-space/todo/${detailId}`}
+          onListItemClick={(object) => {
+            context.setDialog({
+              display: true,
+              title: object.data.action,
+              content: <>Todo: model loading</>,
+            });
+          }}
           listAction={(id, object) => {
             return (
               <context.UI.Field
-                modelId="qs-todo"
+                field={model.fields["done"]}
                 fieldId="done"
                 objectId={id}
                 object={object}
@@ -107,7 +128,7 @@ const AppQSActionTodoDetail: React.FC<{
               listAction={(id, object) => {
                 return (
                   <context.UI.Field
-                    modelId="qs-todo"
+                    field={model.fields["done"]}
                     fieldId="done"
                     objectId={id}
                     object={object}
