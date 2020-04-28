@@ -7,6 +7,7 @@ import AppActionManageObjectTabFields from "./Tabs/Fields";
 import AppActionManageObjectTabOverviews from "./Tabs/Overviews";
 import AppActionManageObjectTabPermissions from "./Tabs/Permissions";
 import AppActionManageObjectTabAPI from "./Tabs/API";
+import AppActionManageObjectTabLayouts from "./Tabs/Layouts";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -71,7 +72,13 @@ const AppActionManageObject: React.FC<{
           context={context}
         />
       )}
-      {currentTab === "layouts" && "layouts"}
+      {currentTab === "layouts" && (
+        <AppActionManageObjectTabLayouts
+          model={model}
+          UI={UI}
+          context={context}
+        />
+      )}
       {currentTab === "overviews" && (
         <AppActionManageObjectTabOverviews
           model={model}

@@ -27,6 +27,7 @@ const FieldTypeBoolean: React.FC<{
     return (
       <Checkbox
         checked={newValue}
+        color="primary"
         onChange={(event) => {
           setNewValue(event.target.checked);
           onChange(event.target.checked);
@@ -58,6 +59,7 @@ const FieldTypeBoolean: React.FC<{
                 <Checkbox
                   checked={newValue}
                   disabled
+                  color="primary"
                   style={{ paddingLeft: 0, marginLeft: 0 }}
                 />
               </Grid>
@@ -75,6 +77,7 @@ const FieldTypeBoolean: React.FC<{
               <Typography variant="body2">
                 <Checkbox
                   checked={newValue}
+                  color="primary"
                   onChange={(event) => {
                     setNewValue(event.target.checked);
                     onChange(event.target.checked);

@@ -21,16 +21,16 @@ export default class App {
           icon: FaLemon,
         },
         {
-          key: "notes",
-          label: "Quick notes",
-          component: AppQSActionNotes,
-          icon: FaStickyNote,
-        },
-        {
           key: "todo",
           label: "Todo",
           component: AppActionTodo,
           icon: FaListAlt,
+        },
+        {
+          key: "notes",
+          label: "Quick notes",
+          component: AppQSActionNotes,
+          icon: FaStickyNote,
         },
         {
           key: "files",
