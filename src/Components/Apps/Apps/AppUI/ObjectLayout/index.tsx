@@ -3,12 +3,15 @@ import { ModelType } from "../../../../../Utils/Types";
 import Loading from "../../../../Loading";
 import Server from "../../../../../Utils/Server";
 import uniqid from "uniqid";
+import ViewObject from "../../../../Object";
 
 const UIObjectLayout: React.FC<{
   model?: ModelType;
   modelId?: string;
   layoutId: string;
-}> = ({ model, modelId, layoutId }) => {
+  appId: string;
+  objectId?: string;
+}> = ({ model, modelId, layoutId, appId, objectId }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
 
@@ -39,7 +42,14 @@ const UIObjectLayout: React.FC<{
 
   // UI
   if (!appliedModel) return <Loading />;
-  return <>Layout</>;
+  return (
+    <ViewObject
+      objectTypeId={appliedModel.key}
+      layoutId={layoutId}
+      appId={appId}
+      objectId={objectId}
+    />
+  );
 };
 
 export default UIObjectLayout;

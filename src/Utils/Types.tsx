@@ -188,6 +188,8 @@ export interface UIType {
       model?: ModelType;
       modelId?: string;
       layoutId: string;
+      appId: string;
+      objectId?: string;
     }>;
     TreeView: React.FC<{
       items: TreeViewDataItem[];

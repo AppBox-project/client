@@ -59,7 +59,7 @@ const AppQSActionTodoDetail: React.FC<{
   }, [detailId]);
 
   // UI
-  if (!todos) return <context.UI.Loading />;
+  if (!todos || !model) return <context.UI.Loading />;
   return (
     <Grid container>
       <Grid item xs={12} md={8}>
@@ -96,7 +96,14 @@ const AppQSActionTodoDetail: React.FC<{
             context.setDialog({
               display: true,
               title: object.data.action,
-              content: <>Todo: model loading</>,
+              content: (
+                <context.UI.Layouts.ObjectLayout
+                  model={model}
+                  layoutId="default"
+                  appId="quick-space"
+                  objectId={object._id}
+                />
+              ),
             });
           }}
           listAction={(id, object) => {
@@ -125,6 +132,20 @@ const AppQSActionTodoDetail: React.FC<{
               listTextPath="data.action"
               baseUrl={`/quick-space/todo/${detailId}`}
               listSubTextPath="data.description"
+              onListItemClick={(object) => {
+                context.setDialog({
+                  display: true,
+                  title: object.data.action,
+                  content: (
+                    <context.UI.Layouts.ObjectLayout
+                      model={model}
+                      layoutId="default"
+                      appId="quick-space"
+                      objectId={object._id}
+                    />
+                  ),
+                });
+              }}
               listAction={(id, object) => {
                 return (
                   <context.UI.Field
