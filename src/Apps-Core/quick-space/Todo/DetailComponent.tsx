@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
-import { filter } from "lodash";
+import { filter, sortBy } from "lodash";
 import { Grid, Paper, Typography, TextField } from "@material-ui/core";
 
 const AppQSActionTodoDetail: React.FC<{
@@ -25,10 +25,9 @@ const AppQSActionTodoDetail: React.FC<{
       { "data.project": detailId },
       (response) => {
         if (response.success) {
-          setTodos(
-            filter(response.data, (o) => {
+          setTodos(sortBy(filter(response.data, (o) => {
               return o.data.done !== true;
-            })
+            }), ["data.order"])
           );
           setDoneTodos(
             filter(response.data, (o) => {
