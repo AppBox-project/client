@@ -261,3 +261,9 @@ export interface UIType {
     }>;
   };
 }
+
+export interface LayoutDesignerItem {
+  type: string;
+  field?: string;
+  xs?: number;
+}

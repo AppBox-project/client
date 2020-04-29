@@ -15,31 +15,34 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   model,
 }) => {
   // Global
-  const [newLayout, setNewLayout] = useState();
+  const [layout, setLayout] = useState(model.layouts[detailId]);
 
   // Lifecycle
-  useEffect(() => {
-    setNewLayout(model.layouts[detailId]);
-  }, [detailId]);
 
   // UI
-  if (!newLayout) return <context.UI.Loading />;
-
   return (
     <context.UI.Animations.AnimationContainer>
       <context.UI.Animations.AnimationItem>
         <Typography variant="h6">
-          Layout <i>{detailId}</i>
+          Layout <i>{detailId}</i> {layout.length}
         </Typography>
       </context.UI.Animations.AnimationItem>
       <context.UI.Animations.AnimationItem>
         <Paper className="paper" style={{ marginTop: 15 }}>
-          [item tray]
-          <Divider style={{ margin: "15px 0" }} />
           <LayoutDesigner
-            layout={newLayout}
+            componentList={{
+              GridContainer: { label: "Grid container" },
+              GridItem: { label: "Grid item" },
+              AnimationContainer: { label: "Animation container" },
+              AnimationItem: { label: "Animation Item" },
+              Paper: { label: "Paper" },
+              Group: { label: "Group" },
+              Field: { label: "Field" },
+              Html: { label: "HTML" },
+            }}
+            layout={layout}
             onChange={(layout) => {
-              setNewLayout(layout);
+              setLayout(layout);
             }}
           />
         </Paper>
