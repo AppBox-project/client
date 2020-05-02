@@ -14,8 +14,8 @@ const DropTarget: React.FC<{
   children?;
   layoutItem?: LayoutDesignerItem;
   root?: true; componentList?,
-  onChange: (response) => void;
-}> = ({ layoutItem, children, root, onChange, componentList }) => {
+  onChange: (response) => void; onChangeProps?: (result) => void
+}> = ({ layoutItem, children, root, onChange, componentList, onChangeProps }) => {
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: "box",
     drop(item, monitor) {
@@ -44,7 +44,11 @@ const DropTarget: React.FC<{
   return (
     <div className={componentList[layoutItem.type].droppable ? styles.componentWrapper : styles.componentWrapperSmall}>
       <Typography variant={componentList[layoutItem.type].droppable ? "h6" : "body1"} style={{ textAlign: "center", cursor: 'default' }}>
-        {componentList[layoutItem.type].popup && <IconButton onClick={() => { componentList[layoutItem.type].popup(componentList[layoutItem.type], layoutItem) }}><FaCog style={{ height: 18, width: 18 }} /></IconButton>}
+        {componentList[layoutItem.type].popup && <IconButton onClick={() => {
+          componentList[layoutItem.type].popup(componentList[layoutItem.type], layoutItem, result => {
+            onChangeProps(result)
+          })
+        }}><FaCog style={{ height: 18, width: 18 }} /></IconButton>}
         {componentList[layoutItem.type].label}{componentList[layoutItem.type].dynamicLabel && ': ' + layoutItem[componentList[layoutItem.type].dynamicLabel]}
       </Typography>
       {componentList[layoutItem.type].droppable && <div ref={drop} className={className}>

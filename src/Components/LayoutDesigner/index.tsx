@@ -50,11 +50,17 @@ export default LayoutDesigner;
 
 const LayoutItem: React.FC<{ key, layoutItem, componentList, onChange, layout, path }> = ({ key, layoutItem, componentList, onChange, layout, path }) => {
 
-
   return <DropTarget
     key={key}
     componentList={componentList}
     layoutItem={layoutItem}
+    onChangeProps={result => {
+      map(result, (change, key) => {
+        layoutItem[key] = change
+      })
+      layoutItem[findIndex(layout, o => { return o.id === layoutItem.id })] = layoutItem;
+      onChange(layout)
+    }}
     onChange={(response) => {
       if (!layoutItem.items) layoutItem.items = []
       layoutItem.items.push({ type: response.id, xs: 12, id: uniqid() })

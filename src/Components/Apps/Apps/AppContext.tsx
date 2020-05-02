@@ -176,16 +176,17 @@ export class AppContext {
     });
   };
 
-  updateModel = (type, newModel, id) => {
+  updateModel = (modelType, newData, modelId) => {
     return new Promise((resolve, reject) => {
       const requestId = uniqid();
       Server.emit("appUpdatesModel", {
+        newModel: newData,
         requestId,
-        type,
-        id,
-        newModel,
+        type: modelType,
+        id: modelId,
         appId: this.appId,
       });
+
       Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           resolve();

@@ -139,10 +139,10 @@ const App: React.FC<{
             )}
             {dialog.buttons && (
               <DialogActions>
-                {dialog.buttons.map((button) => {
+                {dialog.buttons.map((button, index) => {
                   return (
                     <Button
-                      key={button.label}
+                      key={index}
                       onClick={() => {
                         setDialog({ ...dialog, display: false });
                         button.onClick(
