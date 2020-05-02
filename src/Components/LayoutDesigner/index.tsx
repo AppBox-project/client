@@ -7,12 +7,16 @@ import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or 
 import { Divider } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutDesignerItem } from "../../Utils/Types";
+import { findIndex } from 'lodash'
+import uniqid from "uniqid"
 
 const LayoutDesigner: React.FC<{
   layout: LayoutDesignerItem[];
   onChange: (layout) => void;
   componentList: {};
 }> = ({ layout, onChange, componentList }) => {
+  console.log('lay', layout);
+
   // UI
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
@@ -24,17 +28,16 @@ const LayoutDesigner: React.FC<{
         <DropTarget
           root
           onChange={(response) => {
-            onChange([...layout, { field: "name", type: "Field", xs: 12 }]);
+            onChange([...layout, { type: response.id, xs: 12, id: uniqid() }]);
           }}
         >
           {layout.map((layoutItem, key) => {
             return (
-              <DropTarget
+              <LayoutItem
                 key={key}
                 layoutItem={layoutItem}
-                onChange={(response) => {
-                  console.log(response);
-                }}
+                componentList={componentList}
+                onChange={onChange} layout={layout} path=""
               />
             );
           })}
@@ -45,3 +48,33 @@ const LayoutDesigner: React.FC<{
 };
 
 export default LayoutDesigner;
+
+const LayoutItem: React.FC<{ key, layoutItem, componentList, onChange, layout, path }> = ({ key, layoutItem, componentList, onChange, layout, path }) => {
+
+  console.log('li', layoutItem);
+
+  return <DropTarget
+    key={key}
+    layoutItem={layoutItem}
+    onChange={(response) => {
+      if (!layoutItem.items) layoutItem.items = []
+      layoutItem.items.push({ type: response.id, xs: 12, id: uniqid() })
+      const itemList = layout
+      path.split('.').map(pathDot => {
+        //
+      })
+      const newItemList = itemList
+      newItemList[findIndex(itemList, o => { return o.id === layoutItem.id })] = layoutItem;
+      onChange(newItemList)
+
+    }}
+  > {layoutItem.items && layoutItem.items.map((layoutItem, key) => {
+    return (
+      <LayoutItem
+        key={key}
+        layoutItem={layoutItem} componentList={componentList} onChange={onChange} layout={layout} path={path + layoutItem.id}
+      />
+    );
+  })}</DropTarget>
+
+}
