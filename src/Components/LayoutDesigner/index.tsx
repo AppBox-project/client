@@ -7,7 +7,7 @@ import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or 
 import { Divider } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutDesignerItem } from "../../Utils/Types";
-import { findIndex } from "lodash";
+import { findIndex, remove } from "lodash";
 import uniqid from "uniqid";
 
 const LayoutDesigner: React.FC<{
@@ -62,6 +62,11 @@ const LayoutItem: React.FC<{
       key={key}
       componentList={componentList}
       layoutItem={layoutItem}
+      onDelete={() => {
+        remove(layout, (o) => {
+          return o.id === layoutItem.id;
+        });
+      }}
       onChangeProps={(result) => {
         map(result, (change, key) => {
           layoutItem[key] = change;

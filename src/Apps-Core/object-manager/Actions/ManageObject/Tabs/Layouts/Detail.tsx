@@ -44,19 +44,172 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
         <Paper className="paper" style={{ marginTop: 15 }}>
           <LayoutDesigner
             componentList={{
-              GridContainer: { label: "Grid container", droppable: true },
-              GridItem: { label: "Grid item", droppable: true },
+              GridContainer: {
+                label: "Grid container",
+                droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
+              GridItem: {
+                label: "Grid item",
+                droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
               AnimationContainer: {
                 label: "Animation container",
                 droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
               },
-              AnimationItem: { label: "Animation Item", droppable: true },
-              Paper: { label: "Paper", droppable: true },
-              Group: { label: "Group", droppable: true },
+              AnimationItem: {
+                label: "Animation Item",
+                droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
+              Paper: {
+                label: "Paper",
+                droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
+              Group: {
+                label: "Group",
+                droppable: true,
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
               Field: {
                 label: "Field",
                 dynamicLabel: "field",
-                popup: (component, layoutItem, respond) => {
+                popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI
                   context.setDialog({
                     display: true,
@@ -80,7 +233,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                       {
                         label: <div style={{ color: "red" }}>Delete</div>,
                         onClick: (response) => {
-                          console.log("Todo");
+                          deleteItem();
                         },
                       },
                       {
@@ -94,7 +247,32 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                   });
                 },
               },
-              Html: { label: "HTML" },
+              Html: {
+                label: "HTML",
+                popup: (component, layoutItem, respond, deleteItem) => {
+                  // Show tweak UI
+                  context.setDialog({
+                    display: true,
+                    title: component.label,
+                    form: [],
+                    buttons: [
+                      {
+                        label: <div style={{ color: "red" }}>Delete</div>,
+                        onClick: (response) => {
+                          deleteItem();
+                        },
+                      },
+                      {
+                        label: "Update",
+                        onClick: (response) => {
+                          respond(response);
+                          setHasChanged(true);
+                        },
+                      },
+                    ],
+                  });
+                },
+              },
             }}
             layout={layout}
             onChange={(newLayout) => {
