@@ -5,6 +5,12 @@
   margin-bottom: 15px;
 }
 
+.componentWrapperSmall{
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-sizing: content-box;
+  margin-bottom: 15px;
+}
+
 .dropTarget {
   border: 1px dotted rgba(0, 0, 0, 0.3);
   width: 95%;

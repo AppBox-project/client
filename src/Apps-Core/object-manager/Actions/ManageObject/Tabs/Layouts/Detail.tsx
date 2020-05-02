@@ -3,6 +3,7 @@ import { AppContextType, ModelType } from "../../../../../../Utils/Types";
 import { Typography, Paper, Divider, Fab } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
+import { map } from "lodash"
 
 const AppActionManageObjectTabLayoutsDetail: React.FC<{
   match: { params: { detailId } };
@@ -17,11 +18,21 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
 }) => {
     // Global
     const [layout, setLayout] = useState(model.layouts[detailId]);
-    const [hasChanged, setHasChanged] = useState(false)
+    const [hasChanged, setHasChanged] = useState(false);
+    const [fieldList, setFieldList] = useState([])
 
     // Lifecycle
+    useEffect(() => {
+      const newFieldList = [];
+      map(model.fields, (field, key) => {
+        newFieldList.push({ value: key, label: field.name });
+      })
+      setFieldList(newFieldList)
+    }, [])
 
     // UI
+    if (!fieldList) return <context.UI.Loading />
+
     return (
       <context.UI.Animations.AnimationContainer>
         <context.UI.Animations.AnimationItem>
@@ -39,7 +50,22 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 AnimationItem: { label: "Animation Item", droppable: true },
                 Paper: { label: "Paper", droppable: true },
                 Group: { label: "Group", droppable: true },
-                Field: { label: "Field" },
+                Field: {
+                  label: "Field", dynamicLabel: "field", popup: (component, layoutItem) => {
+                    // Show tweak UI
+                    context.setDialog({
+                      display: true, title: component.label, form: [
+                        { key: "field", label: "Field", value: layoutItem.field ? layoutItem.field : '', type: 'dropdown', dropdownOptions: fieldList },
+                        { key: "xs", label: "XS", value: layoutItem.xs ? layoutItem.xs : 12, type: 'number' },
+                      ],
+                      buttons: [{
+                        label: 'Save', onClick: response => {
+                          console.log(response);
+                        }
+                      }]
+                    })
+                  }
+                },
                 Html: { label: "HTML" },
               }}
               layout={layout}

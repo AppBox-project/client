@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useDrop } from "react-dnd";
 import styles from "./styles.module.scss";
-import { Typography } from "@material-ui/core";
+import { Typography, IconButton } from "@material-ui/core";
 import { LayoutDesignerItem } from "../../Utils/Types";
+import { FaCog } from "react-icons/fa";
 
 export interface DustbinState {
   hasDropped: boolean;
@@ -33,24 +34,26 @@ const DropTarget: React.FC<{
   let className = styles.dropTarget;
   if (isOverCurrent) className += " " + styles.dropTargetActive;
 
+  if (root) return <div ref={drop} className={className}>
+    {children ? (
+      <>{children}</>
+    ) : (
+        <Typography variant="caption">Drop items here</Typography>
+      )}
+  </div>
   return (
-    <div className={!root && styles.componentWrapper}>
-      <Typography variant="h6" style={{ textAlign: "center" }}>
-        {root ? "Layout" : componentList[layoutItem.type].label}
+    <div className={componentList[layoutItem.type].droppable ? styles.componentWrapper : styles.componentWrapperSmall}>
+      <Typography variant={componentList[layoutItem.type].droppable ? "h6" : "body1"} style={{ textAlign: "center", cursor: 'default' }}>
+        {componentList[layoutItem.type].popup && <IconButton onClick={() => { componentList[layoutItem.type].popup(componentList[layoutItem.type], layoutItem) }}><FaCog style={{ height: 18, width: 18 }} /></IconButton>}
+        {componentList[layoutItem.type].label}{componentList[layoutItem.type].dynamicLabel && ': ' + layoutItem[componentList[layoutItem.type].dynamicLabel]}
       </Typography>
-      {!root ? componentList[layoutItem.type].droppable && <div ref={drop} className={className}>
+      {componentList[layoutItem.type].droppable && <div ref={drop} className={className}>
         {children ? (
           <>{children}</>
         ) : (
             <Typography variant="caption">Drop items here</Typography>
           )}
-      </div> : <div ref={drop} className={className}>
-          {children ? (
-            <>{children}</>
-          ) : (
-              <Typography variant="caption">Drop items here</Typography>
-            )}
-        </div>}
+      </div>}
     </div>
   );
 };

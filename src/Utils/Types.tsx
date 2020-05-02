@@ -158,8 +158,9 @@ export interface dialogType {
   form?: {
     key: string;
     label: string;
-    type?: "input";
+    type?: "text" | "number" | "dropdown";
     value?: string;
+    dropdownOptions?: { label: string, value: string }[]
     xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   }[];
   buttons?: [{ label: string; onClick: (response) => void }];
@@ -236,6 +237,7 @@ export interface UIType {
     TextInput: React.FC<{
       label: string;
       value: string;
+      type?: "text" | "number";
       onChange?: (value: string) => void;
       multiline?: boolean;
       style?: {};
@@ -266,5 +268,6 @@ export interface LayoutDesignerItem {
   type: string;
   field?: string;
   xs?: number;
-  droppable?: boolean
+  droppable?: boolean;
+  label?: string;
 }
