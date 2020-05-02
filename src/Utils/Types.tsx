@@ -266,4 +266,5 @@ export interface LayoutDesignerItem {
   type: string;
   field?: string;
   xs?: number;
+  droppable?: boolean
 }

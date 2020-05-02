@@ -15,7 +15,6 @@ const LayoutDesigner: React.FC<{
   onChange: (layout) => void;
   componentList: {};
 }> = ({ layout, onChange, componentList }) => {
-  console.log('lay', layout);
 
   // UI
   return (
@@ -51,22 +50,18 @@ export default LayoutDesigner;
 
 const LayoutItem: React.FC<{ key, layoutItem, componentList, onChange, layout, path }> = ({ key, layoutItem, componentList, onChange, layout, path }) => {
 
-  console.log('li', layoutItem);
 
   return <DropTarget
     key={key}
+    componentList={componentList}
     layoutItem={layoutItem}
     onChange={(response) => {
       if (!layoutItem.items) layoutItem.items = []
       layoutItem.items.push({ type: response.id, xs: 12, id: uniqid() })
       const itemList = layout
-      path.split('.').map(pathDot => {
-        //
-      })
       const newItemList = itemList
       newItemList[findIndex(itemList, o => { return o.id === layoutItem.id })] = layoutItem;
       onChange(newItemList)
-
     }}
   > {layoutItem.items && layoutItem.items.map((layoutItem, key) => {
     return (

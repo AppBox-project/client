@@ -12,9 +12,9 @@ export interface DustbinState {
 const DropTarget: React.FC<{
   children?;
   layoutItem?: LayoutDesignerItem;
-  root?: true;
+  root?: true; componentList?,
   onChange: (response) => void;
-}> = ({ layoutItem, children, root, onChange }) => {
+}> = ({ layoutItem, children, root, onChange, componentList }) => {
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: "box",
     drop(item, monitor) {
@@ -36,15 +36,21 @@ const DropTarget: React.FC<{
   return (
     <div className={!root && styles.componentWrapper}>
       <Typography variant="h6" style={{ textAlign: "center" }}>
-        {root ? "Layout" : layoutItem.type}
+        {root ? "Layout" : componentList[layoutItem.type].label}
       </Typography>
-      <div ref={drop} className={className}>
+      {!root ? componentList[layoutItem.type].droppable && <div ref={drop} className={className}>
         {children ? (
           <>{children}</>
         ) : (
-          <Typography variant="caption">Drop items here</Typography>
-        )}
-      </div>
+            <Typography variant="caption">Drop items here</Typography>
+          )}
+      </div> : <div ref={drop} className={className}>
+          {children ? (
+            <>{children}</>
+          ) : (
+              <Typography variant="caption">Drop items here</Typography>
+            )}
+        </div>}
     </div>
   );
 };
