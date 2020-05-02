@@ -87,6 +87,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                         label: "Update",
                         onClick: (response) => {
                           respond(response);
+                          setHasChanged(true);
                         },
                       },
                     ],
