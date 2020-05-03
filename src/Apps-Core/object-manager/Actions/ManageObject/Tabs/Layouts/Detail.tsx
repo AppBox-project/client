@@ -79,7 +79,38 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                   context.setDialog({
                     display: true,
                     title: component.label,
-                    form: [],
+                    form: [
+                      {
+                        key: "xs",
+                        label: "Extra small screens (and up)",
+                        value: layoutItem.xs ? layoutItem.xs : 12,
+                        type: "number",
+                      },
+                      {
+                        key: "sm",
+                        label: "Small screens (and up)",
+                        value: layoutItem.sm,
+                        type: "number",
+                      },
+                      {
+                        key: "md",
+                        label: "Medium screens (and up)",
+                        value: layoutItem.md,
+                        type: "number",
+                      },
+                      {
+                        key: "lg",
+                        label: "Large screens (and up)",
+                        value: layoutItem.lg,
+                        type: "number",
+                      },
+                      {
+                        key: "xl",
+                        label: "Extra large screens (and up)",
+                        value: layoutItem.xl,
+                        type: "number",
+                      },
+                    ],
                     buttons: [
                       {
                         label: <div style={{ color: "red" }}>Delete</div>,

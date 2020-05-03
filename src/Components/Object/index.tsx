@@ -2,16 +2,7 @@ import React, { useEffect, useState, createRef } from "react";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
-import {
-  Typography,
-  IconButton,
-  Grid,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  Button,
-  Paper,
-} from "@material-ui/core";
+import { Typography, IconButton, Grid, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -19,6 +10,10 @@ import styles from "./styles.module.scss";
 import { ModelType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import Field from "../Field";
+import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
+import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
+import ObjectLayoutItemPaper from "./LayoutItems/Paper";
+import ObjectLayoutItemField from "./LayoutItems/Field";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -275,130 +270,79 @@ const LayoutItem: React.FC<{
   switch (layoutItem.type) {
     case "GridContainer":
       return (
-        <Grid container>
-          {layoutItem.items.map((layoutItem, id) => {
-            return (
-              <LayoutItem
-                key={id}
-                layoutItem={layoutItem}
-                objectType={objectType}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-              />
-            );
-          })}
-        </Grid>
+        <ObjectLayoutItemGridContainer>
+          {layoutItem.items &&
+            layoutItem.items.map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  objectType={objectType}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                />
+              );
+            })}
+        </ObjectLayoutItemGridContainer>
       );
     case "GridItem":
       return (
-        <Grid
-          item
+        <ObjectLayoutItemGridItem
           xs={layoutItem.xs}
           sm={layoutItem.sm}
           md={layoutItem.md}
           lg={layoutItem.lg}
           xl={layoutItem.xl}
         >
-          {layoutItem.items.map((layoutItem, id) => {
-            return (
-              <LayoutItem
-                key={id}
-                layoutItem={layoutItem}
-                objectType={objectType}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-              />
-            );
-          })}
-        </Grid>
+          {layoutItem.items &&
+            layoutItem.items.map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  objectType={objectType}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                />
+              );
+            })}
+        </ObjectLayoutItemGridItem>
       );
     case "Paper":
       return (
-        <Paper className="paper">
-          {layoutItem.items.map((layoutItem, id) => {
-            return (
-              <LayoutItem
-                key={layoutItem}
-                layoutItem={layoutItem}
-                objectType={objectType}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-              />
-            );
-          })}
-        </Paper>
-      );
-    case "HTML":
-      return <div dangerouslySetInnerHTML={{ __html: layoutItem.content }} />;
-    case "Group":
-      return (
-        <ExpansionPanel key={layoutItem.id} defaultExpanded={true}>
-          <ExpansionPanelSummary
-            expandIcon={<FaAngleDown />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Typography variant="h6">General settings</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Grid container>
-              {layoutItem.items.map((layoutItem, id) => {
-                return (
-                  <LayoutItem
-                    key={id}
-                    layoutItem={layoutItem}
-                    objectType={objectType}
-                    mode={mode}
-                    setMode={setMode}
-                    setToChange={setToChange}
-                    toChange={toChange}
-                    object={object}
-                  />
-                );
-              })}
-            </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+        <ObjectLayoutItemPaper>
+          {layoutItem.items &&
+            layoutItem.items.map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  objectType={objectType}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                />
+              );
+            })}
+        </ObjectLayoutItemPaper>
       );
     case "Field":
-      const field = objectType.fields[layoutItem.field];
       return (
-        <Grid
-          item
-          xs={layoutItem.xs}
-          sm={layoutItem.sm}
-          md={layoutItem.md}
-          lg={layoutItem.lg}
-          xl={layoutItem.xl}
-          key={layoutItem.field}
-          className={
-            object &&
-            layoutItem.field in toChange &&
-            toChange[layoutItem.field] !== null &&
-            styles.changed
-          }
-          style={{ padding: mode === "edit" ? "0 5px" : 0 }}
-        >
-          <Field
-            mode={mode}
-            field={field}
-            fieldId={layoutItem.field}
-            object={object}
-            setMode={setMode}
-            onChange={(value) => {
-              setToChange({ ...toChange, [layoutItem.field]: value });
-            }}
-          />
-        </Grid>
+        <ObjectLayoutItemField
+          layoutItem={layoutItem}
+          object={object}
+          mode={mode}
+          setMode={setMode}
+          model={objectType}
+        />
       );
     default:
       return <>Unknown layoutItem type:{layoutItem.type}</>;
