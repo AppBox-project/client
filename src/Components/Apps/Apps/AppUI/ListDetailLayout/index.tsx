@@ -6,6 +6,8 @@ import {
   ListItemText,
   ListItemIcon,
   ListSubheader,
+  ListItemSecondaryAction,
+  IconButton,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -15,7 +17,7 @@ import {
   ColumnWidth,
 } from "../../../../../Utils/Types";
 import ActionBar from "../../../../ActionBar";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 
@@ -39,6 +41,7 @@ const ListDetailLayout: React.FC<{
   detailComponentProps?: {};
   context: AppContextType;
   addFunction?: () => void;
+  deleteFunction?: (id) => void;
   navWidth?: ColumnWidth;
 }> = ({
   list,
@@ -48,6 +51,7 @@ const ListDetailLayout: React.FC<{
   detailComponentProps,
   context,
   addFunction,
+  deleteFunction,
   mode,
   treeList,
   navWidth,
@@ -72,6 +76,7 @@ const ListDetailLayout: React.FC<{
           ) : (
             <ListNav
               addFunction={addFunction}
+              deleteFunction={deleteFunction}
               baseUrl={baseUrl}
               selectedItem={selectedItem}
               list={list}
@@ -104,12 +109,13 @@ const ListDetailLayout: React.FC<{
 
 export default ListDetailLayout;
 
-const ListNav: React.FC<{ addFunction; baseUrl; selectedItem; list }> = ({
-  addFunction,
-  baseUrl,
-  selectedItem,
-  list,
-}) => {
+const ListNav: React.FC<{
+  addFunction;
+  deleteFunction;
+  baseUrl;
+  selectedItem;
+  list;
+}> = ({ addFunction, deleteFunction, baseUrl, selectedItem, list }) => {
   return (
     <div className={styles.root}>
       <List>
@@ -140,6 +146,18 @@ const ListNav: React.FC<{ addFunction; baseUrl; selectedItem; list }> = ({
                             selected={selectedItem === subItem.id}
                           >
                             <ListItemText>{subItem.label}</ListItemText>
+                            {deleteFunction && (
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  onClick={() => {
+                                    deleteFunction(subItem.id);
+                                  }}
+                                  color="primary"
+                                >
+                                  <FaTrash style={{ width: 18, height: 18 }} />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            )}
                           </ListItem>
                         </Link>
                       );
@@ -149,6 +167,18 @@ const ListNav: React.FC<{ addFunction; baseUrl; selectedItem; list }> = ({
                   <Link to={`${baseUrl}/${listItem.id}`}>
                     <ListItem button selected={selectedItem === listItem.id}>
                       <ListItemText>{listItem.label}</ListItemText>
+                      {deleteFunction && (
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            onClick={() => {
+                              deleteFunction(listItem.id);
+                            }}
+                            color="primary"
+                          >
+                            <FaTrash style={{ width: 18, height: 18 }} />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      )}
                     </ListItem>
                   </Link>
                 )}

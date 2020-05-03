@@ -160,7 +160,7 @@ export interface dialogType {
     label: string;
     type?: "text" | "number" | "dropdown";
     value?: string;
-    dropdownOptions?: { label: string, value: string }[]
+    dropdownOptions?: { label: string; value: string }[];
     xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   }[];
   buttons?: { label: string | JSX.Element; onClick: (response) => void }[];
@@ -206,6 +206,7 @@ export interface UIType {
       detailComponentProps?: {};
       context: AppContextType;
       addFunction?: () => void;
+      deleteFunction?: (id) => void;
       navWidth?: ColumnWidth;
     }>;
     SortableList: React.FC<{

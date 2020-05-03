@@ -28,6 +28,60 @@ const AppActionManageObjectTabLayouts: React.FC<{
       detailComponentProps={{ model }}
       context={context}
       navWidth={2}
+      deleteFunction={(id) => {
+        console.log(id);
+
+        context.setDialog({
+          display: true,
+          title: "Delete layout",
+          content: <>Are you sure?</>,
+          buttons: [
+            {
+              label: "Yes",
+              onClick: (response) => {
+                delete model.layouts[id];
+
+                context.updateModel(
+                  model.key,
+                  {
+                    ...model,
+                  },
+                  model._id
+                );
+              },
+            },
+            {
+              label: "No",
+              onClick: () => {},
+            },
+          ],
+        });
+      }}
+      addFunction={() => {
+        context.setDialog({
+          display: true,
+          title: "Create new layout",
+          form: [{ key: "key", label: "Layout key" }],
+          buttons: [
+            {
+              label: "Add",
+              onClick: (response) => {
+                context.updateModel(
+                  model.key,
+                  {
+                    ...model,
+                    layouts: {
+                      ...model.layouts,
+                      [response.key]: [],
+                    },
+                  },
+                  model._id
+                );
+              },
+            },
+          ],
+        });
+      }}
     />
   );
 };
