@@ -15,7 +15,7 @@ const ObjectLayoutItemField: React.FC<{
 }> = ({ layoutItem, object, mode, setMode, model }) => {
   // Vars
   const [modelField] = useState(model.fields[layoutItem.field]);
-  const [objectField] = useState(object.data[layoutItem.field]);
+  const [objectField] = useState(object ? object.data[layoutItem.field] : "");
 
   // UI
   switch (mode) {

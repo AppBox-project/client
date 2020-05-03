@@ -378,6 +378,8 @@ const LayoutItem: React.FC<{
         </ObjectLayoutItemPaper>
       );
     case "Field":
+      console.log(object);
+
       return (
         <ObjectLayoutItemField
           layoutItem={layoutItem}
