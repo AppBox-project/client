@@ -14,6 +14,8 @@ import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
 import ObjectLayoutItemField from "./LayoutItems/Field";
+import ObjectLayoutItemAnimationItem from "./LayoutItems/AnimationItem";
+import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -313,6 +315,47 @@ const LayoutItem: React.FC<{
               );
             })}
         </ObjectLayoutItemGridItem>
+      );
+
+    case "AnimationContainer":
+      return (
+        <ObjectLayoutItemAnimationContainer>
+          {layoutItem.items &&
+            layoutItem.items.map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  objectType={objectType}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                />
+              );
+            })}
+        </ObjectLayoutItemAnimationContainer>
+      );
+    case "AnimationItem":
+      return (
+        <ObjectLayoutItemAnimationItem>
+          {layoutItem.items &&
+            layoutItem.items.map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  objectType={objectType}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                />
+              );
+            })}
+        </ObjectLayoutItemAnimationItem>
       );
     case "Paper":
       return (
