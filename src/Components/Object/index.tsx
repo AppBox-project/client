@@ -6,10 +6,8 @@ import { Typography, IconButton, Grid, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import styles from "./styles.module.scss";
 import { ModelType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import Field from "../Field";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
@@ -378,8 +376,6 @@ const LayoutItem: React.FC<{
         </ObjectLayoutItemPaper>
       );
     case "Field":
-      console.log(object);
-
       return (
         <ObjectLayoutItemField
           layoutItem={layoutItem}
