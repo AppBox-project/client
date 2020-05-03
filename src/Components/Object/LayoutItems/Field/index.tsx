@@ -4,6 +4,7 @@ import { ModelType } from "../../../../Utils/Types";
 import ObjectFieldDisplayBoolean from "../../FieldDisplay/Boolean";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import ObjectFieldDisplayRelationship from "../../FieldDisplay/Relationship";
+import InputInput from "../../../Inputs/Input";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -44,7 +45,7 @@ const ObjectLayoutItemField: React.FC<{
                 modelField={modelField}
                 objectField={objectField}
               />
-            )}{" "}
+            )}
             {modelField.type === "relationship" && (
               <ObjectFieldDisplayRelationship
                 modelField={modelField}
@@ -69,7 +70,13 @@ const ObjectLayoutItemField: React.FC<{
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            Edit
+            {modelField.type === "formula" && (
+              <ObjectFieldDisplayInput
+                modelField={modelField}
+                objectField={objectField}
+              />
+            )}
+            {modelField.type === "input" && <InputInput />}
           </Grid>
         </Grid>
       );
