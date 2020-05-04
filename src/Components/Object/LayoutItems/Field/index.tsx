@@ -6,6 +6,7 @@ import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import ObjectFieldDisplayRelationship from "../../FieldDisplay/Relationship";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
+import InputCheckbox from "../../../Inputs/Checkbox";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -13,7 +14,7 @@ const ObjectLayoutItemField: React.FC<{
   mode;
   setMode;
   model: ModelType;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | boolean) => void;
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
@@ -102,6 +103,15 @@ const ObjectLayoutItemField: React.FC<{
                 value={objectField}
               />
             )}
+            {modelField.type === "boolean" && (
+              <InputCheckbox
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                value={objectField}
+              />
+            )}
+            {modelField.type === "relationship" && <>Relationship</>}
           </Grid>
         </Grid>
       );

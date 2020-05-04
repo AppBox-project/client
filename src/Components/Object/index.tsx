@@ -90,7 +90,6 @@ const ViewObject: React.FC<{
         filter: { _id: objectId },
       });
       Server.on(`receive-${dataRequestId}`, (response) => {
-        console.log(response);
         if (response.success) {
           setObject(response.data[0]);
         } else {

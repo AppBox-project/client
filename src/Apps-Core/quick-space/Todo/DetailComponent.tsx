@@ -101,6 +101,7 @@ const AppQSActionTodoDetail: React.FC<{
                 onListItemClick={(object) => {
                   context.setDialog({
                     display: true,
+                    size: "md",
                     title: object.data.action,
                     content: (
                       <context.UI.Layouts.ObjectLayout

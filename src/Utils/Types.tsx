@@ -155,6 +155,7 @@ export interface dialogType {
   display: boolean;
   title?: string;
   content?: any;
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   form?: {
     key: string;
     label: string;
