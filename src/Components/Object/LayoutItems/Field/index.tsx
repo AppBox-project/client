@@ -5,6 +5,7 @@ import ObjectFieldDisplayBoolean from "../../FieldDisplay/Boolean";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import ObjectFieldDisplayRelationship from "../../FieldDisplay/Relationship";
 import InputInput from "../../../Inputs/Input";
+import styles from "./styles.module.scss";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -12,7 +13,9 @@ const ObjectLayoutItemField: React.FC<{
   mode;
   setMode;
   model: ModelType;
-}> = ({ layoutItem, object, mode, setMode, model }) => {
+  onChange?: (value: string) => void;
+  toChange;
+}> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
   const [modelField] = useState(model.fields[layoutItem.field]);
   const [objectField] = useState(object ? object.data[layoutItem.field] : "");
@@ -24,6 +27,7 @@ const ObjectLayoutItemField: React.FC<{
         <Grid
           container
           style={{ cursor: "context-menu" }}
+          className={styles.container}
           onDoubleClick={() => {
             setMode("edit");
           }}
@@ -59,13 +63,16 @@ const ObjectLayoutItemField: React.FC<{
       return (
         <Grid
           container
-          style={{ cursor: "context-menu" }}
-          onDoubleClick={() => {
-            setMode("edit");
+          className={styles.container}
+          style={{
+            backgroundColor: layoutItem.field in toChange ? "#efefef" : "white",
           }}
         >
-          <Grid item xs={6}>
-            <Typography variant="body1" style={{ fontWeight: "bold" }}>
+          <Grid item xs={6} style={{ verticalAlign: "middle" }}>
+            <Typography
+              variant="body1"
+              style={{ fontWeight: "bold", verticalAlign: "middle" }}
+            >
               {modelField.name}
             </Typography>
           </Grid>
@@ -76,7 +83,15 @@ const ObjectLayoutItemField: React.FC<{
                 objectField={objectField}
               />
             )}
-            {modelField.type === "input" && <InputInput />}
+            {modelField.type === "input" && (
+              <InputInput
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+              />
+            )}
           </Grid>
         </Grid>
       );

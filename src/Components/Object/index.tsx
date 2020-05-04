@@ -383,6 +383,10 @@ const LayoutItem: React.FC<{
           mode={mode}
           setMode={setMode}
           model={objectType}
+          toChange={toChange}
+          onChange={(value) => {
+            setToChange({ ...toChange, [layoutItem.field]: value });
+          }}
         />
       );
     default:
