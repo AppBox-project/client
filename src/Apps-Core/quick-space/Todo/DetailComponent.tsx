@@ -105,7 +105,7 @@ const AppQSActionTodoDetail: React.FC<{
                     content: (
                       <context.UI.Layouts.ObjectLayout
                         model={model}
-                        layoutId="default"
+                        layoutId="popup"
                         appId="quick-space"
                         objectId={object._id}
                       />
