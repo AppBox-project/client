@@ -7,6 +7,8 @@ import ObjectFieldDisplayRelationship from "../../FieldDisplay/Relationship";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
 import InputCheckbox from "../../../Inputs/Checkbox";
+import InputSelect from "../../../Inputs/Select";
+import InputRelationShip from "../../../Inputs/Relationship";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -71,6 +73,8 @@ const ObjectLayoutItemField: React.FC<{
         </Grid>
       );
     case "edit":
+      console.log(modelField);
+
       return (
         <Grid
           container
@@ -111,7 +115,16 @@ const ObjectLayoutItemField: React.FC<{
                 value={objectField}
               />
             )}
-            {modelField.type === "relationship" && <>Relationship</>}
+            {modelField.type === "relationship" && (
+              <InputRelationShip
+                label={modelField.name}
+                value={objectField}
+                objectType={modelField.typeArgs.relationshipTo}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}
           </Grid>
         </Grid>
       );

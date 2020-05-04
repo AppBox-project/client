@@ -55,24 +55,28 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
   // UI
   if (apps === []) return <context.UI.Loading />;
   return (
-    <Grid container>
-      {apps.map((app) => {
-        return (
-          <Grid
-            item
-            xs={12}
-            md={3}
-            key={app.data.key}
-            onClick={() => {
-              history.push(`/app-hub/browse/${app.data.key}`);
-            }}
-            className={styles.appLink}
-            style={{ backgroundImage: `url(${app.data.banner})` }}
-          >
-            <div>{app.data.name}</div>
-          </Grid>
-        );
-      })}
-    </Grid>
+    <context.UI.Animations.AnimationContainer>
+      <Grid container>
+        {apps.map((app) => {
+          return (
+            <Grid
+              item
+              xs={12}
+              md={3}
+              key={app.data.key}
+              onClick={() => {
+                history.push(`/app-hub/browse/${app.data.key}`);
+              }}
+              className={styles.appLink}
+              style={{ backgroundImage: `url(${app.data.banner})` }}
+            >
+              <context.UI.Animations.AnimationItem>
+                <div>{app.data.name}</div>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+          );
+        })}
+      </Grid>
+    </context.UI.Animations.AnimationContainer>
   );
 };
