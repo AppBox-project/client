@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { ModelType } from "../../../../Utils/Types";
 import ObjectFieldDisplayBoolean from "../../FieldDisplay/Boolean";
@@ -17,8 +17,18 @@ const ObjectLayoutItemField: React.FC<{
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
-  const [modelField] = useState(model.fields[layoutItem.field]);
-  const [objectField] = useState(object ? object.data[layoutItem.field] : "");
+  const [modelField, setModelField] = useState(model.fields[layoutItem.field]);
+  const [objectField, setObjectField] = useState(
+    object ? object.data[layoutItem.field] : ""
+  );
+
+  // Lifecycle
+  useEffect(() => {
+    setObjectField(object ? object.data[layoutItem.field] : "");
+  }, [object]);
+  useEffect(() => {
+    setModelField(model.fields[layoutItem.field]);
+  }, [model]);
 
   // UI
   switch (mode) {
