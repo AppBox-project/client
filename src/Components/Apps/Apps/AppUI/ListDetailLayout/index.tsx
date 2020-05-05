@@ -43,6 +43,7 @@ const ListDetailLayout: React.FC<{
   addFunction?: () => void;
   deleteFunction?: (id) => void;
   navWidth?: ColumnWidth;
+  navFixedIcon?: JSX.Element;
 }> = ({
   list,
   customNavComponent,
@@ -55,6 +56,7 @@ const ListDetailLayout: React.FC<{
   mode,
   treeList,
   navWidth,
+  navFixedIcon,
 }) => {
   // Vars
   const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -80,6 +82,7 @@ const ListDetailLayout: React.FC<{
               baseUrl={baseUrl}
               selectedItem={selectedItem}
               list={list}
+              navFixedIcon={navFixedIcon}
             />
           )}
         </Grid>
@@ -115,7 +118,15 @@ const ListNav: React.FC<{
   baseUrl;
   selectedItem;
   list;
-}> = ({ addFunction, deleteFunction, baseUrl, selectedItem, list }) => {
+  navFixedIcon?;
+}> = ({
+  addFunction,
+  deleteFunction,
+  baseUrl,
+  selectedItem,
+  list,
+  navFixedIcon,
+}) => {
   return (
     <div className={styles.root}>
       <List>
@@ -145,6 +156,9 @@ const ListNav: React.FC<{
                             button
                             selected={selectedItem === subItem.id}
                           >
+                            {navFixedIcon && (
+                              <ListItemIcon>{navFixedIcon}</ListItemIcon>
+                            )}
                             <ListItemText>{subItem.label}</ListItemText>
                             {deleteFunction && (
                               <ListItemSecondaryAction>
@@ -166,6 +180,9 @@ const ListNav: React.FC<{
                 ) : (
                   <Link to={`${baseUrl}/${listItem.id}`}>
                     <ListItem button selected={selectedItem === listItem.id}>
+                      {navFixedIcon && (
+                        <ListItemIcon>{navFixedIcon}</ListItemIcon>
+                      )}
                       <ListItemText>{listItem.label}</ListItemText>
                       {deleteFunction && (
                         <ListItemSecondaryAction>

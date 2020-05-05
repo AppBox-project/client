@@ -29,8 +29,6 @@ const AppActionManageObjectTabLayouts: React.FC<{
       context={context}
       navWidth={2}
       deleteFunction={(id) => {
-        console.log(id);
-
         context.setDialog({
           display: true,
           title: "Delete layout",

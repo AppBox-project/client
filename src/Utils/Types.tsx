@@ -209,6 +209,7 @@ export interface UIType {
       addFunction?: () => void;
       deleteFunction?: (id) => void;
       navWidth?: ColumnWidth;
+      navFixedIcon?: JSX.Element;
     }>;
     SortableList: React.FC<{
       listItems: [];
@@ -227,12 +228,12 @@ export interface UIType {
     style?: {};
     modelId?: string;
     field?;
-    fieldId: string;
-    objectId: string;
+    fieldId?: string;
+    objectId?: string;
     directSave?: true;
     directSaveDelay?: number;
     object?;
-    mode: "view" | "edit" | "free";
+    mode?: "view" | "edit" | "free";
     onChange?: (value) => void;
   }>;
   Inputs: {

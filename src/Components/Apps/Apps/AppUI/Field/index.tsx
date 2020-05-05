@@ -9,12 +9,12 @@ const AppUiField: React.FC<{
   style?: {};
   modelId?: string;
   field?;
-  fieldId: string;
-  objectId: string;
+  fieldId?: string;
+  objectId?: string;
   directSave?: true;
   directSaveDelay?: number;
   object?;
-  mode: "view" | "edit" | "free";
+  mode?: "view" | "edit" | "free";
   onChange?: (value) => void;
 }> = ({
   style,
