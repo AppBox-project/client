@@ -156,10 +156,14 @@ const AppQSNotesNavigation: React.FC<{
               linkToPath="_id"
               button
               onAdd={() => {
-                context.addObject("qs-memo", {
-                  title: "Fresh note",
-                  project: selectedProject,
-                });
+                context.addObject(
+                  "qs-memo",
+                  {
+                    title: "Fresh note",
+                    project: selectedProject,
+                  },
+                  () => {}
+                );
               }}
             />
           </>

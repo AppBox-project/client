@@ -74,17 +74,17 @@ const AppQSActionTodoDetail: React.FC<{
                 style={{ margin: "0 15px", width: "95%" }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    context
-                      .addObject("qs-todo", {
+                    context.addObject(
+                      "qs-todo",
+                      {
                         action: newTodo,
                         project: detailId,
-                      })
-                      .then(
-                        () => {},
-                        (reason) => {
-                          console.log(reason);
-                        }
-                      );
+                      },
+                      (response) => {
+                        console.log(response);
+                      }
+                    );
+
                     setNewTodo("");
                   }
                 }}

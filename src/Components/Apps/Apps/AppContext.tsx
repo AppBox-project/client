@@ -153,6 +153,7 @@ export class AppContext {
                       requestId: allowPermissionRequestId,
                       appId: this.appId,
                       objectType: type,
+                      permissionType: "read",
                     });
                     Server.on(
                       `receive-${allowPermissionRequestId}`,
@@ -175,26 +176,64 @@ export class AppContext {
     }
   };
 
-  addObject = (type, object) => {
-    return new Promise((resolve, reject) => {
-      const requestId = uniqid();
-      Server.emit("appInsertsObject", {
-        requestId,
-        type,
-        object,
-        appId: this.appId,
-      });
-      Server.on(`receive-${requestId}`, (response) => {
-        if (response.success) {
-          resolve();
+  addObject = (type, object, then) => {
+    const requestId = uniqid();
+    Server.emit("appInsertsObject", {
+      requestId,
+      type,
+      object,
+      appId: this.appId,
+    });
+    Server.on(`receive-${requestId}`, (response) => {
+      if (response.success) {
+        then(response);
+      } else {
+        if (response.feedback) {
+          then(response);
         } else {
-          if (response.feedback) {
-            reject(response.feedback);
+          if (response.reason === "no-create-permission-app") {
+            // Ask user for permission
+            this.setDialog({
+              display: true,
+              title: `${this.app.data.name} is trying to create in '${type}'`,
+              content: "Do you wish to allow this?",
+              size: "xs",
+              buttons: [
+                {
+                  label: "No",
+                  onClick: () => {
+                    then({
+                      success: false,
+                      reason: "permission-denied-by-user",
+                    });
+                  },
+                },
+                {
+                  label: "Yes",
+                  onClick: () => {
+                    const allowPermissionRequestId = uniqid();
+                    Server.emit("allowAppAccess", {
+                      requestId: allowPermissionRequestId,
+                      appId: this.appId,
+                      objectType: type,
+                      permissionType: "create",
+                    });
+                    Server.on(
+                      `receive-${allowPermissionRequestId}`,
+                      (response) => {
+                        // Retry
+                        this.addObject(type, object, then);
+                      }
+                    );
+                  },
+                },
+              ],
+            });
           } else {
-            reject(response.reason);
+            then(response);
           }
         }
-      });
+      }
     });
   };
 

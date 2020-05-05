@@ -97,7 +97,7 @@ export interface AppContextType {
     filter: {},
     then: (response: any) => void
   ) => AppRequestController;
-  addObject: (type: string, object: {}) => Promise<boolean | string>;
+  addObject: (type: string, object: {}, then: (response: any) => void) => void;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
   updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
