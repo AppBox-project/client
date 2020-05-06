@@ -1,5 +1,4 @@
 import React from "react";
-import { Checkbox } from "@material-ui/core";
 
 const ObjectFieldDisplayInput: React.FC<{ modelField; objectField }> = ({
   objectField,

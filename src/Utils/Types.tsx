@@ -24,6 +24,7 @@ export interface ModelFieldType {
   typeArgs?: {
     type?: string;
     relationshipTo?: string;
+    options?: { label: string; value: string }[];
   };
 }
 

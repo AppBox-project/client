@@ -9,6 +9,7 @@ import styles from "./styles.module.scss";
 import InputCheckbox from "../../../Inputs/Checkbox";
 import InputSelect from "../../../Inputs/Select";
 import InputRelationShip from "../../../Inputs/Relationship";
+import { find } from "lodash";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -57,7 +58,9 @@ const ObjectLayoutItemField: React.FC<{
                 objectField={objectField}
               />
             )}
-            {(modelField.type === "input" || modelField.type === "formula") && (
+            {(modelField.type === "input" ||
+              modelField.type === "formula" ||
+              modelField.type === "options") && (
               <ObjectFieldDisplayInput
                 modelField={modelField}
                 objectField={objectField}
@@ -120,6 +123,18 @@ const ObjectLayoutItemField: React.FC<{
                 objectType={modelField.typeArgs.relationshipTo}
                 onChange={(value) => {
                   onChange(value);
+                }}
+              />
+            )}
+            {modelField.type === "options" && (
+              <InputSelect
+                label={modelField.name}
+                value={find(modelField.typeArgs.options, (o) => {
+                  return o.key === objectField;
+                })}
+                options={modelField.typeArgs.options}
+                onChange={(value) => {
+                  onChange(value.key);
                 }}
               />
             )}
