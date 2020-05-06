@@ -5,7 +5,7 @@ const ObjectFieldDisplayBoolean: React.FC<{ modelField; objectField }> = ({
   objectField,
   modelField,
 }) => {
-  return <Checkbox disabled checked={objectField} />;
+  return <Checkbox style={{ padding: 0 }} disabled checked={objectField} />;
 };
 
 export default ObjectFieldDisplayBoolean;

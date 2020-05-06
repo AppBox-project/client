@@ -51,7 +51,6 @@ const ObjectFieldDisplayRelationship: React.FC<{ modelField; objectField }> = ({
     }
   }, [objectField]);
 
-  console.log(model, object);
   // UI
   if (model === "empty") return <></>;
   if (!model || !object)

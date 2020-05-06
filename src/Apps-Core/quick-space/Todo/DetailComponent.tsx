@@ -22,7 +22,7 @@ const AppQSActionTodoDetail: React.FC<{
   useEffect(() => {
     const todoRequest = context.getObjects(
       "qs-todo",
-      { "data.project": detailId },
+      { "data.project": detailId, "data.done": { $ne: true } },
       (response) => {
         if (response.success) {
           setTodos(

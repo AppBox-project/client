@@ -2,7 +2,13 @@ import React from "react";
 import AppActionTodo from "./Todo";
 import FourOhFour from "../../Components/FourOhFour";
 import AppQSActionNotes from "./Notes";
-import { FaLemon, FaStickyNote, FaListAlt, FaFolderOpen } from "react-icons/fa";
+import {
+  FaLemon,
+  FaStickyNote,
+  FaListAlt,
+  FaFolderOpen,
+  FaTh,
+} from "react-icons/fa";
 
 export default class App {
   context: any;
@@ -18,7 +24,7 @@ export default class App {
           key: "desktop",
           label: "Desktop",
           component: FourOhFour,
-          icon: FaLemon,
+          icon: FaTh,
         },
         {
           key: "todo",
@@ -28,7 +34,7 @@ export default class App {
         },
         {
           key: "notes",
-          label: "Quick notes",
+          label: "Notes",
           component: AppQSActionNotes,
           icon: FaStickyNote,
         },

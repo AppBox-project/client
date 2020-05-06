@@ -13,8 +13,13 @@ import {
   ListItem,
   List,
   ListItemText,
+  ListSubheader,
+  ListItemSecondaryAction,
+  IconButton,
+  Tooltip,
 } from "@material-ui/core";
 import FormulaEditor from "../../../../../../Components/FormulaEditor";
+import { FaTh, FaPlus, FaTrashAlt } from "react-icons/fa";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
   match: { params: { detailId } };
@@ -31,7 +36,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
   const UI: UIType = context.UI;
 
   // States & Hooks
-  const [field, setField] = useState();
+  const [field, setField] = useState<any>();
   const [formulaDeps, setFormulaDeps] = useState();
 
   // Lifecycle
@@ -168,7 +173,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "options" && (
                   <>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                       <UI.Inputs.SelectInput
                         label="Display as"
                         value={
@@ -187,18 +192,120 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         }}
                       />
                     </Grid>
-                    <Grid item xs={6}>
-                      {" "}
-                    </Grid>
                     <Grid item xs={12}>
-                      <UI.Inputs.TextInput
-                        label="Options"
-                        multiline
-                        value={field.typeArgs ? field.typeArgs.options : ""}
-                        onChange={(value) => {
-                          setField({ ...field, options: value });
-                        }}
-                      />
+                      <List>
+                        <ListSubheader>
+                          <ListItemSecondaryAction>
+                            <Tooltip placement="left" title="Add option">
+                              <IconButton
+                                onClick={() => {
+                                  context.setDialog({
+                                    display: true,
+                                    title: "Add options",
+                                    form: [
+                                      {
+                                        key: "newOptions",
+                                        label: "New options (comma seperated)",
+                                      },
+                                    ],
+                                    buttons: [
+                                      {
+                                        label: "Add",
+                                        onClick: (response) => {
+                                          const newOptions = field.typeArgs
+                                            ? field.typeArgs.options
+                                              ? field.typeArgs.options
+                                              : []
+                                            : [];
+                                          response.newOptions
+                                            .split(",")
+                                            .map((newOption) => {
+                                              newOptions.push({
+                                                label: newOption.trim(),
+                                                key: newOption.trim(),
+                                              });
+                                            });
+                                          setField({
+                                            ...field,
+                                            typeArgs: {
+                                              ...field.typeArgs,
+                                              options: [...newOptions],
+                                            },
+                                          });
+                                        },
+                                      },
+                                    ],
+                                  });
+                                }}
+                              >
+                                <FaPlus style={{ width: 14, height: 14 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </ListItemSecondaryAction>
+                          Available options
+                        </ListSubheader>
+                        {field.typeArgs ? (
+                          field.typeArgs.options ? (
+                            field.typeArgs.options.map((option) => {
+                              return (
+                                <ListItem key={option.value}>
+                                  <ListItemText>{option.label}</ListItemText>
+                                  <ListItemSecondaryAction>
+                                    <IconButton
+                                      onClick={() => {
+                                        context.setDialog({
+                                          display: true,
+                                          title: "Delete or archive?",
+                                          content: (
+                                            <>
+                                              <p>
+                                                Deleting is permanent and
+                                                requires remapping of data.
+                                              </p>
+                                              <p>Archiving can be undone.</p>
+                                            </>
+                                          ),
+                                          buttons: [
+                                            {
+                                              label: "Do nothing",
+                                              onClick: () => {},
+                                            },
+                                            {
+                                              label: (
+                                                <span style={{ color: "red" }}>
+                                                  Delete
+                                                </span>
+                                              ),
+                                              onClick: () => {},
+                                            },
+                                            {
+                                              label: "Archive",
+                                              onClick: () => {},
+                                            },
+                                          ],
+                                        });
+                                      }}
+                                    >
+                                      <FaTrashAlt
+                                        style={{ width: 14, height: 14 }}
+                                      />
+                                    </IconButton>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
+                              );
+                            })
+                          ) : (
+                            <ListItem>
+                              <ListItemText>No items</ListItemText>
+                            </ListItem>
+                          )
+                        ) : (
+                          <ListItem>
+                            <ListItemText>No items</ListItemText>
+                          </ListItem>
+                        )}
+                        <ListSubheader>Archived options</ListSubheader>
+                      </List>
                     </Grid>
                   </>
                 )}

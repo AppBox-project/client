@@ -73,8 +73,6 @@ const ObjectLayoutItemField: React.FC<{
         </Grid>
       );
     case "edit":
-      console.log(modelField);
-
       return (
         <Grid
           container
