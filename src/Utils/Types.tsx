@@ -44,7 +44,7 @@ export interface ModelType {
   name: string;
   name_plural: string;
   primary: string;
-  fields: [ModelFieldType];
+  fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
   layouts: any;
   buttons: any;
@@ -187,13 +187,21 @@ export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
   Layouts: {
-    ObjectLayout: React.FC<{
-      model?: ModelType;
-      modelId?: string;
-      layoutId: string;
-      appId: string;
-      objectId?: string;
-    }>;
+    Object: {
+      ObjectLayout: React.FC<{
+        model?: ModelType;
+        modelId?: string;
+        layoutId: string;
+        appId: string;
+        objectId?: string;
+      }>;
+      BoardLayout: React.FC<{
+        context: AppContextType;
+        objects;
+        model: ModelType;
+        boardField: String;
+      }>;
+    };
     TreeView: React.FC<{
       items: TreeViewDataItem[];
       linkTo: string;

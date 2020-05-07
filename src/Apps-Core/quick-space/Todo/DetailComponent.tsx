@@ -7,6 +7,7 @@ import {
   Typography,
   TextField,
   IconButton,
+  Tooltip,
 } from "@material-ui/core";
 import { FaTrello, FaBars } from "react-icons/fa";
 
@@ -24,7 +25,7 @@ const AppQSActionTodoDetail: React.FC<{
   const [doneTodos, setDoneTodos] = useState();
   const [newTodo, setNewTodo] = useState("");
   const [model, setModel] = useState();
-  const [view, setView] = useState("todo");
+  const [view, setView] = useState("board");
 
   // Lifecycle
   useEffect(() => {
@@ -70,26 +71,26 @@ const AppQSActionTodoDetail: React.FC<{
   if (!todos || !model) return <context.UI.Loading />;
   return (
     <>
-      <IconButton
-        color="primary"
-        onClick={() => {
-          setView(view === "board" ? "todo" : "board");
-        }}
+      <Tooltip
+        placement="right"
+        title={`Switch to ${view === "board" ? "todo" : "board"} view`}
       >
-        {view === "board" ? <FaBars /> : <FaTrello />}
-      </IconButton>
+        <IconButton
+          color="primary"
+          onClick={() => {
+            setView(view === "board" ? "todo" : "board");
+          }}
+        >
+          {view === "board" ? <FaBars /> : <FaTrello />}
+        </IconButton>
+      </Tooltip>
       {view === "board" && (
-        <context.UI.Animations.AnimationContainer>
-          {model.fields.status.typeArgs.options.map((statusOption) => {
-            return (
-              <context.UI.Animations.AnimationItem>
-                <Paper className="paper">
-                  <Typography variant="h6">{statusOption.label}</Typography>
-                </Paper>
-              </context.UI.Animations.AnimationItem>
-            );
-          })}
-        </context.UI.Animations.AnimationContainer>
+        <context.UI.Layouts.Object.BoardLayout
+          context={context}
+          objects={todos}
+          model={model}
+          boardField="status"
+        />
       )}
       {view === "todo" && (
         <context.UI.Animations.AnimationContainer>
@@ -135,7 +136,7 @@ const AppQSActionTodoDetail: React.FC<{
                         size: "md",
                         title: object.data.action,
                         content: (
-                          <context.UI.Layouts.ObjectLayout
+                          <context.UI.Layouts.Object.ObjectLayout
                             model={model}
                             layoutId="popup"
                             appId="quick-space"
@@ -177,7 +178,7 @@ const AppQSActionTodoDetail: React.FC<{
                         display: true,
                         title: object.data.action,
                         content: (
-                          <context.UI.Layouts.ObjectLayout
+                          <context.UI.Layouts.Object.ObjectLayout
                             model={model}
                             layoutId="default"
                             appId="quick-space"

@@ -10,6 +10,7 @@ import AppUiField from "./AppUI/Field";
 import SortableList from "../../UI/SortableList";
 import InputSwitch from "../../Inputs/Switch";
 import ObjectLayout from "./AppUI/ObjectLayout";
+import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
 
 export class AppContext {
   appId: string;
@@ -29,7 +30,15 @@ export class AppContext {
       Animations: { AnimationContainer, AnimationItem },
       Inputs: { ...Forms, Switch: InputSwitch },
       Field: AppUiField,
-      Layouts: { ListDetailLayout, TreeView, SortableList, ObjectLayout },
+      Layouts: {
+        ListDetailLayout,
+        TreeView,
+        SortableList,
+        Object: {
+          ObjectLayout,
+          BoardLayout,
+        },
+      },
     };
     this.isReady = new Promise((resolve, reject) => {
       const requestId = uniqid();

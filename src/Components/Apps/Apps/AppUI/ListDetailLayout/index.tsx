@@ -93,14 +93,14 @@ const ListDetailLayout: React.FC<{
             path={`${baseUrl}/:detailId`}
             render={(props) => {
               return (
-                <>
+                <div style={{ overflowX: "scroll" }}>
                   {isMobile && <ActionBar backUrl={baseUrl} />}
                   <DetailComponent
                     {...props}
                     {...detailComponentProps}
                     context={context}
                   />
-                </>
+                </div>
               );
             }}
           />
