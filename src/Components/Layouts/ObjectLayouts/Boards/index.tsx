@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../Utils/Types";
-import { Paper, Typography } from "@material-ui/core";
+import { Paper, Typography, Divider } from "@material-ui/core";
 import {
   DragDropContext,
   Droppable,
@@ -10,7 +10,7 @@ import {
   DroppableProvided,
 } from "react-beautiful-dnd";
 import { map, filter } from "lodash";
-import Column from "./Column";
+import styles from "./styles.module.scss";
 
 const BoardLayout: React.FC<{
   context: AppContextType;
@@ -20,70 +20,126 @@ const BoardLayout: React.FC<{
 }> = ({ context, objects, model, boardField }) => {
   // Vars
   const [newObjects, setNewObjects] = useState(objects);
-
+  const noGroup = filter(newObjects, (o) => {
+    return !o.data[boardField];
+  });
   // Lifecycle
   useEffect(() => {
     setNewObjects(objects);
   }, [objects]);
 
   const onDragEnd = (result: DropResult) => {
-    console.log(result);
+    if (result.destination.droppableId !== result.source.droppableId) {
+      context.updateObject(
+        model.key,
+        { [boardField]: result.destination.droppableId },
+        result.draggableId
+      );
+    }
   };
 
   // UI
+
   return (
-    <div style={{ width: "max-content", height: "100%" }}>
+    <div
+      style={{
+        width: "max-content",
+        height: "100%",
+      }}
+    >
       <context.UI.Animations.AnimationContainer>
         <DragDropContext onDragEnd={onDragEnd}>
-          {map(model.fields[boardField].typeArgs.options, (option, index) => {
-            return (
-              <Droppable droppableId={option.key}>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            {noGroup.length > 0 && (
+              <Droppable droppableId="empty">
                 {(droppableProvided, droppableSnapshot) => (
                   <div
                     ref={droppableProvided.innerRef}
-                    style={{ width: 250, display: "inline-block" }}
+                    style={{ flex: 1, minWidth: 250 }}
                   >
                     <context.UI.Animations.AnimationItem>
-                      <Paper
-                        className="paper"
-                        style={{
-                          transition: "all 1s",
-                          margin: 15,
-                        }}
-                      >
-                        <Typography variant="h6">{option.label}</Typography>
-                        {map(
-                          filter(objects, (o) => {
-                            return o.data[boardField] === option.key;
-                          }),
-                          (todo, index) => {
-                            return (
-                              <Draggable
-                                key={todo._id}
-                                draggableId={todo._id}
-                                index={index}
-                              >
-                                {(draggableProvided, draggableSnapshot) => (
-                                  <div
-                                    ref={draggableProvided.innerRef}
-                                    {...draggableProvided.draggableProps}
-                                    {...draggableProvided.dragHandleProps}
-                                  >
-                                    {todo.data[model.primary]}
+                      <div className={styles.column}>
+                        <Typography variant="h6">No {boardField}</Typography>
+                        <Divider style={{ margin: "8px 0 8px 0" }} />
+                        {map(noGroup, (todo, index) => {
+                          return (
+                            <Draggable
+                              key={todo._id}
+                              draggableId={todo._id}
+                              index={index}
+                            >
+                              {(draggableProvided, draggableSnapshot) => (
+                                <div
+                                  ref={draggableProvided.innerRef}
+                                  {...draggableProvided.draggableProps}
+                                  {...draggableProvided.dragHandleProps}
+                                >
+                                  <div className={styles.draggable}>
+                                    <Typography variant="body1">
+                                      {todo.data[model.primary]}
+                                    </Typography>
                                   </div>
-                                )}
-                              </Draggable>
-                            );
-                          }
-                        )}
+                                </div>
+                              )}
+                            </Draggable>
+                          );
+                        })}
                         {droppableProvided.placeholder}
-                      </Paper>
+                      </div>
                     </context.UI.Animations.AnimationItem>
                   </div>
                 )}
               </Droppable>
-            );
-          })}
+            )}
+            {map(model.fields[boardField].typeArgs.options, (option, index) => {
+              return (
+                <Droppable droppableId={option.key} key={option.key}>
+                  {(droppableProvided, droppableSnapshot) => (
+                    <div
+                      ref={droppableProvided.innerRef}
+                      style={{ flex: 1, minWidth: 250 }}
+                    >
+                      <context.UI.Animations.AnimationItem>
+                        <div className={styles.column}>
+                          <Typography variant="h6">{option.label}</Typography>
+                          <Divider style={{ margin: "8px 0 8px 0" }} />
+                          {map(
+                            filter(newObjects, (o) => {
+                              return o.data[boardField] === option.key;
+                            }),
+                            (todo, index) => {
+                              return (
+                                <Draggable
+                                  key={todo._id}
+                                  draggableId={todo._id}
+                                  index={index}
+                                >
+                                  {(draggableProvided, draggableSnapshot) => (
+                                    <div
+                                      ref={draggableProvided.innerRef}
+                                      {...draggableProvided.draggableProps}
+                                      {...draggableProvided.dragHandleProps}
+                                    >
+                                      <div className={styles.draggable}>
+                                        <Typography variant="body1">
+                                          {todo.data[model.primary]}
+                                        </Typography>
+                                      </div>
+                                    </div>
+                                  )}
+                                </Draggable>
+                              );
+                            }
+                          )}
+                          {droppableProvided.placeholder}
+                        </div>
+                      </context.UI.Animations.AnimationItem>
+                    </div>
+                  )}
+                </Droppable>
+              );
+            })}
+          </div>
         </DragDropContext>
       </context.UI.Animations.AnimationContainer>
     </div>
