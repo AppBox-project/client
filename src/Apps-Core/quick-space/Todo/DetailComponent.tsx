@@ -25,7 +25,7 @@ const AppQSActionTodoDetail: React.FC<{
   const [doneTodos, setDoneTodos] = useState();
   const [newTodo, setNewTodo] = useState("");
   const [model, setModel] = useState();
-  const [view, setView] = useState("board");
+  const [view, setView] = useState("todo");
 
   // Lifecycle
   useEffect(() => {
