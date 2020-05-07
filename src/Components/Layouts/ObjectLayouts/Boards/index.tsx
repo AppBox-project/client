@@ -5,11 +5,9 @@ import {
   DragDropContext,
   Droppable,
   DropResult,
-  DraggableLocation,
   Draggable,
-  DroppableProvided,
 } from "react-beautiful-dnd";
-import { map, filter } from "lodash";
+import { map, filter, findIndex } from "lodash";
 import styles from "./styles.module.scss";
 
 const BoardLayout: React.FC<{
@@ -30,6 +28,14 @@ const BoardLayout: React.FC<{
 
   const onDragEnd = (result: DropResult) => {
     if (result.destination.droppableId !== result.source.droppableId) {
+      // Update preview for a smoother experience than waiting for DB
+      const index = findIndex(newObjects, (o) => {
+        return o._id === result.draggableId;
+      });
+      newObjects[index].data[boardField] = result.destination.droppableId;
+      setNewObjects(newObjects);
+
+      // Save actual change
       context.updateObject(
         model.key,
         { [boardField]: result.destination.droppableId },
