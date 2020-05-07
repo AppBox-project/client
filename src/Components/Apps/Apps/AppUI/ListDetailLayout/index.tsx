@@ -68,9 +68,9 @@ const ListDetailLayout: React.FC<{
   // Lifecycle
   // UI
   return (
-    <Grid container>
+    <Grid container style={{ height: "100%" }}>
       {(!selectedItem || !isMobile) && (
-        <Grid item xs={12} md={navigationWidth}>
+        <Grid item xs={12} md={navigationWidth} style={{ height: "100%" }}>
           {customNavComponent ? (
             customNavComponent
           ) : mode === "tree" ? (
@@ -88,12 +88,12 @@ const ListDetailLayout: React.FC<{
         </Grid>
       )}
       {selectedItem && (
-        <Grid item xs={12} md={detailWidth} style={{ padding: 15 }}>
+        <Grid item xs={12} md={detailWidth} style={{ height: "100%" }}>
           <Route
             path={`${baseUrl}/:detailId`}
             render={(props) => {
               return (
-                <div style={{ overflowX: "scroll" }}>
+                <div style={{ overflowX: "auto", height: "100%" }}>
                   {isMobile && <ActionBar backUrl={baseUrl} />}
                   <DetailComponent
                     {...props}

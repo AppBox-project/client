@@ -32,7 +32,7 @@ const BoardLayout: React.FC<{
 
   // UI
   return (
-    <div style={{ width: 3000 }}>
+    <div style={{ width: "max-content", height: "100%" }}>
       <context.UI.Animations.AnimationContainer>
         <DragDropContext onDragEnd={onDragEnd}>
           {map(model.fields[boardField].typeArgs.options, (option, index) => {
