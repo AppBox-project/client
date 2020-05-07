@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../Utils/Types";
-import { Paper, Typography, Divider } from "@material-ui/core";
+import { Typography, Divider } from "@material-ui/core";
 import {
   DragDropContext,
   Droppable,
@@ -15,7 +15,8 @@ const BoardLayout: React.FC<{
   objects;
   model: ModelType;
   boardField: string;
-}> = ({ context, objects, model, boardField }) => {
+  onItemClick?: (item) => void;
+}> = ({ context, objects, model, boardField, onItemClick }) => {
   // Vars
   const [newObjects, setNewObjects] = useState(objects);
   const noGroup = filter(newObjects, (o) => {
@@ -126,7 +127,12 @@ const BoardLayout: React.FC<{
                                       {...draggableProvided.draggableProps}
                                       {...draggableProvided.dragHandleProps}
                                     >
-                                      <div className={styles.draggable}>
+                                      <div
+                                        className={styles.draggable}
+                                        onClick={() => {
+                                          if (onItemClick) onItemClick(todo);
+                                        }}
+                                      >
                                         <Typography variant="body1">
                                           {todo.data[model.primary]}
                                         </Typography>

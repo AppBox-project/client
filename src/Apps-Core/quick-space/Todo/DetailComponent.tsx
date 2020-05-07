@@ -31,7 +31,7 @@ const AppQSActionTodoDetail: React.FC<{
   useEffect(() => {
     const todoRequest = context.getObjects(
       "qs-todo",
-      { "data.project": detailId, "data.done": { $ne: true } },
+      { "data.project": detailId },
       (response) => {
         if (response.success) {
           setTodos(
@@ -90,6 +90,21 @@ const AppQSActionTodoDetail: React.FC<{
           objects={todos}
           model={model}
           boardField="status"
+          onItemClick={(object) => {
+            context.setDialog({
+              display: true,
+              size: "md",
+              title: object.data.action,
+              content: (
+                <context.UI.Layouts.Object.ObjectLayout
+                  model={model}
+                  layoutId="popup"
+                  appId="quick-space"
+                  objectId={object._id}
+                />
+              ),
+            });
+          }}
         />
       )}
       {view === "todo" && (

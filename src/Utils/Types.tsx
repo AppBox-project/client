@@ -200,6 +200,7 @@ export interface UIType {
         objects;
         model: ModelType;
         boardField: String;
+        onItemClick?: (item) => void;
       }>;
     };
     TreeView: React.FC<{
