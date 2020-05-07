@@ -60,6 +60,13 @@ const App: React.FC<{
       setAppcontext(null);
       setgApp(null);
       setgButtons({});
+      setDialog({
+        ...dialog,
+        display: false,
+        title: undefined,
+        content: undefined,
+        form: undefined,
+      });
       context.unload();
     };
   }, [appId]);
