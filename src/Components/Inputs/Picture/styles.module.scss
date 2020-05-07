@@ -1,0 +1,13 @@
+.dropzone {
+  border: 1px dotted #606060;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 1s;
+  border-radius: 8px;
+}
+
+.isDragging {
+  background-color: #eee;
+  border: 1px solid black;
+}

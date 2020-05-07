@@ -10,6 +10,8 @@ import InputCheckbox from "../../../Inputs/Checkbox";
 import InputSelect from "../../../Inputs/Select";
 import InputRelationShip from "../../../Inputs/Relationship";
 import { find } from "lodash";
+import ObjectFieldDisplayPicture from "../../FieldDisplay/Picture";
+import InputPicture from "../../../Inputs/Picture";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -68,6 +70,12 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "relationship" && (
               <ObjectFieldDisplayRelationship
+                modelField={modelField}
+                objectField={objectField}
+              />
+            )}
+            {modelField.type === "picture" && (
+              <ObjectFieldDisplayPicture
                 modelField={modelField}
                 objectField={objectField}
               />
@@ -135,6 +143,15 @@ const ObjectLayoutItemField: React.FC<{
                 options={modelField.typeArgs.options}
                 onChange={(value) => {
                   onChange(value.key);
+                }}
+              />
+            )}
+            {modelField.type === "picture" && (
+              <InputPicture
+                label={modelField.name}
+                value={objectField}
+                onChange={(value) => {
+                  console.log(value);
                 }}
               />
             )}

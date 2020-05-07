@@ -1,0 +1,14 @@
+.root {
+  width: 100px;
+  height: 100px;
+  background-color: #eee;
+  transition: all 1s;
+  text-align: center;
+  padding-top: 15%;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: #ddd;
+  }
+}

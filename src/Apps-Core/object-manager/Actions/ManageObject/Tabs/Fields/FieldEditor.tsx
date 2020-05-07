@@ -1,7 +1,6 @@
-import React, { useEffect, useState, ContextType } from "react";
+import React, { useEffect, useState } from "react";
 import {
   UIType,
-  ModelFieldType,
   AppContextType,
   ModelType,
 } from "../../../../../../Utils/Types";
@@ -145,6 +144,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "richtext", label: "Rich text" },
                       { value: "formula", label: "Formula" },
                       { value: "relationship", label: "Relationship" },
+                      { value: "file", label: "File" },
+                      { value: "picture", label: "Picture" },
                     ]}
                     onChange={(value) => {
                       setField({ ...field, type: value });
