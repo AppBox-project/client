@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone";
 import styles from "./styles.module.scss";
 import { IconButton } from "@material-ui/core";
