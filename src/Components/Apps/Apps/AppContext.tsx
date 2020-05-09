@@ -334,6 +334,16 @@ export class AppContext {
       }
     });
   };
+
+  callBackendAction = (action, args) => {
+    const requestId = uniqid();
+    Server.emit("performBackendAction", {
+      action,
+      args,
+      requestId,
+      appId: this.appId,
+    });
+  };
 }
 
 // Pass this back to the app to allow cancelling listeners

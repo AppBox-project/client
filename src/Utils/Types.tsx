@@ -121,6 +121,7 @@ export interface AppContextType {
       data?: [any];
     }) => void
   ) => AppRequestController;
+  callBackendAction: (action, args) => void;
 }
 
 export interface WidgetContextType {
