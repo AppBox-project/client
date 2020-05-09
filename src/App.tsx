@@ -22,6 +22,19 @@ const App: React.FC = () => {
   useEffect(() => {
     let userRequest;
 
+    Server.on("who-r-u", (previousAction) => {
+      console.log("Received who-r-u");
+      const signInRequest = uniqid();
+      Server.emit("signIn", {
+        requestId: signInRequest,
+        username: localStorage.getItem("username"),
+        token: localStorage.getItem("token"),
+      });
+      Server.on(`receive-${signInRequest}`, (response) => {
+        Server.emit(previousAction.action.key, previousAction.args);
+      });
+    });
+
     if (localStorage.getItem("username") && localStorage.getItem("token")) {
       const signInRequest = uniqid();
       Server.emit("signIn", {
