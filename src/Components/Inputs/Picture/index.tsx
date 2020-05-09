@@ -3,17 +3,21 @@ import Dropzone from "react-dropzone";
 import styles from "./styles.module.scss";
 import { IconButton } from "@material-ui/core";
 import { FaTrashAlt } from "react-icons/fa";
+import Axios from "axios";
+import { ModelType } from "../../../Utils/Types";
 
 const InputPicture: React.FC<{
   placeholder?: string;
   label?: string;
   value?: string;
+  object;
+  model: ModelType;
   onChange?: (value: string) => void;
-}> = ({ placeholder, label, value, onChange }) => {
+  fieldKey: string;
+}> = ({ placeholder, label, value, onChange, object, model, fieldKey }) => {
   // Vars
   const [newValue, setNewValue] = useState("");
   const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState();
 
   // Lifecycle
   useEffect(() => {
@@ -21,23 +25,38 @@ const InputPicture: React.FC<{
   }, [value]);
 
   // UI
-  return file ? (
+  return newValue ? (
     <>
       <IconButton
         color="primary"
         onClick={() => {
-          setFile(undefined);
+          setNewValue(undefined);
         }}
       >
         <FaTrashAlt style={{ width: 15, height: 15 }} />
       </IconButton>
-      {file.name}
+      {newValue}
     </>
   ) : (
     <Dropzone
       onDrop={(files) => {
         setIsDragging(false);
-        setFile(files[0]);
+        //setToUpload([...toUpload, files[0]]);
+        var formData = new FormData();
+        formData.append("username", localStorage.getItem("username"));
+        formData.append("token", localStorage.getItem("token"));
+        formData.append("modelType", model.key);
+        formData.append("objectId", object._id);
+        formData.append("fieldkey", fieldKey);
+        formData.append("image", files[0]);
+        Axios.post("/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }).then((response) => {
+          setNewValue(response.data);
+          onChange(response.data);
+        });
       }}
       accept="image/*"
       multiple={false}

@@ -150,8 +150,11 @@ const ObjectLayoutItemField: React.FC<{
               <InputPicture
                 label={modelField.name}
                 value={objectField}
+                model={model}
+                fieldKey={objectField}
+                object={object}
                 onChange={(value) => {
-                  console.log(value);
+                  onChange(value);
                 }}
               />
             )}

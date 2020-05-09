@@ -14,6 +14,7 @@ import ObjectLayoutItemPaper from "./LayoutItems/Paper";
 import ObjectLayoutItemField from "./LayoutItems/Field";
 import ObjectLayoutItemAnimationItem from "./LayoutItems/AnimationItem";
 import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer";
+import Axios from "axios";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -27,6 +28,7 @@ const ViewObject: React.FC<{
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
   const [toChange, setToChange] = useState({});
   const [feedback, setFeedback] = useState();
+  const [toUpload, setToUpload] = useState([]);
 
   const save = () => {
     if (toChange !== {}) {
@@ -185,6 +187,8 @@ const ViewObject: React.FC<{
               <LayoutItem
                 key={id}
                 layoutItem={layoutItem}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
                 objectType={objectType}
                 mode={mode}
                 setMode={setMode}
@@ -258,6 +262,8 @@ const LayoutItem: React.FC<{
   setToChange: (any) => void;
   setMode: (string) => void;
   object: any;
+  setToUpload;
+  toUpload;
 }> = ({
   layoutItem,
   objectType,
@@ -266,6 +272,8 @@ const LayoutItem: React.FC<{
   setMode,
   object,
   setToChange,
+  setToUpload,
+  toUpload,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -277,6 +285,8 @@ const LayoutItem: React.FC<{
                 <LayoutItem
                   key={item.id}
                   layoutItem={item}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
                   objectType={objectType}
                   mode={mode}
                   setMode={setMode}
@@ -304,6 +314,8 @@ const LayoutItem: React.FC<{
                   key={item.id}
                   layoutItem={item}
                   objectType={objectType}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
                   mode={mode}
                   setMode={setMode}
                   setToChange={setToChange}
@@ -324,6 +336,8 @@ const LayoutItem: React.FC<{
                 <LayoutItem
                   key={item.id}
                   layoutItem={item}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
                   objectType={objectType}
                   mode={mode}
                   setMode={setMode}
@@ -344,6 +358,8 @@ const LayoutItem: React.FC<{
                 <LayoutItem
                   key={item.id}
                   layoutItem={item}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
                   objectType={objectType}
                   mode={mode}
                   setMode={setMode}
@@ -363,6 +379,8 @@ const LayoutItem: React.FC<{
               return (
                 <LayoutItem
                   key={item.id}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
                   layoutItem={item}
                   objectType={objectType}
                   mode={mode}
