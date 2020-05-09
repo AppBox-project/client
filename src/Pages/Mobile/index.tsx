@@ -62,6 +62,7 @@ const MobileLayout: React.FC = () => {
   }, []);
 
   if (!apps) return <Loading />;
+  console.log(baseUrl + gUser.data.picture);
 
   return (
     <>
@@ -173,10 +174,10 @@ const MobileLayout: React.FC = () => {
             <ListItem button>
               <ListItemIcon>
                 {gUser.data.picture ? (
-                    <Avatar src={baseUrl + gUse.data.picture} />
-                  ) : (
-                    <Avatar>{gUser.data.first_name}</Avatar>
-                  )}
+                  <Avatar src={baseUrl + gUser.data.picture} />
+                ) : (
+                  <Avatar>{gUser.data.first_name}</Avatar>
+                )}
               </ListItemIcon>
               <ListItemText primary={gUser.data.full_name} />
             </ListItem>
