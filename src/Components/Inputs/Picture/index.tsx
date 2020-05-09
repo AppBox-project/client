@@ -5,6 +5,7 @@ import { IconButton } from "@material-ui/core";
 import { FaTrashAlt } from "react-icons/fa";
 import Axios from "axios";
 import { ModelType } from "../../../Utils/Types";
+import { baseUrl } from "../../../Utils/Utils";
 
 const InputPicture: React.FC<{
   placeholder?: string;
@@ -31,6 +32,7 @@ const InputPicture: React.FC<{
         color="primary"
         onClick={() => {
           setNewValue(undefined);
+          onChange("");
         }}
       >
         <FaTrashAlt style={{ width: 15, height: 15 }} />
@@ -49,7 +51,7 @@ const InputPicture: React.FC<{
         formData.append("objectId", object._id);
         formData.append("fieldkey", fieldKey);
         formData.append("image", files[0]);
-        Axios.post("/upload", formData, {
+        Axios.post(`${baseUrl}/upload`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

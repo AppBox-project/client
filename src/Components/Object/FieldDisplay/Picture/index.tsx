@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
 import styles from "./styles.module.scss";
+import { baseUrl } from "../../../../Utils/Utils";
 
 const ObjectFieldDisplayPicture: React.FC<{ modelField; objectField }> = ({
   objectField,
@@ -9,7 +10,10 @@ const ObjectFieldDisplayPicture: React.FC<{ modelField; objectField }> = ({
   return (
     <>
       {objectField ? (
-        <img src={objectField} />
+        <div
+          className={styles.picturePreview}
+          style={{ backgroundImage: `url(${baseUrl}${objectField})` }}
+        />
       ) : (
         <div className={styles.root}>
           <Typography variant="caption">No {modelField.name}</Typography>
