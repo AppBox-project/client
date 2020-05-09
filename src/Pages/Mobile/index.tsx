@@ -26,6 +26,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsPage from "../Settings";
 import { map } from "lodash";
+import { baseUrl } from "../../Utils/Utils";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
