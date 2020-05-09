@@ -171,9 +171,11 @@ const MobileLayout: React.FC = () => {
             </ListItem>
             <ListItem button>
               <ListItemIcon>
-                <Avatar style={{ width: 32, height: 32 }}>
-                  {gUser.data.first_name}
-                </Avatar>
+                {user.data.picture ? (
+                    <Avatar src={baseUrl + user.data.picture} />
+                  ) : (
+                    <Avatar>{user.data.first_name}</Avatar>
+                  )}
               </ListItemIcon>
               <ListItemText primary={gUser.data.full_name} />
             </ListItem>
