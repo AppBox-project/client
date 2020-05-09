@@ -20,6 +20,7 @@ import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import { GiCardboardBox } from "react-icons/gi";
 import SettingsPage from "../Settings";
+import { baseUrl } from "../../Utils/Utils";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState();
@@ -170,9 +171,15 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         >
           <motion.div variants={item}>
             <Link to="/settings/update">
-              <IconButton style={{ width: 64 }}>
-                <Avatar>{user.data.first_name}</Avatar>
-              </IconButton>
+              <Tooltip placement="right" title={`Hi ${user.data.first_name}`}>
+                <IconButton style={{ width: 64 }}>
+                  {user.data.picture ? (
+                    <Avatar src={baseUrl + user.data.picture} />
+                  ) : (
+                    <Avatar>{user.data.first_name}</Avatar>
+                  )}
+                </IconButton>
+              </Tooltip>
             </Link>
           </motion.div>
         </Grid>
