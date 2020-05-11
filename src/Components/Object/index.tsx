@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createRef } from "react";
+import React, { useEffect, useState, createRef, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
@@ -14,7 +14,6 @@ import ObjectLayoutItemPaper from "./LayoutItems/Paper";
 import ObjectLayoutItemField from "./LayoutItems/Field";
 import ObjectLayoutItemAnimationItem from "./LayoutItems/AnimationItem";
 import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer";
-import Axios from "axios";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -29,6 +28,7 @@ const ViewObject: React.FC<{
   const [toChange, setToChange] = useState({});
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
 
   const save = () => {
     if (toChange !== {}) {
@@ -106,6 +106,31 @@ const ViewObject: React.FC<{
       }
     };
   }, [objectTypeId]);
+  useEffect(() => {
+    if (mode === "view") {
+      setNavBar({
+        ...navBar,
+        backButton: { icon: <FaAngleLeft />, url: `/${appId}/${objectTypeId}` },
+      });
+    } else {
+      setNavBar({
+        ...navBar,
+        backButton: {
+          icon: <IoMdClose />,
+          function: () => {
+            setMode("view");
+          },
+        },
+      });
+    }
+
+    return () => {
+      setNavBar({
+        ...navBar,
+        backButton: { icon: undefined, url: undefined, function: undefined },
+      });
+    };
+  }, [objectTypeId, appId, mode]);
 
   // UI
   if (!objectType || (!object && objectId)) return <Loading />;

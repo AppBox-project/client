@@ -21,6 +21,7 @@ import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import { GiCardboardBox } from "react-icons/gi";
 import SettingsPage from "../Settings";
 import { baseUrl } from "../../Utils/Utils";
+import DesktopNavBar from "./NavBar";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState();
@@ -38,7 +39,7 @@ const Desktop: React.FC = () => {
   return (
     <>
       <AppBar currentApp={currentApp} />
-      <SearchBar style={{ left: currentApp ? 304 : 64 }} />
+      <DesktopNavBar currentApp={currentApp} />
       <div className={styles.appSpace}>
         <Switch>
           <Route path="/settings" component={SettingsPage} />
