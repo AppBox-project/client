@@ -9,6 +9,7 @@ setGlobal({
   isMobile: undefined,
   app: undefined,
   navBar: {
+    title: undefined,
     backButton: { icon: undefined, url: undefined, function: undefined },
     buttons: {},
   },

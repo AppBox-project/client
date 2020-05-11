@@ -11,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { map } from "lodash";
 
-const DesktopNavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
+const NavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
   // Vars
   const [app] = useGlobal<any>("app");
   const [navBar] = useGlobal<any>("navBar");
@@ -41,12 +41,29 @@ const DesktopNavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
           )}
           <Link to="/" style={{ flex: 1, color: "white" }}>
             <Typography variant="h6">
-              {currentApp ? (app ? app.data.name : "") : "AppBox"}
+              {navBar.title
+                ? navBar.title
+                : currentApp
+                ? app
+                  ? app.data.name
+                  : ""
+                : "AppBox"}
             </Typography>
           </Link>
           {navBar.buttons &&
             map(navBar.buttons, (button, key) => {
-              return <Button>{button.label}</Button>;
+              return (
+                <Button
+                  key={key}
+                  startIcon={button.icon}
+                  style={{ color: "white" }}
+                  onClick={button.function}
+                  variant={button.variant ? button.variant : "text"}
+                  color="primary"
+                >
+                  {button.label}
+                </Button>
+              );
             })}
         </Toolbar>
       </AppBar>
@@ -54,4 +71,4 @@ const DesktopNavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
   );
 };
 
-export default DesktopNavBar;
+export default NavBar;

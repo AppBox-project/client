@@ -29,6 +29,7 @@ const ViewObject: React.FC<{
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [pageTitle, setPageTitle] = useState(undefined);
 
   const save = () => {
     if (toChange !== {}) {
@@ -110,15 +111,52 @@ const ViewObject: React.FC<{
     if (mode === "view") {
       setNavBar({
         ...navBar,
-        backButton: { icon: <FaAngleLeft />, url: `/${appId}/${objectTypeId}` },
+        backButton: {
+          ...navBar.backButton,
+          icon: <FaAngleLeft />,
+          url: `/${appId}/${objectTypeId}`,
+          function: undefined,
+        },
+        title: pageTitle ? pageTitle : undefined,
+        buttons: {
+          objectEdit: {
+            label: "Edit",
+            icon: <FaEdit />,
+            function: () => {
+              setMode("edit");
+            },
+          },
+        },
       });
     } else {
       setNavBar({
         ...navBar,
+
         backButton: {
+          ...navBar.backButton,
           icon: <IoMdClose />,
+          url: undefined,
           function: () => {
             setMode("view");
+          },
+        },
+        title: pageTitle ? pageTitle : undefined,
+        buttons: {
+          objectCancel: {
+            label: "Cancel",
+            icon: <IoMdClose />,
+            function: () => {
+              setMode("view");
+              setToChange({});
+            },
+          },
+          objectSave: {
+            label: "Save",
+            variant: "contained",
+            icon: <FaSave />,
+            function: () => {
+              save();
+            },
           },
         },
       });
@@ -127,10 +165,22 @@ const ViewObject: React.FC<{
     return () => {
       setNavBar({
         ...navBar,
-        backButton: { icon: undefined, url: undefined, function: undefined },
+        backButton: {
+          icon: undefined,
+          url: undefined,
+          function: undefined,
+        },
+        title: undefined,
+        buttons: {},
       });
     };
-  }, [objectTypeId, appId, mode]);
+  }, [objectTypeId, appId, mode, pageTitle]);
+
+  useEffect(() => {
+    if (object) {
+      setPageTitle(object.data[objectType.primary]);
+    }
+  }, [object, objectType]);
 
   // UI
   if (!objectType || (!object && objectId)) return <Loading />;
@@ -151,60 +201,6 @@ const ViewObject: React.FC<{
         }
       }}
     >
-      {objectId && (
-        <Grid container>
-          <Grid item xs={8}>
-            <Typography variant="h5">
-              {mode === "view" ? (
-                <Link to={`/${appId}/${objectTypeId}`}>
-                  <IconButton>
-                    <FaAngleLeft />
-                  </IconButton>
-                </Link>
-              ) : (
-                <IconButton
-                  onClick={() => {
-                    setMode("view");
-                  }}
-                >
-                  <IoMdClose />
-                </IconButton>
-              )}
-
-              {object.data[objectType.primary]}
-            </Typography>
-          </Grid>
-          <Grid item xs={4} style={{ textAlign: "right" }}>
-            <div style={{ textAlign: "right", width: "100%" }}>
-              {mode === "edit" && (
-                <Button
-                  startIcon={<IoMdClose />}
-                  onClick={() => {
-                    setMode("view");
-                    setToChange({});
-                  }}
-                >
-                  Cancel
-                </Button>
-              )}
-              <Button
-                startIcon={mode === "view" ? <FaEdit /> : <FaSave />}
-                variant={mode === "view" ? "outlined" : "contained"}
-                color="primary"
-                onClick={() => {
-                  if (mode === "view") {
-                    setMode("edit");
-                  } else {
-                    save();
-                  }
-                }}
-              >
-                {mode === "view" ? "Edit" : "Save"}
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      )}
       {objectType.layouts[layoutId ? layoutId : "default"] ? (
         objectType.layouts[layoutId ? layoutId : "default"].map(
           (layoutItem, id) => {
