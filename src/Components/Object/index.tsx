@@ -2,7 +2,8 @@ import React, { useEffect, useState, createRef, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
-import { Typography, IconButton, Grid, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -29,6 +30,8 @@ const ViewObject: React.FC<{
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [defaultButton] = useGlobal<any>("defaultButton");
+  const [isMobile] = useGlobal<any>("isMobile");
   const [pageTitle, setPageTitle] = useState(undefined);
 
   const save = () => {
@@ -164,11 +167,8 @@ const ViewObject: React.FC<{
 
     return () => {
       setNavBar({
-        ...navBar,
         backButton: {
-          icon: undefined,
-          url: undefined,
-          function: undefined,
+          ...defaultButton,
         },
         title: undefined,
         buttons: {},

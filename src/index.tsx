@@ -8,6 +8,7 @@ setGlobal({
   user: undefined,
   isMobile: undefined,
   app: undefined,
+  defaultButton: { icon: undefined, url: undefined, function: undefined },
   navBar: {
     title: undefined,
     backButton: { icon: undefined, url: undefined, function: undefined },

@@ -11,14 +11,20 @@ import {
 import { Link } from "react-router-dom";
 import { map } from "lodash";
 
-const NavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
+const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
   const [app] = useGlobal<any>("app");
   const [navBar] = useGlobal<any>("navBar");
+  const [isMobile] = useGlobal<any>("isMobile");
+
   // Lifecycle
   // UI
   return (
-    <div className={`${styles.root}${currentApp ? ` ${styles.withApp}` : ""}`}>
+    <div
+      className={`${styles.root}${currentApp ? ` ${styles.withApp}` : ""}${
+        isMobile ? ` ${styles.isMobile}` : ""
+      }`}
+    >
       <AppBar position="static" style={{ display: "flex" }} elevation={0}>
         <Toolbar>
           {navBar.backButton.icon && navBar.backButton.url ? (
@@ -52,7 +58,7 @@ const NavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
           </Link>
           {navBar.buttons &&
             map(navBar.buttons, (button, key) => {
-              return (
+              return button.label ? (
                 <Button
                   key={key}
                   startIcon={button.icon}
@@ -63,6 +69,13 @@ const NavBar: React.FC<{ currentApp }> = ({ currentApp }) => {
                 >
                   {button.label}
                 </Button>
+              ) : (
+                <IconButton
+                  onClick={button.function}
+                  style={{ color: "white" }}
+                >
+                  {button.icon}
+                </IconButton>
               );
             })}
         </Toolbar>

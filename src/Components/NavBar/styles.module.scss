@@ -10,4 +10,9 @@
     width: calc(100vw - 304px);
     left: 304px;
   }
+
+  &.isMobile {
+    left: 0px;
+    width: 100vw;
+  }
 }

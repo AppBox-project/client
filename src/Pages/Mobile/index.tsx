@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
-import { FaGripHorizontal, FaTimes, FaHome } from "react-icons/fa";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../../Components/Loading";
@@ -10,9 +9,6 @@ import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
   Typography,
   Avatar,
   SwipeableDrawer,
@@ -25,7 +21,8 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsPage from "../Settings";
-import { map } from "lodash";
+import NavBar from "../../Components/NavBar";
+import styles from "./styles.module.scss";
 import { baseUrl } from "../../Utils/Utils";
 
 const MobileLayout: React.FC = () => {
@@ -34,12 +31,11 @@ const MobileLayout: React.FC = () => {
   const currentTab = window.location.href.split("/")[3]
     ? window.location.href.split("/")[3]
     : "home";
-  const [fabOpen, setFabOpen] = useState(false);
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
-  const [gApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
-  const [gButtons] = useGlobal<any>("buttons");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [defaultButton, setDefaultButton] = useGlobal<any>("defaultButton");
 
   // UI
   // Lifecycle
@@ -55,48 +51,40 @@ const MobileLayout: React.FC = () => {
     });
     setIsMobile(true);
 
+    setDefaultButton({
+      icon: <MenuIcon />,
+      function: () => {
+        setDrawerOpen(true);
+      },
+    });
+    setNavBar({
+      ...navBar,
+      backButton: {
+        icon: <MenuIcon />,
+        function: () => {
+          setDrawerOpen(true);
+        },
+      },
+    });
+
     return () => {
       Server.emit("unlistenForObjects", { requestId });
       setIsMobile(undefined);
+      setNavBar({
+        ...navBar,
+        backButton: {
+          icon: undefined,
+          function: undefined,
+        },
+      });
     };
   }, []);
 
   if (!apps) return <Loading />;
-  console.log(baseUrl + gUser.data.picture);
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => {
-              setDrawerOpen(!drawerOpen);
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link to="/" style={{ color: "white", flexGrow: 1 }}>
-            <Typography variant="h6">
-              {gApp ? gApp.data.name : "AppBox"}
-            </Typography>
-          </Link>
-          {map(gButtons, (button, id) => {
-            const Icon = button.icon;
-            return (
-              <IconButton
-                onClick={button.action}
-                style={{ color: "white" }}
-                key={id}
-              >
-                <Icon />
-              </IconButton>
-            );
-          })}
-        </Toolbar>
-      </AppBar>
+      <NavBar />
       <SwipeableDrawer
         anchor="left"
         open={drawerOpen}
@@ -184,19 +172,21 @@ const MobileLayout: React.FC = () => {
           </List>
         </div>
       </SwipeableDrawer>
-      <Switch>
-        <Route path="/" exact component={StartPage} />
-        <Route path="/apps" exact component={StartPage} />
-        <Route path="/settings" component={SettingsPage} />
-        <Route path="/home" exact component={StartPage} />
-        <Route
-          path="/:appId"
-          render={(params) => {
-            return <AppRenderer {...params} setCurrentApp={() => {}} />;
-          }}
-        />
-        <Route component={FourOhFour} />
-      </Switch>
+      <div className={styles.app}>
+        <Switch>
+          <Route path="/" exact component={StartPage} />
+          <Route path="/apps" exact component={StartPage} />
+          <Route path="/settings" component={SettingsPage} />
+          <Route path="/home" exact component={StartPage} />
+          <Route
+            path="/:appId"
+            render={(params) => {
+              return <AppRenderer {...params} setCurrentApp={() => {}} />;
+            }}
+          />
+          <Route component={FourOhFour} />
+        </Switch>
+      </div>
     </>
   );
 };

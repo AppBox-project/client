@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaBaseballBall, FaLemon, FaCompass } from "react-icons/fa";
+import { FaBaseballBall, FaLemon, FaCompass, FaDropbox } from "react-icons/fa";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -26,25 +26,39 @@ const AppUIMobile: React.FC<{
   const history = useHistory();
   const [gApp] = useGlobal<any>("app");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [gButtons, setgButtons] = useGlobal<any>("buttons");
-
-  const actionsDisplayAs = gApp
-    ? gApp.data.mobileSettings
-      ? gApp.data.mobileSettings.actionsDisplayAs
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [actionsDisplayAs, setActionsDisplayAs] = useState(
+    gApp
+      ? gApp.data.mobileSettings
         ? gApp.data.mobileSettings.actionsDisplayAs
+          ? gApp.data.mobileSettings.actionsDisplayAs
+          : "default"
         : "default"
       : "default"
-    : "default";
+  );
+
+  useEffect(() => {
+    setActionsDisplayAs(
+      gApp
+        ? gApp.data.mobileSettings
+          ? gApp.data.mobileSettings.actionsDisplayAs
+            ? gApp.data.mobileSettings.actionsDisplayAs
+            : "default"
+          : "default"
+        : "default"
+    );
+  }, [gApp]);
 
   useEffect(() => {
     if (actionsDisplayAs === "menu") {
-      setgButtons({
-        ...gButtons,
-        toggleNavigate: {
-          label: "Explore actions",
-          icon: FaCompass,
-          action: () => {
-            setDrawerOpen(true);
+      setNavBar({
+        ...navBar,
+        buttons: {
+          navigate: {
+            icon: <FaCompass />,
+            function: () => {
+              setDrawerOpen(true);
+            },
           },
         },
       });
@@ -74,7 +88,7 @@ const AppUIMobile: React.FC<{
         ))}
       <div
         style={{
-          height: "calc(100vh - 104px)",
+          height: "calc(100vh - 100px)",
           overflowInline: "scroll",
         }}
       >
@@ -122,7 +136,9 @@ const AppUIMobile: React.FC<{
                       history.push(`/${appContext.appId}/${action.key}`);
                     }}
                   >
-                    <ListItemIcon>{Icon ? <Icon /> : <FaLemon />}</ListItemIcon>
+                    <ListItemIcon>
+                      {Icon ? <Icon /> : <FaDropbox />}
+                    </ListItemIcon>
                     <ListItemText>{action.label}</ListItemText>
                   </ListItem>
                 );
@@ -133,6 +149,7 @@ const AppUIMobile: React.FC<{
         {actionsDisplayAs === "bottom-navigation" && (
           <BottomNavigation
             value={currentAction}
+            showLabels
             onChange={(event, newValue) => {
               history.push(`/${appContext.appId}/${newValue}`);
             }}
