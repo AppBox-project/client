@@ -1,8 +1,9 @@
-import React, { useEffect, useState, createRef } from "react";
+import React, { useEffect, useState, createRef, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
-import { Typography, IconButton, Grid, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import { FaAngleLeft, FaAngleDown, FaEdit, FaSave } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -14,7 +15,6 @@ import ObjectLayoutItemPaper from "./LayoutItems/Paper";
 import ObjectLayoutItemField from "./LayoutItems/Field";
 import ObjectLayoutItemAnimationItem from "./LayoutItems/AnimationItem";
 import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer";
-import Axios from "axios";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -29,6 +29,10 @@ const ViewObject: React.FC<{
   const [toChange, setToChange] = useState({});
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [defaultButton] = useGlobal<any>("defaultButton");
+  const [isMobile] = useGlobal<any>("isMobile");
+  const [pageTitle, setPageTitle] = useState(undefined);
 
   const save = () => {
     if (toChange !== {}) {
@@ -106,6 +110,77 @@ const ViewObject: React.FC<{
       }
     };
   }, [objectTypeId]);
+  useEffect(() => {
+    if (mode === "view") {
+      setNavBar({
+        ...navBar,
+        backButton: {
+          ...navBar.backButton,
+          icon: <FaAngleLeft />,
+          url: `/${appId}/${objectTypeId}`,
+          function: undefined,
+        },
+        title: pageTitle ? pageTitle : undefined,
+        buttons: {
+          objectEdit: {
+            label: "Edit",
+            icon: <FaEdit />,
+            function: () => {
+              setMode("edit");
+            },
+          },
+        },
+      });
+    } else {
+      setNavBar({
+        ...navBar,
+
+        backButton: {
+          ...navBar.backButton,
+          icon: <IoMdClose />,
+          url: undefined,
+          function: () => {
+            setMode("view");
+          },
+        },
+        title: pageTitle ? pageTitle : undefined,
+        buttons: {
+          objectCancel: {
+            label: "Cancel",
+            icon: <IoMdClose />,
+            function: () => {
+              setMode("view");
+              setToChange({});
+            },
+          },
+          objectSave: {
+            label: "Save",
+            variant: "contained",
+            icon: <FaSave />,
+            function: () => {
+              save();
+            },
+          },
+        },
+      });
+    }
+
+    return () => {
+      setNavBar({
+        backButton: {
+          ...defaultButton,
+        },
+        title: undefined,
+        buttons: {},
+      });
+    };
+  }, [objectTypeId, appId, mode, pageTitle]);
+
+  useEffect(() => {
+    if (object) {
+      setPageTitle(object.data[objectType.primary]);
+    }
+  }, [object, objectType]);
 
   // UI
   if (!objectType || (!object && objectId)) return <Loading />;
@@ -126,60 +201,6 @@ const ViewObject: React.FC<{
         }
       }}
     >
-      {objectId && (
-        <Grid container>
-          <Grid item xs={8}>
-            <Typography variant="h5">
-              {mode === "view" ? (
-                <Link to={`/${appId}/${objectTypeId}`}>
-                  <IconButton>
-                    <FaAngleLeft />
-                  </IconButton>
-                </Link>
-              ) : (
-                <IconButton
-                  onClick={() => {
-                    setMode("view");
-                  }}
-                >
-                  <IoMdClose />
-                </IconButton>
-              )}
-
-              {object.data[objectType.primary]}
-            </Typography>
-          </Grid>
-          <Grid item xs={4} style={{ textAlign: "right" }}>
-            <div style={{ textAlign: "right", width: "100%" }}>
-              {mode === "edit" && (
-                <Button
-                  startIcon={<IoMdClose />}
-                  onClick={() => {
-                    setMode("view");
-                    setToChange({});
-                  }}
-                >
-                  Cancel
-                </Button>
-              )}
-              <Button
-                startIcon={mode === "view" ? <FaEdit /> : <FaSave />}
-                variant={mode === "view" ? "outlined" : "contained"}
-                color="primary"
-                onClick={() => {
-                  if (mode === "view") {
-                    setMode("edit");
-                  } else {
-                    save();
-                  }
-                }}
-              >
-                {mode === "view" ? "Edit" : "Save"}
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      )}
       {objectType.layouts[layoutId ? layoutId : "default"] ? (
         objectType.layouts[layoutId ? layoutId : "default"].map(
           (layoutItem, id) => {

@@ -1,0 +1,18 @@
+.root {
+  width: calc(100vw - 64px);
+  background-color: red;
+  position: absolute;
+  top: 0px;
+  left: 64px;
+  transition: all 0.1s;
+
+  &.withApp {
+    width: calc(100vw - 304px);
+    left: 304px;
+  }
+
+  &.isMobile {
+    left: 0px;
+    width: 100vw;
+  }
+}

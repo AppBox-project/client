@@ -67,6 +67,19 @@ const App: React.FC<{
         content: undefined,
         form: undefined,
       });
+      const newColor = `#0247a1`;
+      var metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", newColor);
+      setgTheme({
+        ...gTheme,
+        palette: {
+          ...gTheme.palette,
+          primary: {
+            ...gTheme.palette.primary,
+            main: newColor,
+          },
+        },
+      });
       context.unload();
     };
   }, [appId]);
