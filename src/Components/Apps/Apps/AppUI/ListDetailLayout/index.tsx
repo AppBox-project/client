@@ -16,10 +16,10 @@ import {
   TreeViewDataItem,
   ColumnWidth,
 } from "../../../../../Utils/Types";
-import ActionBar from "../../../../ActionBar";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaAngleLeft } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
+import { useState, useEffect } from "react";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -64,8 +64,33 @@ const ListDetailLayout: React.FC<{
   const navigationWidth = navWidth ? navWidth : 3;
   //@ts-ignore
   const detailWidth: ColumnWidth = 12 - navigationWidth;
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [defaultButton] = useGlobal<any>("defaultButton");
 
   // Lifecycle
+  useEffect(() => {
+    if (isMobile && window.location.href.match(baseUrl + "/")) {
+      setNavBar({
+        ...navBar,
+        backButton: {
+          ...navBar.backButton,
+          icon: <FaAngleLeft />,
+          url: baseUrl,
+          function: undefined,
+        },
+      });
+    }
+
+    return () => {
+      setNavBar({
+        backButton: {
+          ...defaultButton,
+        },
+        title: undefined,
+        buttons: {},
+      });
+    };
+  }, [window.location.href]);
   // UI
   return (
     <Grid container style={{ height: "100%" }}>
@@ -94,7 +119,6 @@ const ListDetailLayout: React.FC<{
             render={(props) => {
               return (
                 <div style={{ overflowX: "auto", height: "100%" }}>
-                  {isMobile && <ActionBar backUrl={baseUrl} />}
                   <DetailComponent
                     {...props}
                     {...detailComponentProps}
