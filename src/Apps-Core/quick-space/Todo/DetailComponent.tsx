@@ -8,8 +8,12 @@ import {
   TextField,
   IconButton,
   Tooltip,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Divider,
 } from "@material-ui/core";
-import { FaTrello, FaBars } from "react-icons/fa";
+import { FaTrello, FaBars, FaExpand, FaAngleDown } from "react-icons/fa";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -112,112 +116,125 @@ const AppQSActionTodoDetail: React.FC<{
       {view === "todo" && (
         <context.UI.Animations.AnimationContainer>
           <Grid container>
-            <Grid item xs={12} md={8}>
+            <Grid
+              item
+              xs={12}
+              md={8}
+              style={{ padding: 15, boxSizing: "border-box" }}
+            >
               <context.UI.Animations.AnimationItem>
-                <Paper className="paper">
-                  <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Add todo"
-                    value={newTodo}
-                    style={{ margin: "0 15px", width: "95%" }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        context.addObject(
-                          "qs-todo",
-                          {
-                            action: newTodo,
-                            project: detailId,
-                          },
-                          (response) => {
-                            console.log(response);
-                          }
-                        );
-
-                        setNewTodo("");
-                      }
-                    }}
-                    onChange={(e) => {
-                      setNewTodo(e.target.value);
-                    }}
-                  />
-                  <context.UI.Layouts.SortableList
-                    listItems={todos}
-                    linkToPath="_id"
-                    listTextPath="data.action"
-                    listSubTextPath="data.description"
-                    baseUrl={`/quick-space/todo/${detailId}`}
-                    onListItemClick={(object) => {
-                      context.setDialog({
-                        display: true,
-                        size: "md",
-                        title: object.data.action,
-                        content: (
-                          <context.UI.Layouts.Object.ObjectLayout
-                            model={model}
-                            layoutId="popup"
-                            appId="quick-space"
-                            objectId={object._id}
-                          />
-                        ),
-                      });
-                    }}
-                    listAction={(id, object) => {
-                      return (
-                        <context.UI.Field
-                          field={model.fields["done"]}
-                          fieldId="done"
-                          objectId={id}
-                          object={object}
-                          mode="free"
-                          directSave
-                          directSaveDelay={1}
-                        />
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  label="Add todo"
+                  value={newTodo}
+                  style={{ margin: "0 15px", width: "95%" }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      context.addObject(
+                        "qs-todo",
+                        {
+                          action: newTodo,
+                          project: detailId,
+                        },
+                        (response) => {
+                          console.log(response);
+                        }
                       );
-                    }}
-                  />
-                </Paper>
+
+                      setNewTodo("");
+                    }
+                  }}
+                  onChange={(e) => {
+                    setNewTodo(e.target.value);
+                  }}
+                />
+                <context.UI.Layouts.SortableList
+                  listItems={todos}
+                  linkToPath="_id"
+                  listTextPath="data.action"
+                  listSubTextPath="data.description"
+                  baseUrl={`/quick-space/todo/${detailId}`}
+                  onListItemClick={(object) => {
+                    context.setDialog({
+                      display: true,
+                      size: "md",
+                      title: object.data.action,
+                      content: (
+                        <context.UI.Layouts.Object.ObjectLayout
+                          model={model}
+                          layoutId="popup"
+                          appId="quick-space"
+                          objectId={object._id}
+                        />
+                      ),
+                    });
+                  }}
+                  listAction={(id, object) => {
+                    return (
+                      <context.UI.Field
+                        field={model.fields["done"]}
+                        fieldId="done"
+                        objectId={id}
+                        object={object}
+                        mode="free"
+                        directSave
+                        directSaveDelay={1}
+                      />
+                    );
+                  }}
+                />
               </context.UI.Animations.AnimationItem>
             </Grid>
 
             {doneTodos && doneTodos.length > 0 && (
               <Grid item xs={12} md={4} style={{ padding: 15 }}>
                 <context.UI.Animations.AnimationItem>
-                  <Typography variant="h6">Done</Typography>
-                  <context.UI.Layouts.SortableList
-                    listItems={doneTodos}
-                    linkToPath="_id"
-                    listTextPath="data.action"
-                    baseUrl={`/quick-space/todo/${detailId}`}
-                    listSubTextPath="data.description"
-                    onListItemClick={(object) => {
-                      context.setDialog({
-                        display: true,
-                        title: object.data.action,
-                        content: (
-                          <context.UI.Layouts.Object.ObjectLayout
-                            model={model}
-                            layoutId="default"
-                            appId="quick-space"
-                            objectId={object._id}
-                          />
-                        ),
-                      });
-                    }}
-                    listAction={(id, object) => {
-                      return (
-                        <context.UI.Field
-                          field={model.fields["done"]}
-                          fieldId="done"
-                          objectId={id}
-                          object={object}
-                          mode="free"
-                          directSave
-                          directSaveDelay={1}
-                        />
-                      );
-                    }}
-                  />
+                  <ExpansionPanel>
+                    <ExpansionPanelSummary
+                      expandIcon={<FaAngleDown />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography variant="h6">Done</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                      <context.UI.Layouts.SortableList
+                        listItems={doneTodos}
+                        linkToPath="_id"
+                        listTextPath="data.action"
+                        baseUrl={`/quick-space/todo/${detailId}`}
+                        listSubTextPath="data.description"
+                        onListItemClick={(object) => {
+                          context.setDialog({
+                            display: true,
+                            title: object.data.action,
+                            content: (
+                              <context.UI.Layouts.Object.ObjectLayout
+                                model={model}
+                                layoutId="default"
+                                appId="quick-space"
+                                objectId={object._id}
+                              />
+                            ),
+                          });
+                        }}
+                        listAction={(id, object) => {
+                          return (
+                            <context.UI.Field
+                              field={model.fields["done"]}
+                              fieldId="done"
+                              objectId={id}
+                              object={object}
+                              mode="free"
+                              directSave
+                              directSaveDelay={1}
+                            />
+                          );
+                        }}
+                      />{" "}
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
                 </context.UI.Animations.AnimationItem>
               </Grid>
             )}
