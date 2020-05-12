@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CKEditor from "@ckeditor/ckeditor5-react";
-import mode from "@ckeditor/ckeditor5-build-classic";
 
 const InputRichText: React.FC<{
   placeholder?: string;
@@ -18,20 +16,7 @@ const InputRichText: React.FC<{
   }, [value]);
 
   // UI
-  return (
-    /**/ <>
-      Test
-      <CKEditor
-        editor={mode}
-        data={newValue}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          setNewValue(data);
-          if (onChange) onChange(data);
-        }}
-      />
-    </>
-  );
+  return <>This broke things</>;
 };
 
 export default InputRichText;
