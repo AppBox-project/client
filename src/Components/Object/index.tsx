@@ -135,7 +135,6 @@ const ViewObject: React.FC<{
     } else {
       setNavBar({
         ...navBar,
-
         backButton: {
           ...navBar.backButton,
           icon: <IoMdClose />,
@@ -161,6 +160,7 @@ const ViewObject: React.FC<{
 
     return () => {
       setNavBar({
+        ...navBar,
         backButton: {
           ...defaultButton,
         },

@@ -54,6 +54,7 @@ const AppUIMobile: React.FC<{
       setNavBar({
         ...navBar,
         buttons: {
+          ...navBar.buttons,
           navigate: {
             icon: <FaCompass />,
             function: () => {
@@ -66,6 +67,7 @@ const AppUIMobile: React.FC<{
       setNavBar({
         ...navBar,
         buttons: {
+          ...navBar.buttons,
           navigate: undefined,
         },
       });

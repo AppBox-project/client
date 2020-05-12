@@ -28,6 +28,7 @@ const AppQSActionTodoDetail: React.FC<{
   const [view, setView] = useState("todo");
 
   // Lifecycle
+
   useEffect(() => {
     const todoRequest = context.getObjects(
       "qs-todo",
@@ -67,23 +68,24 @@ const AppQSActionTodoDetail: React.FC<{
     };
   }, [detailId]);
 
+  useEffect(() => {
+    context.setButton("toggleMode", {
+      icon: view === "todo" ? <FaTrello /> : <FaBars />,
+      function: () => {
+        setView(view === "todo" ? "board" : "todo");
+      },
+    });
+
+    // On unmount
+    return () => {
+      context.setButton("toggleMode", undefined);
+    };
+  }, [view]);
+
   // UI
   if (!todos || !model) return <context.UI.Loading />;
   return (
     <>
-      <Tooltip
-        placement="right"
-        title={`Switch to ${view === "board" ? "todo" : "board"} view`}
-      >
-        <IconButton
-          color="primary"
-          onClick={() => {
-            setView(view === "board" ? "todo" : "board");
-          }}
-        >
-          {view === "board" ? <FaBars /> : <FaTrello />}
-        </IconButton>
-      </Tooltip>
       {view === "board" && (
         <context.UI.Layouts.Object.BoardLayout
           context={context}

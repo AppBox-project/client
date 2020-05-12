@@ -15,6 +15,7 @@ import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
 import Select from "./AppUI/Forms/Select";
+import { filter } from "lodash";
 
 const App: React.FC<{
   match: { params: { appId } };
@@ -31,12 +32,13 @@ const App: React.FC<{
   const [dialogFormContent, setDialogFormContent] = useState();
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
-  const [gButtons, setgButtons] = useGlobal<any>("buttons");
+  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [appButtons, setAppButtons] = useState({});
 
   //Lifecycle
   useEffect(() => {
     setCurrentApp(appId);
-    const context = new AppContext(appId, setDialog);
+    const context = new AppContext(appId, setDialog, appButtons, setAppButtons);
     context.isReady.then(() => {
       //@ts-ignore
       setAppcontext(context);
@@ -58,8 +60,17 @@ const App: React.FC<{
     return () => {
       setCurrentApp(null);
       setAppcontext(null);
+      setAppButtons(null);
+      setNavBar({
+        ...navBar,
+        buttons: {
+          ...filter(navBar.appButtons, (a, b) => {
+            return !b.match(appId);
+          }),
+        },
+      });
+
       setgApp(null);
-      setgButtons({});
       setDialog({
         ...dialog,
         display: false,
@@ -83,8 +94,16 @@ const App: React.FC<{
       context.unload();
     };
   }, [appId]);
+  useEffect(() => {
+    if (appContext) {
+      //@ts-ignore
+      appContext.updateAppButtons(appButtons);
+    }
+    setNavBar({ ...navBar, buttons: { ...navBar.buttons, ...appButtons } });
+  }, [appButtons]);
 
   //UI
+
   if (!appContext) return <Loading />;
   return (
     <>

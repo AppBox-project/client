@@ -83,11 +83,11 @@ const ListDetailLayout: React.FC<{
 
     return () => {
       setNavBar({
+        ...navBar,
         backButton: {
           ...defaultButton,
         },
         title: undefined,
-        buttons: {},
       });
     };
   }, [window.location.href]);

@@ -11,6 +11,7 @@ import SortableList from "../../UI/SortableList";
 import InputSwitch from "../../Inputs/Switch";
 import ObjectLayout from "./AppUI/ObjectLayout";
 import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
+import { filter } from "lodash";
 
 export class AppContext {
   appId: string;
@@ -21,10 +22,14 @@ export class AppContext {
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
   setDialog: any;
+  appButtons;
+  setAppButtons;
 
-  constructor(appId, setDialog) {
+  constructor(appId, setDialog, appButtons, setAppButtons) {
     this.appId = appId;
     this.setDialog = setDialog;
+    this.appButtons = appButtons;
+    this.setAppButtons = setAppButtons;
     this.UI = {
       Loading,
       Animations: { AnimationContainer, AnimationItem },
@@ -79,6 +84,18 @@ export class AppContext {
   unload = () => {
     this.dataListeners.map((listener) => {
       Server.emit(listener.unlistenAction, { requestId: listener.requestId });
+    });
+  };
+
+  updateAppButtons = (appButtons) => {
+    this.appButtons = appButtons;
+  };
+
+  // (Un)register a global button
+  setButton = (buttonId, button) => {
+    this.setAppButtons({
+      ...this.appButtons,
+      [`${this.appId}-${buttonId}`]: button,
     });
   };
 

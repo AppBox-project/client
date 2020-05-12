@@ -18,6 +18,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
+
   // UI
   return (
     <div
@@ -27,7 +28,9 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
     >
       <AppBar position="static" style={{ display: "flex" }} elevation={0}>
         <Toolbar>
-          {navBar.backButton.icon && navBar.backButton.url ? (
+          {navBar.backButton &&
+          navBar.backButton.icon &&
+          navBar.backButton.url ? (
             <Link to={navBar.backButton.url} style={{ color: "white" }}>
               <IconButton edge="start" color="inherit" aria-label="menu">
                 {navBar.backButton.icon}

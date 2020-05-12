@@ -93,6 +93,10 @@ export interface AppContextType {
   appCode: any;
   actions: [{ label: string; key: string; component: FC; icon?: React.FC }];
   UI: UIType;
+  setButton: (
+    buttonId,
+    button: { label?: string; icon; function?; url?: string }
+  ) => void;
   getObjects: (
     type: string,
     filter: {},
