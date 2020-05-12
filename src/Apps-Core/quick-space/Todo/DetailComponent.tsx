@@ -3,15 +3,11 @@ import { AppContextType } from "../../../Utils/Types";
 import { filter, sortBy } from "lodash";
 import {
   Grid,
-  Paper,
   Typography,
   TextField,
-  IconButton,
-  Tooltip,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Divider,
 } from "@material-ui/core";
 import { FaTrello, FaBars, FaExpand, FaAngleDown } from "react-icons/fa";
 

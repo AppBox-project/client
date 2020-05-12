@@ -68,7 +68,7 @@ const AppQSNotesNavigation: React.FC<{
 
   // UI
   return (
-    <Grid container style={{ height: "calc(100vh - 64px)" }}>
+    <Grid container style={{ height: "100%" }}>
       <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
         <Typography
           variant="h6"

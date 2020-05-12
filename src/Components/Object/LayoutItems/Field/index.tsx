@@ -12,6 +12,8 @@ import InputRelationShip from "../../../Inputs/Relationship";
 import { find } from "lodash";
 import ObjectFieldDisplayPicture from "../../FieldDisplay/Picture";
 import InputPicture from "../../../Inputs/Picture";
+import ObjectFieldDisplayHtml from "../../FieldDisplay/HTML";
+import InputRichText from "../../../Inputs/RichText";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -76,6 +78,12 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "picture" && (
               <ObjectFieldDisplayPicture
+                modelField={modelField}
+                objectField={objectField}
+              />
+            )}
+            {modelField.type === "richtext" && (
+              <ObjectFieldDisplayHtml
                 modelField={modelField}
                 objectField={objectField}
               />
@@ -156,6 +164,15 @@ const ObjectLayoutItemField: React.FC<{
                 onChange={(value) => {
                   onChange(value);
                 }}
+              />
+            )}
+            {modelField.type === "richtext" && (
+              <InputRichText
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
               />
             )}
           </Grid>
