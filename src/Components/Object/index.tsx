@@ -122,7 +122,8 @@ const ViewObject: React.FC<{
         },
         title: pageTitle ? pageTitle : undefined,
         buttons: {
-          objectEdit: {
+          ...navBar.buttons,
+          objectToggle: {
             label: "Edit",
             icon: <FaEdit />,
             function: () => {
@@ -145,15 +146,8 @@ const ViewObject: React.FC<{
         },
         title: pageTitle ? pageTitle : undefined,
         buttons: {
-          objectCancel: {
-            label: "Cancel",
-            icon: <IoMdClose />,
-            function: () => {
-              setMode("view");
-              setToChange({});
-            },
-          },
-          objectSave: {
+          ...navBar.buttons,
+          objectToggle: {
             label: "Save",
             variant: "contained",
             icon: <FaSave />,
@@ -171,7 +165,7 @@ const ViewObject: React.FC<{
           ...defaultButton,
         },
         title: undefined,
-        buttons: {},
+        buttons: { ...navBar.buttons, objectToggle: undefined },
       });
     };
   }, [objectTypeId, appId, mode, pageTitle]);

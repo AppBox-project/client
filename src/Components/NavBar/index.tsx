@@ -58,25 +58,27 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
           </Link>
           {navBar.buttons &&
             map(navBar.buttons, (button, key) => {
-              return button.label ? (
-                <Button
-                  key={key}
-                  startIcon={button.icon}
-                  style={{ color: "white" }}
-                  onClick={button.function}
-                  variant={button.variant ? button.variant : "text"}
-                  color="primary"
-                >
-                  {button.label}
-                </Button>
-              ) : (
-                <IconButton
-                  onClick={button.function}
-                  style={{ color: "white" }}
-                >
-                  {button.icon}
-                </IconButton>
-              );
+              if (button) {
+                return button.label ? (
+                  <Button
+                    key={key}
+                    startIcon={button.icon}
+                    style={{ color: "white" }}
+                    onClick={button.function}
+                    variant={button.variant ? button.variant : "text"}
+                    color="primary"
+                  >
+                    {button.label}
+                  </Button>
+                ) : (
+                  <IconButton
+                    onClick={button.function}
+                    style={{ color: "white" }}
+                  >
+                    {button.icon}
+                  </IconButton>
+                );
+              }
             })}
         </Toolbar>
       </AppBar>
