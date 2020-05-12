@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaBaseballBall, FaLemon, FaCompass, FaDropbox } from "react-icons/fa";
+import { FaLemon, FaCompass, FaDropbox } from "react-icons/fa";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -60,6 +60,13 @@ const AppUIMobile: React.FC<{
               setDrawerOpen(true);
             },
           },
+        },
+      });
+    } else {
+      setNavBar({
+        ...navBar,
+        buttons: {
+          navigate: undefined,
         },
       });
     }
