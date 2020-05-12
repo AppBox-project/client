@@ -3,7 +3,7 @@
   height: 100%;
   width: 240px;
   position: absolute;
-  top: 0px;
+  top: -64px;
   background-color: rgb(244, 245, 247);
   color: rgb(66, 82, 110);
   animation-duration: 0.22s;
@@ -18,7 +18,7 @@
 }
 .app {
   position: absolute;
-  top: 64px;
+
   left: 240px;
   width: calc(100vw - 304px);
   height: calc(100vh - 64px);
