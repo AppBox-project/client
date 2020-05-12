@@ -80,7 +80,7 @@ const AppQSActionTodoDetail: React.FC<{
     return () => {
       context.setButton("toggleMode", undefined);
     };
-  }, [view]);
+  }, [view, detailId]);
 
   // UI
   if (!todos || !model) return <context.UI.Loading />;

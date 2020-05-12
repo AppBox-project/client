@@ -10,7 +10,6 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@material-ui/core";
-import { AppContext } from "../../AppContext";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   appContext,

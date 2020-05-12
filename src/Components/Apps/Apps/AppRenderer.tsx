@@ -63,11 +63,7 @@ const App: React.FC<{
       setAppButtons(null);
       setNavBar({
         ...navBar,
-        buttons: {
-          ...filter(navBar.appButtons, (a, b) => {
-            return !b.match(appId);
-          }),
-        },
+        buttons: {},
       });
 
       setgApp(null);
@@ -95,10 +91,6 @@ const App: React.FC<{
     };
   }, [appId]);
   useEffect(() => {
-    if (appContext) {
-      //@ts-ignore
-      appContext.updateAppButtons(appButtons);
-    }
     setNavBar({ ...navBar, buttons: { ...navBar.buttons, ...appButtons } });
   }, [appButtons]);
 

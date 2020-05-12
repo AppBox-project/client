@@ -11,7 +11,6 @@ import SortableList from "../../UI/SortableList";
 import InputSwitch from "../../Inputs/Switch";
 import ObjectLayout from "./AppUI/ObjectLayout";
 import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
-import { filter } from "lodash";
 
 export class AppContext {
   appId: string;
@@ -82,6 +81,7 @@ export class AppContext {
 
   // Close active listeners for app
   unload = () => {
+    this.setAppButtons({});
     this.dataListeners.map((listener) => {
       Server.emit(listener.unlistenAction, { requestId: listener.requestId });
     });

@@ -75,6 +75,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
                   </Button>
                 ) : (
                   <IconButton
+                    key={key}
                     onClick={button.function}
                     style={{ color: "white" }}
                   >
