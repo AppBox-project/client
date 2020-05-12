@@ -13,7 +13,6 @@ import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
 import * as icons from "react-icons/fa";
-import SearchBar from "./Components/SearchBar";
 import { Switch, Route } from "react-router-dom";
 import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
