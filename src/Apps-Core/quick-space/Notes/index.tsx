@@ -48,7 +48,7 @@ const AppQSActionNotes: React.FC<{
       }
     });
 
-    context.getObjects("qs-memo", {}, (response) => {
+    context.getObjects("qs-note", {}, (response) => {
       if (response.success) {
         setMemos(sortBy(response.data, ["data.order"]));
       } else {

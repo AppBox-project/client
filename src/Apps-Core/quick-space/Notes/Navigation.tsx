@@ -157,7 +157,7 @@ const AppQSNotesNavigation: React.FC<{
               button
               onAdd={() => {
                 context.addObject(
-                  "qs-memo",
+                  "qs-note",
                   {
                     title: "Fresh note",
                     project: selectedProject,

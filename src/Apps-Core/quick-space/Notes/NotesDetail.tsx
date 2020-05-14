@@ -20,7 +20,7 @@ const AppQSNotesDetail: React.FC<{
   useEffect(() => {
     setSelectedMemo(detailId);
     const noteRequest = context.getObjects(
-      "qs-memo",
+      "qs-note",
       { _id: detailId },
       (response) => {
         if (response.success) {
@@ -42,14 +42,14 @@ const AppQSNotesDetail: React.FC<{
   return (
     <>
       <context.UI.Field
-        modelId="qs-memo"
+        modelId="qs-note"
         fieldId="title"
         objectId={detailId}
         mode="free"
         directSave
       />
       <context.UI.Field
-        modelId="qs-memo"
+        modelId="qs-note"
         fieldId="body"
         objectId={detailId}
         mode="free"

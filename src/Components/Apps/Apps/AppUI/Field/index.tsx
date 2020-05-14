@@ -51,7 +51,7 @@ const AppUiField: React.FC<{
       Server.emit("listenForObjects", {
         requestId: requestObjectId,
         filter: { _id: objectId },
-        type: "qs-memo",
+        type: "qs-note",
       });
       Server.on(`receive-${requestObjectId}`, (response) => {
         if (response.success) {

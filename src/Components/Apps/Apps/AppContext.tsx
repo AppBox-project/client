@@ -164,7 +164,7 @@ export class AppContext {
         if (response.success) {
           then(response);
         } else {
-          console.log("Query failed: ", response.reason);
+          console.log("Query failed: ", response);
           if (response.reason === "no-permission-app") {
             this.setDialog({
               display: true,
