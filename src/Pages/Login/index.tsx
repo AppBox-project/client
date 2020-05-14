@@ -38,6 +38,8 @@ const LoginPage: React.FC = () => {
     hidden: { opacity: 0, y: 10 },
   };
 
+  console.log(currentTab);
+
   return (
     <Grid container>
       <Grid item xs={12} md={5} className={`bg`}>
@@ -53,44 +55,19 @@ const LoginPage: React.FC = () => {
                 textColor="primary"
                 centered
               >
-                <Tab label="Log in" />
-                <Tab label="Register" />
+                <Tab label="Log in" value={0} />
+                <Tab label="Register" value={1} />
               </Tabs>
             </motion.div>
             <motion.div variants={item}>
-              {currentTab === 0 ? <Login /> : <Register />}
+              <Login />
             </motion.div>
+            <motion.div variants={item}>Register</motion.div>
           </div>
         </motion.div>
       </Grid>
     </Grid>
   );
-};
-
-const Register: React.FC = () => {
-  const [userType, setUserType] = useState();
-  // Lifecycle
-  useEffect(() => {
-    // Object type information
-    const requestId = uniqid();
-    Server.emit("listenForObjectTypes", {
-      requestId,
-      filter: { key: "user" },
-    });
-    Server.on(`receive-${requestId}`, (data) => {
-      window.location.reload();
-      console.log("Received userType", data[0]);
-      setUserType(data[0]);
-    });
-
-    return () => {
-      Server.emit("unlistenForObjects", { requestId });
-    };
-  }, []);
-
-  // UI
-  if (userType === undefined) return <CircularProgress />;
-  return <>Todo</>;
 };
 
 const Login: React.FC = () => {
