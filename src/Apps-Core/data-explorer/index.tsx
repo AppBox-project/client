@@ -10,21 +10,23 @@ export default class App {
   }
 
   getActions = () => {
-    return new Promise(resolve => {
-      this.context.getTypes({}, response => {
+    return new Promise((resolve) => {
+      this.context.getTypes({}, (response) => {
         if (response.success) {
           const actions = [];
-          response.data.map(result => {
+          response.data.map((result) => {
             actions.push({
               label: result.name_plural,
               key: result.key,
-              component: AppActionObject
+              component: AppActionObject,
             });
           });
           resolve(actions);
         } else {
-          console.log("Something went wrong", response.reason);
-          resolve([{ key: "a", label: "A", component: FourOhFour }]);
+          console.log("Something went wrong", response);
+          resolve([
+            { key: "a", label: response.reason, component: FourOhFour },
+          ]);
         }
       });
     });

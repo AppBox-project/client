@@ -26,6 +26,31 @@ const AppActionManageObjectTabOverviews: React.FC<{
       DetailComponent={AppActionManageObjectOverviewEditor}
       context={context}
       detailComponentProps={{ model }}
+      addFunction={() => {
+        context.setDialog({
+          display: true,
+          title: "New overview",
+          form: [{ key: "key", label: "Overview key" }],
+          buttons: [
+            {
+              label: "Add",
+              onClick: (response) => {
+                context.updateModel(
+                  model.key,
+                  {
+                    ...model,
+                    overviews: {
+                      ...model.overviews,
+                      [response.key]: { fields: [], buttons: [] },
+                    },
+                  },
+                  model._id
+                );
+              },
+            },
+          ],
+        });
+      }}
     />
   );
 };

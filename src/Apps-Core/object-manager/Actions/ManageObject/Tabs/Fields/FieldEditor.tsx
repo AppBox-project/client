@@ -146,6 +146,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "relationship", label: "Relationship" },
                       { value: "file", label: "File" },
                       { value: "picture", label: "Picture" },
+                      { value: "data", label: "Free data" },
                     ]}
                     onChange={(value) => {
                       setField({ ...field, type: value });

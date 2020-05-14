@@ -1,5 +1,6 @@
 import FourOhFour from "../../Components/FourOhFour";
 import AppActionManageObject from "./Actions/ManageObject";
+import AppActionAddObject from "./Actions/AddObject";
 
 export default class App {
   context: any;
@@ -21,12 +22,14 @@ export default class App {
             });
           });
           resolve([
-            { key: "new", label: "Add object", component: FourOhFour },
+            { key: "new", label: "Add object", component: AppActionAddObject },
             ...actions,
           ]);
         } else {
-          console.log("Something went wrong", response.reason);
-          resolve([{ key: "a", label: "A", component: FourOhFour }]);
+          console.log("Something went wrong", response);
+          resolve([
+            { key: "a", label: response.reason, component: FourOhFour },
+          ]);
         }
       });
     });

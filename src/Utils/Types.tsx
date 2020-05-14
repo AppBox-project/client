@@ -97,6 +97,7 @@ export interface AppContextType {
     buttonId,
     button: { label?: string; icon; function?; url?: string }
   ) => void;
+  createModel: (newModel, then: (response: ServerResponse) => void) => void;
   getObjects: (
     type: string,
     filter: {},
@@ -190,6 +191,7 @@ interface ListItem {
 
 export interface UIType {
   Loading: React.FC<{ label?: string }>;
+  Margin: React.FC;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
   Layouts: {
     Object: {

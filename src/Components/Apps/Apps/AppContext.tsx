@@ -11,6 +11,7 @@ import SortableList from "../../UI/SortableList";
 import InputSwitch from "../../Inputs/Switch";
 import ObjectLayout from "./AppUI/ObjectLayout";
 import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
+import Margin from "./AppUI/Margin";
 
 export class AppContext {
   appId: string;
@@ -31,6 +32,7 @@ export class AppContext {
     this.setAppButtons = setAppButtons;
     this.UI = {
       Loading,
+      Margin: Margin,
       Animations: { AnimationContainer, AnimationItem },
       Inputs: { ...Forms, Switch: InputSwitch },
       Field: AppUiField,
@@ -96,6 +98,14 @@ export class AppContext {
     this.setAppButtons({
       ...this.appButtons,
       [`${this.appId}-${buttonId}`]: button,
+    });
+  };
+
+  createModel = (newModel, then: (response: ServerResponse) => void) => {
+    const requestId = uniqid();
+    Server.emit("appCreatesModel", { newModel, requestId, appId: this.appId });
+    Server.on(`receive-${requestId}`, (response) => {
+      console.log(response);
     });
   };
 
