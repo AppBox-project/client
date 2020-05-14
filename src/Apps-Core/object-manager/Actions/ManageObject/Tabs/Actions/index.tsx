@@ -14,7 +14,7 @@ const AppActionManageObjectTabActions: React.FC<{
 }> = ({ model, UI, context }) => {
   // States & Hooks
   const list = [];
-  map(model.actions, (overview, key) => {
+  map(model.buttons, (overview, key) => {
     list.push({ label: key, id: key, url: key });
   });
 
@@ -40,7 +40,7 @@ const AppActionManageObjectTabActions: React.FC<{
                   {
                     ...model,
                     actions: {
-                      ...model.actions,
+                      ...model.buttons,
                       [response.key]: {},
                     },
                   },

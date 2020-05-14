@@ -69,9 +69,10 @@ const Overview: React.FC<{
 
   // UI
   if (!objects || !objectType || !layout) return <Loading />;
+
   return (
     <>
-      {layout.actions && (
+      {layout.buttons && (
         <>
           <Grid
             container
@@ -80,10 +81,10 @@ const Overview: React.FC<{
             alignItems="center"
           >
             <Grid item xs={12} md={3} style={{ textAlign: "right", margin: 5 }}>
-              {layout.actions.map((buttonInfo) => {
-                if (objectType.actions) {
-                  if (objectType.actions[buttonInfo]) {
-                    const button = objectType.actions[buttonInfo];
+              {layout.buttons.map((buttonInfo) => {
+                if (objectType.buttons) {
+                  if (objectType.buttons[buttonInfo]) {
+                    const button = objectType.buttons[buttonInfo];
                     return (
                       <Button
                         key={buttonInfo}
@@ -134,7 +135,7 @@ const Overview: React.FC<{
                 </TableCell>
               );
             })}
-            {layout.actions && layout.actions.length > 0 && (
+            {layout.buttons && layout.buttons.length > 0 && (
               <TableCell>
                 <div style={{ float: "right" }}>&nbsp;</div>
               </TableCell>
