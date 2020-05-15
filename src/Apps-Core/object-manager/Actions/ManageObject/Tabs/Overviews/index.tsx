@@ -41,7 +41,11 @@ const AppActionManageObjectTabOverviews: React.FC<{
                     ...model,
                     overviews: {
                       ...model.overviews,
-                      [response.key]: { fields: [], buttons: [] },
+                      [response.key]: {
+                        fields: [],
+                        buttons: [],
+                        actions: ["delete"],
+                      },
                     },
                   },
                   model._id
