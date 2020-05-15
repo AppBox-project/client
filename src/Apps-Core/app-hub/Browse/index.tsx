@@ -68,7 +68,7 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
                 history.push(`/app-hub/browse/${app.data.key}`);
               }}
               className={styles.appLink}
-              style={{ backgroundImage: `url(${app.data.banner})` }}
+              style={{ backgroundImage: `url(${app.data.banner.url})` }}
             >
               <context.UI.Animations.AnimationItem>
                 <div>{app.data.name}</div>
