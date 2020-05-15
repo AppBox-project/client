@@ -15,7 +15,6 @@ import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
 import Select from "./AppUI/Forms/Select";
-import { filter } from "lodash";
 
 const App: React.FC<{
   match: { params: { appId } };

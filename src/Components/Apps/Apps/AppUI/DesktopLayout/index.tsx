@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Icon,
 } from "@material-ui/core";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
@@ -98,7 +99,7 @@ const ActionMenu: React.FC<{
       </motion.div>
       <List>
         {context.actions.map((action) => {
-          const Icon = action.icon;
+          const ActionIcon: React.FC<{ style }> = action.icon;
           return (
             <motion.div variants={item} key={action.key}>
               <Link
@@ -107,12 +108,24 @@ const ActionMenu: React.FC<{
                 style={{ color: "rgb(66, 82, 110)" }}
               >
                 <ListItem button selected={currentPage === action.key}>
-                  {Icon && (
+                  {ActionIcon && (
                     <ListItemIcon>
-                      <Icon />
+                      <Icon
+                        color={
+                          currentPage === action.key ? "primary" : "inherit"
+                        }
+                      >
+                        <ActionIcon style={{ width: 18, height: 18 }} />
+                      </Icon>
                     </ListItemIcon>
                   )}
-                  <ListItemText>{action.label}</ListItemText>
+                  <ListItemText>
+                    <Typography
+                      color={currentPage === action.key ? "primary" : "inherit"}
+                    >
+                      {action.label}
+                    </Typography>
+                  </ListItemText>
                 </ListItem>
               </Link>
             </motion.div>
