@@ -43,6 +43,15 @@ const AppActionManageObjectTabObject: React.FC<{
                   }}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <UI.Inputs.TextInput
+                  label="Primary field"
+                  value={model.primary}
+                  onChange={(value) => {
+                    setNewModel({ ...newModel, primary: value });
+                  }}
+                />
+              </Grid>
             </Grid>
             {newModel && (
               <Button

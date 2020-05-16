@@ -121,6 +121,15 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     }}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <UI.Inputs.TextInput
+                    label="Default value"
+                    value={field.default}
+                    onChange={(value) => {
+                      setField({ ...field, default: value });
+                    }}
+                  />
+                </Grid>
               </Grid>
             </Paper>
           </UI.Animations.AnimationItem>
