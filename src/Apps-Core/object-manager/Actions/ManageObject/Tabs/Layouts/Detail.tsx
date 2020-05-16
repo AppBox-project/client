@@ -1,9 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Typography, Paper, Divider, Fab } from "@material-ui/core";
+import { Typography, Paper, Divider, Fab, Grid } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
 import { map } from "lodash";
+import {
+  AnimationContainer,
+  AnimationItem,
+} from "../../../../../../Components/Apps/Apps/AppUI/Animations";
+
+const WrapperPaper: React.FC = (Props) => {
+  return <Paper {...Props}>{Props.children}</Paper>;
+};
+
+const WrapperGridContainer: React.FC = (Props) => {
+  return (
+    <Grid container {...Props}>
+      {Props.children}
+    </Grid>
+  );
+};
+
+const WrapperGridItem: React.FC = (Props) => {
+  return (
+    <Grid item {...Props}>
+      {Props.children}
+    </Grid>
+  );
+};
+
+const WrapperAnimationContainer: React.FC = (Props) => {
+  return <AnimationContainer {...Props}>{Props.children}</AnimationContainer>;
+};
+
+const WrapperAnimationItem: React.FC = (Props) => {
+  return <AnimationItem {...Props}>{Props.children}</AnimationItem>;
+};
 
 const AppActionManageObjectTabLayoutsDetail: React.FC<{
   match: { params: { detailId } };
@@ -47,6 +79,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               GridContainer: {
                 label: "Grid container",
                 droppable: true,
+                wrapper: WrapperGridContainer,
                 popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI
                   context.setDialog({
@@ -74,6 +107,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               GridItem: {
                 label: "Grid item",
                 droppable: true,
+                wrapper: WrapperGridItem,
                 popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI
                   context.setDialog({
@@ -132,6 +166,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               AnimationContainer: {
                 label: "Animation container",
                 droppable: true,
+                wrapper: WrapperAnimationContainer,
                 popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI
                   context.setDialog({
@@ -159,6 +194,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               AnimationItem: {
                 label: "Animation Item",
                 droppable: true,
+                wrapper: WrapperAnimationItem,
                 popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI
                   context.setDialog({
@@ -185,6 +221,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               },
               Paper: {
                 label: "Paper",
+                wrapper: WrapperPaper,
                 droppable: true,
                 popup: (component, layoutItem, respond, deleteItem) => {
                   // Show tweak UI

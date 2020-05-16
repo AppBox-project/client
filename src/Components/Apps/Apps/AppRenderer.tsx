@@ -155,7 +155,11 @@ const App: React.FC<{
                         onChange={(value) => {
                           setDialogFormContent({
                             ...dialogFormContent,
-                            [formItem.key]: value,
+                            [formItem.key]: formItem.type
+                              ? formItem.type === "number"
+                                ? parseInt(value)
+                                : value
+                              : value,
                           });
                         }}
                       />

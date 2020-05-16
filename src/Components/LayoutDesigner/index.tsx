@@ -24,6 +24,7 @@ const LayoutDesigner: React.FC<{
       <Divider style={{ marginTop: 10 }} />
       <div style={{ overflow: "hidden", clear: "both", marginTop: 10 }}>
         <DropTarget
+          Wrapper={EmptyWrapper}
           root
           onChange={(response) => {
             onChange([...layout, { type: response.id, xs: 12, id: uniqid() }]);
@@ -49,6 +50,10 @@ const LayoutDesigner: React.FC<{
 
 export default LayoutDesigner;
 
+const EmptyWrapper: React.FC = (Props) => {
+  return <div {...Props}>{Props.children}</div>;
+};
+
 const LayoutItem: React.FC<{
   key;
   layoutItem;
@@ -57,9 +62,14 @@ const LayoutItem: React.FC<{
   layout;
   path;
 }> = ({ key, layoutItem, componentList, onDrop, layout, path }) => {
+  const Wrapper = componentList[layoutItem.type].wrapper
+    ? componentList[layoutItem.type].wrapper
+    : EmptyWrapper;
+
   return (
     <DropTarget
       key={key}
+      Wrapper={Wrapper}
       componentList={componentList}
       layoutItem={layoutItem}
       onDelete={() => {

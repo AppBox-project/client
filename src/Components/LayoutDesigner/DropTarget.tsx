@@ -18,6 +18,7 @@ const DropTarget: React.FC<{
   onChange: (response) => void;
   onChangeProps?: (result) => void;
   onDelete?;
+  Wrapper;
 }> = ({
   layoutItem,
   children,
@@ -26,6 +27,7 @@ const DropTarget: React.FC<{
   componentList,
   onChangeProps,
   onDelete,
+  Wrapper,
 }) => {
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: "box",
@@ -47,25 +49,28 @@ const DropTarget: React.FC<{
 
   if (root)
     return (
-      <div ref={drop} className={className}>
-        {children ? (
-          <>{children}</>
-        ) : (
-          <Typography variant="caption">Drop items here</Typography>
-        )}
-      </div>
+      <Wrapper {...layoutItem}>
+        <div ref={drop} className={className}>
+          {children ? (
+            <>{children}</>
+          ) : (
+            <Typography variant="caption">Drop items here</Typography>
+          )}
+        </div>
+      </Wrapper>
     );
   return (
-    <div
+    <Wrapper
       className={
         componentList[layoutItem.type].droppable
           ? styles.componentWrapper
           : styles.componentWrapperSmall
       }
+      {...layoutItem}
     >
       <Typography
         variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
-        style={{ textAlign: "center", cursor: "default" }}
+        style={{ textAlign: "center", cursor: "default", width: "100%" }}
       >
         {componentList[layoutItem.type].popup && (
           <IconButton
@@ -88,15 +93,18 @@ const DropTarget: React.FC<{
           ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
       </Typography>
       {componentList[layoutItem.type].droppable && (
-        <div ref={drop} className={className}>
-          {children ? (
-            <>{children}</>
-          ) : (
-            <Typography variant="caption">Drop items here</Typography>
-          )}
-        </div>
+        <>
+          <Typography
+            variant="caption"
+            ref={drop}
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            Drop items here
+          </Typography>
+          <Wrapper className={className}>{children && children}</Wrapper>
+        </>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
