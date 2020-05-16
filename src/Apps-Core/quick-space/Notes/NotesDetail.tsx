@@ -50,7 +50,7 @@ const AppQSNotesDetail: React.FC<{
       />
       <context.UI.Field
         modelId="qs-note"
-        fieldId="body"
+        fieldId="note"
         objectId={detailId}
         mode="free"
         directSave
