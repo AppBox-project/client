@@ -82,9 +82,9 @@ const Overview: React.FC<{
           >
             <Grid item xs={12} md={3} style={{ textAlign: "right", margin: 5 }}>
               {layout.buttons.map((buttonInfo) => {
-                if (objectType.buttons) {
-                  if (objectType.buttons[buttonInfo]) {
-                    const button = objectType.buttons[buttonInfo];
+                if (objectType.actions) {
+                  if (objectType.actions[buttonInfo]) {
+                    const button = objectType.actions[buttonInfo];
                     return (
                       <Button
                         key={buttonInfo}

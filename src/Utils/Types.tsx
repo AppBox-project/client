@@ -47,7 +47,7 @@ export interface ModelType {
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
   layouts: any;
-  buttons: any;
+  actions: any;
   api?: {
     read?: ModelApiType;
     create?: ModelApiType;

@@ -18,7 +18,7 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import FormulaEditor from "../../../../../../Components/FormulaEditor";
-import { FaTh, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
   match: { params: { detailId } };
@@ -147,10 +147,16 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     options={[
                       { value: "input", label: "Input" },
                       { value: "boolean", label: "Boolean" },
+                      { value: "color", label: "Color" },
+                      { value: "date", label: "Date" },
                       { value: "options", label: "Options" },
                       { value: "richtext", label: "Rich text" },
                       { value: "formula", label: "Formula" },
                       { value: "relationship", label: "Relationship" },
+                      {
+                        value: "relationship_m",
+                        label: "Relationship (Many-To-Many)",
+                      },
                       { value: "file", label: "File" },
                       { value: "picture", label: "Picture" },
                       { value: "data", label: "Free data" },

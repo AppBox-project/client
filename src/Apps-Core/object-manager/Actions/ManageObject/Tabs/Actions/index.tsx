@@ -14,7 +14,7 @@ const AppActionManageObjectTabActions: React.FC<{
 }> = ({ model, UI, context }) => {
   // States & Hooks
   const list = [];
-  map(model.buttons, (overview, key) => {
+  map(model.actions, (overview, key) => {
     list.push({ label: key, id: key, url: key });
   });
 
@@ -35,13 +35,15 @@ const AppActionManageObjectTabActions: React.FC<{
             {
               label: "Add",
               onClick: (response) => {
+                console.log(response);
+
                 context.updateModel(
                   model.key,
                   {
                     ...model,
                     actions: {
-                      ...model.buttons,
-                      [response.key]: {},
+                      ...model.actions,
+                      [response.key]: { layout: "create" },
                     },
                   },
                   model._id
