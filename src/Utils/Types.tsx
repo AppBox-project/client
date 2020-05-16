@@ -231,7 +231,7 @@ export interface UIType {
     }>;
     SortableList: React.FC<{
       listItems: [];
-      listTextPath: string;
+      listTextPath?: string;
       listSubTextPath?: string;
       baseUrl: string;
       linkToPath?: string;
@@ -240,6 +240,7 @@ export interface UIType {
       listAction?: (id: string, object) => JSX.Element;
       onListItemClick?: (object) => void;
       onAdd?: () => void;
+      customItem?: (listItem) => JSX.Element;
     }>;
   };
   Field: React.FC<{

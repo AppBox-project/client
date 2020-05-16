@@ -18,6 +18,7 @@ const SortableList: React.FC<{
   button: true;
   onAdd: () => void;
   onListItemClick?: (object) => void;
+  customItem?: (listItem) => void;
 }> = ({
   listItems,
   listTextPath,
@@ -29,6 +30,7 @@ const SortableList: React.FC<{
   listSubTextPath,
   onAdd,
   onListItemClick,
+  customItem,
 }) => {
   // Vars
   const history = useHistory();
@@ -83,35 +85,39 @@ const SortableList: React.FC<{
                     }
                     index={index}
                   >
-                    {(draggableProvided, draggableSnapshot) => (
-                      <ListItem
-                        button={button}
-                        ref={draggableProvided.innerRef}
-                        {...draggableProvided.draggableProps}
-                        {...draggableProvided.dragHandleProps}
-                      >
-                        {(ListIcon || listAction) && (
-                          <ListItemIcon>
-                            {listAction ? (
-                              listAction(get(listItem, linkToPath), listItem)
-                            ) : (
-                              <ListIcon />
-                            )}
-                          </ListItemIcon>
-                        )}
-                        <ListItemText
-                          primary={get(listItem, listTextPath)}
-                          secondary={get(listItem, listSubTextPath)}
-                          onClick={() => {
-                            if (linkToPath)
-                              history.push(
-                                `${baseUrl}/${get(listItem, linkToPath)}`
-                              );
-                            if (onListItemClick) onListItemClick(listItem);
-                          }}
-                        />
-                      </ListItem>
-                    )}
+                    {(draggableProvided, draggableSnapshot) => {
+                      return customItem ? (
+                        customItem(listItem)
+                      ) : (
+                        <ListItem
+                          button={button}
+                          ref={draggableProvided.innerRef}
+                          {...draggableProvided.draggableProps}
+                          {...draggableProvided.dragHandleProps}
+                        >
+                          {(ListIcon || listAction) && (
+                            <ListItemIcon>
+                              {listAction ? (
+                                listAction(get(listItem, linkToPath), listItem)
+                              ) : (
+                                <ListIcon />
+                              )}
+                            </ListItemIcon>
+                          )}
+                          <ListItemText
+                            primary={get(listItem, listTextPath)}
+                            secondary={get(listItem, listSubTextPath)}
+                            onClick={() => {
+                              if (linkToPath)
+                                history.push(
+                                  `${baseUrl}/${get(listItem, linkToPath)}`
+                                );
+                              if (onListItemClick) onListItemClick(listItem);
+                            }}
+                          />
+                        </ListItem>
+                      );
+                    }}
                   </Draggable>
                 );
               })}

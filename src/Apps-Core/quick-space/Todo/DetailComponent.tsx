@@ -8,6 +8,12 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  Chip,
+  Avatar,
 } from "@material-ui/core";
 import { FaTrello, FaBars, FaExpand, FaAngleDown } from "react-icons/fa";
 
@@ -149,36 +155,49 @@ const AppQSActionTodoDetail: React.FC<{
                 <context.UI.Layouts.SortableList
                   listItems={todos}
                   linkToPath="_id"
-                  listTextPath="data.action"
-                  listSubTextPath="data.description"
                   baseUrl={`/quick-space/todo/${detailId}`}
-                  onListItemClick={(object) => {
-                    context.setDialog({
-                      display: true,
-                      size: "md",
-                      title: object.data.action,
-                      content: (
-                        <context.UI.Layouts.Object.ObjectLayout
-                          model={model}
-                          layoutId="popup"
-                          popup
-                          appId="quick-space"
-                          objectId={object._id}
-                        />
-                      ),
-                    });
-                  }}
-                  listAction={(id, object) => {
+                  customItem={(todo) => {
                     return (
-                      <context.UI.Field
-                        field={model.fields["done"]}
-                        fieldId="done"
-                        objectId={id}
-                        object={object}
-                        mode="free"
-                        directSave
-                        directSaveDelay={1}
-                      />
+                      <ListItem key={todo._id} style={{ cursor: "pointer" }}>
+                        <ListItemIcon>
+                          <context.UI.Field
+                            field={model.fields["done"]}
+                            fieldId="done"
+                            objectId={todo._id}
+                            object={todo}
+                            mode="free"
+                            directSave
+                            directSaveDelay={1}
+                          />
+                        </ListItemIcon>
+                        <ListItemText
+                          onClick={(object) => {
+                            context.setDialog({
+                              display: true,
+                              size: "md",
+                              title: todo.data.action,
+                              content: (
+                                <context.UI.Layouts.Object.ObjectLayout
+                                  model={model}
+                                  layoutId="popup"
+                                  popup
+                                  appId="quick-space"
+                                  objectId={todo._id}
+                                />
+                              ),
+                            });
+                          }}
+                          primary={todo.data.action}
+                          secondary={todo.data.description}
+                        />
+                        <ListItemSecondaryAction>
+                          <Chip
+                            variant="outlined"
+                            label={todo.data.status}
+                            size="small"
+                          />
+                        </ListItemSecondaryAction>
+                      </ListItem>
                     );
                   }}
                 />
