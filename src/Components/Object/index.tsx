@@ -13,6 +13,7 @@ import ObjectLayoutItemPaper from "./LayoutItems/Paper";
 import ObjectLayoutItemField from "./LayoutItems/Field";
 import ObjectLayoutItemAnimationItem from "./LayoutItems/AnimationItem";
 import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer";
+import ObjectLayoutItemRelatedList from "./LayoutItems/RelatedList";
 
 const ViewObject: React.FC<{
   objectTypeId: string;
@@ -426,6 +427,15 @@ const LayoutItem: React.FC<{
           }}
         />
       );
+    case "RelatedList":
+      return (
+        <ObjectLayoutItemRelatedList
+          layoutItem={layoutItem}
+          objectId={object._id}
+        />
+      );
+
+      break;
     default:
       return <>Unknown layoutItem type:{layoutItem.type}</>;
   }
