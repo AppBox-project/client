@@ -108,7 +108,7 @@ const ViewObject: React.FC<{
         Server.emit("unlistenForObjects", { requestId: dataRequestId });
       }
     };
-  }, [objectTypeId]);
+  }, [objectTypeId, objectId]);
   useEffect(() => {
     if (mode === "view") {
       if (!popup) {
