@@ -45,22 +45,25 @@ const SortableList: React.FC<{
   return (
     <DragDropContext
       onDragEnd={(swap) => {
-        const result = listItems;
-        const [removed] = result.splice(swap.source.index, 1);
-        result.splice(swap.destination.index, 0, removed);
-        setItems(result);
-        const changes = {};
-        for (let x = 0; x < result.length; x++) {
-          //@ts-ignore
-          changes[result[x]._id] = { order: x };
-        }
+        if (swap.destination) {
+          const result = listItems;
+          const [removed] = result.splice(swap.source.index, 1);
 
-        // Batch update the order for all the items
-        const requestId = uniqid();
-        Server.emit("updateMany", { changes, requestId });
-        Server.on(`receive-${requestId}`, (response) => {
-          console.log(response);
-        });
+          result.splice(swap.destination.index, 0, removed);
+          setItems(result);
+          const changes = {};
+          for (let x = 0; x < result.length; x++) {
+            //@ts-ignore
+            changes[result[x]._id] = { order: x };
+          }
+
+          // Batch update the order for all the items
+          const requestId = uniqid();
+          Server.emit("updateMany", { changes, requestId });
+          Server.on(`receive-${requestId}`, (response) => {
+            console.log(response);
+          });
+        }
       }}
     >
       <List>

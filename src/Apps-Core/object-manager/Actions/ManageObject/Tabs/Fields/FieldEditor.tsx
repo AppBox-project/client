@@ -49,15 +49,13 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
 
   return (
     <UI.Animations.AnimationContainer>
-      <Grid container style={{ width: "100%" }}>
+      <Grid container style={{ width: "100%", padding: 15 }}>
         <Grid item xs={12}>
           <UI.Animations.AnimationItem>
             <Grid container style={{ marginBottom: 15 }}>
-              <Grid item xs={10}>
-                <Typography variant="h5">{field.name}</Typography>
-              </Grid>
-              <Grid item xs={2} style={{ textAlign: "right" }}>
+              <Grid item xs={12} style={{ textAlign: "right" }}>
                 <Button
+                  variant="outlined"
                   onClick={() => {
                     context.setDialog({
                       display: true,
@@ -386,18 +384,110 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <ValidationsList
-              validations={field.validations}
-              context={context}
-            />
+            <Paper className="paper" style={{ margin: "0 7px 0 0" }}>
+              <Tooltip placement="left" title="Add validation">
+                <IconButton
+                  style={{ float: "right" }}
+                  onClick={() => {
+                    context.setDialog({
+                      display: true,
+                      title: "Add validation",
+                      form: [{ label: "Validation", key: "validation" }],
+                      buttons: [
+                        {
+                          label: "Add",
+                          onClick: (response) => {
+                            const validations = field.validations
+                              ? field.validations
+                              : [];
+                            validations.push(response.validation);
+                            setField({
+                              ...field,
+                              validations,
+                            });
+                          },
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  <FaPlus style={{ height: 15, width: 15 }} />
+                </IconButton>
+              </Tooltip>
+              <Typography variant="h5">Validations</Typography>
+              <List>
+                {field.validations ? (
+                  field.validations.map((validation) => {
+                    return (
+                      <ListItem
+                        button
+                        onClick={() => {
+                          context.setDialog({
+                            display: true,
+                            title: "Transformation",
+                          });
+                        }}
+                      >
+                        <ListItemText>{validation}</ListItemText>
+                      </ListItem>
+                    );
+                  })
+                ) : (
+                  <ListItem>No validations</ListItem>
+                )}
+              </List>
+            </Paper>
           </UI.Animations.AnimationItem>
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <TransformationsList
-              transformations={field.transformations}
-              context={context}
-            />
+            <Paper className="paper" style={{ margin: "0 0 0 7px" }}>
+              <Tooltip placement="left" title="Add transformation">
+                <IconButton
+                  style={{ float: "right" }}
+                  onClick={() => {
+                    context.setDialog({
+                      display: true,
+                      title: "Add transformation",
+                      form: [
+                        { label: "Transformation", key: "transformation" },
+                      ],
+                      buttons: [
+                        {
+                          label: "Add",
+                          onClick: (response) => {
+                            const transformations = field.transformations
+                              ? field.transformations
+                              : [];
+                            transformations.push(response.transformation);
+                            setField({
+                              ...field,
+                              transformations,
+                            });
+                          },
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  <FaPlus style={{ height: 15, width: 15 }} />
+                </IconButton>
+              </Tooltip>
+              <Typography variant="h5">Transformations</Typography>
+              <List>
+                {field.transformations ? (
+                  field.transformations.map((transformation) => {
+                    return (
+                      <ListItem>
+                        <ListItemText>{transformation}</ListItemText>
+                      </ListItem>
+                    );
+                  })
+                ) : (
+                  <ListItem>No transformations</ListItem>
+                )}
+              </List>
+            </Paper>
           </UI.Animations.AnimationItem>
         </Grid>
         {field !== model.fields[detailId] && (
@@ -438,62 +528,6 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
         )}
       </Grid>
     </UI.Animations.AnimationContainer>
-  );
-};
-
-const ValidationsList: React.FC<{
-  validations: [string];
-  context: AppContextType;
-}> = ({ validations, context }) => {
-  return (
-    <Paper className="paper" style={{ margin: "0 7px 0 0" }}>
-      <Typography variant="h5">Validations</Typography>
-      <List>
-        {validations ? (
-          validations.map((validation) => {
-            return (
-              <ListItem
-                button
-                onClick={() => {
-                  context.setDialog({
-                    display: true,
-                    title: "Transformation",
-                  });
-                }}
-              >
-                <ListItemText>{validation}</ListItemText>
-              </ListItem>
-            );
-          })
-        ) : (
-          <ListItem>No validations</ListItem>
-        )}
-      </List>
-    </Paper>
-  );
-};
-
-const TransformationsList: React.FC<{
-  transformations: [string];
-  context: AppContextType;
-}> = ({ transformations }) => {
-  return (
-    <Paper className="paper" style={{ margin: "0 0 0 7px" }}>
-      <Typography variant="h5">Transformations</Typography>
-      <List>
-        {transformations ? (
-          transformations.map((transformation) => {
-            return (
-              <ListItem>
-                <ListItemText>{transformation}</ListItemText>
-              </ListItem>
-            );
-          })
-        ) : (
-          <ListItem>No transformations</ListItem>
-        )}
-      </List>
-    </Paper>
   );
 };
 
