@@ -8,6 +8,7 @@ import {
   ListSubheader,
   ListItemSecondaryAction,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -171,7 +172,9 @@ const ListNav: React.FC<{
                 {listItem.subItems ? (
                   <>
                     <Link to={`${baseUrl}/${listItem.id}`}>
-                      <ListSubheader>{listItem.label}</ListSubheader>
+                      <ListSubheader color="primary" style={{ marginTop: 10 }}>
+                        <Typography variant="h6">{listItem.label}</Typography>
+                      </ListSubheader>
                     </Link>
                     {listItem.subItems.map((subItem) => {
                       return (

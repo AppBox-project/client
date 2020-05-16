@@ -13,6 +13,7 @@ const InputCheckbox: React.FC<{
   return (
     <Checkbox
       style={{ padding: 0 }}
+      color="primary"
       value={newValue}
       onChange={(event) => {
         setNewValue(event.target.checked);

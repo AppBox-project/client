@@ -14,6 +14,8 @@ import ObjectFieldDisplayPicture from "../../FieldDisplay/Picture";
 import InputPicture from "../../../Inputs/Picture";
 import ObjectFieldDisplayHtml from "../../FieldDisplay/HTML";
 import InputRichText from "../../../Inputs/RichText";
+import InputColor from "../../../Inputs/Color";
+import ObjectFieldDisplayColor from "../../FieldDisplay/Color";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -84,6 +86,12 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "richtext" && (
               <ObjectFieldDisplayHtml
+                modelField={modelField}
+                objectField={objectField}
+              />
+            )}
+            {modelField.type === "color" && (
+              <ObjectFieldDisplayColor
                 modelField={modelField}
                 objectField={objectField}
               />
@@ -168,6 +176,15 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "richtext" && (
               <InputRichText
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+              />
+            )}
+            {modelField.type === "color" && (
+              <InputColor
                 onChange={(value) => {
                   onChange(value);
                 }}

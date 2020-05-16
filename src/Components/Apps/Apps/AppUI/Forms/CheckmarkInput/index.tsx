@@ -30,8 +30,9 @@ const AppUICheckmark: React.FC<{
       <Grid item xs={1} className="input-container">
         <div className="input-container-sub" style={{ textAlign: "right" }}>
           <Checkbox
+            color="primary"
             checked={newValue}
-            onChange={event => {
+            onChange={(event) => {
               setNewValue(event.target.checked);
               onChange(event.target.checked);
             }}
