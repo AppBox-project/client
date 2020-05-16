@@ -16,6 +16,7 @@ import ObjectFieldDisplayHtml from "../../FieldDisplay/HTML";
 import InputRichText from "../../../Inputs/RichText";
 import InputColor from "../../../Inputs/Color";
 import ObjectFieldDisplayColor from "../../FieldDisplay/Color";
+import FieldDisplay from "../../FieldDisplay";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -58,44 +59,7 @@ const ObjectLayoutItemField: React.FC<{
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            {modelField.type === "boolean" && (
-              <ObjectFieldDisplayBoolean
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-            {(modelField.type === "input" ||
-              modelField.type === "formula" ||
-              modelField.type === "options") && (
-              <ObjectFieldDisplayInput
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-            {modelField.type === "relationship" && (
-              <ObjectFieldDisplayRelationship
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-            {modelField.type === "picture" && (
-              <ObjectFieldDisplayPicture
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-            {modelField.type === "richtext" && (
-              <ObjectFieldDisplayHtml
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-            {modelField.type === "color" && (
-              <ObjectFieldDisplayColor
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
+            <FieldDisplay objectField={objectField} modelField={modelField} />
           </Grid>
         </Grid>
       );
