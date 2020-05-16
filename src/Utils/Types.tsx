@@ -209,6 +209,7 @@ export interface UIType {
         model: ModelType;
         boardField: String;
         onItemClick?: (item) => void;
+        customItem?: (listItem) => JSX.Element;
       }>;
     };
     TreeView: React.FC<{

@@ -98,21 +98,47 @@ const AppQSActionTodoDetail: React.FC<{
           objects={todos}
           model={model}
           boardField="status"
-          onItemClick={(object) => {
-            context.setDialog({
-              display: true,
-              size: "md",
-              title: object.data.action,
-              content: (
-                <context.UI.Layouts.Object.ObjectLayout
-                  model={model}
-                  layoutId="popup"
-                  popup
-                  appId="quick-space"
-                  objectId={object._id}
-                />
-              ),
-            });
+          customItem={(todo) => {
+            return (
+              <Grid container>
+                <Grid item xs={3}>
+                  <context.UI.Field
+                    field={model.fields["done"]}
+                    fieldId="done"
+                    objectId={todo._id}
+                    object={todo}
+                    mode="free"
+                    directSave
+                    directSaveDelay={1}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={9}
+                  onClick={() => {
+                    context.setDialog({
+                      display: true,
+                      size: "md",
+                      title: todo.data.action,
+                      content: (
+                        <context.UI.Layouts.Object.ObjectLayout
+                          model={model}
+                          layoutId="popup"
+                          popup
+                          appId="quick-space"
+                          objectId={todo._id}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  <Typography variant="body1">{todo.data.action}</Typography>
+                  <Typography variant="caption">
+                    {todo.data.description}
+                  </Typography>
+                </Grid>
+              </Grid>
+            );
           }}
         />
       )}
@@ -190,13 +216,15 @@ const AppQSActionTodoDetail: React.FC<{
                           primary={todo.data.action}
                           secondary={todo.data.description}
                         />
-                        <ListItemSecondaryAction>
-                          <Chip
-                            variant="outlined"
-                            label={todo.data.status}
-                            size="small"
-                          />
-                        </ListItemSecondaryAction>
+                        {todo.data.status && (
+                          <ListItemSecondaryAction>
+                            <Chip
+                              variant="outlined"
+                              label={todo.data.status}
+                              size="small"
+                            />
+                          </ListItemSecondaryAction>
+                        )}
                       </ListItem>
                     );
                   }}

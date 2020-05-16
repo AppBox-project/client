@@ -16,7 +16,8 @@ const BoardLayout: React.FC<{
   model: ModelType;
   boardField: string;
   onItemClick?: (item) => void;
-}> = ({ context, objects, model, boardField, onItemClick }) => {
+  customItem?: (listItem) => JSX.Element;
+}> = ({ context, objects, model, boardField, onItemClick, customItem }) => {
   // Vars
   const [newObjects, setNewObjects] = useState(objects);
   const noGroup = filter(newObjects, (o) => {
@@ -81,9 +82,13 @@ const BoardLayout: React.FC<{
                                   {...draggableProvided.dragHandleProps}
                                 >
                                   <div className={styles.draggable}>
-                                    <Typography variant="body1">
-                                      {todo.data[model.primary]}
-                                    </Typography>
+                                    {customItem ? (
+                                      customItem(todo)
+                                    ) : (
+                                      <Typography variant="body1">
+                                        {todo.data[model.primary]}
+                                      </Typography>
+                                    )}
                                   </div>
                                 </div>
                               )}
@@ -133,9 +138,13 @@ const BoardLayout: React.FC<{
                                             if (onItemClick) onItemClick(todo);
                                           }}
                                         >
-                                          <Typography variant="body1">
-                                            {todo.data[model.primary]}
-                                          </Typography>
+                                          {customItem ? (
+                                            customItem(todo)
+                                          ) : (
+                                            <Typography variant="body1">
+                                              {todo.data[model.primary]}
+                                            </Typography>
+                                          )}
                                         </div>
                                       </div>
                                     )}

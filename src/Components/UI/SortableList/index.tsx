@@ -87,7 +87,13 @@ const SortableList: React.FC<{
                   >
                     {(draggableProvided, draggableSnapshot) => {
                       return customItem ? (
-                        customItem(listItem)
+                        <div
+                          ref={draggableProvided.innerRef}
+                          {...draggableProvided.draggableProps}
+                          {...draggableProvided.dragHandleProps}
+                        >
+                          {customItem(listItem)}
+                        </div>
                       ) : (
                         <ListItem
                           button={button}
