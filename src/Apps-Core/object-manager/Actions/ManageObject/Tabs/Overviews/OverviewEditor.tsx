@@ -21,6 +21,7 @@ import {
   ListItemAvatar,
   TableRow,
   Fab,
+  ListItemIcon,
 } from "@material-ui/core";
 import {
   FaAngleUp,
@@ -28,20 +29,20 @@ import {
   FaAngleLeft,
   FaAngleRight,
   FaSave,
+  FaCheckSquare,
+  FaSquare,
 } from "react-icons/fa";
 import { map, filter, indexOf } from "lodash";
 
 const AppActionManageObjectOverviewEditor: React.FC<{
   match: { params: { detailId } };
   context: AppContextType;
-  fields: [ModelFieldType];
   model: ModelType;
 }> = ({
   match: {
     params: { detailId },
   },
   context,
-  fields,
   model,
 }) => {
   // Global
@@ -58,7 +59,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   if (!overview) return <UI.Loading />;
 
   return (
-    <>
+    <div style={{ margin: 15 }}>
       <UI.Animations.AnimationContainer>
         <UI.Animations.AnimationItem>
           <div style={{ margin: "0 15px 15px 0" }}>
@@ -181,6 +182,75 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </Paper>
               </UI.Animations.AnimationItem>
             </Grid>
+            <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
+              <UI.Animations.AnimationItem>
+                <Paper className="paper">
+                  <Typography variant="h6">Buttons</Typography>
+                  <List>
+                    {map(model.actions, (action, key) => {
+                      return (
+                        <ListItem
+                          style={{ cursor: "pointer" }}
+                          selected={overview.buttons.includes(key)}
+                          onClick={() => {
+                            if (overview.buttons.includes(key)) {
+                              setOverview({
+                                ...overview,
+                                buttons: filter(overview.buttons, (o) => {
+                                  return o !== key;
+                                }),
+                              });
+                            } else {
+                              const buttons = overview.buttons
+                                ? overview.buttons
+                                : [];
+                              buttons.push(key);
+                              setOverview({ ...overview, buttons });
+                            }
+                          }}
+                        >
+                          <ListItemIcon>
+                            <IconButton
+                              color={
+                                overview.buttons.includes(key)
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              {overview.buttons.includes(key) ? (
+                                <FaCheckSquare
+                                  style={{ width: 18, height: 18 }}
+                                />
+                              ) : (
+                                <FaSquare style={{ width: 18, height: 18 }} />
+                              )}
+                            </IconButton>
+                          </ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              color={
+                                overview.buttons.includes(key)
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              {key}
+                            </Typography>
+                          </ListItemText>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </Paper>
+              </UI.Animations.AnimationItem>
+            </Grid>
+            <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
+              <UI.Animations.AnimationItem>
+                <Paper className="paper">
+                  <Typography variant="h6">Actions</Typography>
+                </Paper>
+              </UI.Animations.AnimationItem>
+            </Grid>
           </Grid>
         </div>
       </UI.Animations.AnimationContainer>
@@ -205,7 +275,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
           </UI.Animations.AnimationContainer>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

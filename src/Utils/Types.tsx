@@ -29,9 +29,9 @@ export interface ModelFieldType {
 }
 
 export interface ModelOverviewType {
-  fields: [string];
-  buttons: [string];
-  actions: [string];
+  fields: string[];
+  buttons: string[];
+  actions: string[];
 }
 interface ModelApiType {
   active: boolean;
