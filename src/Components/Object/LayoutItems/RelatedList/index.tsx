@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Typography,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+} from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
+import { useHistory } from "react-router-dom";
 
 const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   layoutItem,
@@ -11,6 +20,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   // Vars
   const [relatedItems, setRelatedItems] = useState();
   const [relatedModel, setRelatedModel] = useState();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -43,21 +53,49 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
       Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
     };
   }, []);
-  // UI
 
+  // UI
   return (
     <>
       <Typography variant="h6">{layoutItem.title}</Typography>
       {relatedItems && relatedModel ? (
-        <List>
-          {relatedItems.map((item) => {
-            return (
-              <ListItem button>
-                <ListItemText>{item.data[relatedModel.primary]}</ListItemText>
-              </ListItem>
-            );
-          })}
-        </List>
+        relatedItems.length > 0 ? (
+          <TableContainer component={Paper}>
+            <TableHead>
+              <TableRow>
+                {layoutItem.displayfields.split(",").map((field) => {
+                  return <TableCell>{field}</TableCell>;
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {relatedItems.map((item) => {
+                return (
+                  <TableRow
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      history.push(
+                        `/data-explorer/${layoutItem.object}/${item._id}`
+                      );
+                    }}
+                  >
+                    {layoutItem.displayfields.split(",").map((field) => {
+                      return (
+                        <TableCell>
+                          {item.data[field] ? item.data[field] : " "}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </TableContainer>
+        ) : (
+          <Typography variant="body2" style={{ textAlign: "center" }}>
+            No related {relatedModel.name_plural}
+          </Typography>
+        )
       ) : (
         <>
           <Skeleton variant="text" height={25} />

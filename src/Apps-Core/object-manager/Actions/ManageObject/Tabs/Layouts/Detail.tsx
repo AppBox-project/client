@@ -348,6 +348,14 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                       value: layoutItem.field ? layoutItem.field : "",
                       type: "text",
                     },
+                    {
+                      key: "displayfields",
+                      label: "Display fields (comma seperated)",
+                      value: layoutItem.displayfields
+                        ? layoutItem.displayfields
+                        : "",
+                      type: "text",
+                    },
                   ],
                   buttons: [
                     {
