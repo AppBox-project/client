@@ -20,7 +20,8 @@ const ViewObject: React.FC<{
   appId: string;
   objectId?: string;
   onSuccess?: () => void;
-}> = ({ objectTypeId, layoutId, appId, objectId, onSuccess }) => {
+  popup?: true;
+}> = ({ objectTypeId, layoutId, appId, objectId, onSuccess, popup }) => {
   const [objectType, setObjectType] = useState<ModelType>();
   const [object, setObject] = useState();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
@@ -109,61 +110,67 @@ const ViewObject: React.FC<{
   }, [objectTypeId]);
   useEffect(() => {
     if (mode === "view") {
-      setNavBar({
-        ...navBar,
-        backButton: {
-          ...navBar.backButton,
-          icon: <FaAngleLeft />,
-          url: `/${appId}/${objectTypeId}`,
-          function: undefined,
-        },
-        title: pageTitle ? pageTitle : undefined,
-        buttons: {
-          ...navBar.buttons,
-          objectToggle: {
-            label: "Edit",
-            icon: <FaEdit />,
-            function: () => {
-              setMode("edit");
+      if (!popup) {
+        setNavBar({
+          ...navBar,
+          backButton: {
+            ...navBar.backButton,
+            icon: <FaAngleLeft />,
+            url: `/${appId}/${objectTypeId}`,
+            function: undefined,
+          },
+          title: pageTitle ? pageTitle : undefined,
+          buttons: {
+            ...navBar.buttons,
+            objectToggle: {
+              label: "Edit",
+              icon: <FaEdit />,
+              function: () => {
+                setMode("edit");
+              },
             },
           },
-        },
-      });
+        });
+      }
     } else {
-      setNavBar({
-        ...navBar,
-        backButton: {
-          ...navBar.backButton,
-          icon: <IoMdClose />,
-          url: undefined,
-          function: () => {
-            setMode("view");
-          },
-        },
-        title: pageTitle ? pageTitle : undefined,
-        buttons: {
-          ...navBar.buttons,
-          objectToggle: {
-            label: "Save",
-            variant: "contained",
-            icon: <FaSave />,
+      if (!popup) {
+        setNavBar({
+          ...navBar,
+          backButton: {
+            ...navBar.backButton,
+            icon: <IoMdClose />,
+            url: undefined,
             function: () => {
-              save();
+              setMode("view");
             },
           },
-        },
-      });
+          title: pageTitle ? pageTitle : undefined,
+          buttons: {
+            ...navBar.buttons,
+            objectToggle: {
+              label: "Save",
+              variant: "contained",
+              icon: <FaSave />,
+              function: () => {
+                save();
+              },
+            },
+          },
+        });
+      }
     }
 
     return () => {
-      setNavBar({
-        ...navBar,
-        backButton: {
-          ...defaultButton,
-        },
-        title: undefined,
-        buttons: { ...navBar.buttons, objectToggle: undefined },
-      });
+      if (!popup) {
+        setNavBar({
+          ...navBar,
+          backButton: {
+            ...defaultButton,
+          },
+          title: undefined,
+          buttons: { ...navBar.buttons, objectToggle: undefined },
+        });
+      }
     };
   }, [objectTypeId, appId, mode, pageTitle, toChange]);
 
@@ -250,7 +257,7 @@ const ViewObject: React.FC<{
           </ul>
         </Alert>
       )}
-      {!objectId && (
+      {(!objectId || popup) && (
         <div style={{ float: "right" }}>
           <Button
             color="primary"

@@ -101,6 +101,7 @@ const AppQSActionTodoDetail: React.FC<{
                 <context.UI.Layouts.Object.ObjectLayout
                   model={model}
                   layoutId="popup"
+                  popup
                   appId="quick-space"
                   objectId={object._id}
                 />
@@ -160,6 +161,7 @@ const AppQSActionTodoDetail: React.FC<{
                         <context.UI.Layouts.Object.ObjectLayout
                           model={model}
                           layoutId="popup"
+                          popup
                           appId="quick-space"
                           objectId={object._id}
                         />
@@ -209,6 +211,7 @@ const AppQSActionTodoDetail: React.FC<{
                               <context.UI.Layouts.Object.ObjectLayout
                                 model={model}
                                 layoutId="default"
+                                popup
                                 appId="quick-space"
                                 objectId={object._id}
                               />

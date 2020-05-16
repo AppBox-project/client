@@ -46,7 +46,6 @@ const BoardLayout: React.FC<{
   };
 
   // UI
-
   return (
     <div
       style={{
@@ -101,53 +100,55 @@ const BoardLayout: React.FC<{
             {map(model.fields[boardField].typeArgs.options, (option, index) => {
               return (
                 <Droppable droppableId={option.key} key={option.key}>
-                  {(droppableProvided, droppableSnapshot) => (
-                    <div
-                      ref={droppableProvided.innerRef}
-                      style={{ flex: 1, minWidth: 250 }}
-                    >
-                      <context.UI.Animations.AnimationItem>
-                        <div className={styles.column}>
-                          <Typography variant="h6">{option.label}</Typography>
-                          <Divider style={{ margin: "8px 0 8px 0" }} />
-                          {map(
-                            filter(newObjects, (o) => {
-                              return o.data[boardField] === option.key;
-                            }),
-                            (todo, index) => {
-                              return (
-                                <Draggable
-                                  key={todo._id}
-                                  draggableId={todo._id}
-                                  index={index}
-                                >
-                                  {(draggableProvided, draggableSnapshot) => (
-                                    <div
-                                      ref={draggableProvided.innerRef}
-                                      {...draggableProvided.draggableProps}
-                                      {...draggableProvided.dragHandleProps}
-                                    >
+                  {(droppableProvided, droppableSnapshot) => {
+                    return (
+                      <div
+                        ref={droppableProvided.innerRef}
+                        style={{ flex: 1, minWidth: 250 }}
+                      >
+                        <context.UI.Animations.AnimationItem>
+                          <div className={styles.column}>
+                            <Typography variant="h6">{option.label}</Typography>
+                            <Divider style={{ margin: "8px 0 8px 0" }} />
+                            {map(
+                              filter(newObjects, (o) => {
+                                return o.data[boardField] === option.key;
+                              }),
+                              (todo, index) => {
+                                return (
+                                  <Draggable
+                                    key={todo._id}
+                                    draggableId={todo._id}
+                                    index={index}
+                                  >
+                                    {(draggableProvided, draggableSnapshot) => (
                                       <div
-                                        className={styles.draggable}
-                                        onClick={() => {
-                                          if (onItemClick) onItemClick(todo);
-                                        }}
+                                        ref={draggableProvided.innerRef}
+                                        {...draggableProvided.draggableProps}
+                                        {...draggableProvided.dragHandleProps}
                                       >
-                                        <Typography variant="body1">
-                                          {todo.data[model.primary]}
-                                        </Typography>
+                                        <div
+                                          className={styles.draggable}
+                                          onClick={() => {
+                                            if (onItemClick) onItemClick(todo);
+                                          }}
+                                        >
+                                          <Typography variant="body1">
+                                            {todo.data[model.primary]}
+                                          </Typography>
+                                        </div>
                                       </div>
-                                    </div>
-                                  )}
-                                </Draggable>
-                              );
-                            }
-                          )}
-                          {droppableProvided.placeholder}
-                        </div>
-                      </context.UI.Animations.AnimationItem>
-                    </div>
-                  )}
+                                    )}
+                                  </Draggable>
+                                );
+                              }
+                            )}
+                            {droppableProvided.placeholder}
+                          </div>
+                        </context.UI.Animations.AnimationItem>
+                      </div>
+                    );
+                  }}
                 </Droppable>
               );
             })}

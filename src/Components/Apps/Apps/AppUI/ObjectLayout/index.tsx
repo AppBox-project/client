@@ -11,7 +11,8 @@ const UIObjectLayout: React.FC<{
   layoutId: string;
   appId: string;
   objectId?: string;
-}> = ({ model, modelId, layoutId, appId, objectId }) => {
+  popup?: true;
+}> = ({ model, modelId, layoutId, appId, objectId, popup }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
 
@@ -44,6 +45,7 @@ const UIObjectLayout: React.FC<{
   if (!appliedModel) return <Loading />;
   return (
     <ViewObject
+      popup={popup}
       objectTypeId={appliedModel.key}
       layoutId={layoutId}
       appId={appId}
