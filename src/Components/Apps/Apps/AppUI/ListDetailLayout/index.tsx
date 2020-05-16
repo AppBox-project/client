@@ -183,7 +183,15 @@ const ListNav: React.FC<{
                             {navFixedIcon && (
                               <ListItemIcon>{navFixedIcon}</ListItemIcon>
                             )}
-                            <ListItemText>{subItem.label}</ListItemText>
+                            <ListItemText
+                              color={
+                                selectedItem === listItem.id
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              {subItem.label}
+                            </ListItemText>
                             {deleteFunction && (
                               <ListItemSecondaryAction>
                                 <IconButton
@@ -207,7 +215,13 @@ const ListNav: React.FC<{
                       {navFixedIcon && (
                         <ListItemIcon>{navFixedIcon}</ListItemIcon>
                       )}
-                      <ListItemText>{listItem.label}</ListItemText>
+                      <ListItemText
+                        color={
+                          selectedItem === listItem.id ? "primary" : "inherit"
+                        }
+                      >
+                        {listItem.label}
+                      </ListItemText>
                       {deleteFunction && (
                         <ListItemSecondaryAction>
                           <IconButton

@@ -52,7 +52,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
       Server.emit("unlistenForObjects", { requestId });
       Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
     };
-  }, []);
+  }, [objectId]);
 
   // UI
   return (

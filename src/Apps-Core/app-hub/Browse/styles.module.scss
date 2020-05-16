@@ -6,13 +6,14 @@
   margin: 15px;
   background-size: cover;
   -webkit-transition: 0.8s;
-  transition: 0.3s;
+  transition: all 0.3s;
   box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.24),
     0 4px 10px -2px rgba(0, 0, 0, 0.2);
 
   &:hover {
     box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.5),
       0 4px 15px -2px rgba(0, 0, 0, 0.4);
+    background-size: 101%;
   }
 
   div {

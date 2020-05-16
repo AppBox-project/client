@@ -7,6 +7,7 @@ import {
   GridListTileBar,
   Grid,
   Paper,
+  Typography,
 } from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { useHistory, Route, Switch } from "react-router-dom";
@@ -71,7 +72,9 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
               style={{ backgroundImage: `url(${app.data.banner.url})` }}
             >
               <context.UI.Animations.AnimationItem>
-                <div>{app.data.name}</div>
+                <Typography variant="body1" style={{ paddingTop: 15 }}>
+                  {app.data.name}
+                </Typography>
               </context.UI.Animations.AnimationItem>
             </Grid>
           );
