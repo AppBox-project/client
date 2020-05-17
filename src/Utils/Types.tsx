@@ -256,6 +256,12 @@ export interface UIType {
     mode?: "view" | "edit" | "free";
     onChange?: (value) => void;
   }>;
+  FieldDisplay: React.FC<{
+    modelField;
+    objectField;
+    props?;
+  }>;
+
   Inputs: {
     TextInput: React.FC<{
       label: string;

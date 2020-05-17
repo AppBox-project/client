@@ -12,6 +12,7 @@ import InputSwitch from "../../Inputs/Switch";
 import ObjectLayout from "./AppUI/ObjectLayout";
 import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
 import Margin from "./AppUI/Margin";
+import FieldDisplay from "../../Object/FieldDisplay";
 
 export class AppContext {
   appId: string;
@@ -36,6 +37,7 @@ export class AppContext {
       Animations: { AnimationContainer, AnimationItem },
       Inputs: { ...Forms, Switch: InputSwitch },
       Field: AppUiField,
+      FieldDisplay,
       Layouts: {
         ListDetailLayout,
         TreeView,

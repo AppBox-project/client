@@ -9,7 +9,8 @@ import { useHistory } from "react-router-dom";
 const ObjectFieldDisplayRelationshipM: React.FC<{
   modelField;
   objectField;
-}> = ({ objectField, modelField }) => {
+  size?;
+}> = ({ objectField, modelField, size }) => {
   // Vars
   const [objects, setObjects] = useState();
   const history = useHistory();
@@ -39,6 +40,7 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
             {objects.map((object) => {
               return (
                 <Chip
+                  size={size}
                   onClick={() => {
                     history.push(
                       `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`

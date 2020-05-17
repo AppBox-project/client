@@ -216,13 +216,27 @@ const AppQSActionTodoDetail: React.FC<{
                           primary={todo.data.action}
                           secondary={todo.data.description}
                         />
-                        {todo.data.status && (
-                          <ListItemSecondaryAction>
-                            <Chip
-                              variant="outlined"
-                              label={todo.data.status}
-                              size="small"
-                            />
+                        {(todo.data.status || todo.data.tags) && (
+                          <ListItemSecondaryAction
+                            style={{ textAlign: "right" }}
+                          >
+                            {todo.data.status && (
+                              <Chip
+                                variant="outlined"
+                                label={todo.data.status}
+                                size="small"
+                              />
+                            )}
+                            <br />
+                            {todo.data.tags && (
+                              <>
+                                <context.UI.FieldDisplay
+                                  objectField={todo.data.tags}
+                                  modelField={model.fields.tags}
+                                  props={{ size: "small" }}
+                                />
+                              </>
+                            )}
                           </ListItemSecondaryAction>
                         )}
                       </ListItem>

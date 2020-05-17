@@ -7,9 +7,10 @@ import ObjectFieldDisplayHtml from "./FieldDisplay/HTML";
 import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 
-const FieldDisplay: React.FC<{ objectField; modelField }> = ({
+const FieldDisplay: React.FC<{ objectField; modelField; props? }> = ({
   objectField,
   modelField,
+  props,
 }) => {
   return (
     <>
@@ -17,6 +18,7 @@ const FieldDisplay: React.FC<{ objectField; modelField }> = ({
         <ObjectFieldDisplayBoolean
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {(modelField.type === "input" ||
@@ -25,36 +27,42 @@ const FieldDisplay: React.FC<{ objectField; modelField }> = ({
         <ObjectFieldDisplayInput
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {modelField.type === "relationship" && (
         <ObjectFieldDisplayRelationship
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {modelField.type === "relationship_m" && (
         <ObjectFieldDisplayRelationshipM
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {modelField.type === "picture" && (
         <ObjectFieldDisplayPicture
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {modelField.type === "richtext" && (
         <ObjectFieldDisplayHtml
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
       {modelField.type === "color" && (
         <ObjectFieldDisplayColor
           modelField={modelField}
           objectField={objectField}
+          {...props}
         />
       )}
     </>
