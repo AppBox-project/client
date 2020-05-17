@@ -25,6 +25,7 @@ export class AppContext {
   setDialog: any;
   appButtons;
   setAppButtons;
+  appConfig;
 
   constructor(appId, setDialog, appButtons, setAppButtons) {
     this.appId = appId;
@@ -71,6 +72,7 @@ export class AppContext {
           ).then((app) => {
             const AppCode = app.default;
             this.appCode = new AppCode(this);
+            this.appConfig = this.appCode.appConfig;
             this.appCode.getActions().then((actions) => {
               this.actions = actions;
               resolve();

@@ -7,11 +7,15 @@ import {
   TableCell,
   TableBody,
   Paper,
+  Collapse,
+  List,
+  Table,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { useHistory } from "react-router-dom";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   layoutItem,
@@ -21,6 +25,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   const [relatedItems, setRelatedItems] = useState();
   const [relatedModel, setRelatedModel] = useState();
   const history = useHistory();
+  const [showMore, setShowMore] = useState(false);
 
   // Lifecycle
   useEffect(() => {
@@ -61,35 +66,90 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
       {relatedItems && relatedModel ? (
         relatedItems.length > 0 ? (
           <TableContainer component={Paper}>
-            <TableHead>
-              <TableRow>
-                {layoutItem.displayfields.split(",").map((field) => {
-                  return <TableCell>{field}</TableCell>;
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  {layoutItem.displayfields.split(",").map((field) => {
+                    return <TableCell>{field}</TableCell>;
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {relatedItems.slice(0, 3).map((item, index) => {
+                  return (
+                    <TableRow
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        history.push(
+                          `/data-explorer/${layoutItem.object}/${item._id}`
+                        );
+                      }}
+                    >
+                      {layoutItem.displayfields.split(",").map((field) => {
+                        return (
+                          <TableCell>
+                            {item.data[field] ? item.data[field] : " "}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
                 })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {relatedItems.map((item) => {
-                return (
-                  <TableRow
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      history.push(
-                        `/data-explorer/${layoutItem.object}/${item._id}`
-                      );
-                    }}
-                  >
-                    {layoutItem.displayfields.split(",").map((field) => {
-                      return (
-                        <TableCell>
-                          {item.data[field] ? item.data[field] : " "}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+                {relatedItems.length > 3 && (
+                  <>
+                    <TableRow
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShowMore(!showMore);
+                      }}
+                    >
+                      <TableCell
+                        colSpan={layoutItem.displayfields.split(",").length}
+                      >
+                        {showMore ? <FaAngleUp /> : <FaAngleDown />}Show more
+                      </TableCell>
+                    </TableRow>
+                    <Collapse
+                      in={showMore}
+                      timeout="auto"
+                      unmountOnExit
+                      style={{ width: "100%" }}
+                    >
+                      <TableContainer>
+                        <TableBody>
+                          {relatedItems
+                            .slice(3, relatedItems.length)
+                            .map((item, index) => {
+                              return (
+                                <TableRow
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    history.push(
+                                      `/data-explorer/${layoutItem.object}/${item._id}`
+                                    );
+                                  }}
+                                >
+                                  {layoutItem.displayfields
+                                    .split(",")
+                                    .map((field) => {
+                                      return (
+                                        <TableCell>
+                                          {item.data[field]
+                                            ? item.data[field]
+                                            : " "}
+                                        </TableCell>
+                                      );
+                                    })}
+                                </TableRow>
+                              );
+                            })}
+                        </TableBody>
+                      </TableContainer>
+                    </Collapse>
+                  </>
+                )}
+              </TableBody>
+            </Table>
           </TableContainer>
         ) : (
           <Typography variant="body2" style={{ textAlign: "center" }}>

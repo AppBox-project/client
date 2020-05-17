@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
 import AppQSActionTodoDetail from "./DetailComponent";
 import { filter } from "lodash";
+import { GoTasklist } from "react-icons/go";
 
 const AppQSActionTodo: React.FC<{
   match: { isExact: boolean };
@@ -53,6 +54,7 @@ const AppQSActionTodo: React.FC<{
       context={context}
       baseUrl="/quick-space/todo"
       list={projects}
+      navFixedIcon={<GoTasklist />}
       navWidth={2}
       DetailComponent={AppQSActionTodoDetail}
     />

@@ -108,7 +108,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       animate="visible"
       variants={list}
       className={styles.appbar}
-      style={{ backgroundColor: theme.palette.primary.main }}
+      style={{
+        backgroundColor: theme.palette.primary.main,
+        transition: "all 0.3s",
+      }}
     >
       <div className={styles.shadow} />
       <Grid

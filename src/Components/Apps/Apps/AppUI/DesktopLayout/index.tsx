@@ -10,7 +10,9 @@ import {
   ListItemText,
   ListItemIcon,
   Icon,
+  Divider,
 } from "@material-ui/core";
+import { FaWrench } from "react-icons/fa";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   appContext,
@@ -41,6 +43,12 @@ const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
               />
             );
           })}
+          {appContext.appConfig && appContext.appConfig.settings && (
+            <Route
+              path={`/${appContext.appId}/settings`}
+              component={appContext.appConfig.settings}
+            />
+          )}
         </Switch>
       </div>
     </>
@@ -132,6 +140,24 @@ const ActionMenu: React.FC<{
           );
         })}
       </List>
+      {context.appConfig && context.appConfig.settings && (
+        <motion.div
+          variants={item}
+          style={{ position: "absolute", bottom: 0, width: "85%" }}
+        >
+          <Divider />
+          <List>
+            <Link className="no-link" to={`/${context.app.data.id}/settings`}>
+              <ListItem button>
+                <ListItemIcon>
+                  <FaWrench />
+                </ListItemIcon>
+                <ListItemText>Settings</ListItemText>
+              </ListItem>
+            </Link>
+          </List>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

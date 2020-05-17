@@ -1,14 +1,8 @@
-import React from "react";
 import AppActionTodo from "./Todo";
 import FourOhFour from "../../Components/FourOhFour";
 import AppQSActionNotes from "./Notes";
-import {
-  FaLemon,
-  FaStickyNote,
-  FaListAlt,
-  FaFolderOpen,
-  FaTh,
-} from "react-icons/fa";
+import { FaStickyNote, FaListAlt, FaFolderOpen, FaTh } from "react-icons/fa";
+import AppSettings from "./Settings";
 
 export default class App {
   context: any;
@@ -16,6 +10,10 @@ export default class App {
   constructor(context) {
     this.context = context;
   }
+
+  appConfig = {
+    settings: AppSettings,
+  };
 
   getActions = () => {
     return new Promise((resolve) => {
