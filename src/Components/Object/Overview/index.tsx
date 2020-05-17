@@ -13,6 +13,9 @@ import {
   Checkbox,
   TableSortLabel,
   TableContainer,
+  IconButton,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -22,6 +25,7 @@ import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
 import FieldDisplay from "../FieldDisplay";
+import { filter, size } from "lodash";
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -56,8 +60,8 @@ const Overview: React.FC<{
   const [layout, setLayout] = useState();
   const [objects, setObjects] = useState();
   const [dialogContent, setDialogContent] = useState();
-  const [anchorEl, setAnchorEl] = useState();
-  const [selected, setSelected] = useState();
+  const [anchorEl, setAnchorEl] = useState<any>();
+  const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState();
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const history = useHistory();
@@ -166,6 +170,20 @@ const Overview: React.FC<{
                   <Checkbox
                     color="primary"
                     inputProps={{ "aria-label": "Select all" }}
+                    onChange={(event) => {
+                      if (event.target.checked) {
+                        const newSelecteds = objects.map((n) => n._id);
+                        setSelected(newSelecteds);
+                        return;
+                      }
+                      setSelected([]);
+                    }}
+                    checked={
+                      size(objects) > 0 && selected.length === size(objects)
+                    }
+                    indeterminate={
+                      selected.length > 0 && selected.length < size(objects)
+                    }
                   />
                 </TableCell>
                 {layout.fields.map((field) => (
@@ -178,6 +196,19 @@ const Overview: React.FC<{
                     </TableSortLabel>
                   </TableCell>
                 ))}
+                {layout.actions && layout.actions.length > 0 && (
+                  <TableCell>
+                    <div style={{ float: "right" }}>
+                      <IconButton
+                        onClick={(event) => {
+                          setAnchorEl(event.currentTarget);
+                        }}
+                      >
+                        <IoMdMore />
+                      </IconButton>
+                    </div>{" "}
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -197,7 +228,19 @@ const Overview: React.FC<{
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
+                          color="primary"
                           checked={isItemSelected}
+                          onChange={() => {
+                            if (selected.includes(object._id)) {
+                              setSelected(
+                                filter(selected, (o) => {
+                                  return o !== object._id;
+                                })
+                              );
+                            } else {
+                              setSelected([...selected, object._id]);
+                            }
+                          }}
                           inputProps={{ "aria-labelledby": labelId }}
                         />
                       </TableCell>
@@ -217,13 +260,55 @@ const Overview: React.FC<{
                           </TableCell>
                         );
                       })}
+                      {layout.actions && layout.actions.length > 0 && (
+                        <TableCell>
+                          <div style={{ float: "right" }}>
+                            <IconButton
+                              onClick={(event) => {
+                                const newSelected = [];
+                                newSelected.push(object._id);
+                                setSelected(newSelected);
+                                setAnchorEl(event.currentTarget);
+                              }}
+                            >
+                              <IoMdMore />
+                            </IconButton>
+                          </div>
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 }
               )}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer>{" "}
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
+        >
+          <MenuItem
+            onClick={() => {
+              selected.map((deleteId) => {
+                const requestId = uniqid();
+                Server.emit("deleteObject", { objectId: deleteId, requestId });
+                Server.on(`receive-${requestId}`, (response) => {
+                  if (response.success) {
+                    setAnchorEl(null);
+                  } else {
+                    console.log(response);
+                  }
+                });
+              });
+              setSelected([]);
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
       </Paper>
     </>
   );

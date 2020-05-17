@@ -248,6 +248,61 @@ const AppActionManageObjectOverviewEditor: React.FC<{
               <UI.Animations.AnimationItem>
                 <Paper className="paper">
                   <Typography variant="h6">Actions</Typography>
+                  <List>
+                    {map({ delete: { label: "Delete" } }, (action, key) => {
+                      return (
+                        <ListItem
+                          style={{ cursor: "pointer" }}
+                          selected={overview.actions.includes(key)}
+                          onClick={() => {
+                            if (overview.actions.includes(key)) {
+                              setOverview({
+                                ...overview,
+                                actions: filter(overview.actions, (o) => {
+                                  return o !== key;
+                                }),
+                              });
+                            } else {
+                              const actions = overview.actions
+                                ? overview.actions
+                                : [];
+                              actions.push(key);
+                              setOverview({ ...overview, actions });
+                            }
+                          }}
+                        >
+                          <ListItemIcon>
+                            <IconButton
+                              color={
+                                overview.actions.includes(key)
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              {overview.actions.includes(key) ? (
+                                <FaCheckSquare
+                                  style={{ width: 18, height: 18 }}
+                                />
+                              ) : (
+                                <FaSquare style={{ width: 18, height: 18 }} />
+                              )}
+                            </IconButton>
+                          </ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              color={
+                                overview.actions.includes(key)
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              {action.label}
+                            </Typography>
+                          </ListItemText>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
                 </Paper>
               </UI.Animations.AnimationItem>
             </Grid>

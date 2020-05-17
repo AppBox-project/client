@@ -10,7 +10,9 @@ const ObjectFieldDisplayColor: React.FC<{ modelField; objectField }> = ({
     <Chip
       style={{
         transition: "all 1s",
-        backgroundColor: `rgba(${objectField.r},${objectField.g},${objectField.b},${objectField.a})`,
+        backgroundColor: objectField
+          ? `rgba(${objectField.r},${objectField.g},${objectField.b},${objectField.a})`
+          : "rgba(50,50,50,1)",
       }}
       label={<FaEyeDropper style={{ color: "white", width: 15, height: 15 }} />}
     />
