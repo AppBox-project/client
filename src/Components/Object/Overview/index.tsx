@@ -282,7 +282,7 @@ const Overview: React.FC<{
               )}
             </TableBody>
           </Table>
-        </TableContainer>{" "}
+        </TableContainer>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -292,16 +292,11 @@ const Overview: React.FC<{
         >
           <MenuItem
             onClick={() => {
+              setAnchorEl(null);
+
               selected.map((deleteId) => {
                 const requestId = uniqid();
                 Server.emit("deleteObject", { objectId: deleteId, requestId });
-                Server.on(`receive-${requestId}`, (response) => {
-                  if (response.success) {
-                    setAnchorEl(null);
-                  } else {
-                    console.log(response);
-                  }
-                });
               });
               setSelected([]);
             }}

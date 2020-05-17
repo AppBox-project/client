@@ -44,6 +44,14 @@ const AppActionManageObjectActionsDetail: React.FC<{
                 onChange={(value) => {
                   setAction({ ...action, layout: value });
                 }}
+              />{" "}
+              <context.UI.Inputs.SelectInput
+                label="Type"
+                options={[{ value: "create", label: "create" }]}
+                value={action.type}
+                onChange={(value) => {
+                  setAction({ ...action, type: value });
+                }}
               />
             </>
           )}

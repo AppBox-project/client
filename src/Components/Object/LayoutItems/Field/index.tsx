@@ -53,12 +53,12 @@ const ObjectLayoutItemField: React.FC<{
             setMode("edit");
           }}
         >
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Typography variant="body1" style={{ fontWeight: "bold" }}>
               {modelField.name}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             <FieldDisplay objectField={objectField} modelField={modelField} />
           </Grid>
         </Grid>
@@ -72,7 +72,7 @@ const ObjectLayoutItemField: React.FC<{
             backgroundColor: layoutItem.field in toChange ? "#efefef" : "white",
           }}
         >
-          <Grid item xs={6} style={{ verticalAlign: "middle" }}>
+          <Grid item xs={4} style={{ verticalAlign: "middle" }}>
             <Typography
               variant="body1"
               style={{ fontWeight: "bold", verticalAlign: "middle" }}
@@ -80,7 +80,7 @@ const ObjectLayoutItemField: React.FC<{
               {modelField.name}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             {modelField.type === "formula" && (
               <ObjectFieldDisplayInput
                 modelField={modelField}
@@ -94,6 +94,7 @@ const ObjectLayoutItemField: React.FC<{
                 }}
                 placeholder={modelField.name}
                 value={objectField}
+                type={modelField.typeArgs && modelField.typeArgs.type}
               />
             )}
             {modelField.type === "boolean" && (
