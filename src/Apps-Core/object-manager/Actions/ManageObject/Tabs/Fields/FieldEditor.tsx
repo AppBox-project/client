@@ -364,7 +364,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   </Grid>
                 )}
 
-                {field.type === "relationship" && (
+                {(field.type === "relationship" ||
+                  field.type === "relationship_m") && (
                   <Grid item xs={6}>
                     <ListObjectTypes
                       context={context}

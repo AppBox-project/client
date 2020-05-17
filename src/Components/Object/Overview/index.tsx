@@ -247,6 +247,7 @@ const Overview: React.FC<{
                       {layout.fields.map((field) => {
                         return (
                           <TableCell
+                            style={{ cursor: "pointer" }}
                             onClick={() => {
                               history.push(
                                 `/${appId}/${objectTypeId}/${object._id}`

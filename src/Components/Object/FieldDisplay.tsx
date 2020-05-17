@@ -5,6 +5,7 @@ import ObjectFieldDisplayRelationship from "./FieldDisplay/Relationship";
 import ObjectFieldDisplayPicture from "./FieldDisplay/Picture";
 import ObjectFieldDisplayHtml from "./FieldDisplay/HTML";
 import ObjectFieldDisplayColor from "./FieldDisplay/Color";
+import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 
 const FieldDisplay: React.FC<{ objectField; modelField }> = ({
   objectField,
@@ -28,6 +29,12 @@ const FieldDisplay: React.FC<{ objectField; modelField }> = ({
       )}
       {modelField.type === "relationship" && (
         <ObjectFieldDisplayRelationship
+          modelField={modelField}
+          objectField={objectField}
+        />
+      )}
+      {modelField.type === "relationship_m" && (
+        <ObjectFieldDisplayRelationshipM
           modelField={modelField}
           objectField={objectField}
         />

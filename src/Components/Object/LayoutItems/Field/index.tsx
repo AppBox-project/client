@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { ModelType } from "../../../../Utils/Types";
-import ObjectFieldDisplayBoolean from "../../FieldDisplay/Boolean";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
-import ObjectFieldDisplayRelationship from "../../FieldDisplay/Relationship";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
 import InputCheckbox from "../../../Inputs/Checkbox";
 import InputSelect from "../../../Inputs/Select";
 import InputRelationShip from "../../../Inputs/Relationship";
 import { find } from "lodash";
-import ObjectFieldDisplayPicture from "../../FieldDisplay/Picture";
 import InputPicture from "../../../Inputs/Picture";
-import ObjectFieldDisplayHtml from "../../FieldDisplay/HTML";
 import InputRichText from "../../../Inputs/RichText";
 import InputColor from "../../../Inputs/Color";
-import ObjectFieldDisplayColor from "../../FieldDisplay/Color";
 import FieldDisplay from "../../FieldDisplay";
+import InputRelationShipM from "../../../Inputs/Relationship _m";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -107,6 +103,16 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "relationship" && (
               <InputRelationShip
+                label={modelField.name}
+                value={objectField}
+                objectType={modelField.typeArgs.relationshipTo}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}{" "}
+            {modelField.type === "relationship_m" && (
+              <InputRelationShipM
                 label={modelField.name}
                 value={objectField}
                 objectType={modelField.typeArgs.relationshipTo}
