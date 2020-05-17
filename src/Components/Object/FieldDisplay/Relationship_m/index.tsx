@@ -10,9 +10,11 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
   modelField;
   objectField;
   size?;
-}> = ({ objectField, modelField, size }) => {
+  baseUrl?;
+}> = ({ objectField, modelField, size, baseUrl }) => {
   // Vars
   const [objects, setObjects] = useState();
+  const [model, setModel] = useState();
   const history = useHistory();
 
   // Lifecycle
@@ -30,12 +32,26 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
         console.log(response);
       }
     });
+
+    const modelRequestId = uniqid();
+    Server.emit("listenForObjectTypes", {
+      requestId,
+      filter: { key: modelField.typeArgs.relationshipTo },
+    });
+    Server.on(`receive-${requestId}`, (response) => {
+      setModel(response[0]);
+    });
+
+    return () => {
+      Server.emit("unlistenForObjects", { requestId });
+      Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
+    };
   }, [objectField]);
   // UI
   return (
     <>
       {objectField ? (
-        objects ? (
+        objects && model ? (
           <>
             {objects.map((object) => {
               return (
@@ -44,11 +60,13 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
                     size={size}
                     onClick={() => {
                       history.push(
-                        `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
+                        baseUrl
+                          ? `${baseUrl}/${object._id}`
+                          : `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
                       );
                     }}
                     icon={<FaTags style={{ color: "white" }} />}
-                    label={object.data["name"]}
+                    label={object.data[model.primary]}
                     style={{
                       color: "white",
                       backgroundColor:
