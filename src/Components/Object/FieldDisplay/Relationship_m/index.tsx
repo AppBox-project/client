@@ -5,6 +5,7 @@ import Server from "../../../../Utils/Server";
 import { Chip } from "@material-ui/core";
 import { FaTags } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
+import * as icons from "react-icons/fa";
 
 const ObjectFieldDisplayRelationshipM: React.FC<{
   modelField;
@@ -54,6 +55,7 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
         objects && model ? (
           <>
             {objects.map((object) => {
+              const Icon = icons[model.icon ? model.icon : "FaTags"];
               return (
                 <Fragment key={object._id}>
                   <Chip
@@ -65,8 +67,9 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
                           : `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
                       );
                     }}
-                    icon={<FaTags style={{ color: "white" }} />}
+                    icon={<Icon style={{ color: "white" }} />}
                     label={object.data[model.primary]}
+                    color={!object.data["color"] ? "primary" : "inherit"}
                     style={{
                       color: "white",
                       backgroundColor:
