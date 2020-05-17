@@ -1,6 +1,7 @@
 import FourOhFour from "../../Components/FourOhFour";
 import AppActionManageObject from "./Actions/ManageObject";
 import AppActionAddObject from "./Actions/AddObject";
+import * as icons from "react-icons/fa";
 
 export default class App {
   context: any;
@@ -19,6 +20,7 @@ export default class App {
               label: result.name_plural,
               key: result.key,
               component: AppActionManageObject,
+              icon: icons[result.icon],
             });
           });
           resolve([

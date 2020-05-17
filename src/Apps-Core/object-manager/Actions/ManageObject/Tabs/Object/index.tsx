@@ -52,6 +52,15 @@ const AppActionManageObjectTabObject: React.FC<{
                   }}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <UI.Inputs.TextInput
+                  label="Icon"
+                  value={model.icon}
+                  onChange={(value) => {
+                    setNewModel({ ...newModel, icon: value });
+                  }}
+                />
+              </Grid>
             </Grid>
             {newModel && (
               <Button

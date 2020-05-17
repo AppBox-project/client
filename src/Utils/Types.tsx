@@ -43,6 +43,7 @@ export interface ModelType {
   key: string;
   name: string;
   name_plural: string;
+  icon: string;
   primary: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
