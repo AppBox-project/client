@@ -46,7 +46,14 @@ const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route
               path={`/${appContext.appId}/settings`}
-              component={appContext.appConfig.settings}
+              render={(props) => {
+                return (
+                  <appContext.appConfig.settings
+                    context={appContext}
+                    {...props}
+                  />
+                );
+              }}
             />
           )}
         </Switch>
