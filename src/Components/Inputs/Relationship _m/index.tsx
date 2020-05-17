@@ -37,6 +37,10 @@ const InputRelationShipM: React.FC<{
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const newValue = arrayMove(selected, oldIndex, newIndex);
     setSelected(newValue);
+    const result = [];
+    newValue.map((o) => result.push(o.value));
+    if (onChange) onChange(result);
+    console.log(result);
   };
 
   // Lifecycle

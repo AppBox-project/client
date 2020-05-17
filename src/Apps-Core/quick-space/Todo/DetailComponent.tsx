@@ -214,7 +214,25 @@ const AppQSActionTodoDetail: React.FC<{
                             });
                           }}
                           primary={todo.data.action}
-                          secondary={todo.data.description}
+                          secondary={
+                            <>
+                              {todo.data.description && (
+                                <>
+                                  {todo.data.description}
+                                  <br />
+                                </>
+                              )}
+                              {todo.data.tags && (
+                                <>
+                                  <context.UI.FieldDisplay
+                                    objectField={todo.data.tags}
+                                    modelField={model.fields.tags}
+                                    props={{ size: "small" }}
+                                  />
+                                </>
+                              )}
+                            </>
+                          }
                         />
                         {(todo.data.status || todo.data.tags) && (
                           <ListItemSecondaryAction
@@ -226,16 +244,6 @@ const AppQSActionTodoDetail: React.FC<{
                                 label={todo.data.status}
                                 size="small"
                               />
-                            )}
-                            <br />
-                            {todo.data.tags && (
-                              <>
-                                <context.UI.FieldDisplay
-                                  objectField={todo.data.tags}
-                                  modelField={model.fields.tags}
-                                  props={{ size: "small" }}
-                                />
-                              </>
                             )}
                           </ListItemSecondaryAction>
                         )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Skeleton } from "@material-ui/lab";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
@@ -39,22 +39,24 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
           <>
             {objects.map((object) => {
               return (
-                <Chip
-                  size={size}
-                  onClick={() => {
-                    history.push(
-                      `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
-                    );
-                  }}
-                  icon={<FaTags style={{ color: "white" }} />}
-                  label={object.data["name"]}
-                  style={{
-                    color: "white",
-                    backgroundColor:
-                      object.data["color"] &&
-                      `rgba(${object.data["color"].r},${object.data["color"].g},${object.data["color"].b},${object.data["color"].a})`,
-                  }}
-                />
+                <Fragment key={object._id}>
+                  <Chip
+                    size={size}
+                    onClick={() => {
+                      history.push(
+                        `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
+                      );
+                    }}
+                    icon={<FaTags style={{ color: "white" }} />}
+                    label={object.data["name"]}
+                    style={{
+                      color: "white",
+                      backgroundColor:
+                        object.data["color"] &&
+                        `rgba(${object.data["color"].r},${object.data["color"].g},${object.data["color"].b},${object.data["color"].a})`,
+                    }}
+                  />{" "}
+                </Fragment>
               );
             })}
           </>
