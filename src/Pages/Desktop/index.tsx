@@ -41,7 +41,6 @@ const Desktop: React.FC = () => {
       <NavBar currentApp={currentApp} />
       <div className={styles.appSpace}>
         <Switch>
-          <Route path="/settings" component={SettingsPage} />
           <Route
             path="/:appId"
             render={(params) => {

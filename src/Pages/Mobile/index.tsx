@@ -176,7 +176,6 @@ const MobileLayout: React.FC = () => {
         <Switch>
           <Route path="/" exact component={StartPage} />
           <Route path="/apps" exact component={StartPage} />
-          <Route path="/settings" component={SettingsPage} />
           <Route path="/home" exact component={StartPage} />
           <Route
             path="/:appId"

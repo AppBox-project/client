@@ -152,6 +152,8 @@ const Overview: React.FC<{
           </Grid>
           <Dialog
             open={dialogContent !== undefined}
+            maxWidth="lg"
+            fullWidth
             onClose={() => {
               setDialogContent(undefined);
             }}
