@@ -34,7 +34,12 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
       }
     });
 
-    const modelRequestId = uniqid();
+    return () => {
+      Server.emit("unlistenForObjects", { requestId });
+    };
+  }, [objectField]);
+  useEffect(() => {
+    const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
       requestId,
       filter: { key: modelField.typeArgs.relationshipTo },
@@ -42,13 +47,13 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
     Server.on(`receive-${requestId}`, (response) => {
       setModel(response[0]);
     });
-
     return () => {
-      Server.emit("unlistenForObjects", { requestId });
-      Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
+      Server.emit("unlistenForObjectTypes", { requestId });
     };
-  }, [objectField]);
+  }, [modelField]);
   // UI
+  console.log(objectField, objects, model);
+
   return (
     <>
       {objectField ? (
