@@ -18,6 +18,7 @@ const AppSettings: React.FC<{
       context={context}
       DetailComponent={AppSettingsDetail}
       navWidth={2}
+      title="Settings"
     />
   );
 };

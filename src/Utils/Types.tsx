@@ -231,6 +231,7 @@ export interface UIType {
       deleteFunction?: (id) => void;
       navWidth?: ColumnWidth;
       navFixedIcon?: JSX.Element;
+      title?: string;
     }>;
     SortableList: React.FC<{
       listItems: [];

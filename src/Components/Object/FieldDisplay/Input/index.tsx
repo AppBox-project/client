@@ -1,4 +1,5 @@
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 const ObjectFieldDisplayInput: React.FC<{ modelField; objectField }> = ({
   objectField,
@@ -9,7 +10,7 @@ const ObjectFieldDisplayInput: React.FC<{ modelField; objectField }> = ({
       return <>······</>;
     }
   }
-  return <>{objectField}</>;
+  return <Typography variant="body1">{objectField}</Typography>;
 };
 
 export default ObjectFieldDisplayInput;

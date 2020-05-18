@@ -51,9 +51,8 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
       Server.emit("unlistenForObjectTypes", { requestId });
     };
   }, [modelField]);
-  // UI
-  console.log(objectField, objects, model);
 
+  // UI
   return (
     <>
       {objectField ? (
@@ -92,8 +91,8 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
               return (
                 <Skeleton
                   key={index}
-                  variant="circle"
-                  width={18}
+                  variant="text"
+                  width={150}
                   height={18}
                   style={{ display: "inline-block" }}
                 />

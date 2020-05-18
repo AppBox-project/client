@@ -1,4 +1,4 @@
-import React, { useGlobal } from "reactn";
+import React, { useGlobal, useEffect } from "reactn";
 import {
   Grid,
   List,
@@ -9,6 +9,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Typography,
+  Divider,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -20,7 +21,6 @@ import {
 import { FaPlus, FaTrash, FaAngleLeft } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
-import { useState, useEffect } from "react";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -45,6 +45,7 @@ const ListDetailLayout: React.FC<{
   deleteFunction?: (id) => void;
   navWidth?: ColumnWidth;
   navFixedIcon?: JSX.Element;
+  title?;
 }> = ({
   list,
   customNavComponent,
@@ -58,6 +59,7 @@ const ListDetailLayout: React.FC<{
   treeList,
   navWidth,
   navFixedIcon,
+  title,
 }) => {
   // Vars
   const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -102,14 +104,17 @@ const ListDetailLayout: React.FC<{
           ) : mode === "tree" ? (
             <TreeViewUI items={treeList} linkTo={baseUrl} />
           ) : (
-            <ListNav
-              addFunction={addFunction}
-              deleteFunction={deleteFunction}
-              baseUrl={baseUrl}
-              selectedItem={selectedItem}
-              list={list}
-              navFixedIcon={navFixedIcon}
-            />
+            <>
+              <ListNav
+                addFunction={addFunction}
+                deleteFunction={deleteFunction}
+                baseUrl={baseUrl}
+                selectedItem={selectedItem}
+                list={list}
+                navFixedIcon={navFixedIcon}
+                title={title}
+              />
+            </>
           )}
         </Grid>
       )}
@@ -144,6 +149,7 @@ const ListNav: React.FC<{
   selectedItem;
   list;
   navFixedIcon?;
+  title?;
 }> = ({
   addFunction,
   deleteFunction,
@@ -151,11 +157,22 @@ const ListNav: React.FC<{
   selectedItem,
   list,
   navFixedIcon,
+  title,
 }) => {
   return (
     <div className={styles.root}>
       <List>
         <AnimationContainer>
+          <AnimationItem>
+            <Typography
+              variant="h6"
+              color="primary"
+              style={{ textAlign: "center" }}
+              gutterBottom
+            >
+              {title}
+            </Typography>
+          </AnimationItem>
           {addFunction && (
             <AnimationItem>
               <ListItem button onClick={addFunction}>

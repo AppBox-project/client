@@ -100,7 +100,7 @@ const InputRelationShipM: React.FC<{
       onChange={(selectedOptions) => {
         setSelected(selectedOptions);
         const result = [];
-        selectedOptions.map((o) => result.push(o.value));
+        if (selectedOptions) selectedOptions.map((o) => result.push(o.value));
         if (onChange) onChange(result);
       }}
       components={{
