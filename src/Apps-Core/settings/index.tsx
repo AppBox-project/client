@@ -22,7 +22,7 @@ export default class App {
         },
         {
           key: "backup",
-          label: "Backup database",
+          label: "Backup",
           component: AppSettingsBackup,
           icon: FaServer,
         },
