@@ -1,6 +1,8 @@
 import FourOhFour from "../../Components/FourOhFour";
 import { GrUpdate } from "react-icons/gr";
 import AppSettingsUpdate from "./Updates";
+import { FaServer } from "react-icons/fa";
+import AppSettingsBackup from "./Backup";
 
 export default class App {
   context: any;
@@ -17,6 +19,12 @@ export default class App {
           label: "Update software",
           component: AppSettingsUpdate,
           icon: GrUpdate,
+        },
+        {
+          key: "backup",
+          label: "Backup database",
+          component: AppSettingsBackup,
+          icon: FaServer,
         },
       ]);
     });
