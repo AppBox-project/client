@@ -13,7 +13,7 @@ const AppSettingsBackup: React.FC<{
   // Lifecycle
 
   // UI
-  return <>Backup tool</>;
+  return <>TODO: Make a database upgrade tool</>;
 };
 
 export default AppSettingsBackup;
