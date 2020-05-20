@@ -15,7 +15,7 @@ const InputRichText: React.FC<{
   // Lifecycle
   useEffect(() => {
     setNewValue(value);
-  }, [value]);
+  }, []);
 
   // UI
   return (
