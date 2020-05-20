@@ -18,7 +18,9 @@ const AppSettingsUpdate: React.FC<{
     <div className="center" style={{ textAlign: "center" }}>
       {upgradeTask && (
         <>
-          <Typography>Upgrading: {task.data.state && task.data.state}</Typography>
+          <Typography>
+            Upgrading: {upgradeTask.data.state && upgradeTask.data.state}
+          </Typography>
           <Typography>
             {upgradeTask.data.done ? (
               <>Upgrade done</>
