@@ -221,7 +221,7 @@ const AppQSActionTodoDetail: React.FC<{
                                   <br />
                                 </>
                               )}
-                              {todo.data.status && (
+                              {todo.data.status && isMobile && (
                                 <>
                                   <Chip
                                     variant="outlined"
