@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
 import { filter, sortBy } from "lodash";
 import {
@@ -13,9 +13,8 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   Chip,
-  Avatar,
 } from "@material-ui/core";
-import { FaTrello, FaBars, FaExpand, FaAngleDown } from "react-icons/fa";
+import { FaTrello, FaBars, FaAngleDown } from "react-icons/fa";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -32,9 +31,9 @@ const AppQSActionTodoDetail: React.FC<{
   const [newTodo, setNewTodo] = useState("");
   const [model, setModel] = useState();
   const [view, setView] = useState("todo");
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
-
   useEffect(() => {
     const todoRequest = context.getObjects(
       "qs-todo",
@@ -222,19 +221,26 @@ const AppQSActionTodoDetail: React.FC<{
                                   <br />
                                 </>
                               )}
-                              {todo.data.tags && (
+                              {todo.data.status && (
                                 <>
-                                  <context.UI.FieldDisplay
-                                    objectField={todo.data.tags}
-                                    modelField={model.fields.tags}
-                                    props={{ size: "small" }}
-                                  />
+                                  <Chip
+                                    variant="outlined"
+                                    label={todo.data.status}
+                                    size="small"
+                                  />{" "}
                                 </>
+                              )}
+                              {todo.data.tags && (
+                                <context.UI.FieldDisplay
+                                  objectField={todo.data.tags}
+                                  modelField={model.fields.tags}
+                                  props={{ size: "small" }}
+                                />
                               )}
                             </>
                           }
                         />
-                        {(todo.data.status || todo.data.tags) && (
+                        {(todo.data.status || todo.data.tags) && !isMobile && (
                           <ListItemSecondaryAction
                             style={{ textAlign: "right" }}
                           >
