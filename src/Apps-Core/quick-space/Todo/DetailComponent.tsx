@@ -242,40 +242,44 @@ const AppQSActionTodoDetail: React.FC<{
                                   props={{ size: "small" }}
                                 />
                               )}
-                              {todo.data.relatedNotes && (
-                                <>
-                                  {" "}
-                                  <Chip
-                                    label={`${todo.data.relatedNotes.length} ${
-                                      todo.data.relatedNotes.length === 1
-                                        ? "note"
-                                        : "notes"
-                                    }`}
-                                    icon={
-                                      <FaStickyNote
-                                        style={{ width: 12, height: 12 }}
-                                      />
-                                    }
-                                    size="small"
-                                    variant="outlined"
-                                  />
-                                </>
-                              )}
-                              {todo.data.relates_to && (
-                                <>
-                                  {" "}
-                                  <Chip
-                                    label={`${todo.data.relates_to.length} related`}
-                                    icon={
-                                      <GoTasklist
-                                        style={{ width: 12, height: 12 }}
-                                      />
-                                    }
-                                    size="small"
-                                    variant="outlined"
-                                  />
-                                </>
-                              )}
+                              {todo.data.relatedNotes &&
+                                todo.data.relatedNotes.length > 0 && (
+                                  <>
+                                    {" "}
+                                    <Chip
+                                      label={`${
+                                        todo.data.relatedNotes.length
+                                      } ${
+                                        todo.data.relatedNotes.length === 1
+                                          ? "note"
+                                          : "notes"
+                                      }`}
+                                      icon={
+                                        <FaStickyNote
+                                          style={{ width: 12, height: 12 }}
+                                        />
+                                      }
+                                      size="small"
+                                      variant="outlined"
+                                    />
+                                  </>
+                                )}
+                              {todo.data.relates_to &&
+                                todo.data.relates_to.length > 0 && (
+                                  <>
+                                    {" "}
+                                    <Chip
+                                      label={`${todo.data.relates_to.length} related`}
+                                      icon={
+                                        <GoTasklist
+                                          style={{ width: 12, height: 12 }}
+                                        />
+                                      }
+                                      size="small"
+                                      variant="outlined"
+                                    />
+                                  </>
+                                )}
                             </>
                           }
                         />
