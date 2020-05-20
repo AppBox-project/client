@@ -14,7 +14,8 @@ import {
   ListItemSecondaryAction,
   Chip,
 } from "@material-ui/core";
-import { FaTrello, FaBars, FaAngleDown } from "react-icons/fa";
+import { FaTrello, FaBars, FaAngleDown, FaStickyNote } from "react-icons/fa";
+import { GoTasklist } from "react-icons/go";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -183,7 +184,11 @@ const AppQSActionTodoDetail: React.FC<{
                   baseUrl={`/quick-space/todo/${detailId}`}
                   customItem={(todo) => {
                     return (
-                      <ListItem key={todo._id} style={{ cursor: "pointer" }}>
+                      <ListItem
+                        key={todo._id}
+                        style={{ cursor: "pointer" }}
+                        button
+                      >
                         <ListItemIcon>
                           <context.UI.Field
                             field={model.fields["done"]}
@@ -236,6 +241,40 @@ const AppQSActionTodoDetail: React.FC<{
                                   modelField={model.fields.tags}
                                   props={{ size: "small" }}
                                 />
+                              )}
+                              {todo.data.relatedNotes && (
+                                <>
+                                  {" "}
+                                  <Chip
+                                    label={`${todo.data.relatedNotes.length} ${
+                                      todo.data.relatedNotes.length === 1
+                                        ? "note"
+                                        : "notes"
+                                    }`}
+                                    icon={
+                                      <FaStickyNote
+                                        style={{ width: 12, height: 12 }}
+                                      />
+                                    }
+                                    size="small"
+                                    variant="outlined"
+                                  />
+                                </>
+                              )}
+                              {todo.data.relates_to && (
+                                <>
+                                  {" "}
+                                  <Chip
+                                    label={`${todo.data.relates_to.length} related`}
+                                    icon={
+                                      <GoTasklist
+                                        style={{ width: 12, height: 12 }}
+                                      />
+                                    }
+                                    size="small"
+                                    variant="outlined"
+                                  />
+                                </>
                               )}
                             </>
                           }
