@@ -251,7 +251,7 @@ export interface UIType {
     style?: {};
     modelId?: string;
     field?;
-    fieldId?: string;
+    fieldId: string;
     objectId?: string;
     directSave?: true;
     directSaveDelay?: number;

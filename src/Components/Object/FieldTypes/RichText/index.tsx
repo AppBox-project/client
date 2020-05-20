@@ -3,6 +3,7 @@ import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
 import InputDrafting from "../../../Inputs/Drafting";
+import InputRichText from "../../../Inputs/RichText";
 
 const FieldTypeRichText: React.FC<{
   mode: "view" | "edit" | "free";
@@ -25,65 +26,14 @@ const FieldTypeRichText: React.FC<{
 
   // UI
   if (newValue === undefined) return <Loading />;
-  // @ts-ignore
-  if (mode === "free")
-    return (
-      <>
-        {field.typeArgs.type === "drafting" && (
-          <InputDrafting
-            placeholder={field.name}
-            mode="inline"
-            value={newValue}
-            onChange={(value) => {
-              onChange(value);
-            }}
-          />
-        )}
-      </>
-    );
   return (
-    <div className={mode === "view" ? "view-container" : "input-container"}>
-      <div
-        className={
-          mode === "view" ? "view-container-sub" : "input-container-sub"
-        }
-        style={{ width: "100%", paddingRight: 5 }}
-      >
-        {mode === "view" && (
-          <div
-            style={{ cursor: "copy" }}
-            onDoubleClick={() => {
-              setMode("edit");
-            }}
-          >
-            <Grid container>
-              <Grid item xs={6}>
-                <Typography variant="body1" style={{ fontWeight: 500 }}>
-                  {field.name}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2">Test</Typography>
-              </Grid>
-            </Grid>
-          </div>
-        )}
-        {(mode === "edit" || !mode) && (
-          <>
-            {field.typeArgs.type === "drafting" && (
-              <InputDrafting
-                placeholder={field.name}
-                mode="inline"
-                value={newValue}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </div>
+    <InputRichText
+      placeholder={field.name}
+      value={newValue}
+      onChange={(value) => {
+        onChange(value);
+      }}
+    />
   );
 };
 

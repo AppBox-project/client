@@ -15,7 +15,7 @@ const InputRichText: React.FC<{
   // Lifecycle
   useEffect(() => {
     setNewValue(value);
-  }, []);
+  }, [value]);
 
   // UI
   return (
@@ -24,8 +24,10 @@ const InputRichText: React.FC<{
       data={newValue}
       onChange={(event, editor) => {
         const data = editor.getData();
-        setNewValue(data);
-        if (onChange) onChange(data);
+        if (data !== value) {
+          setNewValue(data);
+          if (onChange) onChange(data);
+        }
       }}
     />
   );

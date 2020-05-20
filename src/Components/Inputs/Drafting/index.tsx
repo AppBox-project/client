@@ -10,11 +10,13 @@ const InputDrafting: React.FC<{
 }> = ({ placeholder, mode, onChange, value }) => {
   // Vars
   const [newValue, setNewValue] = useState(value);
+  const [initial, setInitial] = useState(true);
 
   // Lifecycle
   useEffect(() => {
     setNewValue(value);
-  }, []);
+    setInitial(true);
+  }, [value]);
 
   // UI
   return (
@@ -22,9 +24,16 @@ const InputDrafting: React.FC<{
       editor={ClassicEditor}
       data={newValue}
       onChange={(event, editor) => {
-        const data = editor.getData();
-        setNewValue(data);
-        if (onChange) onChange(data);
+        console.log(event);
+
+        if (initial) {
+          // Prevent initial save
+          setInitial(false);
+        } else {
+          const data = editor.getData();
+          setNewValue(data);
+          if (onChange) onChange(data);
+        }
       }}
     />
   );

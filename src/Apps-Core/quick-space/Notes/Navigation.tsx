@@ -33,6 +33,7 @@ const AppQSNotesNavigation: React.FC<{
   const [selectedProject, setSelectedProject] = useState();
   const [project, setProject] = useState();
   const [activeMemos, setActiveMemos] = useState();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -157,7 +158,13 @@ const AppQSNotesNavigation: React.FC<{
               listTextPath="data.title"
               customItem={(object) => {
                 return (
-                  <ListItem key={object._id}>
+                  <ListItem
+                    key={object._id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      history.push(`/quick-space/notes/${object._id}`);
+                    }}
+                  >
                     {object.data.image && (
                       <ListItemAvatar>
                         <Avatar src={baseUrl + object.data.image} />

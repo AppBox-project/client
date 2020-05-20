@@ -15,45 +15,61 @@ const AppQSNotesDetail: React.FC<{
 }) => {
   // Vars
   const [note, setNote] = useState();
+  const [model, setModel] = useState();
 
   // Lifecycle
   useEffect(() => {
+    // Object
     setSelectedMemo(detailId);
     const noteRequest = context.getObjects(
       "qs-note",
       { _id: detailId },
       (response) => {
         if (response.success) {
-          setNote(response.data[0]);
+          setNote(response.data[0]); // no realtime data for this baby
         } else {
           console.log(response);
         }
       }
     );
 
+    // Model
+    const modelRequest = context.getModel("qs-note", (response) => {
+      if (response.success) {
+        setModel(response.data);
+      } else {
+        console.log(response);
+      }
+    });
+
     return () => {
       noteRequest.stop();
+      modelRequest.stop();
       setSelectedMemo(undefined);
     };
   }, [detailId]);
 
   // UI
-  if (!note) return <context.UI.Loading />;
+  if (!note || !model) return <context.UI.Loading />;
   return (
     <>
       <context.UI.Field
         modelId="qs-note"
+        field={model.fields["title"]}
         fieldId="title"
-        objectId={detailId}
+        object={note}
         mode="free"
         directSave
+        directSaveDelay={100}
       />
       <context.UI.Field
         modelId="qs-note"
         fieldId="note"
-        objectId={detailId}
+        field={model.fields["note"]}
+        object={note}
         mode="free"
         directSave
+        directSaveDelay={1500}
       />
     </>
   );
