@@ -13,7 +13,11 @@ const AppSettingsBackup: React.FC<{
   // Lifecycle
 
   // UI
-  return <>TODO: Make a database upgrade tool, export mongoDB</>;
+  return (
+    <div className="center">
+      TODO: Make a database upgrade tool, export mongoDB
+    </div>
+  );
 };
 
 export default AppSettingsBackup;
