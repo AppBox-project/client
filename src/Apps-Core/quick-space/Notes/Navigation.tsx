@@ -12,9 +12,12 @@ import {
   ListItemIcon,
   Button,
   Icon,
+  ListItemAvatar,
+  Avatar,
 } from "@material-ui/core";
 import { FaGripLines, FaStickyNote, FaPlus } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
+import { baseUrl } from "../../../Utils/Utils";
 
 const grid = 8;
 
@@ -152,6 +155,18 @@ const AppQSNotesNavigation: React.FC<{
             <context.UI.Layouts.SortableList
               listItems={activeMemos}
               listTextPath="data.title"
+              customItem={(object) => {
+                return (
+                  <ListItem key={object._id}>
+                    {object.data.image && (
+                      <ListItemAvatar>
+                        <Avatar src={baseUrl + object.data.image} />
+                      </ListItemAvatar>
+                    )}
+                    <ListItemText>{object.data.title}</ListItemText>
+                  </ListItem>
+                );
+              }}
               baseUrl="/quick-space/notes"
               linkToPath="_id"
               button
