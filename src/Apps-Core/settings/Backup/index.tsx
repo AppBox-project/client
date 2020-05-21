@@ -38,7 +38,7 @@ const AppSettingsBackup: React.FC<{
                   name: `Backing up database`,
                   description: `Triggered manually`,
                   when: "asap",
-                  action: "database-backup",
+                  action: "backup",
                   done: false,
                   arguments: undefined,
                   progress: 0,
