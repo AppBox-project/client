@@ -8,6 +8,7 @@ setGlobal({
   user: undefined,
   isMobile: undefined,
   app: undefined,
+  snackbar: undefined,
   defaultButton: { icon: undefined, url: undefined, function: undefined },
   navBar: {
     title: undefined,
