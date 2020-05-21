@@ -6,6 +6,7 @@ import ObjectFieldDisplayPicture from "./FieldDisplay/Picture";
 import ObjectFieldDisplayHtml from "./FieldDisplay/HTML";
 import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
+import ObjectFieldDisplayFile from "./FieldDisplay/File";
 
 const FieldDisplay: React.FC<{ objectField; modelField; props? }> = ({
   objectField,
@@ -46,6 +47,13 @@ const FieldDisplay: React.FC<{ objectField; modelField; props? }> = ({
       )}
       {modelField.type === "picture" && (
         <ObjectFieldDisplayPicture
+          modelField={modelField}
+          objectField={objectField}
+          {...props}
+        />
+      )}
+      {modelField.type === "file" && (
+        <ObjectFieldDisplayFile
           modelField={modelField}
           objectField={objectField}
           {...props}

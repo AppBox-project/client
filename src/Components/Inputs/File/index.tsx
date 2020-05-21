@@ -7,7 +7,7 @@ import Axios from "axios";
 import { ModelType } from "../../../Utils/Types";
 import { baseUrl } from "../../../Utils/Utils";
 
-const InputPicture: React.FC<{
+const InputFile: React.FC<{
   placeholder?: string;
   label?: string;
   value?: string;
@@ -60,7 +60,6 @@ const InputPicture: React.FC<{
           onChange(response.data);
         });
       }}
-      accept="image/*"
       multiple={false}
       onDragEnter={() => {
         setIsDragging(true);
@@ -75,7 +74,7 @@ const InputPicture: React.FC<{
         >
           <div {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Picture goes here</p>
+            <p>File goes here</p>
           </div>
         </section>
       )}
@@ -83,4 +82,4 @@ const InputPicture: React.FC<{
   );
 };
 
-export default InputPicture;
+export default InputFile;

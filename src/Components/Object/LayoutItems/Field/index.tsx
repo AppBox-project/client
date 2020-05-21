@@ -13,6 +13,7 @@ import InputRichText from "../../../Inputs/RichText";
 import InputColor from "../../../Inputs/Color";
 import FieldDisplay from "../../FieldDisplay";
 import InputRelationShipM from "../../../Inputs/Relationship _m";
+import InputFile from "../../../Inputs/File";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -135,6 +136,18 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "picture" && (
               <InputPicture
+                label={modelField.name}
+                value={objectField}
+                model={model}
+                fieldKey={objectField}
+                object={object}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}
+            {modelField.type === "file" && (
+              <InputFile
                 label={modelField.name}
                 value={objectField}
                 model={model}
