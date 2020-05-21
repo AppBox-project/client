@@ -13,6 +13,8 @@ import {
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
 import { FaLemon, FaCompass, FaDropbox } from "react-icons/fa";
+import FuzzySearch from "fuzzy-search";
+import InputInput from "../../../../Inputs/Input";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -27,6 +29,8 @@ const AppUIMobile: React.FC<{
   const [gApp] = useGlobal<any>("app");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [filter, setFilter] = useState<any>();
+
   const [actionsDisplayAs, setActionsDisplayAs] = useState(
     gApp
       ? gApp.data.mobileSettings
@@ -73,6 +77,12 @@ const AppUIMobile: React.FC<{
       });
     }
   }, [actionsDisplayAs]);
+
+  let actions = appContext.actions;
+  if (filter) {
+    const searcher = new FuzzySearch(actions, ["key", "label"], {});
+    actions = searcher.search(filter);
+  }
 
   return (
     <>
@@ -133,8 +143,18 @@ const AppUIMobile: React.FC<{
               setDrawerOpen(false);
             }}
           >
+            {appContext.appConfig?.actions?.filter && (
+              <InputInput
+                style={{ width: "87%" }}
+                placeholder="Filter actions"
+                value={filter}
+                onChange={(value) => {
+                  setFilter(value);
+                }}
+              />
+            )}
             <List>
-              {appContext.actions.map((action) => {
+              {actions.map((action) => {
                 const Icon = action.icon;
                 return (
                   <ListItem
