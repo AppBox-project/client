@@ -92,7 +92,7 @@ export interface AppContextType {
   app: AppType;
   isReady: Promise<unknown>;
   appCode: any;
-  appConfig: { settings: JSX.Element };
+  appConfig: { settings: JSX.Element; actions: { filter: boolean } };
   actions: [{ label: string; key: string; component: FC; icon?: React.FC }];
   UI: UIType;
   setButton: (

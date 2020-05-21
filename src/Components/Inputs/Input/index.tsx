@@ -7,7 +7,8 @@ const InputInput: React.FC<{
   value?: string;
   onChange?: (value: string) => void;
   type?;
-}> = ({ placeholder, label, value, onChange, type }) => {
+  style?;
+}> = ({ placeholder, label, value, onChange, type, style }) => {
   // Vars
   const [newValue, setNewValue] = useState("");
 
@@ -19,9 +20,10 @@ const InputInput: React.FC<{
   // UI
   if (label)
     return (
-      <label>
+      <label style={{ width: "100%" }}>
         {label}
         <input
+          style={style}
           type={type ? type : "text"}
           className={styles.input}
           placeholder={placeholder}
@@ -35,6 +37,7 @@ const InputInput: React.FC<{
     );
   return (
     <input
+      style={style}
       className={styles.input}
       type={type ? type : "text"}
       placeholder={placeholder}

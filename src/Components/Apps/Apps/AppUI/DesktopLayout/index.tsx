@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppContextType } from "../../../../../Utils/Types";
 import { motion } from "framer-motion";
 import { Link, Switch, Route } from "react-router-dom";
@@ -13,6 +13,8 @@ import {
   Divider,
 } from "@material-ui/core";
 import { FaWrench } from "react-icons/fa";
+import InputInput from "../../../../Inputs/Input";
+import FuzzySearch from "fuzzy-search";
 
 const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
   appContext,
@@ -66,6 +68,7 @@ const ActionMenu: React.FC<{
   context: AppContextType;
   currentPage: string;
 }> = ({ context, currentPage }) => {
+  const [filter, setFilter] = useState();
   const list = {
     visible: {
       opacity: 1,
@@ -91,6 +94,12 @@ const ActionMenu: React.FC<{
     hidden: { opacity: 0, y: 10 },
   };
 
+  let actions = context.actions;
+  if (filter) {
+    const searcher = new FuzzySearch(actions, ["key", "label"], {});
+    actions = searcher.search(filter);
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -112,8 +121,20 @@ const ActionMenu: React.FC<{
           </Typography>
         </Link>
       </motion.div>
+      {context.appConfig?.actions?.filter && (
+        <motion.div variants={item}>
+          <InputInput
+            style={{ width: "87%" }}
+            placeholder="Filter actions"
+            value={filter}
+            onChange={(value) => {
+              setFilter(value);
+            }}
+          />
+        </motion.div>
+      )}
       <List>
-        {context.actions.map((action) => {
+        {actions.map((action) => {
           const ActionIcon: React.FC<{ style }> = action.icon;
           return (
             <motion.div variants={item} key={action.key}>

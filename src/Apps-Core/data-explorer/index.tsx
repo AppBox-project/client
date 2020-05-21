@@ -9,6 +9,12 @@ export default class App {
     this.context = context;
   }
 
+  appConfig = {
+    actions: {
+      filter: true,
+    },
+  };
+
   getActions = () => {
     return new Promise((resolve) => {
       this.context.getTypes({}, (response) => {

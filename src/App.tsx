@@ -19,7 +19,7 @@ import { Alert } from "@material-ui/lab";
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
   const [gTheme] = useGlobal<any>("theme");
-  const [gSnackbar, setgSnackbar] = useGlobal<any>("snackbar");
+  const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   const theme = createMuiTheme(gTheme);
   // Lifecycle
@@ -27,7 +27,7 @@ const App: React.FC = () => {
     let userRequest;
 
     Server.on("reconnect_attempt", () => {
-      setgSnackbar({
+      setSnackbar({
         display: true,
         message: "Connection lost. Reconnecting...",
         type: "warning",
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     });
 
     Server.on("connect", () => {
-      setgSnackbar({ display: false });
+      setSnackbar({ display: false });
     });
 
     Server.on("who-r-u", (previousAction) => {
@@ -108,9 +108,9 @@ const App: React.FC = () => {
           </>
         )}
       </BrowserRouter>
-      {gSnackbar && (
-        <Snackbar open={gSnackbar.display} TransitionComponent={TransitionUp}>
-          <Alert severity={gSnackbar.type}>{gSnackbar.message}</Alert>
+      {snackbar && (
+        <Snackbar open={snackbar.display} TransitionComponent={TransitionUp}>
+          <Alert severity={snackbar.type}>{snackbar.message}</Alert>
         </Snackbar>
       )}
     </ThemeProvider>
