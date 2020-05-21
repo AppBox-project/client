@@ -6,6 +6,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import Axios from "axios";
 import { ModelType } from "../../../Utils/Types";
 import { baseUrl } from "../../../Utils/Utils";
+import uniqid from "uniqid";
 
 const InputFile: React.FC<{
   placeholder?: string;
@@ -48,7 +49,7 @@ const InputFile: React.FC<{
         formData.append("username", localStorage.getItem("username"));
         formData.append("token", localStorage.getItem("token"));
         formData.append("modelType", model.key);
-        formData.append("objectId", object._id);
+        formData.append("objectId", object ? object._id : uniqid() + uniqid());
         formData.append("fieldkey", fieldKey);
         formData.append("file", files[0]);
         Axios.post(`${baseUrl}/upload`, formData, {

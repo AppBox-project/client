@@ -3,6 +3,7 @@ import FourOhFour from "../../Components/FourOhFour";
 import AppQSActionNotes from "./Notes";
 import { FaStickyNote, FaListAlt, FaFolderOpen, FaTh } from "react-icons/fa";
 import AppSettings from "./Settings";
+import AppQSActionFile from "./Files";
 
 export default class App {
   context: any;
@@ -40,7 +41,7 @@ export default class App {
         {
           key: "files",
           label: "Files",
-          component: FourOhFour,
+          component: AppQSActionFile,
           icon: FaFolderOpen,
         },
       ]);
