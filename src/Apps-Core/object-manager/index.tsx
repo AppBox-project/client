@@ -9,10 +9,10 @@ export default class App {
   constructor(context) {
     this.context = context;
   }
-
   appConfig = {
     actions: {
       filter: true,
+      mobile: { displayAs: "menu" },
     },
   };
   getActions = () => {

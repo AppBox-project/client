@@ -13,6 +13,7 @@ export default class App {
 
   appConfig = {
     settings: AppSettings,
+    actions: { mobile: { displayAs: "bottom-navigation" } },
   };
 
   getActions = () => {

@@ -92,7 +92,13 @@ export interface AppContextType {
   app: AppType;
   isReady: Promise<unknown>;
   appCode: any;
-  appConfig: { settings: JSX.Element; actions: { filter: boolean } };
+  appConfig?: {
+    settings?: JSX.Element;
+    actions?: {
+      filter?: boolean;
+      mobile?: { displayAs?: "menu" | "bottom-navigation" | "tabs" };
+    };
+  };
   actions: [{ label: string; key: string; component: FC; icon?: React.FC }];
   UI: UIType;
   setButton: (

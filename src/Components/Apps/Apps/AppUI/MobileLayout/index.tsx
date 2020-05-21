@@ -31,30 +31,8 @@ const AppUIMobile: React.FC<{
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [filter, setFilter] = useState<any>();
 
-  const [actionsDisplayAs, setActionsDisplayAs] = useState(
-    gApp
-      ? gApp.data.mobileSettings
-        ? gApp.data.mobileSettings.actionsDisplayAs
-          ? gApp.data.mobileSettings.actionsDisplayAs
-          : "default"
-        : "default"
-      : "default"
-  );
-
   useEffect(() => {
-    setActionsDisplayAs(
-      gApp
-        ? gApp.data.mobileSettings
-          ? gApp.data.mobileSettings.actionsDisplayAs
-            ? gApp.data.mobileSettings.actionsDisplayAs
-            : "default"
-          : "default"
-        : "default"
-    );
-  }, [gApp]);
-
-  useEffect(() => {
-    if (actionsDisplayAs === "menu") {
+    if (appContext.appConfig?.actions?.mobile?.displayAs === "menu") {
       setNavBar({
         ...navBar,
         buttons: {
@@ -76,7 +54,7 @@ const AppUIMobile: React.FC<{
         },
       });
     }
-  }, [actionsDisplayAs]);
+  }, [appContext]);
 
   let actions = appContext.actions;
   if (filter) {
@@ -86,8 +64,8 @@ const AppUIMobile: React.FC<{
 
   return (
     <>
-      {actionsDisplayAs === "tabs" ||
-        (actionsDisplayAs === "default" && (
+      {appContext.appConfig?.actions?.mobile?.displayAs === "tabs" ||
+        (!appContext.appConfig?.actions?.mobile?.displayAs && (
           <Tabs
             variant="scrollable"
             aria-label="App actions"
@@ -132,7 +110,7 @@ const AppUIMobile: React.FC<{
             );
           })}
         </Switch>
-        {actionsDisplayAs === "menu" && (
+        {appContext.appConfig?.actions?.mobile?.displayAs === "menu" && (
           <SwipeableDrawer
             anchor="right"
             open={drawerOpen}
@@ -175,7 +153,8 @@ const AppUIMobile: React.FC<{
             </List>
           </SwipeableDrawer>
         )}
-        {actionsDisplayAs === "bottom-navigation" && (
+        {appContext.appConfig?.actions?.mobile?.displayAs ===
+          "bottom-navigation" && (
           <BottomNavigation
             value={currentAction}
             showLabels

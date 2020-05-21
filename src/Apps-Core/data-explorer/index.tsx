@@ -12,6 +12,7 @@ export default class App {
   appConfig = {
     actions: {
       filter: true,
+      mobile: { displayAs: "menu" },
     },
   };
 
