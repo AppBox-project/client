@@ -26,12 +26,14 @@ export class AppContext {
   appButtons;
   setAppButtons;
   appConfig;
+  user;
 
-  constructor(appId, setDialog, appButtons, setAppButtons) {
+  constructor(appId, setDialog, appButtons, setAppButtons, user) {
     this.appId = appId;
     this.setDialog = setDialog;
     this.appButtons = appButtons;
     this.setAppButtons = setAppButtons;
+    this.user = user;
     this.UI = {
       Loading,
       Margin: Margin,

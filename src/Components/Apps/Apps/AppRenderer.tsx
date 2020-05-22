@@ -31,13 +31,20 @@ const App: React.FC<{
   const [dialogFormContent, setDialogFormContent] = useState();
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
+  const [gUser] = useGlobal<any>("user");
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [appButtons, setAppButtons] = useState({});
 
   //Lifecycle
   useEffect(() => {
     setCurrentApp(appId);
-    const context = new AppContext(appId, setDialog, appButtons, setAppButtons);
+    const context = new AppContext(
+      appId,
+      setDialog,
+      appButtons,
+      setAppButtons,
+      gUser
+    );
     context.isReady.then(() => {
       //@ts-ignore
       setAppcontext(context);

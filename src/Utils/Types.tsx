@@ -10,6 +10,7 @@ export interface UserType {
     email: string;
     first_name: string;
     last_name: string;
+    full_name: string;
   };
   objectId: string;
 }
@@ -92,6 +93,7 @@ export interface AppContextType {
   app: AppType;
   isReady: Promise<unknown>;
   appCode: any;
+  user: UserType;
   appConfig?: {
     settings?: JSX.Element;
     actions?: {
