@@ -40,7 +40,7 @@ const AppQSActionTodoDetail: React.FC<{
   useEffect(() => {
     const todoRequest = context.getObjects(
       "qs-todo",
-      { "data.project": detailId },
+      { "data.project": detailId, "data.owner": context.user._id },
       (response) => {
         if (response.success) {
           setTodos(
@@ -169,6 +169,7 @@ const AppQSActionTodoDetail: React.FC<{
                             {
                               action: newTodo,
                               project: detailId,
+                              owner: context.user._id,
                             },
                             (response) => {
                               console.log(response);

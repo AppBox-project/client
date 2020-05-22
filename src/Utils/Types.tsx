@@ -4,6 +4,7 @@ export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
 
 export interface UserType {
+  _id: any;
   data: {
     username: string;
     password: string;

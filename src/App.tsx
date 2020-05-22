@@ -15,6 +15,7 @@ import { BrowserRouter } from "react-router-dom";
 import Server from "./Utils/Server";
 import MobileLayout from "./Pages/Mobile";
 import { Alert } from "@material-ui/lab";
+import { FaWifi } from "react-icons/fa";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
@@ -31,6 +32,7 @@ const App: React.FC = () => {
         display: true,
         message: "Connection lost. Reconnecting...",
         type: "warning",
+        icon: <FaWifi />,
       });
     });
 
@@ -110,7 +112,9 @@ const App: React.FC = () => {
       </BrowserRouter>
       {snackbar && (
         <Snackbar open={snackbar.display} TransitionComponent={TransitionUp}>
-          <Alert severity={snackbar.type}>{snackbar.message}</Alert>
+          <Alert icon={snackbar.icon} severity={snackbar.type}>
+            {snackbar.message}
+          </Alert>
         </Snackbar>
       )}
     </ThemeProvider>
