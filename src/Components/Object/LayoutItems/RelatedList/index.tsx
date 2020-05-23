@@ -62,15 +62,21 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   // UI
   return (
     <>
-      <Typography variant="h6">{layoutItem.title}</Typography>
+      <Typography variant="h6" style={{ textAlign: "center" }}>
+        {layoutItem.title}
+      </Typography>
       {relatedItems && relatedModel ? (
         relatedItems.length > 0 ? (
-          <TableContainer component={Paper}>
+          <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>
                   {layoutItem.displayfields.split(",").map((field) => {
-                    return <TableCell>{field}</TableCell>;
+                    return (
+                      <TableCell style={{ textAlign: "center" }}>
+                        {relatedModel.fields[field].name}
+                      </TableCell>
+                    );
                   })}
                 </TableRow>
               </TableHead>

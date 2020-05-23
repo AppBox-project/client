@@ -404,8 +404,6 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
           }}
           layout={layout}
           onChange={(newLayout) => {
-            console.log([...newLayout]);
-
             setLayout([...newLayout]); // Spread operator is required to force react to redraw
             setHasChanged(true);
           }}

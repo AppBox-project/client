@@ -127,8 +127,6 @@ const LayoutItem: React.FC<{
         ] = layoutItem;
       }}
       onChange={(response) => {
-        console.log(response);
-
         if (!layoutItem.items) layoutItem.items = [];
         layoutItem.items.push({ type: response.id, xs: 12, id: uniqid() });
         const itemList = layout;

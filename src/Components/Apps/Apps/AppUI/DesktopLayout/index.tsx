@@ -74,9 +74,9 @@ const ActionMenu: React.FC<{
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.2,
+        duration: 0.05,
         when: "beforeChildren",
-        staggerChildren: 0.08,
+        staggerChildren: 0.03,
         ease: "easeOut",
       },
     },
@@ -133,41 +133,45 @@ const ActionMenu: React.FC<{
           />
         </motion.div>
       )}
-      <List>
-        {actions.map((action) => {
-          const ActionIcon: React.FC<{ style }> = action.icon;
-          return (
-            <motion.div variants={item} key={action.key}>
-              <Link
-                className="no-link"
-                to={`/${context.app.data.id}/${action.key}`}
-                style={{ color: "rgb(66, 82, 110)" }}
-              >
-                <ListItem button selected={currentPage === action.key}>
-                  {ActionIcon && (
-                    <ListItemIcon>
-                      <Icon
+      <div className={styles.scrollable}>
+        <List>
+          {actions.map((action) => {
+            const ActionIcon: React.FC<{ style }> = action.icon;
+            return (
+              <motion.div variants={item} key={action.key}>
+                <Link
+                  className="no-link"
+                  to={`/${context.app.data.id}/${action.key}`}
+                  style={{ color: "rgb(66, 82, 110)" }}
+                >
+                  <ListItem button selected={currentPage === action.key}>
+                    {ActionIcon && (
+                      <ListItemIcon>
+                        <Icon
+                          color={
+                            currentPage === action.key ? "primary" : "inherit"
+                          }
+                        >
+                          <ActionIcon style={{ width: 18, height: 18 }} />
+                        </Icon>
+                      </ListItemIcon>
+                    )}
+                    <ListItemText>
+                      <Typography
                         color={
                           currentPage === action.key ? "primary" : "inherit"
                         }
                       >
-                        <ActionIcon style={{ width: 18, height: 18 }} />
-                      </Icon>
-                    </ListItemIcon>
-                  )}
-                  <ListItemText>
-                    <Typography
-                      color={currentPage === action.key ? "primary" : "inherit"}
-                    >
-                      {action.label}
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-              </Link>
-            </motion.div>
-          );
-        })}
-      </List>
+                        {action.label}
+                      </Typography>
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </List>
+      </div>
       {context.appConfig && context.appConfig.settings && (
         <motion.div
           variants={item}
