@@ -86,6 +86,7 @@ const ViewObject: React.FC<{
 
   // Lifecycle
   useEffect(() => {
+    console.log("Loaded actions", actions);
     // -> Object types
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {

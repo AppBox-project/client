@@ -16,6 +16,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Drawer,
 } from "@material-ui/core";
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -26,6 +27,8 @@ import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
 import FieldDisplay from "../FieldDisplay";
 import { filter, size } from "lodash";
+import { FaFilter } from "react-icons/fa";
+import OverviewFilter from "./Filter";
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -66,12 +69,24 @@ const Overview: React.FC<{
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const history = useHistory();
   const [actions, setActions] = useGlobal<any>("actions");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [overviewFilter, setOverviewFilter] = useState([]);
 
   const isSelected = (name) =>
     selected ? selected.indexOf(name) !== -1 : false;
 
   // Lifecycle
   useEffect(() => {
+    // Actions
+    setActions({
+      ...actions,
+      objectFilter: {
+        icon: <FaFilter style={{ width: 18, height: 18 }} />,
+        function: () => {
+          setDrawerOpen(true);
+        },
+      },
+    });
     // -> Object types
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
@@ -101,20 +116,9 @@ const Overview: React.FC<{
       Server.emit("unlistenForObjectTypes", { requestId });
       Server.emit("unlistenForObjects", { requestId: dataRequestId });
       setLayout(false);
-    };
-  }, [objectTypeId]);
-
-  // Filter buttons
-  useEffect(() => {
-    setActions({
-      ...actions,
-      objectFilter: { label: "test" },
-    });
-
-    return () => {
       setActions({ ...actions, objectFilter: undefined });
     };
-  }, []);
+  }, [objectTypeId]);
 
   // UI
   if (!objects || !model || !layout) return <Loading />;
@@ -321,6 +325,19 @@ const Overview: React.FC<{
           </MenuItem>
         </Menu>
       </Paper>
+      <Drawer
+        anchor="bottom"
+        open={drawerOpen}
+        onClose={() => {
+          setDrawerOpen(false);
+        }}
+      >
+        <OverviewFilter
+          setOverviewFilter={setOverviewFilter}
+          overviewFilter={overviewFilter}
+          model={model}
+        />
+      </Drawer>
     </>
   );
 };
