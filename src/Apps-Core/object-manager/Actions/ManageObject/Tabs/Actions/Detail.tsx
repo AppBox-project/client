@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AppContextType,
-  ModelFieldType,
   ModelType,
-  UIType,
 } from "../../../../../../Utils/Types";
 import { Paper, Button } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";

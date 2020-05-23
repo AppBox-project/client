@@ -17,13 +17,17 @@ const AppQSActionFile: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const fileRequest = context.getObjects("qs-files", {}, (response) => {
-      if (response.success) {
-        setFiles(response.data);
-      } else {
-        console.log(response);
+    const fileRequest = context.getObjects(
+      "qs-files",
+      { "data.owner": context.user._id },
+      (response) => {
+        if (response.success) {
+          setFiles(response.data);
+        } else {
+          console.log(response);
+        }
       }
-    });
+    );
 
     // Model
     const modelRequest = context.getModel("qs-files", (response) => {

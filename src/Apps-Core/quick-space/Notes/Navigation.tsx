@@ -13,7 +13,7 @@ import {
   ListItemAvatar,
   Avatar,
 } from "@material-ui/core";
-import { FaGripLines, FaStickyNote, FaPlus } from "react-icons/fa";
+import { FaGripLines } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { baseUrl } from "../../../Utils/Utils";
 

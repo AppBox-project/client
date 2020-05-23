@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
-import { useHistory, Switch, Route, Link } from "react-router-dom";
+import { useHistory, Switch, Route } from "react-router-dom";
 import { FaLemon, FaDropbox, FaAngleDoubleLeft } from "react-icons/fa";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
@@ -30,7 +30,6 @@ const AppUIMobile: React.FC<{
     ? window.location.href.split(`/${appContext.appId}/`)[1].split("/")[0]
     : "home";
   const history = useHistory();
-  const [gApp] = useGlobal<any>("app");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [filter, setFilter] = useState<any>();

@@ -9,7 +9,6 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Typography,
-  Divider,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";

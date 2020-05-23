@@ -3,7 +3,6 @@ import { Skeleton } from "@material-ui/lab";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { Chip } from "@material-ui/core";
-import { FaTags } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import * as icons from "react-icons/fa";
 

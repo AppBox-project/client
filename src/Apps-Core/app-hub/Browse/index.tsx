@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
 import axios from "axios";
-import {
-  GridList,
-  GridListTile,
-  GridListTileBar,
-  Grid,
-  Paper,
-  Typography,
-} from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { useHistory, Route, Switch } from "react-router-dom";
 import AppAHViewApp from "../ViewApp";

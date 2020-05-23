@@ -4,7 +4,7 @@ import Server from "../../Utils/Server";
 import Loading from "../../Components/Loading";
 import * as icons from "react-icons/fa";
 import { useHistory } from "react-router-dom";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import FourOhFour from "../../Components/FourOhFour";
@@ -20,7 +20,6 @@ import {
   Icon,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import SettingsPage from "../Settings";
 import NavBar from "../../Components/NavBar";
 import styles from "./styles.module.scss";
 import { baseUrl } from "../../Utils/Utils";
@@ -28,9 +27,7 @@ import { baseUrl } from "../../Utils/Utils";
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState();
   const history = useHistory();
-  const currentTab = window.location.href.split("/")[3]
-    ? window.location.href.split("/")[3]
-    : "home";
+
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gUser] = useGlobal<any>("user");
   const [drawerOpen, setDrawerOpen] = useState(false);

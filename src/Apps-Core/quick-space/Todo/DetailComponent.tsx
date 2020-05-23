@@ -74,7 +74,7 @@ const AppQSActionTodoDetail: React.FC<{
       todoRequest.stop();
       modelRequest.stop();
     };
-  }, [detailId]);
+  }, [detailId, context]);
 
   useEffect(() => {
     context.setButton("toggleMode", {

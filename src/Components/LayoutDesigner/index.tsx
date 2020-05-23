@@ -13,12 +13,7 @@ import {
   AnimationContainer,
   AnimationItem,
 } from "../Apps/Apps/AppUI/Animations";
-import {
-  FaToggleOn,
-  FaToggleOff,
-  FaAngleRight,
-  FaAngleLeft,
-} from "react-icons/fa";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 
 const LayoutDesigner: React.FC<{
   layout: LayoutDesignerItem[];

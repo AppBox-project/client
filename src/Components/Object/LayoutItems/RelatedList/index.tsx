@@ -6,9 +6,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Paper,
   Collapse,
-  List,
   Table,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
