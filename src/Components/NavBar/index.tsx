@@ -15,6 +15,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
   const [app] = useGlobal<any>("app");
   const [navBar] = useGlobal<any>("navBar");
+  const [actions] = useGlobal<any>("actions");
   const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
@@ -59,8 +60,8 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
                 : "AppBox"}
             </Typography>
           </Link>
-          {navBar.buttons &&
-            map(navBar.buttons, (button, key) => {
+          {actions &&
+            map(actions, (button, key) => {
               if (button) {
                 return button.label ? (
                   <Button

@@ -31,30 +31,24 @@ const AppUIMobile: React.FC<{
     : "home";
   const history = useHistory();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [gActions, setgActions] = useGlobal<any>("actions");
   const [filter, setFilter] = useState<any>();
 
   useEffect(() => {
     if (appContext.appConfig?.actions?.mobile?.displayAs === "menu") {
-      setNavBar({
-        ...navBar,
-        buttons: {
-          ...navBar.buttons,
-          navigate: {
-            icon: <FaAngleDoubleLeft />,
-            function: () => {
-              setDrawerOpen(true);
-            },
+      setgActions({
+        ...gActions,
+        navigate: {
+          icon: <FaAngleDoubleLeft />,
+          function: () => {
+            setDrawerOpen(true);
           },
         },
       });
     } else {
-      setNavBar({
-        ...navBar,
-        buttons: {
-          ...navBar.buttons,
-          navigate: undefined,
-        },
+      setgActions({
+        ...gActions,
+        navigate: undefined,
       });
     }
   }, [appContext]);

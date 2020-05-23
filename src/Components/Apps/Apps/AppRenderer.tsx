@@ -33,6 +33,7 @@ const App: React.FC<{
   const [gApp, setgApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
   const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [actions, setActions] = useGlobal<any>("actions");
   const [appButtons, setAppButtons] = useState({});
 
   //Lifecycle
@@ -67,10 +68,7 @@ const App: React.FC<{
       setCurrentApp(null);
       setAppcontext(null);
       setAppButtons(null);
-      setNavBar({
-        ...navBar,
-        buttons: {},
-      });
+      setActions({});
 
       setgApp(null);
       setDialog({
@@ -97,7 +95,7 @@ const App: React.FC<{
     };
   }, [appId]);
   useEffect(() => {
-    setNavBar({ ...navBar, buttons: { ...navBar.buttons, ...appButtons } });
+    setActions({ ...actions, ...appButtons });
   }, [appButtons]);
 
   //UI

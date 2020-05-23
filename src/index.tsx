@@ -15,7 +15,7 @@ setGlobal({
     backButton: { icon: undefined, url: undefined, function: undefined },
     buttons: {},
   },
-  buttons: {},
+  actions: {},
   theme: {
     palette: {
       primary: {

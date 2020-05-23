@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import {
   Table,
   TableHead,
@@ -65,6 +65,7 @@ const Overview: React.FC<{
   const [orderBy, setOrderBy] = useState();
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const history = useHistory();
+  const [actions, setActions] = useGlobal<any>("actions");
 
   const isSelected = (name) =>
     selected ? selected.indexOf(name) !== -1 : false;
@@ -102,6 +103,18 @@ const Overview: React.FC<{
       setLayout(false);
     };
   }, [objectTypeId]);
+
+  // Filter buttons
+  useEffect(() => {
+    setActions({
+      ...actions,
+      objectFilter: { label: "test" },
+    });
+
+    return () => {
+      setActions({ ...actions, objectFilter: undefined });
+    };
+  }, []);
 
   // UI
   if (!objects || !model || !layout) return <Loading />;

@@ -39,6 +39,7 @@ const ViewObject: React.FC<{
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
+  const [actions, setActions] = useGlobal<any>("actions");
   const [defaultButton] = useGlobal<any>("defaultButton");
   const [pageTitle, setPageTitle] = useState(undefined);
 
@@ -121,6 +122,16 @@ const ViewObject: React.FC<{
   useEffect(() => {
     if (mode === "view") {
       if (!popup) {
+        setActions({
+          ...actions,
+          objectToggle: {
+            label: "Edit",
+            icon: <FaEdit />,
+            function: () => {
+              setMode("edit");
+            },
+          },
+        });
         setNavBar({
           ...navBar,
           backButton: {
@@ -130,20 +141,21 @@ const ViewObject: React.FC<{
             function: undefined,
           },
           title: pageTitle ? pageTitle : undefined,
-          buttons: {
-            ...navBar.buttons,
-            objectToggle: {
-              label: "Edit",
-              icon: <FaEdit />,
-              function: () => {
-                setMode("edit");
-              },
-            },
-          },
         });
       }
     } else {
       if (!popup) {
+        setActions({
+          ...actions,
+          objectToggle: {
+            label: "Save",
+            variant: "contained",
+            icon: <FaSave />,
+            function: () => {
+              save();
+            },
+          },
+        });
         setNavBar({
           ...navBar,
           backButton: {
@@ -155,30 +167,19 @@ const ViewObject: React.FC<{
             },
           },
           title: pageTitle ? pageTitle : undefined,
-          buttons: {
-            ...navBar.buttons,
-            objectToggle: {
-              label: "Save",
-              variant: "contained",
-              icon: <FaSave />,
-              function: () => {
-                save();
-              },
-            },
-          },
         });
       }
     }
 
     return () => {
       if (!popup) {
+        setActions({ ...actions, objectToggle: undefined });
         setNavBar({
           ...navBar,
           backButton: {
             ...defaultButton,
           },
           title: undefined,
-          buttons: { ...navBar.buttons, objectToggle: undefined },
         });
       }
     };

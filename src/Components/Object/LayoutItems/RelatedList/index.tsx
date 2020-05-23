@@ -82,6 +82,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                 {relatedItems.slice(0, 3).map((item, index) => {
                   return (
                     <TableRow
+                      hover
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         history.push(
