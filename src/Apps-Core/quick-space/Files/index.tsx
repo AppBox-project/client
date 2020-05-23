@@ -54,6 +54,7 @@ const AppQSActionFile: React.FC<{
               appId={context.appId}
               layoutId="dropzone"
               model={model}
+              defaults={{ owner: context.user._id }}
             />
           </div>
           <Divider />

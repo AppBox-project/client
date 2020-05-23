@@ -22,11 +22,20 @@ const ViewObject: React.FC<{
   objectId?: string;
   onSuccess?: () => void;
   popup?: true;
-}> = ({ objectTypeId, layoutId, appId, objectId, onSuccess, popup }) => {
+  defaults?: { [key: string]: string };
+}> = ({
+  objectTypeId,
+  layoutId,
+  appId,
+  objectId,
+  onSuccess,
+  popup,
+  defaults,
+}) => {
   const [objectType, setObjectType] = useState<ModelType>();
   const [object, setObject] = useState();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
-  const [toChange, setToChange] = useState({});
+  const [toChange, setToChange] = useState({ ...defaults });
   const [feedback, setFeedback] = useState();
   const [toUpload, setToUpload] = useState([]);
   const [navBar, setNavBar] = useGlobal<any>("navBar");

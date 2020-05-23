@@ -12,7 +12,8 @@ const UIObjectLayout: React.FC<{
   appId: string;
   objectId?: string;
   popup?: true;
-}> = ({ model, modelId, layoutId, appId, objectId, popup }) => {
+  defaults?: { [key: string]: string };
+}> = ({ model, modelId, layoutId, appId, objectId, popup, defaults }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
 
@@ -49,6 +50,7 @@ const UIObjectLayout: React.FC<{
       objectTypeId={appliedModel.key}
       layoutId={layoutId}
       appId={appId}
+      defaults={defaults}
       objectId={objectId}
     />
   );

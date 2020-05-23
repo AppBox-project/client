@@ -213,6 +213,7 @@ export interface UIType {
         appId: string;
         objectId?: string;
         popup?: true;
+        defaults?: { [key: string]: string };
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;
