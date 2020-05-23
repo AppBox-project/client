@@ -154,6 +154,7 @@ export interface WidgetContextType {
   appId: string;
   app: AppType;
   isReady: Promise<unknown>;
+  user: UserType;
   UI: UIType;
   getObjects: (
     type: string,

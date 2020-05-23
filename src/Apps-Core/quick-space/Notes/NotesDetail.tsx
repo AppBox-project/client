@@ -60,7 +60,7 @@ const AppQSNotesDetail: React.FC<{
         object={note}
         mode="free"
         directSave
-        directSaveDelay={100}
+        directSaveDelay={500}
       />
       <context.UI.Field
         modelId="qs-note"

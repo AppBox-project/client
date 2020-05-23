@@ -14,33 +14,37 @@ const AppQSActionTodo: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const projectRequest = context.getObjects("qs-project", {}, (response) => {
-      if (response.success) {
-        const newProjects = [];
-        response.data.map((project) => {
-          if (!project.data.parent) {
-            const subprojects = [];
-            filter(response.data, (o) => {
-              return o.data.parent === project._id;
-            }).map((subProject) => {
-              subprojects.push({
-                id: subProject._id,
-                label: subProject.data.name,
+    const projectRequest = context.getObjects(
+      "qs-project",
+      { "data.owner": context.user._id },
+      (response) => {
+        if (response.success) {
+          const newProjects = [];
+          response.data.map((project) => {
+            if (!project.data.parent) {
+              const subprojects = [];
+              filter(response.data, (o) => {
+                return o.data.parent === project._id;
+              }).map((subProject) => {
+                subprojects.push({
+                  id: subProject._id,
+                  label: subProject.data.name,
+                });
               });
-            });
-            newProjects.push({
-              id: project._id,
-              label: project.data.name,
-              subItems: subprojects,
-            });
-          }
-        });
-        //@ts-ignore
-        setProjects(newProjects);
-      } else {
-        console.log(response);
+              newProjects.push({
+                id: project._id,
+                label: project.data.name,
+                subItems: subprojects,
+              });
+            }
+          });
+          //@ts-ignore
+          setProjects(newProjects);
+        } else {
+          console.log(response);
+        }
       }
-    });
+    );
     return () => {
       projectRequest.stop();
     };

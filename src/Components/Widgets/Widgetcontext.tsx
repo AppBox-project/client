@@ -19,9 +19,11 @@ export class WidgetContext {
   isReady: Promise<unknown>;
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
+  user;
 
-  constructor(appId) {
+  constructor(appId, user) {
     this.appId = appId;
+    this.user = user;
     this.UI = {
       Loading,
       Animations: { AnimationContainer, AnimationItem },

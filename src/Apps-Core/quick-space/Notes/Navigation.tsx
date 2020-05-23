@@ -10,8 +10,6 @@ import {
   ListSubheader,
   Typography,
   ListItemIcon,
-  Button,
-  Icon,
   ListItemAvatar,
   Avatar,
 } from "@material-ui/core";
@@ -87,6 +85,7 @@ const AppQSNotesNavigation: React.FC<{
               return (
                 <div key={project.value}>
                   <ListSubheader
+                    color="primary"
                     onClick={() => {
                       setSelectedProject(project.value);
                     }}
@@ -182,7 +181,8 @@ const AppQSNotesNavigation: React.FC<{
                   "qs-note",
                   {
                     title: "Fresh note",
-                    project: selectedProject,owner: context.user._id
+                    project: selectedProject,
+                    owner: context.user._id,
                   },
                   () => {}
                 );

@@ -151,12 +151,14 @@ const ActionMenu: React.FC<{
                 return (
                   <div key={group}>
                     <motion.div variants={item}>
-                      <ListSubheader
-                        color="primary"
-                        style={{ cursor: "default" }}
-                      >
-                        {group ? group : "Other"}
-                      </ListSubheader>
+                      {group !== "undefined" && (
+                        <ListSubheader
+                          color="primary"
+                          style={{ cursor: "default" }}
+                        >
+                          {group ? group : "Other"}
+                        </ListSubheader>
+                      )}
                     </motion.div>
                     {actions.map((action) => {
                       const ActionIcon: React.FC<{ style }> = action.icon;

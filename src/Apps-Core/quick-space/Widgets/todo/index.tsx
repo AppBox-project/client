@@ -20,7 +20,7 @@ const AppWidgetTodo: React.FC<{
   useEffect(() => {
     const projectRequest = context.getObjects(
       "qs-project",
-      { _id: projectId },
+      { _id: projectId, "data.owner": context.user._id },
       (response) => {
         if (response.success) {
           setProject(response.data[0]);

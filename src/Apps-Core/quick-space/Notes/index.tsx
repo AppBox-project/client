@@ -19,34 +19,38 @@ const AppQSActionNotes: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-project", {}, (response) => {
-      if (response.success) {
-        const newProjects = [];
-        response.data.map((project) => {
-          if (!project.data.parent) {
-            const subprojects = [];
-            filter(response.data, (o) => {
-              return o.data.parent === project._id;
-            }).map((subProject) => {
-              subprojects.push({
-                value: subProject._id,
-                label: subProject.data.name,
+    context.getObjects(
+      "qs-project",
+      { "data.owner": context.user._id },
+      (response) => {
+        if (response.success) {
+          const newProjects = [];
+          response.data.map((project) => {
+            if (!project.data.parent) {
+              const subprojects = [];
+              filter(response.data, (o) => {
+                return o.data.parent === project._id;
+              }).map((subProject) => {
+                subprojects.push({
+                  value: subProject._id,
+                  label: subProject.data.name,
+                });
               });
-            });
-            newProjects.push({
-              value: project._id,
-              label: project.data.name,
-              subprojects,
-            });
-          }
-        });
-        //@ts-ignore
-        setProjects(newProjects);
-        setFlatProjects(response.data);
-      } else {
-        console.log(response);
+              newProjects.push({
+                value: project._id,
+                label: project.data.name,
+                subprojects,
+              });
+            }
+          });
+          //@ts-ignore
+          setProjects(newProjects);
+          setFlatProjects(response.data);
+        } else {
+          console.log(response);
+        }
       }
-    });
+    );
 
     context.getObjects("qs-note", {}, (response) => {
       if (response.success) {
