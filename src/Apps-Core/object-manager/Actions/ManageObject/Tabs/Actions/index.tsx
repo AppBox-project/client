@@ -26,6 +26,7 @@ const AppActionManageObjectTabActions: React.FC<{
       DetailComponent={AppActionManageObjectActionsDetail}
       context={context}
       detailComponentProps={{ model }}
+      navWidth={2}
       addFunction={() => {
         context.setDialog({
           display: true,

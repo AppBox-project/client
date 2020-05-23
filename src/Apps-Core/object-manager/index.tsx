@@ -12,30 +12,57 @@ export default class App {
   appConfig = {
     actions: {
       filter: true,
+      group: true,
       mobile: { displayAs: "menu" },
     },
   };
   getActions = () => {
     return new Promise((resolve) => {
-      this.context.getTypes({}, (response) => {
-        if (response.success) {
-          const actions = [];
-          response.data.map((result) => {
-            actions.push({
-              label: result.name_plural,
-              key: result.key,
-              component: AppActionManageObject,
-              icon: icons[result.icon],
-            });
+      this.context.getObjects("app", {}, (appResponse) => {
+        if (appResponse.success) {
+          // Make app-map
+          const apps = {};
+          appResponse.data.map((app) => {
+            apps[app.data.id] = app.data;
           });
-          resolve([
-            { key: "new", label: "Add object", component: AppActionAddObject },
-            ...actions,
-          ]);
+
+          this.context.getTypes({}, (response) => {
+            if (response.success) {
+              const actions = [];
+              response.data.map((result) => {
+                let group = result.app;
+                if (!group) group = "Other";
+                if (group !== "Other" && group !== "System") {
+                  group = apps[group].name;
+                }
+
+                actions.push({
+                  label: result.name_plural,
+                  key: result.key,
+                  component: AppActionManageObject,
+                  icon: icons[result.icon],
+                  group,
+                });
+              });
+              resolve([
+                {
+                  key: "new",
+                  label: "Add object",
+                  component: AppActionAddObject,
+                },
+                ...actions,
+              ]);
+            } else {
+              console.log("Something went wrong", response);
+              resolve([
+                { key: "a", label: response.reason, component: FourOhFour },
+              ]);
+            }
+          });
         } else {
-          console.log("Something went wrong", response);
+          console.log("Something went wrong", appResponse);
           resolve([
-            { key: "a", label: response.reason, component: FourOhFour },
+            { key: "a", label: appResponse.reason, component: FourOhFour },
           ]);
         }
       });

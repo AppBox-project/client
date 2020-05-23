@@ -61,6 +61,15 @@ const AppActionManageObjectTabObject: React.FC<{
                   }}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <UI.Inputs.TextInput
+                  label="App"
+                  value={model.app}
+                  onChange={(value) => {
+                    setNewModel({ ...newModel, app: value });
+                  }}
+                />
+              </Grid>
             </Grid>
             {newModel && (
               <Button
@@ -68,6 +77,7 @@ const AppActionManageObjectTabObject: React.FC<{
                 color="primary"
                 onClick={() => {
                   context.updateModel(model.key, newModel, model._id);
+                  setNewModel(undefined);
                 }}
               >
                 Save

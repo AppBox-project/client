@@ -9,12 +9,16 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  ListSubheader,
+  Icon,
+  Typography,
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
-import { useHistory, Switch, Route } from "react-router-dom";
-import { FaLemon, FaCompass, FaDropbox } from "react-icons/fa";
+import { useHistory, Switch, Route, Link } from "react-router-dom";
+import { FaLemon, FaDropbox, FaAngleDoubleLeft } from "react-icons/fa";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
+import { map } from "lodash";
 
 const AppUIMobile: React.FC<{
   appContext: AppContextType;
@@ -38,7 +42,7 @@ const AppUIMobile: React.FC<{
         buttons: {
           ...navBar.buttons,
           navigate: {
-            icon: <FaCompass />,
+            icon: <FaAngleDoubleLeft />,
             function: () => {
               setDrawerOpen(true);
             },
@@ -57,9 +61,19 @@ const AppUIMobile: React.FC<{
   }, [appContext]);
 
   let actions = appContext.actions;
+  const groupedActions = {};
+
   if (filter) {
     const searcher = new FuzzySearch(actions, ["key", "label"], {});
     actions = searcher.search(filter);
+  }
+  if (appContext.appConfig?.actions?.group) {
+    actions.map((action) => {
+      if (!groupedActions[action.group]) {
+        groupedActions[action.group] = [];
+      }
+      groupedActions[action.group].push(action);
+    });
   }
 
   return (
@@ -132,24 +146,81 @@ const AppUIMobile: React.FC<{
               />
             )}
             <List>
-              {actions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <ListItem
-                    key={action.key}
-                    button
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      history.push(`/${appContext.appId}/${action.key}`);
-                    }}
-                  >
-                    <ListItemIcon>
-                      {Icon ? <Icon /> : <FaDropbox />}
-                    </ListItemIcon>
-                    <ListItemText>{action.label}</ListItemText>
-                  </ListItem>
-                );
-              })}
+              {appContext.appConfig?.actions?.group
+                ? map(groupedActions, (actions, group) => {
+                    return (
+                      <div key={group}>
+                        <ListSubheader
+                          color="primary"
+                          style={{ cursor: "default" }}
+                        >
+                          {group ? group : "Other"}
+                        </ListSubheader>
+                        {actions.map((action) => {
+                          const ActionIcon: React.FC<{ style }> = action.icon;
+
+                          return (
+                            <ListItem
+                              button
+                              selected={currentPage === action.key}
+                              onClick={() => {
+                                setDrawerOpen(false);
+                                history.push(
+                                  `/${appContext.appId}/${action.key}`
+                                );
+                              }}
+                              style={{ color: "rgb(66, 82, 110)" }}
+                            >
+                              {ActionIcon && (
+                                <ListItemIcon>
+                                  <Icon
+                                    color={
+                                      currentPage === action.key
+                                        ? "primary"
+                                        : "inherit"
+                                    }
+                                  >
+                                    <ActionIcon
+                                      style={{ width: 18, height: 18 }}
+                                    />
+                                  </Icon>
+                                </ListItemIcon>
+                              )}
+                              <ListItemText>
+                                <Typography
+                                  color={
+                                    currentPage === action.key
+                                      ? "primary"
+                                      : "inherit"
+                                  }
+                                >
+                                  {action.label}
+                                </Typography>
+                              </ListItemText>
+                            </ListItem>
+                          );
+                        })}
+                      </div>
+                    );
+                  })
+                : actions.map((action) => {
+                    const Icon = action.icon;
+                    return (
+                      <ListItem
+                        key={action.key}
+                        button
+                        onClick={() => {
+                          setDrawerOpen(false);
+                          history.push(`/${appContext.appId}/${action.key}`);
+                        }}
+                      >
+                        <ListItemIcon>
+                          {Icon ? <Icon /> : <FaDropbox />}
+                        </ListItemIcon>
+                        <ListItemText>{action.label}</ListItemText>
+                      </ListItem>
+                    );
+                  })}
             </List>
           </SwipeableDrawer>
         )}

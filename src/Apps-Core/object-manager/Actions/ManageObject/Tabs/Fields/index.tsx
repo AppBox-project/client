@@ -28,6 +28,7 @@ const AppActionManageObjectTabFields: React.FC<{
       DetailComponent={AppActionManageObjectTabFieldsEditor}
       context={context}
       detailComponentProps={{ model }}
+      navWidth={2}
       addFunction={() => {
         context.setDialog({
           display: true,

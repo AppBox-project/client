@@ -46,6 +46,7 @@ export interface ModelType {
   name: string;
   name_plural: string;
   icon: string;
+  app: string;
   primary: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
@@ -99,10 +100,19 @@ export interface AppContextType {
     settings?: JSX.Element;
     actions?: {
       filter?: boolean;
+      group?: boolean;
       mobile?: { displayAs?: "menu" | "bottom-navigation" | "tabs" };
     };
   };
-  actions: [{ label: string; key: string; component: FC; icon?: React.FC }];
+  actions: [
+    {
+      label: string;
+      key: string;
+      component: FC;
+      icon?: React.FC;
+      group?: string;
+    }
+  ];
   UI: UIType;
   setButton: (
     buttonId,
