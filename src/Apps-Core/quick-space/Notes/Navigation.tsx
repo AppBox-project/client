@@ -182,7 +182,7 @@ const AppQSNotesNavigation: React.FC<{
                   "qs-note",
                   {
                     title: "Fresh note",
-                    project: selectedProject,
+                    project: selectedProject,owner: context.user._id
                   },
                   () => {}
                 );
