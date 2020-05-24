@@ -111,7 +111,22 @@ const App: React.FC = () => {
         )}
       </BrowserRouter>
       {snackbar && (
-        <Snackbar open={snackbar.display} TransitionComponent={TransitionUp}>
+        <Snackbar
+          open={snackbar.display}
+          autoHideDuration={snackbar.duration}
+          TransitionComponent={TransitionUp}
+          anchorOrigin={{
+            vertical: snackbar.position?.vertical
+              ? snackbar.position.vertical
+              : "bottom",
+            horizontal: snackbar.position?.horizontal
+              ? snackbar.position.horizontal
+              : "center",
+          }}
+          onClose={() => {
+            setSnackbar({ ...snackbar, display: false });
+          }}
+        >
           <Alert icon={snackbar.icon} severity={snackbar.type}>
             {snackbar.message}
           </Alert>

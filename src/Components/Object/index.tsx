@@ -2,8 +2,8 @@ import React, { useEffect, useState, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
-import { Button } from "@material-ui/core";
-import { FaAngleLeft, FaEdit, FaSave } from "react-icons/fa";
+import { Button, ListItem, List, ListItemText } from "@material-ui/core";
+import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { ModelType } from "../../Utils/Types";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -42,6 +42,7 @@ const ViewObject: React.FC<{
   const [actions, setActions] = useGlobal<any>("actions");
   const [defaultButton] = useGlobal<any>("defaultButton");
   const [pageTitle, setPageTitle] = useState(undefined);
+  const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   const save = () => {
     if (toChange !== {}) {
@@ -75,7 +76,65 @@ const ViewObject: React.FC<{
           if (response.success) {
             if (onSuccess) onSuccess();
           } else {
-            setFeedback(response.feedback);
+            if (response.feedback) {
+              setFeedback(response.feedback);
+              setSnackbar({
+                display: true,
+                message: (
+                  <List>
+                    {response.feedback.map((fb, index) => {
+                      let reason = "Unknown error";
+                      switch (fb.reason) {
+                        case "missing-required":
+                          reason = `<em>${
+                            objectType.fields[fb.field].name
+                          }</em> can't be empty.`;
+                          break;
+                        case "not-unique":
+                          reason = `<em>${
+                            objectType.fields[fb.field].name
+                          }</em> needs to be unique, but isn't.`;
+                          break;
+                        case "no-email":
+                          reason = `<em>${
+                            objectType.fields[fb.field].name
+                          }</em> isn't a valid e-mailadress.`;
+                          break;
+                        case "too-short":
+                          reason = `<em>${
+                            objectType.fields[fb.field].name
+                          }</em> should be over ${fb.minLength}  characters.`;
+                          break;
+                        default:
+                          reason = "huh";
+                          break;
+                      }
+                      return (
+                        <ListItem
+                          style={{ cursor: "default" }}
+                          key={`${fb.reason}-${fb.field}`}
+                        >
+                          <ListItemText>
+                            <div dangerouslySetInnerHTML={{ __html: reason }} />
+                          </ListItemText>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                ),
+                type: "error",
+                icon: <FaBomb />,
+              });
+            } else {
+              setSnackbar({
+                display: true,
+                message: response.reason,
+                type: "error",
+                icon: <FaBomb />,
+                duration: 2500,
+                position: { horizontal: "right" },
+              });
+            }
           }
         });
       }
@@ -233,42 +292,7 @@ const ViewObject: React.FC<{
       ) : (
         <>Layout {layoutId} not found </>
       )}
-      {feedback && (
-        <Alert severity="error">
-          <AlertTitle>Errors!</AlertTitle>
-          <ul>
-            {feedback.map((fb) => {
-              let reason = "Unknown error";
-              switch (fb.reason) {
-                case "missing-required":
-                  reason = `${
-                    objectType.fields[fb.field].name
-                  } can't be empty.`;
-                  break;
-                case "not-unique":
-                  reason = `${
-                    objectType.fields[fb.field].name
-                  } needs to be unique, but isn't.`;
-                  break;
-                case "no-email":
-                  reason = `${
-                    objectType.fields[fb.field].name
-                  } isn't a valid e-mailadress.`;
-                  break;
-                case "too-short":
-                  reason = `${
-                    objectType.fields[fb.field].name
-                  } should be over ${fb.minLength}  characters.`;
-                  break;
-                default:
-                  reason = "huh";
-                  break;
-              }
-              return <li key={`${fb.reason}-${fb.field}`}>{reason}</li>;
-            })}
-          </ul>
-        </Alert>
-      )}
+
       {(!objectId || popup) && (
         <div style={{ float: "right" }}>
           <Button

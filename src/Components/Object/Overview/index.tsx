@@ -27,7 +27,7 @@ import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
 import FieldDisplay from "../FieldDisplay";
 import { filter, size } from "lodash";
-import { FaFilter } from "react-icons/fa";
+import { FaFilter, FaBomb } from "react-icons/fa";
 import OverviewFilter from "./Filter";
 
 const stableSort = (array, comparator) => {
@@ -71,6 +71,7 @@ const Overview: React.FC<{
   const [actions, setActions] = useGlobal<any>("actions");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overviewFilter, setOverviewFilter] = useState([]);
+  const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   const isSelected = (name) =>
     selected ? selected.indexOf(name) !== -1 : false;
@@ -324,10 +325,21 @@ const Overview: React.FC<{
           <MenuItem
             onClick={() => {
               setAnchorEl(null);
-
               selected.map((deleteId) => {
                 const requestId = uniqid();
                 Server.emit("deleteObject", { objectId: deleteId, requestId });
+                Server.on(`receive-${requestId}`, (response) => {
+                  if (!response.success) {
+                    setSnackbar({
+                      display: true,
+                      message: response.reason,
+                      type: "error",
+                      icon: <FaBomb />,
+                      duration: 2500,
+                      position: { horizontal: "right" },
+                    });
+                  }
+                });
               });
               setSelected([]);
             }}
