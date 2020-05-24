@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
 import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Dialog,
   DialogContent,
   Paper,
-  Checkbox,
-  TableSortLabel,
   TableContainer,
   IconButton,
   Menu,
@@ -18,6 +11,8 @@ import {
   Toolbar,
   Typography,
   Tooltip,
+  TableCell,
+  TableSortLabel,
 } from "@material-ui/core";
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -30,6 +25,8 @@ import FieldDisplay from "../FieldDisplay";
 import { filter, size } from "lodash";
 import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
 import OverviewFilter from "./Filter";
+import { AutoSizer, Column, Table } from "react-virtualized";
+import ReactVirtualizedTable from "./VirtualizedTable";
 
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -121,9 +118,9 @@ const Overview: React.FC<{
       Server.emit("unlistenForObjects", { requestId: dataRequestId });
     };
   }, [overviewFilter]);
+
   // UI
   if (!objects || !model || !layout) return <Loading />;
-
   return (
     <>
       <Dialog
@@ -214,117 +211,13 @@ const Overview: React.FC<{
             </>
           )}
         </Toolbar>
-        <Table aria-labelledby="tableTitle" aria-label="Object overview">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  inputProps={{ "aria-label": "Select all" }}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      const newSelecteds = objects.map((n) => n._id);
-                      setSelected(newSelecteds);
-                      return;
-                    }
-                    setSelected([]);
-                  }}
-                  checked={
-                    size(objects) > 0 && selected.length === size(objects)
-                  }
-                  indeterminate={
-                    selected.length > 0 && selected.length < size(objects)
-                  }
-                />
-              </TableCell>
-              {layout.fields.map((field) => (
-                <TableCell key={field}>
-                  <TableSortLabel
-                    active={orderBy === field}
-                    direction={orderBy === field ? order : "asc"}
-                  >
-                    {model.fields[field].name}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-              {layout.actions && layout.actions.length > 0 && (
-                <TableCell> </TableCell>
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {stableSort(objects, getComparator(order, orderBy)).map(
-              (object, index) => {
-                const isItemSelected = isSelected(object._id);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={object._id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        onChange={() => {
-                          if (selected.includes(object._id)) {
-                            setSelected(
-                              filter(selected, (o) => {
-                                return o !== object._id;
-                              })
-                            );
-                          } else {
-                            setSelected([...selected, object._id]);
-                          }
-                        }}
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </TableCell>
-                    {layout.fields.map((field) => {
-                      return (
-                        <TableCell
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            history.push(
-                              `/${appId}/${objectTypeId}/${object._id}`
-                            );
-                          }}
-                        >
-                          <FieldDisplay
-                            modelField={model.fields[field]}
-                            objectField={object.data[field]}
-                          />
-                        </TableCell>
-                      );
-                    })}
-                    {layout.actions && layout.actions.length > 0 && (
-                      <TableCell>
-                        <div style={{ float: "right" }}>
-                          <IconButton
-                            onClick={(event) => {
-                              const newSelected = [];
-                              newSelected.push(object._id);
-                              setSelected(newSelected);
-                              setAnchorEl(event.currentTarget);
-                            }}
-                          >
-                            <IoMdMore />
-                          </IconButton>
-                        </div>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                );
-              }
-            )}
-          </TableBody>
-        </Table>
+        <ReactVirtualizedTable
+          data={objects}
+          columns={layout.fields}
+          model={model}
+        />
       </TableContainer>
+
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

@@ -40,6 +40,7 @@
     "react-scripts": "3.4.1",
     "react-select": "^3.0.8",
     "react-sortable-hoc": "^1.11.0",
+    "react-virtualized": "^9.21.2",
     "reactn": "^2.2.5",
     "socket.io-client": "^2.3.0",
     "typescript": "~3.7.2",
