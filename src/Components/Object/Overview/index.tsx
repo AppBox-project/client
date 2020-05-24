@@ -76,7 +76,7 @@ const Overview: React.FC<{
     selected ? selected.indexOf(name) !== -1 : false;
 
   // Lifecycle
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Actions
     setActions({
       ...actions,
