@@ -17,6 +17,9 @@ import {
   Menu,
   MenuItem,
   Drawer,
+  Toolbar,
+  Typography,
+  Tooltip,
 } from "@material-ui/core";
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -27,7 +30,7 @@ import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
 import FieldDisplay from "../FieldDisplay";
 import { filter, size } from "lodash";
-import { FaFilter, FaBomb } from "react-icons/fa";
+import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
 import OverviewFilter from "./Filter";
 
 const stableSort = (array, comparator) => {
@@ -62,13 +65,12 @@ const Overview: React.FC<{
   const [model, setModel] = useState<ModelType>();
   const [layout, setLayout] = useState();
   const [objects, setObjects] = useState();
-  const [dialogContent, setDialogContent] = useState();
+  const [dialogContent, setDialogContent] = useState<any>();
   const [anchorEl, setAnchorEl] = useState<any>();
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState();
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const history = useHistory();
-  const [actions, setActions] = useGlobal<any>("actions");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overviewFilter, setOverviewFilter] = useState([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
@@ -78,17 +80,6 @@ const Overview: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    // Actions
-    setActions({
-      ...actions,
-      objectToggle: undefined,
-      objectFilter: {
-        icon: <FaFilter style={{ width: 18, height: 18 }} />,
-        function: () => {
-          setDrawerOpen(true);
-        },
-      },
-    });
     // -> Object types
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
@@ -103,7 +94,6 @@ const Overview: React.FC<{
     return () => {
       Server.emit("unlistenForObjectTypes", { requestId });
       setLayout(false);
-      setActions({ ...actions, objectFilter: undefined });
     };
   }, [objectTypeId]);
 
@@ -137,29 +127,67 @@ const Overview: React.FC<{
 
   return (
     <>
-      {layout.buttons && (
-        <>
-          <Grid
-            container
-            direction="row"
-            justify="flex-end"
-            alignItems="center"
-          >
-            <Grid item xs={12} md={3} style={{ textAlign: "right", margin: 5 }}>
+      <Dialog
+        open={dialogContent !== undefined}
+        maxWidth="lg"
+        fullWidth
+        onClose={() => {
+          setDialogContent(undefined);
+        }}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogContent>{dialogContent}</DialogContent>
+      </Dialog>
+
+      <TableContainer component={Paper}>
+        <Toolbar style={{ display: "flex" }}>
+          {selected.length > 0 ? (
+            <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
+              {selected.length}{" "}
+              {selected.length === 1
+                ? model.name.toLowerCase()
+                : model.name_plural.toLowerCase()}{" "}
+              selected
+            </Typography>
+          ) : (
+            <Typography
+              variant="h6"
+              id="tableTitle"
+              component="div"
+              style={{ flex: 1 }}
+            >
+              {model.name_plural}
+            </Typography>
+          )}
+
+          {selected.length > 0 ? (
+            <Tooltip title="Apply to selection" placement="left">
+              <IconButton
+                style={{ float: "right" }}
+                onClick={(event) => {
+                  setAnchorEl(event.currentTarget);
+                }}
+              >
+                <FaEdit style={{ width: 18, height: 18 }} />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <>
               {layout.buttons.map((buttonInfo) => {
-                if (model.actions) {
-                  if (model.actions[buttonInfo]) {
-                    const button = model.actions[buttonInfo];
-                    return (
-                      <Button
-                        key={buttonInfo}
-                        variant="outlined"
-                        fullWidth
+                if (model.actions[buttonInfo]) {
+                  const button = model.actions[buttonInfo];
+                  return (
+                    <Tooltip
+                      title={button.label ? button.label : `New ${model.name}`}
+                      placement="left"
+                    >
+                      <IconButton
                         onClick={() => {
                           setDialogContent(
                             <ViewObject
                               objectTypeId={model.key}
                               layoutId={button.layout}
+                              popup={true}
                               appId={appId}
                               onSuccess={() => {
                                 setDialogContent(undefined);
@@ -167,187 +195,169 @@ const Overview: React.FC<{
                             />
                           );
                         }}
-                        startIcon={
-                          button.type === "create" && <IoIosAddCircleOutline />
-                        }
                       >
-                        {button.label ? button.label : `New ${model.name}`}
-                      </Button>
-                    );
-                  }
-                }
-              })}
-            </Grid>
-          </Grid>
-          <Dialog
-            open={dialogContent !== undefined}
-            maxWidth="lg"
-            fullWidth
-            onClose={() => {
-              setDialogContent(undefined);
-            }}
-            aria-labelledby="form-dialog-title"
-          >
-            <DialogContent>{dialogContent}</DialogContent>
-          </Dialog>
-        </>
-      )}
-      <Paper className="paper">
-        <TableContainer>
-          <Table aria-labelledby="tableTitle" aria-label="Object overview">
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    color="primary"
-                    inputProps={{ "aria-label": "Select all" }}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        const newSelecteds = objects.map((n) => n._id);
-                        setSelected(newSelecteds);
-                        return;
-                      }
-                      setSelected([]);
-                    }}
-                    checked={
-                      size(objects) > 0 && selected.length === size(objects)
-                    }
-                    indeterminate={
-                      selected.length > 0 && selected.length < size(objects)
-                    }
-                  />
-                </TableCell>
-                {layout.fields.map((field) => (
-                  <TableCell key={field}>
-                    <TableSortLabel
-                      active={orderBy === field}
-                      direction={orderBy === field ? order : "asc"}
-                    >
-                      {model.fields[field].name}
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-                {layout.actions && layout.actions.length > 0 && (
-                  <TableCell>
-                    <div style={{ float: "right" }}>
-                      <IconButton
-                        onClick={(event) => {
-                          setAnchorEl(event.currentTarget);
-                        }}
-                      >
-                        <IoMdMore />
+                        <IoIosAddCircleOutline />
                       </IconButton>
-                    </div>{" "}
-                  </TableCell>
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {stableSort(objects, getComparator(order, orderBy)).map(
-                (object, index) => {
-                  const isItemSelected = isSelected(object._id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={object._id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onChange={() => {
-                            if (selected.includes(object._id)) {
-                              setSelected(
-                                filter(selected, (o) => {
-                                  return o !== object._id;
-                                })
-                              );
-                            } else {
-                              setSelected([...selected, object._id]);
-                            }
-                          }}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell>
-                      {layout.fields.map((field) => {
-                        return (
-                          <TableCell
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              history.push(
-                                `/${appId}/${objectTypeId}/${object._id}`
-                              );
-                            }}
-                          >
-                            <FieldDisplay
-                              modelField={model.fields[field]}
-                              objectField={object.data[field]}
-                            />
-                          </TableCell>
-                        );
-                      })}
-                      {layout.actions && layout.actions.length > 0 && (
-                        <TableCell>
-                          <div style={{ float: "right" }}>
-                            <IconButton
-                              onClick={(event) => {
-                                const newSelected = [];
-                                newSelected.push(object._id);
-                                setSelected(newSelected);
-                                setAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <IoMdMore />
-                            </IconButton>
-                          </div>
-                        </TableCell>
-                      )}
-                    </TableRow>
+                    </Tooltip>
                   );
                 }
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-        >
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              selected.map((deleteId) => {
-                const requestId = uniqid();
-                Server.emit("deleteObject", { objectId: deleteId, requestId });
-                Server.on(`receive-${requestId}`, (response) => {
-                  if (!response.success) {
-                    setSnackbar({
-                      display: true,
-                      message: response.reason,
-                      type: "error",
-                      icon: <FaBomb />,
-                      duration: 2500,
-                      position: { horizontal: "right" },
-                    });
+              })}
+              <Tooltip title="Filter and tweak list" placement="left">
+                <IconButton
+                  aria-label="filter list"
+                  onClick={() => {
+                    setDrawerOpen(true);
+                  }}
+                >
+                  <FaPencilRuler style={{ width: 18, height: 18 }} />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
+        </Toolbar>
+        <Table aria-labelledby="tableTitle" aria-label="Object overview">
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  color="primary"
+                  inputProps={{ "aria-label": "Select all" }}
+                  onChange={(event) => {
+                    if (event.target.checked) {
+                      const newSelecteds = objects.map((n) => n._id);
+                      setSelected(newSelecteds);
+                      return;
+                    }
+                    setSelected([]);
+                  }}
+                  checked={
+                    size(objects) > 0 && selected.length === size(objects)
                   }
-                });
+                  indeterminate={
+                    selected.length > 0 && selected.length < size(objects)
+                  }
+                />
+              </TableCell>
+              {layout.fields.map((field) => (
+                <TableCell key={field}>
+                  <TableSortLabel
+                    active={orderBy === field}
+                    direction={orderBy === field ? order : "asc"}
+                  >
+                    {model.fields[field].name}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+              {layout.actions && layout.actions.length > 0 && (
+                <TableCell> </TableCell>
+              )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {stableSort(objects, getComparator(order, orderBy)).map(
+              (object, index) => {
+                const isItemSelected = isSelected(object._id);
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={object._id}
+                    selected={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                        onChange={() => {
+                          if (selected.includes(object._id)) {
+                            setSelected(
+                              filter(selected, (o) => {
+                                return o !== object._id;
+                              })
+                            );
+                          } else {
+                            setSelected([...selected, object._id]);
+                          }
+                        }}
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </TableCell>
+                    {layout.fields.map((field) => {
+                      return (
+                        <TableCell
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            history.push(
+                              `/${appId}/${objectTypeId}/${object._id}`
+                            );
+                          }}
+                        >
+                          <FieldDisplay
+                            modelField={model.fields[field]}
+                            objectField={object.data[field]}
+                          />
+                        </TableCell>
+                      );
+                    })}
+                    {layout.actions && layout.actions.length > 0 && (
+                      <TableCell>
+                        <div style={{ float: "right" }}>
+                          <IconButton
+                            onClick={(event) => {
+                              const newSelected = [];
+                              newSelected.push(object._id);
+                              setSelected(newSelected);
+                              setAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <IoMdMore />
+                          </IconButton>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              }
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+      >
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            selected.map((deleteId) => {
+              const requestId = uniqid();
+              Server.emit("deleteObject", { objectId: deleteId, requestId });
+              Server.on(`receive-${requestId}`, (response) => {
+                if (!response.success) {
+                  setSnackbar({
+                    display: true,
+                    message: response.reason,
+                    type: "error",
+                    icon: <FaBomb />,
+                    duration: 2500,
+                    position: { horizontal: "right" },
+                  });
+                }
               });
-              setSelected([]);
-            }}
-          >
-            Delete
-          </MenuItem>
-        </Menu>
-      </Paper>
+            });
+            setSelected([]);
+          }}
+        >
+          Delete
+        </MenuItem>
+      </Menu>
       <Drawer
         anchor="bottom"
         open={drawerOpen}

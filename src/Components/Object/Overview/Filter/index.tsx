@@ -15,6 +15,8 @@ import Select from "react-select";
 import { FaTrash } from "react-icons/fa";
 import { map } from "lodash";
 import InputInput from "../../../Inputs/Input";
+import { ModelType } from "../../../../Utils/Types";
+import InputCheckbox from "../../../Inputs/Checkbox";
 
 const OverviewFilter: React.FC<{
   onSave;
@@ -51,6 +53,7 @@ const OverviewFilter: React.FC<{
               filter={filter}
               filterItem={filterItem}
               index={index}
+              model={model}
             />
           ))}
         </TableBody>
@@ -95,7 +98,8 @@ const FilterItem: React.FC<{
   filterItem;
   key?;
   index;
-}> = ({ modelFieldOptions, setFilter, filter, filterItem, index }) => {
+  model: ModelType;
+}> = ({ modelFieldOptions, setFilter, filter, filterItem, index, model }) => {
   // Vars
   return (
     <TableRow>
@@ -133,18 +137,35 @@ const FilterItem: React.FC<{
         />
       </TableCell>
       <TableCell>
-        <InputInput
-          value={filterItem.value}
-          placeholder="Value"
-          onChange={(value) => {
-            const newFilter = filter;
-            newFilter[index] = {
-              ...filterItem,
-              value,
-            };
-            setFilter([...newFilter]);
-          }}
-        />
+        {filterItem.field &&
+          model.fields[filterItem.field?.value].type === "boolean" && (
+            <InputCheckbox
+              value={filterItem.value}
+              onChange={(value) => {
+                const newFilter = filter;
+                newFilter[index] = {
+                  ...filterItem,
+                  value,
+                };
+                setFilter([...newFilter]);
+              }}
+            />
+          )}
+        {filterItem.field &&
+          model.fields[filterItem.field?.value].type === "input" && (
+            <InputInput
+              value={filterItem.value}
+              placeholder="Value"
+              onChange={(value) => {
+                const newFilter = filter;
+                newFilter[index] = {
+                  ...filterItem,
+                  value,
+                };
+                setFilter([...newFilter]);
+              }}
+            />
+          )}
       </TableCell>
       <TableCell align="right">
         <IconButton

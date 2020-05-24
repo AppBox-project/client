@@ -7,7 +7,7 @@ import {
   Snackbar,
   Slide,
 } from "@material-ui/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import LoginPage from "./Pages/Login";
 import Desktop from "./Pages/Desktop";
@@ -16,11 +16,15 @@ import Server from "./Utils/Server";
 import MobileLayout from "./Pages/Mobile";
 import { Alert } from "@material-ui/lab";
 import { FaWifi } from "react-icons/fa";
+import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
+import PageOnboarding from "./Pages/Onboarding/Onboarding";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
   const [gTheme] = useGlobal<any>("theme");
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+  const [noDb, setNoDb] = useState(false);
+  const [noInit, setNoInit] = useState(false);
 
   const theme = createMuiTheme(gTheme);
   // Lifecycle
@@ -51,6 +55,12 @@ const App: React.FC = () => {
       Server.on(`receive-${signInRequest}`, (response) => {
         Server.emit(previousAction.action.key, previousAction.args);
       });
+    });
+    Server.on("noDb", () => {
+      setNoDb(true);
+    });
+    Server.on("noInit", () => {
+      setNoInit(true);
     });
 
     if (localStorage.getItem("username") && localStorage.getItem("token")) {
@@ -93,11 +103,17 @@ const App: React.FC = () => {
   }, []);
 
   // UI
-  if (!user) return <CircularProgress className="center" />;
+  if (!user && !noDb && !noInit) return <CircularProgress className="center" />;
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        {user === "error" || user === "none" ? (
+        {noDb || noInit ? (
+          noInit ? (
+            <PageOnboarding />
+          ) : (
+            <PageOnboardingNoDb />
+          )
+        ) : user === "error" || user === "none" ? (
           <LoginPage />
         ) : (
           <>
