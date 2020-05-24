@@ -9,19 +9,20 @@ import {
   TableBody,
   IconButton,
   Button,
+  Grid,
 } from "@material-ui/core";
 import Select from "react-select";
 import { FaTrash } from "react-icons/fa";
-import { filter, map, findIndex } from "lodash";
+import { map } from "lodash";
 import InputInput from "../../../Inputs/Input";
-import uniqid from "uniqid";
 
 const OverviewFilter: React.FC<{
-  overviewFilter;
-  setOverviewFilter;
+  onSave;
   model;
-}> = ({ overviewFilter, setOverviewFilter, model }) => {
+}> = ({ onSave, model }) => {
   // Vars
+  const [filter, setFilter] = useState([]);
+
   const modelFieldOptions = [];
   map(model.fields, (field, key) => {
     modelFieldOptions.push({ label: field.name, value: key });
@@ -42,72 +43,92 @@ const OverviewFilter: React.FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {overviewFilter.map((filterItem, index) => (
+          {filter.map((filterItem, index) => (
             <FilterItem
               key={index}
               modelFieldOptions={modelFieldOptions}
-              setOverviewFilter={setOverviewFilter}
-              overviewFilter={overviewFilter}
+              setFilter={setFilter}
+              filter={filter}
               filterItem={filterItem}
+              index={index}
             />
           ))}
         </TableBody>
       </Table>
-      <Button
-        fullWidth
-        onClick={() => {
-          const id = uniqid();
-          setOverviewFilter([
-            ...overviewFilter,
-            { field: "username", operator: "=", value: "", id: uniqid() },
-          ]);
-        }}
-      >
-        Add filter
-      </Button>
+      <Grid container>
+        <Grid item xs={6}>
+          <Button
+            fullWidth
+            onClick={() => {
+              setFilter([
+                ...filter,
+                {
+                  field: undefined,
+                  operator: { label: "is equal to", value: "equals" },
+                  value: "",
+                },
+              ]);
+            }}
+          >
+            Add filter
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            fullWidth
+            onClick={() => {
+              onSave(filter);
+            }}
+          >
+            Save
+          </Button>
+        </Grid>
+      </Grid>
     </TableContainer>
   );
 };
 
 const FilterItem: React.FC<{
   modelFieldOptions;
-  setOverviewFilter;
-  overviewFilter;
+  setFilter;
+  filter;
   filterItem;
   key?;
-}> = ({ modelFieldOptions, setOverviewFilter, overviewFilter, filterItem }) => {
+  index;
+}> = ({ modelFieldOptions, setFilter, filter, filterItem, index }) => {
   // Vars
-  console.log(filterItem);
-
   return (
     <TableRow>
       <TableCell>
         <Select
           options={modelFieldOptions}
-          inputValue={filterItem.field}
+          value={filter.field}
           onChange={(picked) => {
-            setOverviewFilter([
-              ...overviewFilter.splice(
-                findIndex(overviewFilter, { id: filterItem.id }),
-                1,
-                { ...filterItem, field: picked }
-              ),
-            ]);
+            const newFilter = filter;
+            newFilter[index] = {
+              ...filterItem,
+              field: picked,
+            };
+            setFilter([...newFilter]);
           }}
         />
       </TableCell>
       <TableCell>
         <Select
-          options={[{ label: "=" }]}
+          options={[
+            { label: "is equal to", value: "equals" },
+            { label: "contains", value: "contains" },
+            { label: "starts with", value: "starts_with" },
+            { label: "ends with", value: "ends_with" },
+          ]}
           value={filterItem.operator}
           onChange={(picked) => {
-            setOverviewFilter(
-              overviewFilter.splice(
-                findIndex(overviewFilter, { id: filterItem.id }),
-                1,
-                { ...filterItem, operator: picked }
-              )
-            );
+            const newFilter = filter;
+            newFilter[index] = {
+              ...filterItem,
+              operator: picked,
+            };
+            setFilter([...newFilter]);
           }}
         />
       </TableCell>
@@ -116,27 +137,23 @@ const FilterItem: React.FC<{
           value={filterItem.value}
           placeholder="Value"
           onChange={(value) => {
-            setOverviewFilter(
-              overviewFilter.splice(
-                findIndex(overviewFilter, { id: filterItem.id }),
-                1,
-                { ...filterItem, value }
-              )
-            );
+            const newFilter = filter;
+            newFilter[index] = {
+              ...filterItem,
+              value,
+            };
+            setFilter([...newFilter]);
           }}
         />
       </TableCell>
       <TableCell align="right">
         <IconButton
           onClick={() => {
-            setOverviewFilter(
-              filter(overviewFilter, (o) => {
-                return o.id !== filterItem.id;
-              })
-            );
+            const newFilter = filter;
+            newFilter.splice(index, 1);
+            setFilter([...newFilter]);
           }}
         >
-          {filterItem.id}
           <FaTrash style={{ width: 15, height: 15 }} />
         </IconButton>
       </TableCell>

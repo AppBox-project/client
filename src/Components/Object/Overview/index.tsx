@@ -99,12 +99,26 @@ const Overview: React.FC<{
       setLayout(response[0].overviews[layoutId ? layoutId : "default"]);
     });
 
+    return () => {
+      Server.emit("unlistenForObjectTypes", { requestId });
+      setLayout(false);
+      setActions({ ...actions, objectFilter: undefined });
+    };
+  }, [objectTypeId]);
+
+  // effect on filter change
+  useEffect(() => {
+    const objectFilter = {};
+    overviewFilter.map((f) => {
+      objectFilter[`data.${f.field.value}`] = f.value;
+    });
+
     // Objects
     const dataRequestId = uniqid();
     Server.emit("listenForObjects", {
       requestId: dataRequestId,
       type: objectTypeId,
-      filter: {},
+      filter: { ...objectFilter },
     });
     Server.on(`receive-${dataRequestId}`, (response) => {
       if (response.success) {
@@ -114,13 +128,9 @@ const Overview: React.FC<{
       }
     });
     return () => {
-      Server.emit("unlistenForObjectTypes", { requestId });
       Server.emit("unlistenForObjects", { requestId: dataRequestId });
-      setLayout(false);
-      setActions({ ...actions, objectFilter: undefined });
     };
-  }, [objectTypeId]);
-
+  }, [overviewFilter]);
   // UI
   if (!objects || !model || !layout) return <Loading />;
 
@@ -334,9 +344,11 @@ const Overview: React.FC<{
         }}
       >
         <OverviewFilter
-          setOverviewFilter={setOverviewFilter}
-          overviewFilter={overviewFilter}
           model={model}
+          onSave={(response) => {
+            setOverviewFilter(response);
+            setDrawerOpen(false);
+          }}
         />
       </Drawer>
     </>
