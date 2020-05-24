@@ -5,8 +5,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Grid,
-  Button,
   Dialog,
   DialogContent,
   Paper,
@@ -74,6 +72,7 @@ const Overview: React.FC<{
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overviewFilter, setOverviewFilter] = useState([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+  const [fieldDisplayModelCache, setFieldDisplayModelCache] = useState({});
 
   const isSelected = (name) =>
     selected ? selected.indexOf(name) !== -1 : false;
@@ -143,7 +142,7 @@ const Overview: React.FC<{
         <Toolbar style={{ display: "flex" }}>
           {selected.length > 0 ? (
             <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
-              {selected.length}{" "}
+              {selected.length === objects.length ? "All" : selected.length}{" "}
               {selected.length === 1
                 ? model.name.toLowerCase()
                 : model.name_plural.toLowerCase()}{" "}

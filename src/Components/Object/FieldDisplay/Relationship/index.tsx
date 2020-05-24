@@ -5,10 +5,11 @@ import Server from "../../../../Utils/Server";
 import { Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 
-const ObjectFieldDisplayRelationship: React.FC<{ modelField; objectField }> = ({
-  objectField,
-  modelField,
-}) => {
+const ObjectFieldDisplayRelationship: React.FC<{
+  modelField;
+  objectField;
+  targetModelCache?;
+}> = ({ objectField, modelField, targetModelCache }) => {
   // Vars
   const [model, setModel] = useState();
   const [object, setObject] = useState();
@@ -18,15 +19,20 @@ const ObjectFieldDisplayRelationship: React.FC<{ modelField; objectField }> = ({
     if (!objectField) {
       setModel("empty");
     } else {
-      // Get model
       const modelRequestId = uniqid();
-      Server.emit("listenForObjectTypes", {
-        requestId: modelRequestId,
-        filter: { key: modelField.typeArgs.relationshipTo },
-      });
-      Server.on(`receive-${modelRequestId}`, (response) => {
-        setModel(response[0]);
-      });
+
+      if (targetModelCache) {
+        console.log("Loading from cache");
+      } else {
+        // Get model
+        Server.emit("listenForObjectTypes", {
+          requestId: modelRequestId,
+          filter: { key: modelField.typeArgs.relationshipTo },
+        });
+        Server.on(`receive-${modelRequestId}`, (response) => {
+          setModel(response[0]);
+        });
+      }
 
       // Get object
       const objectRequestId = uniqid();
@@ -45,11 +51,12 @@ const ObjectFieldDisplayRelationship: React.FC<{ modelField; objectField }> = ({
       });
 
       return () => {
-        Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
+        if (!targetModelCache)
+          Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
         Server.emit("unlistenForObjects", { requestId: objectRequestId });
       };
     }
-  }, [objectField]);
+  }, [objectField, targetModelCache]);
 
   // UI
   if (model === "empty") return <></>;
