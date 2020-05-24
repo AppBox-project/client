@@ -215,6 +215,8 @@ const Overview: React.FC<{
           data={objects}
           columns={layout.fields}
           model={model}
+          baseUrl={`/${appId}/${objectTypeId}`}
+          history={history}
         />
       </TableContainer>
 

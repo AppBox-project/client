@@ -43,12 +43,27 @@ class MuiVirtualizedTable extends React.PureComponent {
     rowHeight: 48,
   };
 
-  cellRenderer = ({ rowData, columnIndex }) => {
-    //@ts-ignore
-    const { columns, classes, rowHeight, onRowClick, model } = this.props;
+  cellRenderer = ({ rowData, columnIndex, baseUrl }) => {
+    const {
+      //@ts-ignore
+      columns,
+      //@ts-ignore
+      classes,
+      //@ts-ignore
+      rowHeight,
+      //@ts-ignore
+      onRowClick,
+      //@ts-ignore
+      model,
+      //@ts-ignore
+      history,
+    } = this.props;
 
     return (
       <TableCell
+        onClick={() => {
+          history.push(`${baseUrl}/${rowData._id}`);
+        }}
         component="div"
         variant="body"
         style={{
@@ -104,6 +119,10 @@ class MuiVirtualizedTable extends React.PureComponent {
       //@ts-ignore
       model,
       //@ts-ignore
+      baseUrl,
+      //@ts-ignore
+      history,
+      //@ts-ignore
       ...tableProps
     } = this.props;
     return (
@@ -139,6 +158,8 @@ class MuiVirtualizedTable extends React.PureComponent {
                       ...props,
                       columnIndex: index,
                       model: model,
+                      baseUrl: baseUrl,
+                      history: history,
                     })
                   }
                   dataKey={dataKey}
@@ -155,11 +176,13 @@ class MuiVirtualizedTable extends React.PureComponent {
 //@ts-ignore
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
-const ReactVirtualizedTable: React.FC<{ data; columns; model: ModelType }> = ({
-  data,
-  columns,
-  model,
-}) => {
+const ReactVirtualizedTable: React.FC<{
+  data;
+  columns;
+  model: ModelType;
+  baseUrl: string;
+  history;
+}> = ({ data, columns, model, baseUrl, history }) => {
   return (
     <div style={{ height: 800, width: "100%" }}>
       <VirtualizedTable
@@ -167,6 +190,8 @@ const ReactVirtualizedTable: React.FC<{ data; columns; model: ModelType }> = ({
         rowGetter={({ index }) => data[index]}
         columns={columns}
         model={model}
+        baseUrl={baseUrl}
+        history={history}
       />
     </div>
   );
