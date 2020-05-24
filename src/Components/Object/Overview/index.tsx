@@ -76,10 +76,11 @@ const Overview: React.FC<{
     selected ? selected.indexOf(name) !== -1 : false;
 
   // Lifecycle
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Actions
     setActions({
       ...actions,
+      objectToggle: undefined,
       objectFilter: {
         icon: <FaFilter style={{ width: 18, height: 18 }} />,
         function: () => {
