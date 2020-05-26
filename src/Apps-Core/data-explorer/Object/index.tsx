@@ -5,22 +5,20 @@ import ViewObject from "../../../Components/Object";
 
 const AppActionObject: React.FC<{ action }> = ({ action }) => {
   return (
-    <div style={{ padding: 15 }}>
-      <Switch>
-        <Route
-          path={`/data-explorer/${action}/:id`}
-          render={(props) => {
-            return <DetailModule {...props} object={action} />;
-          }}
-        />
-        <Route
-          path={`/data-explorer/${action}`}
-          render={(props) => {
-            return <OverviewModule {...props} object={action} />;
-          }}
-        />
-      </Switch>
-    </div>
+    <Switch>
+      <Route
+        path={`/data-explorer/${action}/:id`}
+        render={(props) => {
+          return <DetailModule {...props} object={action} />;
+        }}
+      />
+      <Route
+        path={`/data-explorer/${action}`}
+        render={(props) => {
+          return <OverviewModule {...props} object={action} />;
+        }}
+      />
+    </Switch>
   );
 };
 

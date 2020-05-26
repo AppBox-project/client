@@ -5,8 +5,11 @@ import TableCell from "@material-ui/core/TableCell";
 import { AutoSizer, Column, Table } from "react-virtualized";
 import { ModelType } from "../../../Utils/Types";
 import FieldDisplay from "../FieldDisplay";
-import { TableSortLabel } from "@material-ui/core";
+import { TableSortLabel, Checkbox, IconButton } from "@material-ui/core";
+import { filter } from "lodash";
+
 import "react-virtualized/styles.css";
+import { IoMdMore } from "react-icons/io";
 const styles = (theme) => ({
   flexContainer: {
     display: "flex",
@@ -123,6 +126,13 @@ class MuiVirtualizedTable extends React.PureComponent {
       //@ts-ignore
       history,
       //@ts-ignore
+      data,
+      //@ts-ignore
+      selected,
+      //@ts-ignore
+      setSelected,
+      //@ts-ignore
+      setAnchorEl,
       ...tableProps
     } = this.props;
     return (
@@ -140,6 +150,50 @@ class MuiVirtualizedTable extends React.PureComponent {
             {...tableProps}
             rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
           >
+            <Column
+              width={100}
+              dataKey="checkmark"
+              headerRenderer={(headerProps) => (
+                <Checkbox
+                  color="primary"
+                  inputProps={{ "aria-label": "Select all" }}
+                  onChange={(event) => {
+                    if (event.target.checked) {
+                      const newSelecteds = data.map((n) => n._id);
+                      setSelected(newSelecteds);
+                      return;
+                    }
+                    setSelected([]);
+                  }}
+                  checked={data.length > 0 && selected.length === data.length}
+                  indeterminate={
+                    selected.length > 0 && selected.length < data.length
+                  }
+                />
+              )}
+              className={classes.flexContainer}
+              cellRenderer={({ rowData }) => {
+                return (
+                  <Checkbox
+                    color="primary"
+                    checked={
+                      selected ? selected.indexOf(rowData._id) !== -1 : false
+                    }
+                    onChange={() => {
+                      if (selected.includes(rowData._id)) {
+                        setSelected(
+                          filter(selected, (o) => {
+                            return o !== rowData._id;
+                          })
+                        );
+                      } else {
+                        setSelected([...selected, rowData._id]);
+                      }
+                    }}
+                  />
+                );
+              }}
+            />
             {columns.map(({ dataKey, ...other }, index) => {
               return (
                 <Column
@@ -167,6 +221,29 @@ class MuiVirtualizedTable extends React.PureComponent {
                 />
               );
             })}
+            <Column
+              width={100}
+              key="options"
+              headerRenderer={(headerProps) => " "}
+              className={classes.flexContainer}
+              cellRenderer={({ rowData }) => (
+                <TableCell>
+                  <div style={{ float: "right" }}>
+                    <IconButton
+                      onClick={(event) => {
+                        const newSelected = [];
+                        newSelected.push(rowData._id);
+                        setSelected(newSelected);
+                        setAnchorEl(event.currentTarget);
+                      }}
+                    >
+                      <IoMdMore />
+                    </IconButton>
+                  </div>
+                </TableCell>
+              )}
+              dataKey={"options"}
+            />
           </Table>
         )}
       </AutoSizer>
@@ -182,9 +259,21 @@ const ReactVirtualizedTable: React.FC<{
   model: ModelType;
   baseUrl: string;
   history;
-}> = ({ data, columns, model, baseUrl, history }) => {
+  selected;
+  setSelected;
+  setAnchorEl;
+}> = ({
+  data,
+  columns,
+  model,
+  baseUrl,
+  history,
+  selected,
+  setSelected,
+  setAnchorEl,
+}) => {
   return (
-    <div style={{ height: 800, width: "100%" }}>
+    <div style={{ height: "calc(100% - 64px)", width: "100%" }}>
       <VirtualizedTable
         rowCount={data.length}
         rowGetter={({ index }) => data[index]}
@@ -192,6 +281,10 @@ const ReactVirtualizedTable: React.FC<{
         model={model}
         baseUrl={baseUrl}
         history={history}
+        data={data}
+        selected={selected}
+        setSelected={setSelected}
+        setAnchorEl={setAnchorEl}
       />
     </div>
   );

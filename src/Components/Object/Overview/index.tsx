@@ -11,8 +11,6 @@ import {
   Toolbar,
   Typography,
   Tooltip,
-  TableCell,
-  TableSortLabel,
 } from "@material-ui/core";
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -21,36 +19,10 @@ import Loading from "../../Loading";
 import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
-import FieldDisplay from "../FieldDisplay";
-import { filter, size } from "lodash";
 import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
 import OverviewFilter from "./Filter";
-import { AutoSizer, Column, Table } from "react-virtualized";
 import ReactVirtualizedTable from "./VirtualizedTable";
-
-const stableSort = (array, comparator) => {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-};
-const descendingComparator = (a, b, orderBy) => {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-};
-const getComparator = (order, orderBy) => {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-};
+import RegularTable from "./Table";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -63,16 +35,10 @@ const Overview: React.FC<{
   const [dialogContent, setDialogContent] = useState<any>();
   const [anchorEl, setAnchorEl] = useState<any>();
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState();
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
   const history = useHistory();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [overviewFilter, setOverviewFilter] = useState([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
-  const [fieldDisplayModelCache, setFieldDisplayModelCache] = useState({});
-
-  const isSelected = (name) =>
-    selected ? selected.indexOf(name) !== -1 : false;
 
   // Lifecycle
   useEffect(() => {
@@ -121,6 +87,7 @@ const Overview: React.FC<{
 
   // UI
   if (!objects || !model || !layout) return <Loading />;
+  const heavynessScore = objects.length; // Todo, multiply by heavyness
   return (
     <>
       <Dialog
@@ -135,7 +102,10 @@ const Overview: React.FC<{
         <DialogContent>{dialogContent}</DialogContent>
       </Dialog>
 
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        style={{ margin: 15, marginBottom: 0, height: "97%", width: "98%" }}
+      >
         <Toolbar style={{ display: "flex" }}>
           {selected.length > 0 ? (
             <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
@@ -211,13 +181,29 @@ const Overview: React.FC<{
             </>
           )}
         </Toolbar>
-        <ReactVirtualizedTable
-          data={objects}
-          columns={layout.fields}
-          model={model}
-          baseUrl={`/${appId}/${objectTypeId}`}
-          history={history}
-        />
+        {heavynessScore > 100 ? (
+          <ReactVirtualizedTable
+            data={objects}
+            columns={layout.fields}
+            model={model}
+            baseUrl={`/${appId}/${objectTypeId}`}
+            history={history}
+            setSelected={setSelected}
+            selected={selected}
+            setAnchorEl={setAnchorEl}
+          />
+        ) : (
+          <RegularTable
+            data={objects}
+            layout={layout}
+            model={model}
+            baseUrl={`/${appId}/${objectTypeId}`}
+            history={history}
+            setSelected={setSelected}
+            selected={selected}
+            setAnchorEl={setAnchorEl}
+          />
+        )}
       </TableContainer>
 
       <Menu
