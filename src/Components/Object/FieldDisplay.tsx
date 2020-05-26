@@ -8,9 +8,21 @@ import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 import ObjectFieldDisplayFile from "./FieldDisplay/File";
 
-const FieldDisplay: React.FC<{ objectField; modelField; props? }> = ({
+const FieldDisplay: React.FC<{
+  objectField;
+  modelField;
+  remoteModelCache?;
+  onLoadRemoteModel?;
+  remoteObjectCache?;
+  onLoadRemoteObject?;
+  props?;
+}> = ({
   objectField,
   modelField,
+  remoteModelCache,
+  onLoadRemoteModel,
+  remoteObjectCache,
+  onLoadRemoteObject,
   props,
 }) => {
   return (
@@ -35,6 +47,10 @@ const FieldDisplay: React.FC<{ objectField; modelField; props? }> = ({
         <ObjectFieldDisplayRelationship
           modelField={modelField}
           objectField={objectField}
+          remoteModelCache={remoteModelCache}
+          onLoadRemoteModel={onLoadRemoteModel}
+          remoteObjectCache={remoteObjectCache}
+          onLoadRemoteObject={onLoadRemoteObject}
           {...props}
         />
       )}

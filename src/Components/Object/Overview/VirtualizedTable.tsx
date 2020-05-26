@@ -1,154 +1,54 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
 import TableCell from "@material-ui/core/TableCell";
 import { AutoSizer, Column, Table } from "react-virtualized";
 import { ModelType } from "../../../Utils/Types";
 import FieldDisplay from "../FieldDisplay";
 import { TableSortLabel, Checkbox, IconButton } from "@material-ui/core";
 import { filter } from "lodash";
-
 import "react-virtualized/styles.css";
 import { IoMdMore } from "react-icons/io";
-const styles = (theme) => ({
-  flexContainer: {
-    display: "flex",
-    alignItems: "center",
-    boxSizing: "border-box",
-  },
-  table: {
-    // temporary right-to-left patch, waiting for
-    // https://github.com/bvaughn/react-virtualized/issues/454
-    "& .ReactVirtualized__Table__headerRow": {
-      flip: false,
-      paddingRight: theme.direction === "rtl" ? "0 !important" : undefined,
-    },
-  },
-  tableRow: {
-    cursor: "pointer",
-  },
-  tableRowHover: {
-    "&:hover": {
-      backgroundColor: theme.palette.grey[200],
-    },
-  },
-  tableCell: {
-    flex: 1,
-  },
-  noClick: {
-    cursor: "initial",
-  },
-});
+import styles from "./styles.module.scss";
 
-class MuiVirtualizedTable extends React.PureComponent {
-  static defaultProps = {
-    headerHeight: 48,
-    rowHeight: 48,
-  };
-
-  cellRenderer = ({ rowData, columnIndex, baseUrl }) => {
-    const {
-      //@ts-ignore
-      columns,
-      //@ts-ignore
-      classes,
-      //@ts-ignore
-      rowHeight,
-      //@ts-ignore
-      onRowClick,
-      //@ts-ignore
-      model,
-      //@ts-ignore
-      history,
-    } = this.props;
-
-    return (
-      <TableCell
-        onClick={() => {
-          history.push(`${baseUrl}/${rowData._id}`);
-        }}
-        component="div"
-        variant="body"
-        style={{
-          height: rowHeight,
-          display: "flex",
-          alignItems: "center",
-          boxSizing: "border-box",
-          flex: 1,
-        }}
-      >
-        <FieldDisplay
-          modelField={model.fields[columns[columnIndex]]}
-          objectField={rowData.data[columns[columnIndex]]}
-        />
-      </TableCell>
-    );
-  };
-
-  headerRenderer = ({ label, columnIndex }) => {
-    //@ts-ignore
-    const { headerHeight, columns, classes, model } = this.props;
-
-    return (
-      <TableCell
-        component="div"
-        variant="head"
-        style={{
-          height: headerHeight,
-          display: "flex",
-          alignItems: "center",
-          boxSizing: "border-box",
-          flex: 1,
-        }}
-        align={columns[columnIndex].numeric || false ? "right" : "left"}
-      >
-        <TableSortLabel>
-          {model.fields[columns[columnIndex]].name}
-        </TableSortLabel>
-      </TableCell>
-    );
-  };
-
-  render() {
-    const {
-      //@ts-ignore
-      classes,
-      //@ts-ignore
-      columns,
-      //@ts-ignore
-      rowHeight,
-      //@ts-ignore
-      headerHeight,
-      //@ts-ignore
-      model,
-      //@ts-ignore
-      baseUrl,
-      //@ts-ignore
-      history,
-      //@ts-ignore
-      data,
-      //@ts-ignore
-      selected,
-      //@ts-ignore
-      setSelected,
-      //@ts-ignore
-      setAnchorEl,
-      ...tableProps
-    } = this.props;
-    return (
+const ReactVirtualizedTable: React.FC<{
+  data;
+  columns;
+  model: ModelType;
+  baseUrl: string;
+  history;
+  selected;
+  setSelected;
+  setAnchorEl;
+}> = ({
+  data,
+  columns,
+  model,
+  baseUrl,
+  history,
+  selected,
+  setSelected,
+  setAnchorEl,
+}) => {
+  // Vars
+  const [remoteModelCache, setRemoteModelCache] = useState({});
+  const [remoteObjectCache, setRemoteObjectCache] = useState({});
+  // Lifecycle
+  // UI
+  return (
+    <div style={{ height: "calc(100% - 64px)", width: "100%" }}>
       <AutoSizer>
         {({ height, width }) => (
           <Table
             height={height}
             width={width}
-            rowHeight={rowHeight}
+            rowHeight={48}
             gridStyle={{
               direction: "inherit",
             }}
-            headerHeight={headerHeight}
-            className={classes.table}
-            {...tableProps}
-            rowClassName={`${classes.tableRow} ${classes.flexContainer}`}
+            headerHeight={48}
+            rowCount={data.length}
+            rowGetter={({ index }) => data[index]}
+            overscanRowCount={2}
+            rowClassName={`${styles.tableRow} ${styles.flexContainer}`}
           >
             <Column
               width={100}
@@ -171,7 +71,7 @@ class MuiVirtualizedTable extends React.PureComponent {
                   }
                 />
               )}
-              className={classes.flexContainer}
+              className={styles.flexContainer}
               cellRenderer={({ rowData }) => {
                 return (
                   <Checkbox
@@ -199,23 +99,68 @@ class MuiVirtualizedTable extends React.PureComponent {
                 <Column
                   width={300}
                   key={dataKey}
-                  headerRenderer={(headerProps) =>
-                    this.headerRenderer({
-                      ...headerProps,
-                      columnIndex: index,
-                      model: model,
-                    })
-                  }
-                  className={classes.flexContainer}
-                  cellRenderer={(props) =>
-                    this.cellRenderer({
-                      ...props,
-                      columnIndex: index,
-                      model: model,
-                      baseUrl: baseUrl,
-                      history: history,
-                    })
-                  }
+                  headerRenderer={(headerProps) => (
+                    <TableCell
+                      component="div"
+                      variant="head"
+                      style={{
+                        height: 48,
+                        display: "flex",
+                        alignItems: "center",
+                        boxSizing: "border-box",
+                        flex: 1,
+                      }}
+                      align={columns[index].numeric || false ? "right" : "left"}
+                    >
+                      <TableSortLabel>
+                        {model.fields[columns[index]].name}
+                      </TableSortLabel>
+                    </TableCell>
+                  )}
+                  className={styles.flexContainer}
+                  cellRenderer={({ rowData }) => (
+                    <TableCell
+                      onClick={() => {
+                        history.push(`${baseUrl}/${rowData._id}`);
+                      }}
+                      component="div"
+                      variant="body"
+                      style={{
+                        height: 48,
+                        display: "flex",
+                        alignItems: "center",
+                        boxSizing: "border-box",
+                        flex: 1,
+                      }}
+                    >
+                      <FieldDisplay
+                        modelField={model.fields[columns[index]]}
+                        objectField={rowData.data[columns[index]]}
+                        remoteModelCache={remoteModelCache[columns[index]]}
+                        onLoadRemoteModel={(remoteModel) => {
+                          if (!remoteModelCache[columns[index]]) {
+                            setRemoteModelCache({
+                              ...remoteModelCache,
+                              [columns[index]]: remoteModel,
+                            });
+                          }
+                        }}
+                        remoteObjectCache={
+                          remoteObjectCache[rowData.data[columns[index]]]
+                        }
+                        onLoadRemoteObject={(remoteObject) => {
+                          if (
+                            !remoteObjectCache[rowData.data[columns[index]]]
+                          ) {
+                            setRemoteObjectCache({
+                              ...remoteObjectCache,
+                              [rowData.data[columns[index]]]: remoteObject,
+                            });
+                          }
+                        }}
+                      />
+                    </TableCell>
+                  )}
                   dataKey={dataKey}
                   {...other}
                 />
@@ -225,7 +170,7 @@ class MuiVirtualizedTable extends React.PureComponent {
               width={100}
               key="options"
               headerRenderer={(headerProps) => " "}
-              className={classes.flexContainer}
+              className={styles.flexContainer}
               cellRenderer={({ rowData }) => (
                 <TableCell>
                   <div style={{ float: "right" }}>
@@ -247,45 +192,6 @@ class MuiVirtualizedTable extends React.PureComponent {
           </Table>
         )}
       </AutoSizer>
-    );
-  }
-}
-//@ts-ignore
-const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
-
-const ReactVirtualizedTable: React.FC<{
-  data;
-  columns;
-  model: ModelType;
-  baseUrl: string;
-  history;
-  selected;
-  setSelected;
-  setAnchorEl;
-}> = ({
-  data,
-  columns,
-  model,
-  baseUrl,
-  history,
-  selected,
-  setSelected,
-  setAnchorEl,
-}) => {
-  return (
-    <div style={{ height: "calc(100% - 64px)", width: "100%" }}>
-      <VirtualizedTable
-        rowCount={data.length}
-        rowGetter={({ index }) => data[index]}
-        columns={columns}
-        model={model}
-        baseUrl={baseUrl}
-        history={history}
-        data={data}
-        selected={selected}
-        setSelected={setSelected}
-        setAnchorEl={setAnchorEl}
-      />
     </div>
   );
 };

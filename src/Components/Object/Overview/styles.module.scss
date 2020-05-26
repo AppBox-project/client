@@ -1,0 +1,19 @@
+.flexContainer {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.tableRow {
+  cursor: pointer;
+  &:hover {
+    background-color: #eee;
+  }
+}
+
+.tableCell {
+  flex: 1;
+}
+noClick {
+  cursor: initial;
+}

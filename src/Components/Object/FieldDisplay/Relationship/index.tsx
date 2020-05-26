@@ -8,8 +8,18 @@ import { Typography } from "@material-ui/core";
 const ObjectFieldDisplayRelationship: React.FC<{
   modelField;
   objectField;
-  targetModelCache?;
-}> = ({ objectField, modelField, targetModelCache }) => {
+  remoteModelCache?;
+  onLoadRemoteModel?;
+  remoteObjectCache?;
+  onLoadRemoteObject?;
+}> = ({
+  objectField,
+  modelField,
+  remoteModelCache,
+  onLoadRemoteModel,
+  remoteObjectCache,
+  onLoadRemoteObject,
+}) => {
   // Vars
   const [model, setModel] = useState();
   const [object, setObject] = useState();
@@ -20,43 +30,60 @@ const ObjectFieldDisplayRelationship: React.FC<{
       setModel("empty");
     } else {
       const modelRequestId = uniqid();
-
-      if (targetModelCache) {
-        console.log("Loading from cache");
+      // Get model
+      if (remoteModelCache) {
+        setModel(remoteModelCache); // Load the cache instead of the fresh model
       } else {
-        // Get model
         Server.emit("listenForObjectTypes", {
           requestId: modelRequestId,
           filter: { key: modelField.typeArgs.relationshipTo },
         });
         Server.on(`receive-${modelRequestId}`, (response) => {
           setModel(response[0]);
+          if (onLoadRemoteModel) {
+            onLoadRemoteModel(response[0]);
+            Server.emit("unlistenForObjectTypes", {
+              requestId: modelRequestId,
+            });
+          }
+        });
+      }
+      // Get object
+      const objectRequestId = uniqid();
+      if (remoteObjectCache) {
+        setObject(remoteObjectCache);
+      } else {
+        Server.emit("listenForObjects", {
+          requestId: objectRequestId,
+          type: modelField.typeArgs.relationshipTo,
+          filter: { _id: objectField },
+        });
+
+        Server.on(`receive-${objectRequestId}`, (response) => {
+          if (response.success) {
+            setObject(response.data[0]);
+            if (onLoadRemoteObject) {
+              onLoadRemoteObject(response.data[0]);
+              Server.emit("unlistenForObjects", {
+                requestId: objectRequestId,
+              });
+            }
+          } else {
+            console.log(response);
+          }
         });
       }
 
-      // Get object
-      const objectRequestId = uniqid();
-      Server.emit("listenForObjects", {
-        requestId: objectRequestId,
-        type: modelField.typeArgs.relationshipTo,
-        filter: { _id: objectField },
-      });
-
-      Server.on(`receive-${objectRequestId}`, (response) => {
-        if (response.success) {
-          setObject(response.data[0]);
-        } else {
-          console.log(response);
-        }
-      });
-
       return () => {
-        if (!targetModelCache)
+        if (!remoteModelCache) {
           Server.emit("unlistenForObjectTypes", { requestId: modelRequestId });
-        Server.emit("unlistenForObjects", { requestId: objectRequestId });
+        }
+        if (!remoteObjectCache) {
+          Server.emit("unlistenForObjects", { requestId: objectRequestId });
+        }
       };
     }
-  }, [objectField, targetModelCache]);
+  }, [objectField]);
 
   // UI
   if (model === "empty") return <></>;
