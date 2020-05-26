@@ -15,7 +15,8 @@ import {
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaLemon, FaDropbox, FaAngleDoubleLeft } from "react-icons/fa";
+import { FaLemon, FaDropbox } from "react-icons/fa";
+import { AiOutlineMenuUnfold } from "react-icons/ai"
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
 import { map } from "lodash";
@@ -39,7 +40,7 @@ const AppUIMobile: React.FC<{
       setgActions({
         ...gActions,
         navigate: {
-          icon: <FaAngleDoubleLeft />,
+          icon: <AiOutlineMenuUnfold />,
           function: () => {
             setDrawerOpen(true);
           },
