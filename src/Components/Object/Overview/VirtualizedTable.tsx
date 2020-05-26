@@ -47,7 +47,7 @@ const ReactVirtualizedTable: React.FC<{
             headerHeight={48}
             rowCount={data.length}
             rowGetter={({ index }) => data[index]}
-            overscanRowCount={2}
+            overscanRowCount={20}
             rowClassName={`${styles.tableRow} ${styles.flexContainer}`}
           >
             <Column
