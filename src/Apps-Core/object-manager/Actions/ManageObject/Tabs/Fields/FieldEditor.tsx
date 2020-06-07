@@ -175,8 +175,9 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       options={[
                         { value: "text", label: "Text" },
                         { value: "password", label: "Password" },
-                        { value: "email", label: "E-mail" },
                         { value: "number", label: "Number" },
+                        { value: "phone", label: "Phone" },
+                        { value: "email", label: "E-mail" },
                       ]}
                       onChange={(value) => {
                         setField({

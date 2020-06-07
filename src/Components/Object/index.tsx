@@ -44,6 +44,51 @@ const ViewObject: React.FC<{
   const [pageTitle, setPageTitle] = useState(undefined);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
+  const getFeedback = (feedback) => {
+    return (
+      <List>
+        {feedback.map((fb, index) => {
+          let reason = "Unknown error";
+          switch (fb.reason) {
+            case "missing-required":
+              reason = `<em>${
+                objectType.fields[fb.field].name
+              }</em> can't be empty.`;
+              break;
+            case "not-unique":
+              reason = `<em>${
+                objectType.fields[fb.field].name
+              }</em> needs to be unique, but isn't.`;
+              break;
+            case "no-email":
+              reason = `<em>${
+                objectType.fields[fb.field].name
+              }</em> isn't a valid e-mailadress.`;
+              break;
+            case "too-short":
+              reason = `<em>${
+                objectType.fields[fb.field].name
+              }</em> should be over ${fb.minLength}  characters.`;
+              break;
+            default:
+              reason = "huh";
+              break;
+          }
+          return (
+            <ListItem
+              style={{ cursor: "default" }}
+              key={`${fb.reason}-${fb.field}`}
+            >
+              <ListItemText>
+                <div dangerouslySetInnerHTML={{ __html: reason }} />
+              </ListItemText>
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   const save = () => {
     if (toChange !== {}) {
       if (objectId) {
@@ -61,7 +106,27 @@ const ViewObject: React.FC<{
             setFeedback(null);
             if (onSuccess) onSuccess();
           } else {
-            setFeedback(response.feedback);
+            if (response.feedback) {
+              setFeedback(response.feedback);
+              setSnackbar({
+                display: true,
+                type: "error",
+                icon: <FaBomb />,
+                duration: 2500,
+                position: { horizontal: "right" },
+
+                message: getFeedback(response.feedback),
+              });
+            } else {
+              setSnackbar({
+                display: true,
+                message: response.reason,
+                type: "error",
+                icon: <FaBomb />,
+                duration: 2500,
+                position: { horizontal: "right" },
+              });
+            }
           }
         });
       } else {
@@ -80,50 +145,12 @@ const ViewObject: React.FC<{
               setFeedback(response.feedback);
               setSnackbar({
                 display: true,
-                message: (
-                  <List>
-                    {response.feedback.map((fb, index) => {
-                      let reason = "Unknown error";
-                      switch (fb.reason) {
-                        case "missing-required":
-                          reason = `<em>${
-                            objectType.fields[fb.field].name
-                          }</em> can't be empty.`;
-                          break;
-                        case "not-unique":
-                          reason = `<em>${
-                            objectType.fields[fb.field].name
-                          }</em> needs to be unique, but isn't.`;
-                          break;
-                        case "no-email":
-                          reason = `<em>${
-                            objectType.fields[fb.field].name
-                          }</em> isn't a valid e-mailadress.`;
-                          break;
-                        case "too-short":
-                          reason = `<em>${
-                            objectType.fields[fb.field].name
-                          }</em> should be over ${fb.minLength}  characters.`;
-                          break;
-                        default:
-                          reason = "huh";
-                          break;
-                      }
-                      return (
-                        <ListItem
-                          style={{ cursor: "default" }}
-                          key={`${fb.reason}-${fb.field}`}
-                        >
-                          <ListItemText>
-                            <div dangerouslySetInnerHTML={{ __html: reason }} />
-                          </ListItemText>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                ),
                 type: "error",
                 icon: <FaBomb />,
+                duration: 2500,
+                position: { horizontal: "right" },
+
+                message: getFeedback(response.feedback),
               });
             } else {
               setSnackbar({

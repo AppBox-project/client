@@ -25,6 +25,7 @@ const App: React.FC = () => {
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
   const [noDb, setNoDb] = useState(false);
   const [noInit, setNoInit] = useState(false);
+  console.log(snackbar);
 
   const theme = createMuiTheme(gTheme);
   // Lifecycle
