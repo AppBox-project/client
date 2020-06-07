@@ -118,49 +118,51 @@ const ReactVirtualizedTable: React.FC<{
                     </TableCell>
                   )}
                   className={styles.flexContainer}
-                  cellRenderer={({ rowData }) => (
-                    <TableCell
-                      onClick={() => {
-                        history.push(`${baseUrl}/${rowData._id}`);
-                      }}
-                      component="div"
-                      variant="body"
-                      style={{
-                        height: 48,
-                        display: "flex",
-                        alignItems: "center",
-                        boxSizing: "border-box",
-                        flex: 1,
-                      }}
-                    >
-                      <FieldDisplay
-                        modelField={model.fields[columns[index]]}
-                        objectField={rowData.data[columns[index]]}
-                        remoteModelCache={remoteModelCache[columns[index]]}
-                        onLoadRemoteModel={(remoteModel) => {
-                          if (!remoteModelCache[columns[index]]) {
-                            setRemoteModelCache({
-                              ...remoteModelCache,
-                              [columns[index]]: remoteModel,
-                            });
-                          }
+                  cellRenderer={({ rowData }) => {
+                    return (
+                      <TableCell
+                        onClick={() => {
+                          history.push(`${baseUrl}/${rowData._id}`);
                         }}
-                        remoteObjectCache={
-                          remoteObjectCache[rowData.data[columns[index]]]
-                        }
-                        onLoadRemoteObject={(remoteObject) => {
-                          if (
-                            !remoteObjectCache[rowData.data[columns[index]]]
-                          ) {
-                            setRemoteObjectCache({
-                              ...remoteObjectCache,
-                              [rowData.data[columns[index]]]: remoteObject,
-                            });
-                          }
+                        component="div"
+                        variant="body"
+                        style={{
+                          height: 48,
+                          display: "flex",
+                          alignItems: "center",
+                          boxSizing: "border-box",
+                          flex: 1,
                         }}
-                      />
-                    </TableCell>
-                  )}
+                      >
+                        <FieldDisplay
+                          modelField={model.fields[columns[index]]}
+                          objectField={rowData.data[columns[index]]}
+                          remoteModelCache={remoteModelCache[columns[index]]}
+                          onLoadRemoteModel={(remoteModel) => {
+                            if (!remoteModelCache[columns[index]]) {
+                              setRemoteModelCache({
+                                ...remoteModelCache,
+                                [columns[index]]: remoteModel,
+                              });
+                            }
+                          }}
+                          remoteObjectCache={
+                            remoteObjectCache[rowData.data[columns[index]]]
+                          }
+                          onLoadRemoteObject={(remoteObject) => {
+                            if (
+                              !remoteObjectCache[rowData.data[columns[index]]]
+                            ) {
+                              setRemoteObjectCache({
+                                ...remoteObjectCache,
+                                [rowData.data[columns[index]]]: remoteObject,
+                              });
+                            }
+                          }}
+                        />
+                      </TableCell>
+                    );
+                  }}
                   dataKey={dataKey}
                   {...other}
                 />

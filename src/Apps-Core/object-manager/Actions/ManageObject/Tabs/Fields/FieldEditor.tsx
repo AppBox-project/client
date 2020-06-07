@@ -149,6 +149,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "boolean", label: "Boolean" },
                       { value: "color", label: "Color" },
                       { value: "date", label: "Date" },
+                      { value: "address", label: "Address" },
                       { value: "options", label: "Options" },
                       { value: "richtext", label: "Rich text" },
                       { value: "formula", label: "Formula" },

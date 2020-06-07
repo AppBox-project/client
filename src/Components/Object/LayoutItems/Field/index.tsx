@@ -14,6 +14,7 @@ import InputColor from "../../../Inputs/Color";
 import FieldDisplay from "../../FieldDisplay";
 import InputRelationShipM from "../../../Inputs/Relationship _m";
 import InputFile from "../../../Inputs/File";
+import InputAddress from "../../../Inputs/Address";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -86,6 +87,16 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "input" && (
               <InputInput
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+                type={modelField.typeArgs && modelField.typeArgs.type}
+              />
+            )}
+            {modelField.type === "address" && (
+              <InputAddress
                 onChange={(value) => {
                   onChange(value);
                 }}
