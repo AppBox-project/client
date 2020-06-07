@@ -103,17 +103,15 @@ const ListDetailLayout: React.FC<{
           ) : mode === "tree" ? (
             <TreeViewUI items={treeList} linkTo={baseUrl} />
           ) : (
-            <>
-              <ListNav
-                addFunction={addFunction}
-                deleteFunction={deleteFunction}
-                baseUrl={baseUrl}
-                selectedItem={selectedItem}
-                list={list}
-                navFixedIcon={navFixedIcon}
-                title={title}
-              />
-            </>
+            <ListNav
+              addFunction={addFunction}
+              deleteFunction={deleteFunction}
+              baseUrl={baseUrl}
+              selectedItem={selectedItem}
+              list={list}
+              navFixedIcon={navFixedIcon}
+              title={title}
+            />
           )}
         </Grid>
       )}

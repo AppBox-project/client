@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Dropzone from "react-dropzone";
 import styles from "./styles.module.scss";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Avatar } from "@material-ui/core";
 import { FaTrashAlt } from "react-icons/fa";
 import Axios from "axios";
 import { ModelType } from "../../../Utils/Types";
@@ -27,7 +27,7 @@ const InputPicture: React.FC<{
 
   // UI
   return newValue ? (
-    <>
+    <Avatar style={{ backgroundImage: `url(${baseUrl + newValue})` }}>
       <IconButton
         color="primary"
         onClick={() => {
@@ -37,8 +37,7 @@ const InputPicture: React.FC<{
       >
         <FaTrashAlt style={{ width: 15, height: 15 }} />
       </IconButton>
-      {newValue}
-    </>
+    </Avatar>
   ) : (
     <Dropzone
       onDrop={(files) => {

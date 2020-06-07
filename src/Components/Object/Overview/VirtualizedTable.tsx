@@ -8,6 +8,7 @@ import { filter } from "lodash";
 import "react-virtualized/styles.css";
 import { IoMdMore } from "react-icons/io";
 import styles from "./styles.module.scss";
+import { Skeleton } from "@material-ui/lab";
 
 const ReactVirtualizedTable: React.FC<{
   data;
@@ -118,7 +119,7 @@ const ReactVirtualizedTable: React.FC<{
                     </TableCell>
                   )}
                   className={styles.flexContainer}
-                  cellRenderer={({ rowData }) => {
+                  cellRenderer={({ rowData, isScrolling }) => {
                     return (
                       <TableCell
                         onClick={() => {

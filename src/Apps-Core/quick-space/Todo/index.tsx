@@ -59,7 +59,7 @@ const AppQSActionTodo: React.FC<{
       baseUrl="/quick-space/todo"
       list={projects}
       navFixedIcon={<GoTasklist />}
-      navWidth={2}
+      navWidth={3}
       DetailComponent={AppQSActionTodoDetail}
     />
   );

@@ -32,11 +32,8 @@ const ObjectFieldDisplayRelationship: React.FC<{
       const modelRequestId = uniqid();
       // Get model
       if (remoteModelCache) {
-        console.log("Loading model from cache");
-
         setModel(remoteModelCache); // Load the cache instead of the fresh model
       } else {
-        console.log("Loading fresh model");
         Server.emit("listenForObjectTypes", {
           requestId: modelRequestId,
           filter: { key: modelField.typeArgs.relationshipTo },
@@ -54,11 +51,8 @@ const ObjectFieldDisplayRelationship: React.FC<{
       // Get object
       const objectRequestId = uniqid();
       if (remoteObjectCache) {
-        console.log("Loading object from cache");
         setObject(remoteObjectCache);
       } else {
-        console.log("Loading fresh object");
-
         Server.emit("listenForObjects", {
           requestId: objectRequestId,
           type: modelField.typeArgs.relationshipTo,
