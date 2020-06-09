@@ -47,15 +47,19 @@ const AppQSActionTodoDetail: React.FC<{
               ["data.order"]
             )
           );
-          setDoneTodos(
+          setDoneTodos(sortyBy(
             filter(response.data, (o) => {
               return o.data.done === true;
-            })
+            }),
+              ["data.order"]
+            )
           );
           setSubTodos(
             filter(response.data, (o) => {
               return o.data.belongs_to;
-            })
+            }),
+              ["data.order"]
+            )
           );
         } else {
           console.log(response);
