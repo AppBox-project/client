@@ -197,6 +197,7 @@ const AppQSActionTodoDetail: React.FC<{
                         model={model}
                         isMobile={isMobile}
                         level={1}
+                        projectId={detailId}
                       />
                     )}
                   />

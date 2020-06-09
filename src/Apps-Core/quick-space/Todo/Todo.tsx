@@ -7,6 +7,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Collapse,
+  TextField,
 } from "@material-ui/core";
 import { GoTasklist } from "react-icons/go";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
@@ -21,11 +22,17 @@ const AppQSActionTodoDetailTodo: React.FC<{
   model: ModelType;
   isMobile: boolean;
   level: number;
-}> = ({ subTodos, todo, context, model, isMobile, level }) => {
+  projectId;
+}> = ({ subTodos, todo, context, model, isMobile, level, projectId }) => {
   // Vars
-  let [expanded, setExpanded] = useState(false); // Used for expanding sub-items
-  let [localChecked, setLocalChecked] = useState(false); // On check this state will be set before real-time data, allowing graying out of item during load.
-  let subItems = filter(subTodos, (o) => o.data.belongs_to === todo._id); // Checks for existing sub-items
+  const [expanded, setExpanded] = useState(false); // Used for expanding sub-items
+  const [localChecked, setLocalChecked] = useState(false); // On check this state will be set before real-time data, allowing graying out of item during load.
+  const [newTodo, setNewTodo] = useState(""); // Used for controlling the 'new todo' input on a sub-item list.
+
+  let subItems = filter(
+    subTodos,
+    (o) => o.data.belongs_to === todo._id && o.data.done != true
+  ); // Checks for existing sub-items
 
   // Lifecycle
 
@@ -154,7 +161,37 @@ const AppQSActionTodoDetailTodo: React.FC<{
       </ListItem>
       {subItems.length > 0 && (
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <div style={{ marginLeft: level * 35 }}>
+          <div
+            style={{ marginLeft: level * 35, borderLeft: "1px dashed #efefef" }}
+          >
+            <TextField
+              fullWidth
+              margin="normal"
+              label={`Add todo to '${todo.data.action}'`}
+              value={newTodo}
+              style={{ margin: "0 15px", width: "98%" }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  context.addObject(
+                    "qs-todo",
+                    {
+                      action: newTodo,
+                      project: projectId,
+                      belongs_to: todo._id,
+                      owner: context.user._id,
+                    },
+                    (response) => {
+                      console.log(response);
+                    }
+                  );
+
+                  setNewTodo("");
+                }
+              }}
+              onChange={(e) => {
+                setNewTodo(e.target.value);
+              }}
+            />
             <context.UI.Layouts.SortableList
               listItems={subItems}
               baseUrl=""
@@ -167,6 +204,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
                     model={model}
                     isMobile={isMobile}
                     level={level + 1}
+                    projectId={projectId}
                   />
                 );
               }}
