@@ -19,6 +19,7 @@ const InputSelect: React.FC<{
   // UI
   return (
     <Select
+      isClearable
       options={options}
       value={newValue}
       isLoading={isLoading}

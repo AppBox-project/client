@@ -58,8 +58,8 @@ const InputRelationShip: React.FC<{
       isLoading={options === undefined}
       value={newValue}
       onChange={(selected) => {
-        setNewValue(selected.value);
-        if (onChange) onChange(selected.value);
+        setNewValue(selected ? selected.value : null);
+        if (onChange) onChange(selected ? selected.value : null);
       }}
     />
   );

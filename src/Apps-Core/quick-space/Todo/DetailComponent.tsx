@@ -8,16 +8,14 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  Chip,
   ListSubheader,
   List,
 } from "@material-ui/core";
 import { FaTrello, FaBars, FaAngleDown, FaStickyNote } from "react-icons/fa";
 import { GoTasklist } from "react-icons/go";
+import { IoMdSubway } from "react-icons/io";
+import { AiOutlineDown } from "react-icons/ai";
+import AppQSActionTodoDetailTodo from "./Todo";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -31,6 +29,7 @@ const AppQSActionTodoDetail: React.FC<{
   // Vars
   const [todos, setTodos] = useState();
   const [doneTodos, setDoneTodos] = useState();
+  const [subTodos, setSubTodos] = useState();
   const [newTodo, setNewTodo] = useState("");
   const [model, setModel] = useState();
   const [view, setView] = useState("todo");
@@ -46,7 +45,7 @@ const AppQSActionTodoDetail: React.FC<{
           setTodos(
             sortBy(
               filter(response.data, (o) => {
-                return o.data.done !== true;
+                return o.data.done !== true && !o.data.belongs_to;
               }),
               ["data.order"]
             )
@@ -54,6 +53,11 @@ const AppQSActionTodoDetail: React.FC<{
           setDoneTodos(
             filter(response.data, (o) => {
               return o.data.done === true;
+            })
+          );
+          setSubTodos(
+            filter(response.data, (o) => {
+              return o.data.belongs_to;
             })
           );
         } else {
@@ -188,124 +192,16 @@ const AppQSActionTodoDetail: React.FC<{
                     listItems={todos}
                     linkToPath="_id"
                     baseUrl={`/quick-space/todo/${detailId}`}
-                    customItem={(todo) => {
-                      return (
-                        <ListItem
-                          key={todo._id}
-                          style={{ cursor: "pointer" }}
-                          button
-                        >
-                          <ListItemIcon>
-                            <context.UI.Field
-                              field={model.fields["done"]}
-                              fieldId="done"
-                              objectId={todo._id}
-                              object={todo}
-                              mode="free"
-                              directSave
-                              directSaveDelay={1}
-                            />
-                          </ListItemIcon>
-                          <ListItemText
-                            onClick={(object) => {
-                              context.setDialog({
-                                display: true,
-                                size: "md",
-                                title: todo.data.action,
-                                content: (
-                                  <context.UI.Layouts.Object.ObjectLayout
-                                    model={model}
-                                    layoutId="popup"
-                                    popup
-                                    appId="quick-space"
-                                    objectId={todo._id}
-                                  />
-                                ),
-                              });
-                            }}
-                            primary={todo.data.action}
-                            secondary={
-                              <>
-                                {todo.data.description && (
-                                  <>
-                                    {todo.data.description}
-                                    <br />
-                                  </>
-                                )}
-                                {todo.data.status && isMobile && (
-                                  <>
-                                    <Chip
-                                      variant="outlined"
-                                      label={todo.data.status}
-                                      size="small"
-                                    />{" "}
-                                  </>
-                                )}
-                                {todo.data.tags && (
-                                  <context.UI.FieldDisplay
-                                    objectField={todo.data.tags}
-                                    modelField={model.fields.tags}
-                                    props={{ size: "small" }}
-                                  />
-                                )}
-                                {todo.data.relatedNotes &&
-                                  todo.data.relatedNotes.length > 0 && (
-                                    <>
-                                      {" "}
-                                      <Chip
-                                        label={`${
-                                          todo.data.relatedNotes.length
-                                        } ${
-                                          todo.data.relatedNotes.length === 1
-                                            ? "note"
-                                            : "notes"
-                                        }`}
-                                        icon={
-                                          <FaStickyNote
-                                            style={{ width: 12, height: 12 }}
-                                          />
-                                        }
-                                        size="small"
-                                        variant="outlined"
-                                      />
-                                    </>
-                                  )}
-                                {todo.data.relates_to &&
-                                  todo.data.relates_to.length > 0 && (
-                                    <>
-                                      {" "}
-                                      <Chip
-                                        label={`${todo.data.relates_to.length} related`}
-                                        icon={
-                                          <GoTasklist
-                                            style={{ width: 12, height: 12 }}
-                                          />
-                                        }
-                                        size="small"
-                                        variant="outlined"
-                                      />
-                                    </>
-                                  )}
-                              </>
-                            }
-                          />
-                          {(todo.data.status || todo.data.tags) &&
-                            !isMobile && (
-                              <ListItemSecondaryAction
-                                style={{ textAlign: "right" }}
-                              >
-                                {todo.data.status && (
-                                  <Chip
-                                    variant="outlined"
-                                    label={todo.data.status}
-                                    size="small"
-                                  />
-                                )}
-                              </ListItemSecondaryAction>
-                            )}
-                        </ListItem>
-                      );
-                    }}
+                    customItem={(todo) => (
+                      <AppQSActionTodoDetailTodo
+                        subTodos={subTodos}
+                        todo={todo}
+                        context={context}
+                        model={model}
+                        isMobile={isMobile}
+                        level={1}
+                      />
+                    )}
                   />
                 </context.UI.Animations.AnimationItem>
               </Grid>

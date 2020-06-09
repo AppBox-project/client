@@ -12,7 +12,10 @@ const ObjectFieldDisplayPicture: React.FC<{ modelField; objectField }> = ({
       {objectField ? (
         <div
           className={styles.picturePreview}
-          style={{ backgroundImage: `url(${baseUrl}${objectField})` }}
+          style={{
+            backgroundImage: `url(${baseUrl}${objectField})`,
+            backgroundSize: "cover",
+          }}
         />
       ) : (
         <div className={styles.root}>
