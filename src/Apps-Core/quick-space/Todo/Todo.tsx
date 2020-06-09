@@ -23,15 +23,24 @@ const AppQSActionTodoDetailTodo: React.FC<{
   level: number;
 }> = ({ subTodos, todo, context, model, isMobile, level }) => {
   // Vars
-  let [expanded, setExpanded] = useState(false);
-  let subItems = filter(subTodos, (o) => o.data.belongs_to === todo._id);
+  let [expanded, setExpanded] = useState(false); // Used for expanding sub-items
+  let [localChecked, setLocalChecked] = useState(false); // On check this state will be set before real-time data, allowing graying out of item during load.
+  let subItems = filter(subTodos, (o) => o.data.belongs_to === todo._id); // Checks for existing sub-items
 
   // Lifecycle
 
   // UI
   return (
     <>
-      <ListItem key={todo._id} style={{ cursor: "pointer" }} button>
+      <ListItem
+        key={todo._id}
+        style={{
+          cursor: "pointer",
+          opacity: localChecked ? 0.6 : 1,
+        }}
+        button
+        disabled={localChecked}
+      >
         <ListItemIcon>
           <context.UI.Field
             field={model.fields["done"]}
@@ -41,6 +50,9 @@ const AppQSActionTodoDetailTodo: React.FC<{
             mode="free"
             directSave
             directSaveDelay={1}
+            onChange={() => {
+              setLocalChecked(true);
+            }}
           />
         </ListItemIcon>
         <ListItemText

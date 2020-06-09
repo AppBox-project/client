@@ -11,10 +11,7 @@ import {
   ListSubheader,
   List,
 } from "@material-ui/core";
-import { FaTrello, FaBars, FaAngleDown, FaStickyNote } from "react-icons/fa";
-import { GoTasklist } from "react-icons/go";
-import { IoMdSubway } from "react-icons/io";
-import { AiOutlineDown } from "react-icons/ai";
+import { FaTrello, FaBars, FaAngleDown } from "react-icons/fa";
 import AppQSActionTodoDetailTodo from "./Todo";
 
 const AppQSActionTodoDetail: React.FC<{
@@ -209,7 +206,7 @@ const AppQSActionTodoDetail: React.FC<{
               {doneTodos && doneTodos.length > 0 && (
                 <Grid item xs={12} md={4} style={{ padding: 15 }}>
                   <context.UI.Animations.AnimationItem>
-                    <ExpansionPanel>
+                    <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
                       <ExpansionPanelSummary
                         expandIcon={<FaAngleDown />}
                         aria-controls="panel1a-content"

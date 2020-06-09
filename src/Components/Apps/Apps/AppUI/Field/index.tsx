@@ -15,7 +15,7 @@ const AppUiField: React.FC<{
   directSaveDelay?: number;
   object?;
   mode?: "view" | "edit" | "free";
-  onChange?: (value) => void;
+  onChange?: (result) => void;
 }> = ({
   style,
   object,
@@ -26,6 +26,7 @@ const AppUiField: React.FC<{
   mode,
   directSave,
   directSaveDelay,
+  onChange,
 }) => {
   // Vars
   const [loadedField, setLoadedField] = useState();
@@ -75,6 +76,7 @@ const AppUiField: React.FC<{
         mode={mode}
         directSave={directSave}
         directSaveDelay={directSaveDelay}
+        onChange={onChange}
       />
     </div>
   );

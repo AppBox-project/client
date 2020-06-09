@@ -6,7 +6,6 @@ import { Button, ListItem, List, ListItemText } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { ModelType } from "../../Utils/Types";
-import { Alert, AlertTitle } from "@material-ui/lab";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
