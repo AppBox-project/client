@@ -52,7 +52,6 @@ const ReactVirtualizedTable: React.FC<{
             rowClassName={`${styles.tableRow} ${styles.flexContainer}`}
           >
             <Column
-              width={100}
               dataKey="checkmark"
               headerRenderer={(headerProps) => (
                 <Checkbox
@@ -109,7 +108,6 @@ const ReactVirtualizedTable: React.FC<{
                         display: "flex",
                         alignItems: "center",
                         boxSizing: "border-box",
-                        flex: 1,
                       }}
                       align={columns[index].numeric || false ? "right" : "left"}
                     >
@@ -170,12 +168,11 @@ const ReactVirtualizedTable: React.FC<{
               );
             })}
             <Column
-              width={100}
               key="options"
               headerRenderer={(headerProps) => " "}
               className={styles.flexContainer}
               cellRenderer={({ rowData }) => (
-                <TableCell>
+                <TableCell style={{ flex: 1, minWidth: 50 }}>
                   <div style={{ float: "right" }}>
                     <IconButton
                       onClick={(event) => {

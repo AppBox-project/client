@@ -2,7 +2,6 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import {
   Dialog,
   DialogContent,
-  Paper,
   TableContainer,
   IconButton,
   Menu,
@@ -16,7 +15,7 @@ import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import Loading from "../../Loading";
-import { IoIosAddCircleOutline, IoMdMore } from "react-icons/io";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
 import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
@@ -102,10 +101,7 @@ const Overview: React.FC<{
         <DialogContent>{dialogContent}</DialogContent>
       </Dialog>
 
-      <TableContainer
-        component={Paper}
-        style={{ margin: 15, marginBottom: 0, height: "97%", width: "98%" }}
-      >
+      <TableContainer component="div" style={{ height: "100%", width: "100%" }}>
         <Toolbar style={{ display: "flex" }}>
           {selected.length > 0 ? (
             <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
