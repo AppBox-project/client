@@ -86,7 +86,18 @@ const Overview: React.FC<{
 
   // UI
   if (!objects || !model || !layout) return <Loading />;
-  const heavynessScore = objects.length; // Todo, multiply by heavyness
+  // Calculate heaviness. A heavy overview is virtualized.
+  let heavyness = 1;
+  layout.fields.map((field) => {
+    if (
+      model.fields[field].type === "relationship" ||
+      model.fields[field].type === "relationship_m"
+    ) {
+      heavyness++;
+    }
+  });
+  const heavynessScore = objects.length * heavyness;
+
   return (
     <>
       <Dialog
@@ -177,7 +188,7 @@ const Overview: React.FC<{
             </>
           )}
         </Toolbar>
-        {heavynessScore > 100 ? (
+        {heavynessScore > 500 ? (
           <ReactVirtualizedTable
             data={objects}
             columns={layout.fields}
