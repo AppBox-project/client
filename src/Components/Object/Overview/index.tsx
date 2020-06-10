@@ -14,7 +14,6 @@ import {
 import { ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
-import Loading from "../../Loading";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
@@ -22,6 +21,7 @@ import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
 import OverviewFilter from "./Filter";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
+import Skeleton from "./Skeleton";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -85,7 +85,7 @@ const Overview: React.FC<{
   }, [overviewFilter]);
 
   // UI
-  if (!objects || !model || !layout) return <Loading />;
+  if (!objects || !model || !layout) return <Skeleton />;
   // Calculate heaviness. A heavy overview is virtualized.
   let heavyness = 1;
   layout.fields.map((field) => {
