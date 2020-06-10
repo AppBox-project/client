@@ -87,16 +87,16 @@ const Overview: React.FC<{
   // UI
   if (!objects || !model || !layout) return <Skeleton />;
   // Calculate heaviness. A heavy overview is virtualized.
-  let heavyness = 1;
+  let heaviness = 1;
   layout.fields.map((field) => {
     if (
       model.fields[field].type === "relationship" ||
       model.fields[field].type === "relationship_m"
     ) {
-      heavyness++;
+      heaviness++;
     }
   });
-  const heavynessScore = objects.length * heavyness;
+  const heavynessScore = objects.length * heaviness;
 
   return (
     <>
