@@ -20,6 +20,7 @@ import {
 import { FaPlus, FaTrash, FaAngleLeft } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
+import ListDetailLayoutSkeleton from "./LoadingSkeleton";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -45,6 +46,7 @@ const ListDetailLayout: React.FC<{
   navWidth?: ColumnWidth;
   navFixedIcon?: JSX.Element;
   title?;
+  isLoading?: true | boolean;
 }> = ({
   list,
   customNavComponent,
@@ -59,6 +61,7 @@ const ListDetailLayout: React.FC<{
   navWidth,
   navFixedIcon,
   title,
+  isLoading,
 }) => {
   // Vars
   const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -93,25 +96,31 @@ const ListDetailLayout: React.FC<{
       });
     };
   }, [window.location.href]);
+
   // UI
+
   return (
     <Grid container style={{ height: "100%" }}>
       {(!selectedItem || !isMobile) && (
         <Grid item xs={12} md={navigationWidth} style={{ height: "100%" }}>
-          {customNavComponent ? (
-            customNavComponent
-          ) : mode === "tree" ? (
-            <TreeViewUI items={treeList} linkTo={baseUrl} />
+          {!isLoading ? (
+            customNavComponent ? (
+              customNavComponent
+            ) : mode === "tree" ? (
+              <TreeViewUI items={treeList} linkTo={baseUrl} />
+            ) : (
+              <ListNav
+                addFunction={addFunction}
+                deleteFunction={deleteFunction}
+                baseUrl={baseUrl}
+                selectedItem={selectedItem}
+                list={list}
+                navFixedIcon={navFixedIcon}
+                title={title}
+              />
+            )
           ) : (
-            <ListNav
-              addFunction={addFunction}
-              deleteFunction={deleteFunction}
-              baseUrl={baseUrl}
-              selectedItem={selectedItem}
-              list={list}
-              navFixedIcon={navFixedIcon}
-              title={title}
-            />
+            <ListDetailLayoutSkeleton />
           )}
         </Grid>
       )}

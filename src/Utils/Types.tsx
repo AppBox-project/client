@@ -253,6 +253,7 @@ export interface UIType {
       navWidth?: ColumnWidth;
       navFixedIcon?: JSX.Element;
       title?: string;
+      isLoading?: true | boolean;
     }>;
     SortableList: React.FC<{
       listItems: [];
