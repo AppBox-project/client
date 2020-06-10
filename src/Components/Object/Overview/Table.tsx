@@ -9,7 +9,7 @@ import {
   TableHead,
   TableSortLabel,
 } from "@material-ui/core";
-import { filter } from "lodash";
+import { filter, orderBy } from "lodash";
 import FieldDisplay from "../FieldDisplay";
 import { IoMdMore } from "react-icons/io";
 
@@ -33,8 +33,9 @@ const RegularTable: React.FC<{
   setAnchorEl,
 }) => {
   // Vars
-  const [orderBy, setOrderBy] = useState();
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const [orderField, setOrderField] = useState(layout.fields[0]);
+  const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
+  const sortedData = orderBy(data, [`data.${orderField}`], [orderDirection]);
 
   // Lifecycle
   // UI
@@ -63,8 +64,18 @@ const RegularTable: React.FC<{
           {layout.fields.map((field) => (
             <TableCell key={field}>
               <TableSortLabel
-                active={orderBy === field}
-                direction={orderBy === field ? order : "asc"}
+                onClick={() => {
+                  if (orderField === field) {
+                    setOrderDirection(
+                      orderDirection === "asc" ? "desc" : "asc"
+                    );
+                  } else {
+                    setOrderField(field);
+                    setOrderDirection("asc");
+                  }
+                }}
+                active={orderField === field}
+                direction={orderField === field ? orderDirection : "asc"}
               >
                 {model.fields[field].name}
               </TableSortLabel>
@@ -76,7 +87,7 @@ const RegularTable: React.FC<{
         </TableRow>
       </TableHead>{" "}
       <TableBody>
-        {data.map((object, index) => {
+        {sortedData.map((object, index) => {
           const isItemSelected = selected
             ? selected.indexOf(object._id) !== -1
             : false;

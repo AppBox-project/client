@@ -4,11 +4,10 @@ import { AutoSizer, Column, Table } from "react-virtualized";
 import { ModelType } from "../../../Utils/Types";
 import FieldDisplay from "../FieldDisplay";
 import { TableSortLabel, Checkbox, IconButton } from "@material-ui/core";
-import { filter } from "lodash";
+import { filter, orderBy } from "lodash";
 import "react-virtualized/styles.css";
 import { IoMdMore } from "react-icons/io";
 import styles from "./styles.module.scss";
-import { Skeleton } from "@material-ui/lab";
 
 const ReactVirtualizedTable: React.FC<{
   data;
@@ -32,6 +31,10 @@ const ReactVirtualizedTable: React.FC<{
   // Vars
   const [remoteModelCache, setRemoteModelCache] = useState({});
   const [remoteObjectCache, setRemoteObjectCache] = useState({});
+  const [orderField, setOrderField] = useState(columns[0]);
+  const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
+  const sortedData = orderBy(data, [`data.${orderField}`], [orderDirection]);
+
   // Lifecycle
   // UI
   return (
@@ -46,8 +49,8 @@ const ReactVirtualizedTable: React.FC<{
               direction: "inherit",
             }}
             headerHeight={48}
-            rowCount={data.length}
-            rowGetter={({ index }) => data[index]}
+            rowCount={sortedData.length}
+            rowGetter={({ index }) => sortedData[index]}
             overscanRowCount={20}
             rowClassName={`${styles.tableRow} ${styles.flexContainer}`}
           >
@@ -111,7 +114,22 @@ const ReactVirtualizedTable: React.FC<{
                       }}
                       align={columns[index].numeric || false ? "right" : "left"}
                     >
-                      <TableSortLabel>
+                      <TableSortLabel
+                        onClick={() => {
+                          if (orderField === columns[index]) {
+                            setOrderDirection(
+                              orderDirection === "asc" ? "desc" : "asc"
+                            );
+                          } else {
+                            setOrderField(columns[index]);
+                            setOrderDirection("asc");
+                          }
+                        }}
+                        active={orderField === columns[index]}
+                        direction={
+                          orderField === columns[index] ? orderDirection : "asc"
+                        }
+                      >
                         {model.fields[columns[index]].name}
                       </TableSortLabel>
                     </TableCell>
