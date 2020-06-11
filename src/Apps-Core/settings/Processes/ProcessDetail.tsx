@@ -1,6 +1,7 @@
 import React from "react";
 import { AppContextType, ModelType } from "../../../Utils/Types";
 import AppSettingsProcessCreate from "./CreateProcess";
+import AppSettingsProcessEdit from "./EditProcess";
 
 const AppSettingsProcessDetail: React.FC<{
   match: { params: { detailId } };
@@ -18,7 +19,7 @@ const AppSettingsProcessDetail: React.FC<{
       {detailId === "create" ? (
         <AppSettingsProcessCreate context={context} />
       ) : (
-        "Edit a process"
+        <AppSettingsProcessEdit context={context} processId={detailId} />
       )}
     </>
   );

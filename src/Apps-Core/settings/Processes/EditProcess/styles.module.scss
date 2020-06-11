@@ -1,0 +1,33 @@
+.row {
+  height: 250px;
+  border-bottom: 1px solid #eaeaea;
+  padding: 15px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.title {
+  text-align: center;
+  color: #666;
+  cursor: default;
+}
+
+.block {
+  width: 250px;
+  height: 200px;
+  box-sizing: border-box;
+  padding: 15px;
+  border: 1px solid #eee;
+  display: inline-block;
+  margin: 15px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #efefef;
+  }
+}
+
+.blockHeader {
+  text-align: center;
+  cursor: default;
+}

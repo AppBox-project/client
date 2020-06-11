@@ -120,7 +120,7 @@ const ListDetailLayout: React.FC<{
               />
             )
           ) : (
-            <ListDetailLayoutSkeleton />
+            <ListDetailLayoutSkeleton title={title} />
           )}
         </Grid>
       )}
@@ -209,6 +209,11 @@ const ListNav: React.FC<{
                             {navFixedIcon && (
                               <ListItemIcon>{navFixedIcon}</ListItemIcon>
                             )}
+                            {subItem.icon && (
+                              <ListItemIcon>
+                                <subItem.icon />
+                              </ListItemIcon>
+                            )}
                             <ListItemText
                               color={
                                 selectedItem === listItem.id
@@ -240,6 +245,11 @@ const ListNav: React.FC<{
                     <ListItem button selected={selectedItem === listItem.id}>
                       {navFixedIcon && (
                         <ListItemIcon>{navFixedIcon}</ListItemIcon>
+                      )}
+                      {listItem.icon && (
+                        <ListItemIcon>
+                          <listItem.icon />
+                        </ListItemIcon>
                       )}
                       <ListItemText
                         color={

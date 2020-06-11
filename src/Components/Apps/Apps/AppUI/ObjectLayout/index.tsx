@@ -19,26 +19,25 @@ const UIObjectLayout: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    let modelRequest;
+    let requestId;
     if (model) {
       setAppliedModel(model);
     } else {
-      const requestId = uniqid();
-      modelRequest = Server.emit("listenForObjectTypes", {
+      requestId = uniqid();
+      Server.emit("listenForObjectTypes", {
         requestId,
         filter: { key: modelId },
       });
       Server.on(`receive-${requestId}`, (response) => {
-        if (response.success) {
-          setAppliedModel(response.data[0]);
-        } else {
-          console.log(response);
-        }
+        setAppliedModel(response[0]);
       });
     }
 
     return () => {
-      if (modelRequest) modelRequest.stop();
+      if (requestId)
+        Server.emit("unlistenForObjectTypes", {
+          requestId,
+        });
     };
   }, [model, modelId]);
 
