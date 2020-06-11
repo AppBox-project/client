@@ -5,6 +5,12 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+  transition: all 1s;
+
+  &:hover {
+    background-color: #fefefe;
+    border-bottom: 1px solid #aaa;
+  }
 }
 .title {
   text-align: center;
@@ -20,10 +26,11 @@
   border: 1px solid #eee;
   display: inline-block;
   margin: 15px;
-  transition: all 0.3s;
+  transition: all 1s;
 
   &:hover {
-    background-color: #efefef;
+    background-color: #fefefe;
+    border: 1px solid #aaa;
   }
 }
 

@@ -6,7 +6,7 @@ import { Skeleton } from "@material-ui/lab";
 const TriggerBlock: React.FC<{
   add?: true;
   isLoading?: true;
-  onClick?: () => void;
+  onClick?: (event) => void;
   trigger?: { label: string };
 }> = ({ add, isLoading, onClick, trigger }) => {
   return isLoading ? (

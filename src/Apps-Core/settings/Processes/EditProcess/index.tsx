@@ -49,6 +49,7 @@ const AppSettingsProcessEdit: React.FC<{
         label: "Save",
         function: () => {
           context.updateObject("system-processes", process, processId);
+          setHasChanged(false);
         },
       });
     } else {
@@ -91,7 +92,19 @@ const AppSettingsProcessEdit: React.FC<{
           <Skeleton width={350} height={42} />
         )}{" "}
       </div>
-      <div className={styles.row}>
+      <div
+        className={styles.row}
+        onClick={() => {
+          setProcess({
+            ...process,
+            triggers: [
+              ...(process.triggers || []),
+              { label: "Example trigger" },
+            ],
+          });
+          setHasChanged(true);
+        }}
+      >
         <Typography variant="subtitle1" className={styles.title}>
           Process triggers...
         </Typography>
@@ -101,24 +114,13 @@ const AppSettingsProcessEdit: React.FC<{
               return (
                 <TriggerBlock
                   trigger={trigger}
-                  onClick={() => {
+                  onClick={(e) => {
                     setEditBlock(`trigger-${index}`);
+                    e.stopPropagation();
                   }}
                 />
               );
             })}
-            <TriggerBlock
-              add
-              onClick={() => {
-                setProcess({
-                  ...process,
-                  triggers: [
-                    ...(process.triggers || []),
-                    { label: "Example trigger" },
-                  ],
-                });
-              }}
-            />
           </>
         ) : (
           <>
@@ -129,26 +131,53 @@ const AppSettingsProcessEdit: React.FC<{
           </>
         )}
       </div>
-      <div className={styles.row}>
-        <Typography variant="subtitle1" className={styles.title}>
-          and performs...
-        </Typography>
-        {process ? (
-          <>
-            <TriggerBlock isLoading />
-            <TriggerBlock isLoading />
-            <TriggerBlock isLoading />
-            <TriggerBlock add />
-          </>
-        ) : (
-          <>
-            <TriggerBlock isLoading />
-            <TriggerBlock isLoading />
-            <TriggerBlock isLoading />
-            <TriggerBlock isLoading />
-          </>
-        )}
-      </div>
+      {process ? (
+        <>
+          {(process.actions || []).map((action, ine3s) => {
+            return (
+              <div className={styles.row}>
+                <Typography variant="subtitle1" className={styles.title}>
+                  and performs...
+                </Typography>
+              </div>
+            );
+          })}
+          <div
+            className={styles.row}
+            style={{ height: 50, cursor: "pointer" }}
+            onClick={() => {
+              setProcess({
+                ...process,
+                actions: [
+                  ...(process.actions || []),
+                  { label: "Example action" },
+                ],
+              });
+              setHasChanged(true);
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              className={styles.title}
+              style={{ cursor: "pointer" }}
+            >
+              add action
+            </Typography>
+          </div>
+        </>
+      ) : (
+        <div className={styles.row}>
+          <Typography variant="subtitle1" className={styles.title}>
+            and performs...
+          </Typography>
+
+          <TriggerBlock isLoading />
+          <TriggerBlock isLoading />
+          <TriggerBlock isLoading />
+          <TriggerBlock isLoading />
+        </div>
+      )}
+
       <Drawer
         anchor="bottom"
         open={editBlock}
@@ -170,6 +199,7 @@ const AppSettingsProcessEdit: React.FC<{
               }
               setProcess({ ...process, triggers });
               setEditBlock(null);
+              setHasChanged(true);
             }}
           />
         ) : (
