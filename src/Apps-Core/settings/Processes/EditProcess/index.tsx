@@ -7,6 +7,10 @@ import { useState, useEffect } from "reactn";
 import { Skeleton } from "@material-ui/lab";
 import TriggerEditor from "./TriggerEditor";
 import { FaSave } from "react-icons/fa";
+import ConditionsBlock from "./ConditionsBlock";
+import ActionBlock from "./ActionBlock";
+import { GiLoveHowl } from "react-icons/gi";
+import ConditionsEditor from "./ConditionsEditor";
 
 const AppSettingsProcessEdit: React.FC<{
   context: AppContextType;
@@ -60,7 +64,6 @@ const AppSettingsProcessEdit: React.FC<{
       context.setButton("save", undefined);
     };
   }, [hasChanged]);
-
   // UI
   return (
     <>
@@ -133,12 +136,39 @@ const AppSettingsProcessEdit: React.FC<{
       </div>
       {process ? (
         <>
-          {(process.actions || []).map((action, ine3s) => {
+          {(process.actions || []).map((action, index) => {
             return (
-              <div className={styles.row}>
+              <div
+                className={styles.row}
+                onClick={() => {
+                  const actions = action.actions;
+                  actions.push({ label: "new action" });
+                  const newActions = process.actions;
+                  newActions[index] = { ...action, actions };
+                  setProcess({ ...process, actions: newActions });
+                  setHasChanged(true);
+                }}
+              >
                 <Typography variant="subtitle1" className={styles.title}>
                   and performs...
                 </Typography>
+                <ConditionsBlock
+                  condition={action.condition}
+                  onClick={(e) => {
+                    setEditBlock(`action-${index}-conditions`);
+                    e.stopPropagation();
+                  }}
+                />
+                {action.actions.map((action, actionIndex) => {
+                  return (
+                    <ActionBlock
+                      onClick={(e) => {
+                        setEditBlock(`action-${index}-action-${actionIndex}`);
+                        e.stopPropagation();
+                      }}
+                    />
+                  );
+                })}
               </div>
             );
           })}
@@ -150,7 +180,10 @@ const AppSettingsProcessEdit: React.FC<{
                 ...process,
                 actions: [
                   ...(process.actions || []),
-                  { label: "Example action" },
+                  {
+                    condition: { name: "New condition", conditions: [] },
+                    actions: [],
+                  },
                 ],
               });
               setHasChanged(true);
@@ -202,8 +235,21 @@ const AppSettingsProcessEdit: React.FC<{
               setHasChanged(true);
             }}
           />
+        ) : editBlock && editBlock.split("-")[2] === "conditions" ? (
+          <ConditionsEditor
+            condition={process.actions[editBlock.split("-")[1]]?.condition}
+            context={context}
+            contextObject={process.context}
+            onChange={(newValue) => {
+              const newActions = process.actions;
+              newActions[editBlock.split("-")[1]].condition = newValue;
+              setProcess({ ...process, actions: newActions });
+              setEditBlock(null);
+              setHasChanged(true);
+            }}
+          />
         ) : (
-          "action"
+          editBlock && editBlock.split("-")[3]
         )}
       </Drawer>
     </>
