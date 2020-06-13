@@ -181,7 +181,11 @@ const AppSettingsProcessEdit: React.FC<{
                 actions: [
                   ...(process.actions || []),
                   {
-                    condition: { name: "New condition", conditions: [] },
+                    condition: {
+                      name: "New condition",
+                      conditions: [],
+                      effects: { true: "actions", false: "next_action" },
+                    },
                     actions: [],
                   },
                 ],

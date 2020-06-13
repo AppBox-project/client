@@ -21,7 +21,7 @@ const AppUICheckmark: React.FC<{
       container
       onClick={() => {
         setNewValue(!newValue);
-        onChange(!newValue);
+        if (onChange) onChange(!newValue);
       }}
     >
       <Grid item xs={11} className="input-container">
