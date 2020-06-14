@@ -10,7 +10,13 @@ const ObjectFieldDisplayInput: React.FC<{ modelField; objectField }> = ({
       return <>······</>;
     }
   }
-  return <Typography variant="body1">{objectField}</Typography>;
+  return (
+    <Typography variant="body1">
+      {typeof objectField === "string"
+        ? objectField
+        : JSON.stringify(objectField)}
+    </Typography>
+  );
 };
 
 export default ObjectFieldDisplayInput;

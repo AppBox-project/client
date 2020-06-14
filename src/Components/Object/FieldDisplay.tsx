@@ -37,7 +37,8 @@ const FieldDisplay: React.FC<{
       {(modelField.type === "input" ||
         modelField.type === "formula" ||
         modelField.type === "options" ||
-        modelField.type === "address") && (
+        modelField.type === "address" ||
+        modelField.type === "data") && (
         <ObjectFieldDisplayInput
           modelField={modelField}
           objectField={objectField}
