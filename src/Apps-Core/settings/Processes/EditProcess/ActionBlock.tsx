@@ -6,14 +6,14 @@ import { Typography } from "@material-ui/core";
 const ActionsBlock: React.FC<{
   isLoading?: true;
   onClick?: (event) => void;
-  action?;
-}> = ({ isLoading, onClick, action }) => {
+  actions;
+}> = ({ isLoading, onClick, actions }) => {
   return isLoading ? (
     <Skeleton className={styles.block} />
   ) : (
     <div className={styles.block} onClick={onClick}>
       <Typography variant="subtitle2" className={styles.blockHeader}>
-        Actions
+        {actions?.label || "New action"}
       </Typography>
     </div>
   );

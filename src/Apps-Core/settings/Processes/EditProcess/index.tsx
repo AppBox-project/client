@@ -6,11 +6,12 @@ import TriggerBlock from "./TriggerBlock";
 import { useState, useEffect } from "reactn";
 import { Skeleton } from "@material-ui/lab";
 import TriggerEditor from "./TriggerEditor";
-import { FaSave } from "react-icons/fa";
+import { FaSave, FaCaretRight } from "react-icons/fa";
 import ConditionsBlock from "./ConditionsBlock";
 import ActionBlock from "./ActionBlock";
 import { GiLoveHowl } from "react-icons/gi";
 import ConditionsEditor from "./ConditionsEditor";
+import ActionsEditor from "./ActionsEditor";
 
 const AppSettingsProcessEdit: React.FC<{
   context: AppContextType;
@@ -142,7 +143,7 @@ const AppSettingsProcessEdit: React.FC<{
                 className={styles.row}
                 onClick={() => {
                   const actions = action.actions;
-                  actions.push({ label: "new action" });
+                  actions.push({ label: "new action", actions: [] });
                   const newActions = process.actions;
                   newActions[index] = { ...action, actions };
                   setProcess({ ...process, actions: newActions });
@@ -159,9 +160,11 @@ const AppSettingsProcessEdit: React.FC<{
                     e.stopPropagation();
                   }}
                 />
-                {action.actions.map((action, actionIndex) => {
+
+                {action.actions.map((actions, actionIndex) => {
                   return (
                     <ActionBlock
+                      actions={actions}
                       onClick={(e) => {
                         setEditBlock(`action-${index}-action-${actionIndex}`);
                         e.stopPropagation();
@@ -253,7 +256,29 @@ const AppSettingsProcessEdit: React.FC<{
             }}
           />
         ) : (
-          editBlock && editBlock.split("-")[3]
+          editBlock && (
+            <ActionsEditor
+              actions={
+                process.actions[editBlock.split("-")[1]]?.actions[
+                  editBlock.split("-")[3]
+                ]
+              }
+              context={context}
+              contextObject={process.context}
+              onChange={(newValue) => {
+                const newActions = process.actions;
+                const index = editBlock.split("-")[3];
+                if (newValue) {
+                  newActions[editBlock.split("-")[1]].actions[index] = newValue;
+                } else {
+                  newActions[editBlock.split("-")[1]].actions.splice(index, 1);
+                }
+                setProcess({ ...process, actions: newActions });
+                setEditBlock(null);
+                setHasChanged(true);
+              }}
+            />
+          )
         )}
       </Drawer>
     </>

@@ -1,64 +1,134 @@
 import React from "react";
-import { Typography, Grid, Button } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  Button,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  ListItemSecondaryAction,
+} from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { AppContextType } from "../../../../Utils/Types";
 import { useState, useEffect } from "reactn";
+import { FaMagic } from "react-icons/fa";
+import { BsTrash2Fill } from "react-icons/bs";
+import { GrAdd } from "react-icons/gr";
 
 const ActionsEditor: React.FC<{
-  trigger;
+  actions;
   context: AppContextType;
   onChange: (newValue) => void;
-}> = ({ trigger, context, onChange }) => {
+  contextObject: string;
+}> = ({ actions, context, onChange, contextObject }) => {
   // Vars
-  const [newTrigger, setNewTrigger] = useState<any>({ type: "updated" }); // Contains the data for the new trigger
+  const [newActions, setNewActions] = useState<any>({ type: "updated" }); // Contains the data for the new actions
 
   // Lifecycle
   useEffect(() => {
-    setNewTrigger(trigger);
-  }, [trigger]);
+    setNewActions(actions);
+  }, [actions]);
 
   // UI
   return (
     <div className={styles.triggerEditor}>
-      <Typography variant="h6">{newTrigger.label}</Typography>
-      <Grid container>
-        <Grid item xs={12}>
-          <context.UI.Inputs.TextInput
-            value={newTrigger?.label || ""}
-            label="Name"
-            onChange={(value) => {
-              setNewTrigger({ ...newTrigger, label: value });
-            }}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <context.UI.Inputs.SelectInput
-            label="Process triggers"
-            value={newTrigger?.type}
-            options={[
-              { label: "when an object gets updated", value: "updated" },
-              { label: "when an object gets created", value: "created" },
-              {
-                label: "when an object gets updated or created",
-                value: "updatedOrCreated",
-              },
-              { label: "at a certain time or date", value: "time" },
-              {
-                label: "when triggered manually or by another process",
-                value: "manual",
-              },
-            ]}
-            onChange={(value) => {
-              setNewTrigger({ ...newTrigger, type: value });
-            }}
-          />
-        </Grid>
+      <Typography variant="h6">{newActions.label}</Typography>
+      <context.UI.Inputs.TextInput
+        value={actions?.label || ""}
+        label="Describe the actions"
+        onChange={(value) => {
+          setNewActions({ ...newActions, label: value });
+        }}
+      />
+      <Divider />
 
+      <List>
+        {newActions.actions?.map((action, index) => {
+          return (
+            <ListItem>
+              <ListItemIcon color="primary">
+                <FaMagic />
+              </ListItemIcon>
+              <Grid container>
+                <Grid item xs={3}>
+                  <context.UI.Inputs.SelectInput
+                    value={action.type}
+                    options={[
+                      { label: "Modify object", value: "modify" },
+                      { label: "Do nothing", value: "nothing" },
+                    ]}
+                    onChange={(value) => {
+                      const actions = newActions.actions;
+                      actions[index].type = value;
+                      setNewActions({ ...newActions, actions });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  {action.type === "modify" && (
+                    <context.UI.Inputs.SelectInput
+                      value={action.action}
+                      options={[
+                        { label: "Set value", value: "value" },
+                        { label: "Delete the object", value: "delete" },
+                      ]}
+                      onChange={(value) => {
+                        const actions = newActions.actions;
+                        actions[index].action = value;
+                        setNewActions({ ...newActions, actions });
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={3}>
+                  {action.action === "value" && "Todo"}
+                </Grid>
+                <Grid item xs={3}>
+                  {action.action === "value" && "Todo"}
+                </Grid>
+              </Grid>
+              <ListItemSecondaryAction>
+                <IconButton
+                  onClick={() => {
+                    const actions = newActions.actions;
+                    actions.splice(index, 1);
+                    setNewActions({ ...newActions, actions });
+                  }}
+                  color="primary"
+                >
+                  <BsTrash2Fill />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          );
+        })}
+        <ListItem
+          button
+          onClick={() => {
+            const actions = newActions.actions;
+            actions.push({
+              type: "modify",
+              action: "value",
+            });
+            setNewActions({ ...newActions, actions });
+          }}
+        >
+          <ListItemIcon>
+            <GrAdd />
+          </ListItemIcon>
+          <ListItemText>Add action</ListItemText>
+        </ListItem>
+      </List>
+      <Divider />
+      <Grid container>
         <Grid item xs={10}>
           <Button
             color="primary"
             onClick={() => {
-              onChange(newTrigger);
+              onChange(newActions);
             }}
             fullWidth
           >
@@ -73,7 +143,7 @@ const ActionsEditor: React.FC<{
             }}
             fullWidth
           >
-            Remove trigger
+            Remove actions
           </Button>
         </Grid>
       </Grid>

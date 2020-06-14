@@ -73,12 +73,14 @@ const App: React.FC = () => {
       Server.on(`receive-${signInRequest}`, (response) => {
         if (response.success) {
           userRequest = uniqid();
+          setTimeout(() => {
+            Server.emit("listenForObjects", {
+              requestId: userRequest,
+              type: "user",
+              filter: { "data.username": localStorage.getItem("username") },
+            });
+          }, 200); // Timeout exists to make sure we have an authenticated session. Todo: make better.
 
-          Server.emit("listenForObjects", {
-            requestId: userRequest,
-            type: "user",
-            filter: { "data.username": localStorage.getItem("username") },
-          });
           Server.on(`receive-${userRequest}`, (response) => {
             if (response.success) {
               setUser(response.data[0]);
