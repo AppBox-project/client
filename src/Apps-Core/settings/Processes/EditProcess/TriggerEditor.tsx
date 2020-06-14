@@ -53,6 +53,89 @@ const TriggerEditor: React.FC<{
             }}
           />
         </Grid>
+        <Grid item xs={6}>
+          {newTrigger?.type === "time" && (
+            <Grid container>
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Second"
+                  value={newTrigger.time?.second || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, second: value },
+                    });
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Minute"
+                  value={newTrigger.time?.minute || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, minute: value },
+                    });
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Hour"
+                  value={newTrigger.time?.hour || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, hour: value },
+                    });
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Day of month"
+                  value={newTrigger.time?.dom || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, dom: value },
+                    });
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Month"
+                  value={newTrigger.time?.month || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, month: value },
+                    });
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={2}>
+                <context.UI.Inputs.TextInput
+                  label="Day of week"
+                  value={newTrigger.time?.dow || "*"}
+                  onChange={(value) => {
+                    setNewTrigger({
+                      ...newTrigger,
+                      time: { ...newTrigger.time, dow: value },
+                    });
+                  }}
+                />
+              </Grid>
+            </Grid>
+          )}
+        </Grid>
 
         <Grid item xs={10}>
           <Button

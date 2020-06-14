@@ -6,11 +6,11 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Checkbox,
   Toolbar,
   Typography,
 } from "@material-ui/core";
 import { Skeleton as SkeletonUI } from "@material-ui/lab";
+
 const Skeleton: React.FC = () => {
   return (
     <TableContainer component="div" style={{ height: "100%", width: "100%" }}>
