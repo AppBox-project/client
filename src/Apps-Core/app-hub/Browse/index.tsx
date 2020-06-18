@@ -40,7 +40,7 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
   // Lifecycle
   useEffect(() => {
     axios
-      .get("https://appbox.vicvan.co/api/appbox-app/read")
+      .get("https://appbox.vicvancooten.nl/api/appbox-app/read")
       .then((response) => {
         setApps(response.data);
       });

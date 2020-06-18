@@ -16,6 +16,7 @@ const AppUiField: React.FC<{
   object?;
   mode?: "view" | "edit" | "free";
   onChange?: (result) => void;
+  value?;
 }> = ({
   style,
   object,
@@ -27,6 +28,7 @@ const AppUiField: React.FC<{
   directSave,
   directSaveDelay,
   onChange,
+  value,
 }) => {
   // Vars
   const [loadedField, setLoadedField] = useState();
@@ -65,8 +67,8 @@ const AppUiField: React.FC<{
   }, [objectId]);
 
   // UI
-  if ((!field && !loadedField) || (!object && !loadedObject))
-    return <Loading />;
+  if (!field && !loadedField) return <Loading />;
+
   return (
     <div style={style}>
       <Field
@@ -77,6 +79,7 @@ const AppUiField: React.FC<{
         directSave={directSave}
         directSaveDelay={directSaveDelay}
         onChange={onChange}
+        value={value}
       />
     </div>
   );

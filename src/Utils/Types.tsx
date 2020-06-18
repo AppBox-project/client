@@ -278,6 +278,7 @@ export interface UIType {
     directSave?: true;
     directSaveDelay?: number;
     object?;
+    value?;
     mode?: "view" | "edit" | "free";
     onChange?: (value) => void;
   }>;

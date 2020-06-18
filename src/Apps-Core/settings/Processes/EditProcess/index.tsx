@@ -25,7 +25,7 @@ const AppSettingsProcessEdit: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("system-processes", {}, (response) => {
+    context.getObjects("system-processes", { _id: processId }, (response) => {
       if (response.success) {
         setProcess(response.data[0].data);
       } else {

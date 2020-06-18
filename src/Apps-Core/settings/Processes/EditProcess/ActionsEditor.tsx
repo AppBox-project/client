@@ -17,7 +17,8 @@ import { useState, useEffect } from "reactn";
 import { FaMagic } from "react-icons/fa";
 import { BsTrash2Fill } from "react-icons/bs";
 import { GrAdd } from "react-icons/gr";
-
+import ProcessEditorObjectEditor from "./ObjectEditor";
+import { find } from "lodash";
 const ActionsEditor: React.FC<{
   actions;
   context: AppContextType;
@@ -26,11 +27,25 @@ const ActionsEditor: React.FC<{
 }> = ({ actions, context, onChange, contextObject }) => {
   // Vars
   const [newActions, setNewActions] = useState<any>({ type: "updated" }); // Contains the data for the new actions
+  const [allModels, setAllModels] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
     setNewActions(actions);
   }, [actions]);
+  useEffect(() => {
+    context.getTypes({}, (response) => {
+      if (response.success) {
+        const list = [];
+        response.data.map((item) => {
+          list.push({ label: item.name, value: item.key });
+        });
+        setAllModels({ list, full: response.data });
+      } else {
+        console.log(response);
+      }
+    });
+  }, []);
 
   // UI
   return (
@@ -56,8 +71,10 @@ const ActionsEditor: React.FC<{
                 <Grid item xs={3}>
                   <context.UI.Inputs.SelectInput
                     value={action.type}
+                    label="Action to perform"
                     options={[
-                      { label: "Modify object", value: "modify" },
+                      { label: "Modify current object", value: "modify" },
+                      { label: "Create new object", value: "create" },
                       { label: "Do nothing", value: "nothing" },
                     ]}
                     onChange={(value) => {
@@ -82,12 +99,63 @@ const ActionsEditor: React.FC<{
                       }}
                     />
                   )}
+                  {action.type === "create" && (
+                    <context.UI.Inputs.SelectInput
+                      value={action.object}
+                      options={allModels?.list || []}
+                      label="Object to create"
+                      onChange={(value) => {
+                        const actions = newActions.actions;
+                        actions[index].object = value;
+                        setNewActions({ ...newActions, actions });
+                      }}
+                    />
+                  )}
                 </Grid>
                 <Grid item xs={3}>
-                  {action.action === "value" && "Todo"}
+                  {action.type === "modify" &&
+                    action.action === "value" &&
+                    "Todo"}
+                  {action.type === "create" && action.object && (
+                    <Button
+                      fullWidth
+                      onClick={() => {
+                        context.setDialog({
+                          display: true,
+                          title: "New object",
+                          size: "lg",
+                          content: (
+                            <ProcessEditorObjectEditor
+                              onSave={(value) => {
+                                const actions = newActions.actions;
+                                actions[index].newObject = value;
+                                setNewActions({ ...newActions, actions });
+                                context.setDialog({ display: false });
+                              }}
+                              context={context}
+                              model={find(
+                                allModels.full,
+                                (o) => o.key === action.object
+                              )}
+                              object={action.newObject}
+                            />
+                          ),
+                        });
+                      }}
+                      color="primary"
+                      aria-required={true}
+                      variant="contained"
+                    >
+                      {action.newObject
+                        ? "Describe the object"
+                        : "Edit the object"}
+                    </Button>
+                  )}
                 </Grid>
                 <Grid item xs={3}>
-                  {action.action === "value" && "Todo"}
+                  {action.type === "modify" &&
+                    action.action === "value" &&
+                    "Todo"}
                 </Grid>
               </Grid>
               <ListItemSecondaryAction>

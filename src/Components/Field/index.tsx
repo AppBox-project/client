@@ -18,6 +18,7 @@ const Field: React.FC<{
   directSave?: true;
   onChange?: (value) => void;
   directSaveDelay?: number;
+  value?;
 }> = ({
   field,
   mode,
@@ -27,6 +28,7 @@ const Field: React.FC<{
   directSave,
   onChange,
   directSaveDelay,
+  value,
 }) => {
   const debouncedDirectSave = debounce(
     (value) => {
@@ -58,6 +60,7 @@ const Field: React.FC<{
           fieldKey={fieldId}
           setMode={setMode}
           onChange={onChangeHandler}
+          value={value}
         />
       )}
       {field.type === "boolean" && (

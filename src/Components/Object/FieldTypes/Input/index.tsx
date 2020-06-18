@@ -10,14 +10,15 @@ const FieldTypeInput: React.FC<{
   fieldKey: string;
   setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: any) => void;
-}> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
+  value?;
+}> = ({ mode, field, object, fieldKey, setMode, onChange, value }) => {
   // Hooks
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState(value);
 
   // Lifecycle
   useEffect(() => {
-    setNewValue(object ? object.data[fieldKey] : "");
-  }, [fieldKey, object]);
+    setNewValue(value || object?.data[fieldKey] || "");
+  }, [fieldKey, object, value]);
 
   // UI
   if (mode === "free")
