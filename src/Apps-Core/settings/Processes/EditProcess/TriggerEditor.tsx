@@ -56,7 +56,7 @@ const TriggerEditor: React.FC<{
         <Grid item xs={6}>
           {newTrigger?.type === "time" && (
             <Grid container>
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Second"
                   value={newTrigger.time?.second || "*"}
@@ -69,7 +69,7 @@ const TriggerEditor: React.FC<{
                 />
               </Grid>
 
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Minute"
                   value={newTrigger.time?.minute || "*"}
@@ -82,7 +82,7 @@ const TriggerEditor: React.FC<{
                 />
               </Grid>
 
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Hour"
                   value={newTrigger.time?.hour || "*"}
@@ -95,7 +95,7 @@ const TriggerEditor: React.FC<{
                 />
               </Grid>
 
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Day of month"
                   value={newTrigger.time?.dom || "*"}
@@ -108,7 +108,7 @@ const TriggerEditor: React.FC<{
                 />
               </Grid>
 
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Month"
                   value={newTrigger.time?.month || "*"}
@@ -121,7 +121,7 @@ const TriggerEditor: React.FC<{
                 />
               </Grid>
 
-              <Grid item xs={2}>
+              <Grid item xs={4} md={2}>
                 <context.UI.Inputs.TextInput
                   label="Day of week"
                   value={newTrigger.time?.dow || "*"}

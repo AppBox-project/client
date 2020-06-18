@@ -80,6 +80,9 @@ const ActionsEditor: React.FC<{
                     onChange={(value) => {
                       const actions = newActions.actions;
                       actions[index].type = value;
+                      if (value === "create") {
+                        actions[index].action = value;
+                      }
                       setNewActions({ ...newActions, actions });
                     }}
                   />
