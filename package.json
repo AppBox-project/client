@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "appbox-client",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^19.0.0",
