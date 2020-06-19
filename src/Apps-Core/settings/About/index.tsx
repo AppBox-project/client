@@ -13,10 +13,10 @@ const AppSettingsAbout: React.FC<{
       <Typography variant="h4" style={{ marginTop: "40vh" }}>
         About AppBox
       </Typography>
-      <Typography variant="subtitle1">
-        A very difficult hobby project.
+      <Typography variant="subtitle1">{packageJson.description}</Typography>
+      <Typography variant="subtitle2">
+        Client version: {packageJson.version}
       </Typography>
-      <Typography variant="subtitle2">Version {packageJson.version}</Typography>
     </div>
   );
 };

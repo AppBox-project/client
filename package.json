@@ -1,6 +1,12 @@
 {
   "name": "appbox-client",
   "version": "0.1.1",
+  "description": "A very difficult hobby project",
+  "author": {
+    "email": "hi@appbox.com",
+    "name": "Vic van Cooten",
+    "url": "https://appbox.com"
+  },
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^19.0.0",

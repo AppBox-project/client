@@ -72,7 +72,6 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
                     }}
                     icon={<Icon style={{ color: "white" }} />}
                     label={object.data[model.primary]}
-                    color={!object.data["color"] ? "primary" : "inherit"}
                     style={{
                       color: "white",
                       backgroundColor:
