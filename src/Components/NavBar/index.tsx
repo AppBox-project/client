@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { map } from "lodash";
+import Search from "../Search";
 
 const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
@@ -49,7 +50,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
           ) : (
             <Icon>{navBar.backButton.icon}</Icon>
           )}
-          <Link to="/" style={{ flex: 1, color: "white" }}>
+          <Link to="/" style={{ color: "white" }}>
             <Typography variant="h6">
               {navBar.title
                 ? navBar.title
@@ -60,6 +61,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
                 : "AppBox"}
             </Typography>
           </Link>
+          <Search />
           {actions &&
             map(actions, (button, key) => {
               if (button) {

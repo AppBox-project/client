@@ -42,7 +42,7 @@ if (window.location.href.match("localhost")) {
 } else {
   serviceWorker.register({
     onUpdate: (registration) => {
-      console.log("New version available!  Ready to update?");
+      console.log("New client version ready to use!");
       if (registration && registration.waiting) {
         registration.waiting.postMessage({ type: "SKIP_WAITING" });
       }

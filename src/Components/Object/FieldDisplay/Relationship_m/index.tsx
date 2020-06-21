@@ -62,6 +62,7 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
               return (
                 <Fragment key={object._id}>
                   <Chip
+                    color="primary"
                     size={size}
                     onClick={() => {
                       history.push(
