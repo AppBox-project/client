@@ -40,5 +40,13 @@ ReactDOM.render(<App />, document.getElementById("root"));
 if (window.location.href.match("localhost")) {
   serviceWorker.unregister();
 } else {
-  serviceWorker.register();
+  serviceWorker.register({
+    onUpdate: (registration) => {
+      console.log("New version available!  Ready to update?");
+      if (registration && registration.waiting) {
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+      window.location.reload();
+    },
+  });
 }
