@@ -15,7 +15,10 @@ import { useHistory } from "react-router";
 
 var debounce = require("debounce-promise");
 
-const Search: React.FC<{}> = ({}) => {
+const Search: React.FC<{ style?; setSearchExpanded? }> = ({
+  style,
+  setSearchExpanded,
+}) => {
   // Vars
   const [isLoading, setIsLoading] = useState(false);
   const [models, setModels] = useState<any>({});
@@ -52,10 +55,11 @@ const Search: React.FC<{}> = ({}) => {
   }, []);
   // UI
   return (
-    <div style={{ flex: 1, margin: "0 35px" }}>
+    <div style={style}>
       <AsyncSelect
         value={null}
         onChange={(chosen, e) => {
+          if (setSearchExpanded) setSearchExpanded(false);
           history.push(
             `/data-explorer/${models[chosen?.obj?.type]?.key}/${
               chosen?.obj?.id
