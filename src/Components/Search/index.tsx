@@ -51,6 +51,13 @@ const Search: React.FC<{}> = ({}) => {
             backgroundColor: "rgba(255,255,255,0.1)",
             border: 0,
           }),
+          option: (provided, state) => ({
+            ...provided,
+            borderBottom: "1px solid #efefef",
+            color: state.isSelected ? "white" : "black",
+            padding: 20,
+          }),
+
           placeholder: (styles, { isFocused }) => {
             return {
               ...styles,

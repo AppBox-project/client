@@ -48,6 +48,8 @@ export interface ModelType {
   icon: string;
   app: string;
   primary: string;
+  indexed: boolean;
+  indexed_fields: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
   layouts: any;

@@ -70,6 +70,24 @@ const AppActionManageObjectTabObject: React.FC<{
                   }}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <context.UI.Inputs.CheckmarkInput
+                  label="Indexed"
+                  value={model.indexed}
+                  onChange={(value) => {
+                    setNewModel({ ...newModel, indexed: value });
+                  }}
+                />
+                {(newModel?.indexed || model.indexed) && (
+                  <UI.Inputs.TextInput
+                    label="Indexed fields"
+                    value={model.indexed_fields}
+                    onChange={(value) => {
+                      setNewModel({ ...newModel, indexed_fields: value });
+                    }}
+                  />
+                )}
+              </Grid>
             </Grid>
             {newModel && (
               <Button
