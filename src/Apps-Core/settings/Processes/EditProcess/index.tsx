@@ -6,10 +6,9 @@ import TriggerBlock from "./TriggerBlock";
 import { useState, useEffect } from "reactn";
 import { Skeleton } from "@material-ui/lab";
 import TriggerEditor from "./TriggerEditor";
-import { FaSave, FaCaretRight } from "react-icons/fa";
+import { FaSave } from "react-icons/fa";
 import ConditionsBlock from "./ConditionsBlock";
 import ActionBlock from "./ActionBlock";
-import { GiLoveHowl } from "react-icons/gi";
 import ConditionsEditor from "./ConditionsEditor";
 import ActionsEditor from "./ActionsEditor";
 

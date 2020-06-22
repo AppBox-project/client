@@ -1,14 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "reactn";
 import AsyncSelect from "react-select/async";
+import { components } from "react-select";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
+import {
+  ListItem,
+  ListItemText,
+  Avatar,
+  ListItemAvatar,
+  List,
+} from "@material-ui/core";
+import * as icons from "react-icons/fa";
+import { useHistory } from "react-router";
 
 var debounce = require("debounce-promise");
 
 const Search: React.FC<{}> = ({}) => {
   // Vars
-  const [newValue, setNewValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [models, setModels] = useState<any>({});
+  const history = useHistory();
 
   const debouncedLoadOptions = useRef(
     debounce((query) => {
@@ -28,11 +39,57 @@ const Search: React.FC<{}> = ({}) => {
   ).current;
 
   // Lifecycle
-
+  useEffect(() => {
+    const requestId = uniqid();
+    Server.emit("listenForObjectTypes", { requestId, filter: {} });
+    Server.on(`receive-${requestId}`, (response) => {
+      const m = {};
+      response.map((r) => {
+        m[r.key] = r;
+      });
+      setModels(m);
+    });
+  }, []);
   // UI
   return (
     <div style={{ flex: 1, margin: "0 35px" }}>
       <AsyncSelect
+        value={null}
+        onChange={(chosen, e) => {
+          history.push(
+            `/data-explorer/${models[chosen?.obj?.type]?.key}/${
+              chosen?.obj?.id
+            }`
+          );
+        }}
+        components={{
+          MenuList: (props) => {
+            return (
+              <components.MenuList {...props}>
+                <List>{props.children}</List>
+              </components.MenuList>
+            );
+          },
+          Option: (props, { innerProps, innerRef, selectOption }) => {
+            const model = models[props.data.obj.type];
+            const ActionIcon = icons[model.icon];
+            return (
+              <components.Option {...props}>
+                <ListItem ref={innerRef} {...innerProps}>
+                  <ListItemAvatar>
+                    <Avatar color="primary">
+                      <ActionIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={props.data.label}
+                    secondary={model.name}
+                  />
+                </ListItem>
+              </components.Option>
+            );
+          },
+        }}
         isLoading={isLoading}
         loadOptions={async (inputValue) => {
           if (inputValue) setIsLoading(true);
@@ -50,6 +107,7 @@ const Search: React.FC<{}> = ({}) => {
             ...styles,
             backgroundColor: "rgba(255,255,255,0.1)",
             border: 0,
+            color: "white",
           }),
           option: (provided, state) => ({
             ...provided,
@@ -57,7 +115,18 @@ const Search: React.FC<{}> = ({}) => {
             color: state.isSelected ? "white" : "black",
             padding: 20,
           }),
-
+          input: (styles) => {
+            return { ...styles, color: "white" };
+          },
+          clearIndicator: (styles) => {
+            return { ...styles, color: "white" };
+          },
+          dropdownIndicator: (styles) => {
+            return { ...styles, color: "white" };
+          },
+          loadingIndicator: (styles) => {
+            return { ...styles, color: "white" };
+          },
           placeholder: (styles, { isFocused }) => {
             return {
               ...styles,
