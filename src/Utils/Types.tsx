@@ -52,6 +52,7 @@ export interface ModelType {
   indexed_fields: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
+  handlers: {};
   layouts: any;
   actions: any;
   api?: {

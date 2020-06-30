@@ -13,9 +13,10 @@ const AppSettingsAbout: React.FC<{
       <Typography variant="h4" style={{ marginTop: "40vh" }}>
         About AppBox
       </Typography>
-      <Typography variant="subtitle1">{packageJson.description}</Typography>
-      <Typography variant="subtitle2">
-        Client version: {packageJson.version}
+      <Typography variant="body1">A very difficult hobby project.</Typography>
+      <br />
+      <Typography variant="body2">
+        Last update is {packageJson.version}: {packageJson.description}
       </Typography>
     </div>
   );

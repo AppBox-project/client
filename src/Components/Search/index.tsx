@@ -9,9 +9,17 @@ import {
   Avatar,
   ListItemAvatar,
   List,
+  IconButton,
+  ListItemSecondaryAction,
+  Tooltip,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import * as icons from "react-icons/fa";
+import { MdLaunch } from "react-icons/md";
 import { useHistory } from "react-router";
+import { ModelType } from "../../Utils/Types";
+import { find, size } from "lodash";
 
 var debounce = require("debounce-promise");
 
@@ -23,6 +31,9 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
   const [isLoading, setIsLoading] = useState<any>(false);
   const [models, setModels] = useState<any>({});
   const history = useHistory();
+  const [apps, setApps] = useState<any>([]);
+  const [anchorEl, setAnchorEl] = useState<any>(null); // Where to show 'opens in' menu
+  const [objectOpensIn, setObjectOpensIn] = useState<any>(); // What to show in 'opens in' menu
 
   const debouncedLoadOptions = useRef(
     debounce((query) => {
@@ -52,10 +63,43 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
       });
       setModels(m);
     });
+
+    const appRequestId = uniqid();
+    Server.emit("listenForObjects", {
+      requestId: appRequestId,
+      type: "app",
+      filter: {},
+    });
+    Server.on(`receive-${appRequestId}`, (response) => {
+      if (response.success) {
+        setApps(response.data);
+      } else {
+        console.log(response);
+      }
+    });
   }, []);
+
   // UI
   return (
     <div style={style}>
+      <Menu
+        id="open-in-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={() => {
+          setAnchorEl(null);
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+          }}
+        >
+          Todo: improve and show handler apps
+        </MenuItem>
+      </Menu>
+
       <AsyncSelect
         value={null}
         onChange={(chosen, e) => {
@@ -75,20 +119,49 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             );
           },
           Option: (props, { innerProps, innerRef, selectOption }) => {
-            const model = models[props.data.obj.type];
+            const model: ModelType = models[props.data.obj.type];
             const ActionIcon = icons[model.icon];
+            const compatibleApps = {
+              "data-explorer": "/data-explorer/{model.key}/{object._id}",
+              ...model.handlers,
+            };
+            const defaultHandler = compatibleApps[model.app]
+              ? model.app
+              : "data-explorer";
+            const handlerApp = find(apps, (o) => o.data.id === defaultHandler);
+
             return (
               <components.Option {...props}>
-                <ListItem ref={innerRef} {...innerProps}>
+                <ListItem>
                   <ListItemAvatar>
-                    <Avatar color="primary">
+                    <Avatar
+                      style={{
+                        backgroundColor: `rgba(${handlerApp.data.color.r},${handlerApp.data.color.g},${handlerApp.data.color.b},${handlerApp.data.color.a})`,
+                      }}
+                    >
                       <ActionIcon />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
+                    ref={innerRef}
+                    {...innerProps}
                     primary={props.data.label}
                     secondary={model.name}
                   />
+                  {size(compatibleApps) > 1 && (
+                    <Tooltip placement="right" title="Open in">
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          onClick={(event) => {
+                            setAnchorEl(event.currentTarget);
+                            event.stopPropagation();
+                          }}
+                        >
+                          <MdLaunch />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </Tooltip>
+                  )}
                 </ListItem>
               </components.Option>
             );
