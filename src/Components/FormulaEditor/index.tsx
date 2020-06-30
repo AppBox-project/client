@@ -7,7 +7,7 @@ import {
   ListItemText,
   ListItem,
   ListSubheader,
-  Tooltip
+  Tooltip,
 } from "@material-ui/core";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
@@ -20,16 +20,16 @@ const FormulaEditor: React.FC<{
   // General
 
   // Hooks
-  const [isValid, setIsValid] = useState(true);
-  const [preview, setPreview] = useState("");
-  const [newValue, setNewValue] = useState();
-  const [requestId, setRequestId] = useState(uniqid());
-  const [dependencies, setDependencies] = useState([]);
+  const [isValid, setIsValid] = useState<any>(true);
+  const [preview, setPreview] = useState<any>("");
+  const [newValue, setNewValue] = useState<any>();
+  const [requestId, setRequestId] = useState<any>(uniqid());
+  const [dependencies, setDependencies] = useState<any>([]);
 
   // Lifecycle
   useEffect(() => {
     setNewValue(value ? value : "{{ project_r.owner_r.first_name }}");
-    Server.on(`receive-${requestId}`, response => {
+    Server.on(`receive-${requestId}`, (response) => {
       setPreview(response);
     });
   }, [value]);
@@ -45,7 +45,7 @@ const FormulaEditor: React.FC<{
           fullWidth
           onClick={() => {
             const depList = [];
-            newValue.split("{{").map(tag => {
+            newValue.split("{{").map((tag) => {
               if (tag.match("}}")) {
                 const t = tag.split("}}")[0].trim();
                 depList.push(t);
@@ -58,7 +58,7 @@ const FormulaEditor: React.FC<{
               formula: newValue,
               requestId,
               context: formulaContext,
-              dependencies: depList
+              dependencies: depList,
             });
           }}
         >
@@ -71,7 +71,7 @@ const FormulaEditor: React.FC<{
           value={newValue}
           fullWidth
           label="Formula"
-          onChange={event => {
+          onChange={(event) => {
             setNewValue(event.target.value);
           }}
         />
@@ -87,7 +87,7 @@ const FormulaEditor: React.FC<{
           >
             <List>
               <ListSubheader>Formula dependencies</ListSubheader>
-              {dependencies.map(dep => {
+              {dependencies.map((dep) => {
                 return (
                   <ListItem key={dep}>
                     <ListItemText>{dep}</ListItemText>

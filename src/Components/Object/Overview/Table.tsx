@@ -33,7 +33,7 @@ const RegularTable: React.FC<{
   setAnchorEl,
 }) => {
   // Vars
-  const [orderField, setOrderField] = useState(layout.fields[0]);
+  const [orderField, setOrderField] = useState<any>(layout.fields[0]);
   const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
   const sortedData = orderBy(data, [`data.${orderField}`], [orderDirection]);
 

@@ -31,8 +31,8 @@ const AppUiField: React.FC<{
   value,
 }) => {
   // Vars
-  const [loadedField, setLoadedField] = useState();
-  const [loadedObject, setLoadedObject] = useState();
+  const [loadedField, setLoadedField] = useState<any>();
+  const [loadedObject, setLoadedObject] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

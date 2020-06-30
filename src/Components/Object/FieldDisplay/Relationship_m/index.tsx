@@ -13,8 +13,8 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
   baseUrl?;
 }> = ({ objectField, modelField, size, baseUrl }) => {
   // Vars
-  const [objects, setObjects] = useState();
-  const [model, setModel] = useState();
+  const [objects, setObjects] = useState<any>();
+  const [model, setModel] = useState<any>();
   const history = useHistory();
 
   // Lifecycle

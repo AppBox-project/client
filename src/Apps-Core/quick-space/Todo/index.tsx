@@ -10,7 +10,7 @@ const AppQSActionTodo: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [projects, setProjects] = useState();
+  const [projects, setProjects] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

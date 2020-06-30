@@ -21,8 +21,8 @@ const ObjectFieldDisplayRelationship: React.FC<{
   onLoadRemoteObject,
 }) => {
   // Vars
-  const [model, setModel] = useState();
-  const [object, setObject] = useState();
+  const [model, setModel] = useState<any>();
+  const [object, setObject] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

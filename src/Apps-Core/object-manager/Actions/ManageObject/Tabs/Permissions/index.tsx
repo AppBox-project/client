@@ -45,7 +45,7 @@ const AppActionManageObjectTabPermissions: React.FC<{
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // Vars
-  const [permissions, setPermissions] = useState(model.permissions);
+  const [permissions, setPermissions] = useState<any>(model.permissions);
   const [permissionOptions, setPermissionOptions] = useState<any>();
 
   // States & Hooks

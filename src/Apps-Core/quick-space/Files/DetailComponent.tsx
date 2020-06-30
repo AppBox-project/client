@@ -13,7 +13,7 @@ const AppQSActionFileDetail: React.FC<{
   },
 }) => {
   // Vars
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

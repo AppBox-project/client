@@ -19,7 +19,7 @@ const BoardLayout: React.FC<{
   customItem?: (listItem) => JSX.Element;
 }> = ({ context, objects, model, boardField, onItemClick, customItem }) => {
   // Vars
-  const [newObjects, setNewObjects] = useState(objects);
+  const [newObjects, setNewObjects] = useState<any>(objects);
   const noGroup = filter(newObjects, (o) => {
     return !o.data[boardField];
   });

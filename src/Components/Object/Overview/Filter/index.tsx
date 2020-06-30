@@ -23,7 +23,7 @@ const OverviewFilter: React.FC<{
   model;
 }> = ({ onSave, model }) => {
   // Vars
-  const [filter, setFilter] = useState([]);
+  const [filter, setFilter] = useState<any>([]);
 
   const modelFieldOptions = [];
   map(model.fields, (field, key) => {

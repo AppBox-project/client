@@ -13,7 +13,7 @@ const AppActionManageObjectTabObject: React.FC<{
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // States & Hooks
-  const [newModel, setNewModel] = useState();
+  const [newModel, setNewModel] = useState<any>();
 
   // UI
   return (

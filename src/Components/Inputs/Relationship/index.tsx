@@ -11,7 +11,7 @@ const InputRelationShip: React.FC<{
 }> = ({ label, objectType, onChange, value }) => {
   // Vars
   const [options, setOptions] = useState<any>();
-  const [newValue, setNewValue] = useState();
+  const [newValue, setNewValue] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

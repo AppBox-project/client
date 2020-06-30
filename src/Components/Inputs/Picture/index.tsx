@@ -17,8 +17,8 @@ const InputPicture: React.FC<{
   fieldKey: string;
 }> = ({ placeholder, label, value, onChange, object, model, fieldKey }) => {
   // Vars
-  const [newValue, setNewValue] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
+  const [newValue, setNewValue] = useState<any>("");
+  const [isDragging, setIsDragging] = useState<any>(false);
 
   // Lifecycle
   useEffect(() => {

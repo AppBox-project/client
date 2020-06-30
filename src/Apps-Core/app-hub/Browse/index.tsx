@@ -34,7 +34,7 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
   context,
 }) => {
   // Vars
-  const [apps, setApps] = useState([]);
+  const [apps, setApps] = useState<any>([]);
   const history = useHistory();
 
   // Lifecycle

@@ -11,7 +11,7 @@ const AppSettingsProcesses: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [processes, setProcesses] = useState([]);
+  const [processes, setProcesses] = useState<any>([]);
 
   // Lifecycle
   useEffect(() => {

@@ -25,9 +25,9 @@ const AppAHViewApp: React.FC<{
   context,
 }) => {
   // Vars
-  const [app, setApp] = useState();
-  const [requestId] = useState(uniqid());
-  const [currentTask, setCurrentTask] = useState();
+  const [app, setApp] = useState<any>();
+  const [requestId] = useState<any>(uniqid());
+  const [currentTask, setCurrentTask] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -56,7 +56,7 @@ const AppAHViewApp: React.FC<{
     <div className={styles.root}>
       <div
         className={styles.background}
-        style={{ backgroundImage: `url(${app.data.banner.url})` }}
+        style={{ backgroundImage: `url(${app?.data?.banner?.url})` }}
       />
       {!currentTask && (
         <Paper className={styles.container}>

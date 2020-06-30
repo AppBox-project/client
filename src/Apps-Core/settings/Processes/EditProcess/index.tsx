@@ -17,10 +17,10 @@ const AppSettingsProcessEdit: React.FC<{
   processId: string;
 }> = ({ context, processId }) => {
   // Vars
-  const [process, setProcess] = useState(); // Contains process data item
-  const [editBlock, setEditBlock] = useState(); // Contains information about the currently selected block
+  const [process, setProcess] = useState<any>(); // Contains process data item
+  const [editBlock, setEditBlock] = useState<any>(); // Contains information about the currently selected block
   const [contexts, setContexts] = useState<any>([]); // Contains a list of all models + potential contexts
-  const [hasChanged, setHasChanged] = useState(false); // Show a save button when changes
+  const [hasChanged, setHasChanged] = useState<any>(false); // Show a save button when changes
 
   // Lifecycle
   useEffect(() => {

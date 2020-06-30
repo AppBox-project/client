@@ -24,12 +24,12 @@ const AppQSActionTodoDetail: React.FC<{
   },
 }) => {
   // Vars
-  const [todos, setTodos] = useState();
-  const [doneTodos, setDoneTodos] = useState();
-  const [subTodos, setSubTodos] = useState();
-  const [newTodo, setNewTodo] = useState("");
-  const [model, setModel] = useState();
-  const [view, setView] = useState("todo");
+  const [todos, setTodos] = useState<any>();
+  const [doneTodos, setDoneTodos] = useState<any>();
+  const [subTodos, setSubTodos] = useState<any>();
+  const [newTodo, setNewTodo] = useState<any>("");
+  const [model, setModel] = useState<any>();
+  const [view, setView] = useState<any>("todo");
   const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle

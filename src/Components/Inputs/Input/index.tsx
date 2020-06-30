@@ -10,7 +10,7 @@ const InputInput: React.FC<{
   style?;
 }> = ({ placeholder, label, value, onChange, type, style }) => {
   // Vars
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState<any>("");
 
   // Lifecycle
   useEffect(() => {

@@ -13,8 +13,8 @@ const AppWidgetTodo: React.FC<{
   context: WidgetContextType;
 }> = ({ projectId, context }) => {
   // Vars
-  const [project, setProject] = useState();
-  const [todos, setTodos] = useState();
+  const [project, setProject] = useState<any>();
+  const [todos, setTodos] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

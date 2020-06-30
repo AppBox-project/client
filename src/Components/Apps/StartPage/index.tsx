@@ -11,7 +11,7 @@ import Widget from "../../Widgets";
 
 const StartPage: React.FC = () => {
   // Vars
-  const [desktop, setDesktop] = useState();
+  const [desktop, setDesktop] = useState<any>();
   const [isMobile] = useGlobal<any>("isMobile");
 
   // Functions

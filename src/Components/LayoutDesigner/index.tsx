@@ -21,7 +21,7 @@ const LayoutDesigner: React.FC<{
   componentList: {};
 }> = ({ layout, onChange, componentList }) => {
   // Vars
-  const [expandTray, setExpandTray] = useState(false);
+  const [expandTray, setExpandTray] = useState<any>(false);
   // UI
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>

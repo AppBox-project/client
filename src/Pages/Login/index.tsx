@@ -14,7 +14,7 @@ import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 
 const LoginPage: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState<any>(0);
   const list = {
     visible: {
       opacity: 1,
@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
 };
 
 const Login: React.FC = () => {
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [user, setUser] = useState<any>({ username: "", password: "" });
   const [_, setGlobalUser] = useGlobal<any>("user");
 
   // UI

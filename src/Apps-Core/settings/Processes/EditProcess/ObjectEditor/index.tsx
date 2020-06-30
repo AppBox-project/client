@@ -21,7 +21,7 @@ const ProcessEditorObjectEditor: React.FC<{
 }> = ({ object, model, context, onSave }) => {
   // Vars
   const [newObject, setNewObject] = useState<any>([]);
-  const [fieldList, setFieldList] = useState([]);
+  const [fieldList, setFieldList] = useState<any>([]);
 
   // Lifecycle
   useEffect(() => {

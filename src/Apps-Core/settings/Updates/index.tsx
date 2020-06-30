@@ -9,7 +9,7 @@ const AppSettingsUpdate: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [upgradeTask, setUpgradeTask] = useState();
+  const [upgradeTask, setUpgradeTask] = useState<any>();
 
   // Lifecycle
 

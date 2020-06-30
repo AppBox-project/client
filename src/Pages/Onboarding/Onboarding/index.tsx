@@ -9,8 +9,8 @@ import uniqid from "uniqid";
 
 const PageOnboarding: React.FC = () => {
   // Vars
-  const [user, setUser] = useState();
-  const [step, setStep] = useState(1);
+  const [user, setUser] = useState<any>();
+  const [step, setStep] = useState<any>(1);
   // Lifecycle
   // UI
   return (

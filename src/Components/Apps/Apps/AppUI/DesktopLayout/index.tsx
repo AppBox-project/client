@@ -70,7 +70,7 @@ const ActionMenu: React.FC<{
   context: AppContextType;
   currentPage: string;
 }> = ({ context, currentPage }) => {
-  const [filter, setFilter] = useState();
+  const [filter, setFilter] = useState<any>();
   const list = {
     visible: {
       opacity: 1,

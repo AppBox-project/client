@@ -13,8 +13,8 @@ const InputAddress: React.FC<{
   style?;
 }> = ({ placeholder, label, value, onChange, type, style }) => {
   // Vars
-  const [newValue, setNewValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [newValue, setNewValue] = useState<any>("");
+  const [isLoading, setIsLoading] = useState<any>(false);
 
   const debouncedLoadOptions = useRef(
     debounce((query) => {

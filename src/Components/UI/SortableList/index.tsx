@@ -34,7 +34,7 @@ const SortableList: React.FC<{
 }) => {
   // Vars
   const history = useHistory();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any>([]);
 
   // Lifecycle
   useEffect(() => {

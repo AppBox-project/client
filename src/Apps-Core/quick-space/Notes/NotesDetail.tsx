@@ -14,8 +14,8 @@ const AppQSNotesDetail: React.FC<{
   },
 }) => {
   // Vars
-  const [note, setNote] = useState();
-  const [model, setModel] = useState();
+  const [note, setNote] = useState<any>();
+  const [model, setModel] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

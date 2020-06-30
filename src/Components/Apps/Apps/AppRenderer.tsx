@@ -26,15 +26,15 @@ const App: React.FC<{
   setCurrentApp,
 }) => {
   const [appContext, setAppcontext] = useState<AppContextType>();
-  const [currentPage, setCurrentPage] = useState();
+  const [currentPage, setCurrentPage] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
-  const [dialogFormContent, setDialogFormContent] = useState();
+  const [dialogFormContent, setDialogFormContent] = useState<any>();
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [actions, setActions] = useGlobal<any>("actions");
-  const [appButtons, setAppButtons] = useState({});
+  const [appButtons, setAppButtons] = useState<any>({});
 
   //Lifecycle
   useEffect(() => {

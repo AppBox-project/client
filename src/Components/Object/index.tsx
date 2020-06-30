@@ -32,15 +32,15 @@ const ViewObject: React.FC<{
   defaults,
 }) => {
   const [objectType, setObjectType] = useState<ModelType>();
-  const [object, setObject] = useState();
+  const [object, setObject] = useState<any>();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
-  const [toChange, setToChange] = useState({ ...defaults });
-  const [feedback, setFeedback] = useState();
-  const [toUpload, setToUpload] = useState([]);
+  const [toChange, setToChange] = useState<any>({ ...defaults });
+  const [feedback, setFeedback] = useState<any>();
+  const [toUpload, setToUpload] = useState<any>([]);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [actions, setActions] = useGlobal<any>("actions");
   const [defaultButton] = useGlobal<any>("defaultButton");
-  const [pageTitle, setPageTitle] = useState(undefined);
+  const [pageTitle, setPageTitle] = useState<any>(undefined);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   const getFeedback = (feedback) => {

@@ -19,7 +19,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [navBar] = useGlobal<any>("navBar");
   const [actions] = useGlobal<any>("actions");
   const [isMobile] = useGlobal<any>("isMobile");
-  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState<any>(false);
 
   // Lifecycle
 

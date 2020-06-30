@@ -61,9 +61,9 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   model,
 }) => {
   // Global
-  const [hasChanged, setHasChanged] = useState(false);
-  const [fieldList, setFieldList] = useState([]);
-  const [layout, setLayout] = useState();
+  const [hasChanged, setHasChanged] = useState<any>(false);
+  const [fieldList, setFieldList] = useState<any>([]);
+  const [layout, setLayout] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

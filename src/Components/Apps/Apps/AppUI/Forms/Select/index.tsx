@@ -17,7 +17,7 @@ const AppUISelect: React.FC<{
 }> = ({ label, value, onChange, options, style }) => {
   // Global
   // States & Hooks
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState<any>("");
   // Lifecycle
   useEffect(() => {
     setNewValue(value);

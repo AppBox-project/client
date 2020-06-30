@@ -13,7 +13,7 @@ import uniqid from "uniqid";
 
 const SettingUpdate: React.FC = () => {
   // Hooks
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<any>(false);
   // Lifecycle
 
   // UI

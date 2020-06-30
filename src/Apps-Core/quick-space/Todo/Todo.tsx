@@ -25,9 +25,9 @@ const AppQSActionTodoDetailTodo: React.FC<{
   projectId;
 }> = ({ subTodos, todo, context, model, isMobile, level, projectId }) => {
   // Vars
-  const [expanded, setExpanded] = useState(false); // Used for expanding sub-items
-  const [localChecked, setLocalChecked] = useState(false); // On check this state will be set before real-time data, allowing graying out of item during load.
-  const [newTodo, setNewTodo] = useState(""); // Used for controlling the 'new todo' input on a sub-item list.
+  const [expanded, setExpanded] = useState<any>(false); // Used for expanding sub-items
+  const [localChecked, setLocalChecked] = useState<any>(false); // On check this state will be set before real-time data, allowing graying out of item during load.
+  const [newTodo, setNewTodo] = useState<any>(""); // Used for controlling the 'new todo' input on a sub-item list.
 
   let subItems = filter(
     subTodos,

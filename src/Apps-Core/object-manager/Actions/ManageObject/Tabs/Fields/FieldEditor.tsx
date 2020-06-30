@@ -36,7 +36,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
 
   // States & Hooks
   const [field, setField] = useState<any>();
-  const [formulaDeps, setFormulaDeps] = useState();
+  const [formulaDeps, setFormulaDeps] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -349,7 +349,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <Grid item xs={12}>
                     <FormulaEditor
                       formulaContext={model.key}
-                      onChange={(formula, deps) => {
+                      onChange={(formula, deps: any) => {
                         setFormulaDeps(deps);
 
                         setField({
@@ -549,7 +549,7 @@ const ListObjectTypes: React.FC<{
   onChange: (id: string) => void;
 }> = ({ context, UI, value, onChange }) => {
   // States & hooks
-  const [objectTypes, setObjectTypes] = useState();
+  const [objectTypes, setObjectTypes] = useState<any[]>([]);
 
   // Lifecycle
   useEffect(() => {

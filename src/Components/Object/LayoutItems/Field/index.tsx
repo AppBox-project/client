@@ -26,8 +26,10 @@ const ObjectLayoutItemField: React.FC<{
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
-  const [modelField, setModelField] = useState(model.fields[layoutItem.field]);
-  const [objectField, setObjectField] = useState(
+  const [modelField, setModelField] = useState<any>(
+    model.fields[layoutItem.field]
+  );
+  const [objectField, setObjectField] = useState<any>(
     object ? object.data[layoutItem.field] : ""
   );
 

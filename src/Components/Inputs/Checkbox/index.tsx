@@ -7,7 +7,7 @@ const InputCheckbox: React.FC<{
   onChange?: (value: boolean) => void;
 }> = ({ label, value, onChange }) => {
   // Vars
-  const [newValue, setNewValue] = useState(value ? value : false);
+  const [newValue, setNewValue] = useState<any>(value ? value : false);
 
   // UI
   return (

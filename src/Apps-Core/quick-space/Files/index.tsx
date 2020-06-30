@@ -11,8 +11,8 @@ const AppQSActionFile: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [files, setFiles] = useState();
-  const [model, setModel] = useState();
+  const [files, setFiles] = useState<any>();
+  const [model, setModel] = useState<any>();
   const history = useHistory();
 
   // Lifecycle

@@ -8,7 +8,7 @@ const AppUICheckmark: React.FC<{
 }> = ({ label, value, onChange }) => {
   // Global
   // States & Hooks
-  const [newValue, setNewValue] = useState(false);
+  const [newValue, setNewValue] = useState<any>(false);
   // Lifecycle
   useEffect(() => {
     setNewValue(value);

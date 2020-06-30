@@ -15,7 +15,7 @@ const AppAHMyApps: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [apps, setApps] = useState();
+  const [apps, setApps] = useState<any>([]);
 
   // Lifecycle
   useEffect(() => {
@@ -32,23 +32,24 @@ const AppAHMyApps: React.FC<{
   if (!apps) return <context.UI.Loading />;
   return (
     <List>
-      {apps.map((app) => {
-        return (
-          <ListItem key={app._id}>
-            <ListItemText>{app.data.name}</ListItemText>
-            <ListItemSecondaryAction>
-              <IconButton
-                color="primary"
-                onClick={() => {
-                  console.log("Todo: update");
-                }}
-              >
-                <FaCloudDownloadAlt />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        );
-      })}
+      {apps ||
+        [].map((app) => {
+          return (
+            <ListItem key={app._id}>
+              <ListItemText>{app.data.name}</ListItemText>
+              <ListItemSecondaryAction>
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    console.log("Todo: update");
+                  }}
+                >
+                  <FaCloudDownloadAlt />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          );
+        })}
     </List>
   );
 };

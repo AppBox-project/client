@@ -9,8 +9,8 @@ const InputDrafting: React.FC<{
   value?: string;
 }> = ({ placeholder, mode, onChange, value }) => {
   // Vars
-  const [newValue, setNewValue] = useState(value);
-  const [initial, setInitial] = useState(true);
+  const [newValue, setNewValue] = useState<any>(value);
+  const [initial, setInitial] = useState<any>(true);
 
   // Lifecycle
   useEffect(() => {

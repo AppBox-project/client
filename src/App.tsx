@@ -23,8 +23,8 @@ const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
   const [gTheme] = useGlobal<any>("theme");
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
-  const [noDb, setNoDb] = useState(false);
-  const [noInit, setNoInit] = useState(false);
+  const [noDb, setNoDb] = useState<any>(false);
+  const [noInit, setNoInit] = useState<any>(false);
 
   const theme = createMuiTheme(gTheme);
   // Lifecycle

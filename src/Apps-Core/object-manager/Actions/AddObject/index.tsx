@@ -8,7 +8,7 @@ const AppActionAddObject: React.FC<{
   match: { isExact: boolean };
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [newObject, setNewObject] = useState({
+  const [newObject, setNewObject] = useState<any>({
     key: null,
     name: null,
     name_plural: null,

@@ -8,7 +8,7 @@ const InputColor: React.FC<{
   onChange?: (value: string) => void;
 }> = ({ placeholder, label, value, onChange }) => {
   // Vars
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState<any>("");
 
   // Lifecycle
   useEffect(() => {

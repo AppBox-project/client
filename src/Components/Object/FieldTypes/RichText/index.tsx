@@ -14,7 +14,7 @@ const FieldTypeRichText: React.FC<{
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
-  const [newValue, setNewValue] = useState();
+  const [newValue, setNewValue] = useState<any>();
   // Lifecycle
   useEffect(() => {
     setNewValue(

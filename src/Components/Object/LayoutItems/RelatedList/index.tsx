@@ -20,10 +20,10 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   objectId,
 }) => {
   // Vars
-  const [relatedItems, setRelatedItems] = useState();
-  const [relatedModel, setRelatedModel] = useState();
+  const [relatedItems, setRelatedItems] = useState<any>();
+  const [relatedModel, setRelatedModel] = useState<any>();
   const history = useHistory();
-  const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState<any>(false);
 
   // Lifecycle
   useEffect(() => {

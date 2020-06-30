@@ -13,7 +13,7 @@ const FieldTypeInput: React.FC<{
   value?;
 }> = ({ mode, field, object, fieldKey, setMode, onChange, value }) => {
   // Hooks
-  const [newValue, setNewValue] = useState(value);
+  const [newValue, setNewValue] = useState<any>(value);
 
   // Lifecycle
   useEffect(() => {

@@ -27,10 +27,10 @@ const AppQSNotesNavigation: React.FC<{
   selectedMemo: string;
 }> = ({ context, projects, memos, flatProjects, selectedMemo }) => {
   // Vars
-  const [projectOverview, setProjectOverview] = useState();
-  const [selectedProject, setSelectedProject] = useState();
-  const [project, setProject] = useState();
-  const [activeMemos, setActiveMemos] = useState();
+  const [projectOverview, setProjectOverview] = useState<any>();
+  const [selectedProject, setSelectedProject] = useState<any>();
+  const [project, setProject] = useState<any>();
+  const [activeMemos, setActiveMemos] = useState<any>();
   const history = useHistory();
 
   // Lifecycle

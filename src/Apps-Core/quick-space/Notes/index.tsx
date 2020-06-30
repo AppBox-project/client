@@ -12,10 +12,10 @@ const AppQSActionNotes: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   //Vars
-  const [projects, setProjects] = useState();
-  const [flatProjects, setFlatProjects] = useState();
-  const [memos, setMemos] = useState();
-  const [selectedMemo, setSelectedMemo] = useState();
+  const [projects, setProjects] = useState<any>();
+  const [flatProjects, setFlatProjects] = useState<any>();
+  const [memos, setMemos] = useState<any>();
+  const [selectedMemo, setSelectedMemo] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

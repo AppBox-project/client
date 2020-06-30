@@ -20,7 +20,7 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
   setSearchExpanded,
 }) => {
   // Vars
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<any>(false);
   const [models, setModels] = useState<any>({});
   const history = useHistory();
 

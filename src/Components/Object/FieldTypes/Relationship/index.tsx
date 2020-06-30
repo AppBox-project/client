@@ -17,7 +17,7 @@ const FieldTypeRelationship: React.FC<{
   onChange: (value: any) => void;
 }> = ({ mode, field, object, fieldKey, setMode, onChange }) => {
   // Hooks
-  const [newValue, setNewValue] = useState();
+  const [newValue, setNewValue] = useState<any>();
   // Lifecycle
   useEffect(() => {
     setNewValue(
@@ -81,8 +81,8 @@ const RelationShipSelector: React.FC<{
   value: string;
 }> = ({ field, onChangeEvent, value }) => {
   // Hooks
-  const [isLoading, setIsLoading] = useState(true);
-  const [results, setResults] = useState();
+  const [isLoading, setIsLoading] = useState<any>(true);
+  const [results, setResults] = useState<any>();
 
   // Lifecycle
   useEffect(() => {

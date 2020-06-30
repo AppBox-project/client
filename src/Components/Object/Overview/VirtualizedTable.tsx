@@ -29,9 +29,9 @@ const ReactVirtualizedTable: React.FC<{
   setAnchorEl,
 }) => {
   // Vars
-  const [remoteModelCache, setRemoteModelCache] = useState({});
-  const [remoteObjectCache, setRemoteObjectCache] = useState({});
-  const [orderField, setOrderField] = useState(columns[0]);
+  const [remoteModelCache, setRemoteModelCache] = useState<any>({});
+  const [remoteObjectCache, setRemoteObjectCache] = useState<any>({});
+  const [orderField, setOrderField] = useState<any>(columns[0]);
   const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("asc");
   const sortedData = orderBy(data, [`data.${orderField}`], [orderDirection]);
 

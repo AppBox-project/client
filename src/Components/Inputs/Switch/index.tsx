@@ -8,7 +8,7 @@ const InputSwitch: React.FC<{
   style?;
 }> = ({ label, value, onChange, style }) => {
   // Vars
-  const [state, setState] = useState(value ? value : false);
+  const [state, setState] = useState<any>(value ? value : false);
 
   // Lifecycle
   useEffect(() => {

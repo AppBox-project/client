@@ -23,7 +23,7 @@ import { baseUrl } from "../../Utils/Utils";
 import NavBar from "../../Components/NavBar";
 
 const Desktop: React.FC = () => {
-  const [currentApp, setCurrentApp] = useState();
+  const [currentApp, setCurrentApp] = useState<any>();
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
@@ -80,7 +80,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
     hidden: { opacity: 0, y: 10 },
   };
   const [user] = useGlobal<any>("user");
-  const [apps, setApps] = useState();
+  const [apps, setApps] = useState<any>();
   const [theme] = useGlobal<any>("theme");
 
   // Lifecycle

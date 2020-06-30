@@ -9,7 +9,7 @@ const AppSettingsBackup: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [task, setTask] = useState();
+  const [task, setTask] = useState<any>();
 
   // Lifecycle
 

@@ -13,7 +13,7 @@ const AppUITextField: React.FC<{
 }> = ({ label, value, onChange, multiline, style, autoFocus, type }) => {
   // Global
   // States & Hooks
-  const [newValue, setNewValue] = useState("");
+  const [newValue, setNewValue] = useState<any>("");
   // Lifecycle
   useEffect(() => {
     setNewValue(value);

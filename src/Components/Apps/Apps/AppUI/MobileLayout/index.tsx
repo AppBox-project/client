@@ -16,7 +16,7 @@ import {
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
 import { FaLemon, FaDropbox } from "react-icons/fa";
-import { AiOutlineMenuUnfold } from "react-icons/ai"
+import { AiOutlineMenuUnfold } from "react-icons/ai";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
 import { map } from "lodash";
@@ -31,7 +31,7 @@ const AppUIMobile: React.FC<{
     ? window.location.href.split(`/${appContext.appId}/`)[1].split("/")[0]
     : "home";
   const history = useHistory();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [gActions, setgActions] = useGlobal<any>("actions");
   const [filter, setFilter] = useState<any>();
 

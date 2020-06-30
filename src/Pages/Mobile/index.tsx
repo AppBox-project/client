@@ -25,12 +25,12 @@ import styles from "./styles.module.scss";
 import { baseUrl } from "../../Utils/Utils";
 
 const MobileLayout: React.FC = () => {
-  const [apps, setApps] = useState();
+  const [apps, setApps] = useState<any>();
   const history = useHistory();
 
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gUser] = useGlobal<any>("user");
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [defaultButton, setDefaultButton] = useGlobal<any>("defaultButton");
 

@@ -29,14 +29,14 @@ const Overview: React.FC<{
   appId: string;
 }> = ({ layoutId, objectTypeId, appId }) => {
   const [model, setModel] = useState<ModelType>();
-  const [layout, setLayout] = useState();
-  const [objects, setObjects] = useState();
+  const [layout, setLayout] = useState<any>();
+  const [objects, setObjects] = useState<any>();
   const [dialogContent, setDialogContent] = useState<any>();
   const [anchorEl, setAnchorEl] = useState<any>();
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState<any>([]);
   const history = useHistory();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [overviewFilter, setOverviewFilter] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState<any>(false);
+  const [overviewFilter, setOverviewFilter] = useState<any>([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   // Lifecycle
