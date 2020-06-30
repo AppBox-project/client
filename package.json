@@ -50,7 +50,7 @@
     "react-virtualized": "^9.21.2",
     "reactn": "^2.2.5",
     "socket.io-client": "^2.3.0",
-    "typescript": "~3.7.2",
+    "typescript": "~3.9.5",
     "uniqid": "^5.2.0"
   },
   "scripts": {
