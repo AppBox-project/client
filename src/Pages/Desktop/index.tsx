@@ -18,9 +18,9 @@ import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
 import { GiCardboardBox } from "react-icons/gi";
-import SettingsPage from "../Settings";
 import { baseUrl } from "../../Utils/Utils";
 import NavBar from "../../Components/NavBar";
+import LinkHandler from "../LinkHandler";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -41,6 +41,7 @@ const Desktop: React.FC = () => {
       <NavBar currentApp={currentApp} />
       <div className={styles.appSpace}>
         <Switch>
+          <Route path="/o/:objectId" component={LinkHandler} />
           <Route
             path="/:appId"
             render={(params) => {

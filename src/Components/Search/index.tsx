@@ -104,11 +104,7 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
         value={null}
         onChange={(chosen, e) => {
           if (setSearchExpanded) setSearchExpanded(false);
-          history.push(
-            `/data-explorer/${models[chosen?.obj?.type]?.key}/${
-              chosen?.obj?.id
-            }`
-          );
+          history.push(`/o/${chosen?.obj?.id}`);
         }}
         components={{
           MenuList: (props) => {
