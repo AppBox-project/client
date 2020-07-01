@@ -51,8 +51,7 @@ const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({
             const app = handlers[model.app] ? model.app : "data-explorer";
 
             // Replace variables in link format with actual data
-            history.push(
-              handlers[app].replace(/{(.*?)}/g, (a, v) => {
+            const link = handlers[app].replace(/{(.*?)}/g, (a, v) => {
                 const type = v.split(":")[0];
                 const field = v.split(":")[1];
 
@@ -60,7 +59,8 @@ const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({
                   ? get(object, field, "error")
                   : get(model, field, "error");
               })
-            );
+            console.log(link)
+            history.push(link);
           });
         } else {
           console.log(response);
