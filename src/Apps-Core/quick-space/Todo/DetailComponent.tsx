@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
-import { filter, sortBy } from "lodash";
+import { filter, sortBy, find } from "lodash";
 import {
   Grid,
   Typography,
@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { FaTrello, FaBars, FaAngleDown } from "react-icons/fa";
 import AppQSActionTodoDetailTodo from "./Todo";
+import { useHistory } from "react-router-dom";
 
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
@@ -29,8 +30,10 @@ const AppQSActionTodoDetail: React.FC<{
   const [subTodos, setSubTodos] = useState<any>();
   const [newTodo, setNewTodo] = useState<any>("");
   const [model, setModel] = useState<any>();
+  const [displayTodo, setDisplayTodo] = useState<any>(undefined);
   const [view, setView] = useState<any>("todo");
   const [isMobile] = useGlobal<any>("isMobile");
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -84,6 +87,15 @@ const AppQSActionTodoDetail: React.FC<{
   }, [detailId, context]);
 
   useEffect(() => {
+    if (window.location.href.match("#") && todos && model) {
+      // We came here via an /o/ link
+      setDisplayTodo(
+        find(todos, (o) => o._id === window.location.href.split("#")[1])
+      );
+    }
+  }, [model, todos]);
+
+  useEffect(() => {
     context.setButton("toggleMode", {
       icon: view === "todo" ? <FaTrello /> : <FaBars />,
       function: () => {
@@ -96,6 +108,32 @@ const AppQSActionTodoDetail: React.FC<{
       context.setButton("toggleMode", undefined);
     };
   }, [view, detailId]);
+
+  // Display todo
+  useEffect(() => {
+    if (displayTodo) {
+      console.log(model);
+
+      context?.setDialog({
+        display: true,
+        size: "md",
+        title: displayTodo.data.action,
+        onClose: () => {
+          history.push(window.location.pathname.split("#")[0]);
+        },
+
+        content: (
+          <context.UI.Layouts.Object.ObjectLayout
+            model={model}
+            layoutId="popup"
+            popup
+            appId="quick-space"
+            objectId={displayTodo._id}
+          />
+        ),
+      });
+    }
+  }, [displayTodo]);
 
   // UI
   if (!todos || !model) return <context.UI.Loading />;

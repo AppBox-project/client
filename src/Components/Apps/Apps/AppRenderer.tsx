@@ -121,6 +121,7 @@ const App: React.FC<{
         <Dialog
           onClose={() => {
             setDialog({ ...dialog, display: false });
+            if (dialog.onClose) dialog.onClose();
           }}
           aria-labelledby="simple-dialog-title"
           open={dialog.display}

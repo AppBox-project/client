@@ -14,6 +14,7 @@ import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { filter } from "lodash";
 import { FaStickyNote } from "react-icons/fa";
 import { AppContextType, ModelType } from "../../../Utils/Types";
+import { useHistory } from "react-router-dom";
 
 const AppQSActionTodoDetailTodo: React.FC<{
   subTodos;
@@ -28,6 +29,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
   const [expanded, setExpanded] = useState<any>(false); // Used for expanding sub-items
   const [localChecked, setLocalChecked] = useState<any>(false); // On check this state will be set before real-time data, allowing graying out of item during load.
   const [newTodo, setNewTodo] = useState<any>(""); // Used for controlling the 'new todo' input on a sub-item list.
+  const history = useHistory();
 
   let subItems = filter(
     subTodos,
@@ -68,6 +70,10 @@ const AppQSActionTodoDetailTodo: React.FC<{
               display: true,
               size: "md",
               title: todo.data.action,
+              onClose: () => {
+                history.push(window.location.pathname.split("#")[0]);
+              },
+
               content: (
                 <context.UI.Layouts.Object.ObjectLayout
                   model={model}

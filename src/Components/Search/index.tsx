@@ -32,8 +32,6 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
   const [models, setModels] = useState<any>({});
   const history = useHistory();
   const [apps, setApps] = useState<any>([]);
-  const [anchorEl, setAnchorEl] = useState<any>(null); // Where to show 'opens in' menu
-  const [objectOpensIn, setObjectOpensIn] = useState<any>(); // What to show in 'opens in' menu
 
   const debouncedLoadOptions = useRef(
     debounce((query) => {
@@ -82,24 +80,6 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
   // UI
   return (
     <div style={style}>
-      <Menu
-        id="open-in-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={() => {
-          setAnchorEl(null);
-        }}
-      >
-        <MenuItem
-          onClick={() => {
-            setAnchorEl(null);
-          }}
-        >
-          Todo: improve and show handler apps
-        </MenuItem>
-      </Menu>
-
       <AsyncSelect
         value={null}
         onChange={(chosen, e) => {
@@ -144,20 +124,6 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
                     primary={props.data.label}
                     secondary={model.name}
                   />
-                  {size(compatibleApps) > 1 && (
-                    <Tooltip placement="right" title="Open in">
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          onClick={(event) => {
-                            setAnchorEl(event.currentTarget);
-                            event.stopPropagation();
-                          }}
-                        >
-                          <MdLaunch />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </Tooltip>
-                  )}
                 </ListItem>
               </components.Option>
             );

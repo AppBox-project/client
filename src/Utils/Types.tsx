@@ -188,6 +188,7 @@ export interface dialogType {
   title?: string;
   content?: any;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
+  onClose?: () => void;
   form?: {
     key: string;
     label: string;
