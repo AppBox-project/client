@@ -12,6 +12,7 @@ const AppActionAddObject: React.FC<{
     key: null,
     name: null,
     name_plural: null,
+    api: {},
   });
   // Lifecycle
   // UI

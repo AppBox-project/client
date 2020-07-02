@@ -178,6 +178,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         { value: "number", label: "Number" },
                         { value: "phone", label: "Phone" },
                         { value: "email", label: "E-mail" },
+                        { value: "url", label: "URL" },
                       ]}
                       onChange={(value) => {
                         setField({

@@ -84,8 +84,11 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
                   {
                     ...newModel,
                     api: {
-                      ...newModel.api,
-                      [detailId]: { ...newModel.api[detailId], active },
+                      ...(newModel.api || {}),
+                      [detailId]: {
+                        ...(newModel?.api ? [detailId] || {} : {}),
+                        active,
+                      },
                     },
                   },
                   model._id
