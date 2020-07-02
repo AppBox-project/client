@@ -239,6 +239,20 @@ export interface UIType {
         customItem?: (listItem) => JSX.Element;
       }>;
     };
+    GridItemLayout: React.FC<{
+      list?: {}[];
+      remoteList?: string;
+      title?: string;
+      dataMap: {
+        title: string;
+        description?: string;
+        image?: string;
+        url?: string;
+        id: string;
+      };
+      onClick?: (item) => void;
+      descriptionIsHtml?: true;
+    }>;
     TreeView: React.FC<{
       items: TreeViewDataItem[];
       linkTo: string;

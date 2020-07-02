@@ -1,0 +1,54 @@
+.item {
+  width: 100%;
+  max-width: 250px;
+  margin: 5px auto;
+  height: 275px;
+  background-color: #efefef;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: 0.3s;
+  cursor: default;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07),
+    0 4px 8px rgba(0, 0, 0, 0.07), 0 8px 16px rgba(0, 0, 0, 0.07),
+    0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
+
+  &:hover {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11),
+      0 4px 4px rgba(0, 0, 0, 0.11), 0 8px 8px rgba(0, 0, 0, 0.11),
+      0 16px 16px rgba(0, 0, 0, 0.11), 0 32px 32px rgba(0, 0, 0, 0.11);
+
+    & .infoWrapper {
+      background-color: rgba(0, 0, 0, 0.5);
+      top: -125px;
+      height: 125px;
+    }
+    &:hover img {
+      filter: blur(2px);
+      transform: scale(1.1);
+    }
+  }
+
+  & .infoWrapper {
+    position: relative;
+    top: -50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  & .imageWrapper {
+    width: 100%;
+    height: 100%;
+
+    & img {
+      transition: transform 1s, filter 0.4s ease-in-out;
+      filter: blur(0);
+      transform: scale(1);
+    }
+  }
+}

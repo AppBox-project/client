@@ -13,6 +13,7 @@ import ObjectLayout from "./AppUI/ObjectLayout";
 import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
 import Margin from "./AppUI/Margin";
 import FieldDisplay from "../../Object/FieldDisplay";
+import GridItemLayout from "../Apps/AppUI/Layouts/GridItemLayout";
 
 export class AppContext {
   appId: string;
@@ -44,6 +45,7 @@ export class AppContext {
       Layouts: {
         ListDetailLayout,
         TreeView,
+        GridItemLayout,
         SortableList,
         Object: {
           ObjectLayout,
