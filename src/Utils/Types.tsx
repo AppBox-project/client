@@ -239,6 +239,13 @@ export interface UIType {
         customItem?: (listItem) => JSX.Element;
       }>;
     };
+    Specialized: {
+      LayoutDesigner: React.FC<{
+        layout: LayoutDesignerItem[];
+        onChange: (layout) => void;
+        componentList: {};
+      }>;
+    };
     GridItemLayout: React.FC<{
       list?: {}[];
       remoteList?: string;

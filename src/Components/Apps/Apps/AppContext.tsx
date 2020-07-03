@@ -14,6 +14,7 @@ import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
 import Margin from "./AppUI/Margin";
 import FieldDisplay from "../../Object/FieldDisplay";
 import GridItemLayout from "../Apps/AppUI/Layouts/GridItemLayout";
+import LayoutDesigner from "../../../Components/LayoutDesigner";
 
 export class AppContext {
   appId: string;
@@ -50,6 +51,9 @@ export class AppContext {
         Object: {
           ObjectLayout,
           BoardLayout,
+        },
+        Specialized: {
+          LayoutDesigner,
         },
       },
     };
