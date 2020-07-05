@@ -97,10 +97,11 @@ export interface AppContextType {
   appId: string;
   app: AppType;
   isReady: Promise<unknown>;
+  onNoAction: React.FC;
   appCode: any;
   user: UserType;
   appConfig?: {
-    settings?: JSX.Element;
+    settings?: React.FC;
     actions?: {
       filter?: boolean;
       group?: boolean;

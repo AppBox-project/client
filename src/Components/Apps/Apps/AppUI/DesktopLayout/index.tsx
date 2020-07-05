@@ -18,11 +18,11 @@ import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import { map } from "lodash";
 
-const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
-  appContext,
-  currentPage,
-  setCurrentPage,
-}) => {
+const AppUIDesktop: React.FC<{
+  appContext: AppContextType;
+  currentPage;
+  setCurrentPage;
+}> = ({ appContext, currentPage, setCurrentPage }) => {
   return (
     <>
       <ActionMenu context={appContext} currentPage={currentPage} />

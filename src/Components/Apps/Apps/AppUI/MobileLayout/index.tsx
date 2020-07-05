@@ -117,6 +117,13 @@ const AppUIMobile: React.FC<{
               />
             );
           })}
+          {appContext.onNoAction && (
+            <Route
+              render={(props) => (
+                <appContext.onNoAction {...props} context={appContext} />
+              )}
+            />
+          )}
         </Switch>
         {appContext.appConfig?.actions?.mobile?.displayAs === "menu" && (
           <SwipeableDrawer

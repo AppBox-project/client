@@ -23,6 +23,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "../../Components/NavBar";
 import styles from "./styles.module.scss";
 import { baseUrl } from "../../Utils/Utils";
+import LinkHandler from "../LinkHandler";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState<any>();
@@ -119,7 +120,7 @@ const MobileLayout: React.FC = () => {
               const Icon = icons[app.data.icon];
               return (
                 <ListItem
-                  key={app.data.key}
+                  key={app._id}
                   button
                   onClick={() => {
                     history.push(`/${app.data.id}`);
@@ -171,15 +172,15 @@ const MobileLayout: React.FC = () => {
       </SwipeableDrawer>
       <div className={styles.app}>
         <Switch>
-          <Route path="/" exact component={StartPage} />
-          <Route path="/apps" exact component={StartPage} />
-          <Route path="/home" exact component={StartPage} />
+          <Route path="/o/:objectId" component={LinkHandler} />
           <Route
             path="/:appId"
             render={(params) => {
               return <AppRenderer {...params} setCurrentApp={() => {}} />;
             }}
           />
+
+          <Route path="/" exact component={StartPage} />
           <Route component={FourOhFour} />
         </Switch>
       </div>

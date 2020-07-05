@@ -52,14 +52,14 @@ const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({
 
             // Replace variables in link format with actual data
             const link = handlers[app].replace(/{(.*?)}/g, (a, v) => {
-                const type = v.split(":")[0];
-                const field = v.split(":")[1];
+              const type = v.split(":")[0];
+              const field = v.split(":")[1];
 
-                return type === "object"
-                  ? get(object, field, "error")
-                  : get(model, field, "error");
-              })
-            console.log(link)
+              return type === "object"
+                ? get(object, field, "error")
+                : get(model, field, "error");
+            });
+            console.log(link);
             history.push(link);
           });
         } else {
