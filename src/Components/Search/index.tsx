@@ -9,17 +9,11 @@ import {
   Avatar,
   ListItemAvatar,
   List,
-  IconButton,
-  ListItemSecondaryAction,
-  Tooltip,
-  Menu,
-  MenuItem,
 } from "@material-ui/core";
 import * as icons from "react-icons/fa";
-import { MdLaunch } from "react-icons/md";
 import { useHistory } from "react-router";
 import { ModelType } from "../../Utils/Types";
-import { find, size } from "lodash";
+import { find } from "lodash";
 
 var debounce = require("debounce-promise");
 

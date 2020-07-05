@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.1.1-10",
-  "description": "More advanced publishing.",
+  "version": "0.1.1-11",
+  "description": "Fix mobile link handling",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

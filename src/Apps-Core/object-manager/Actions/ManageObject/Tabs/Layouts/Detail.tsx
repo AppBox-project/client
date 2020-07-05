@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Typography, Paper, Divider, Fab, Grid } from "@material-ui/core";
+import { Paper, Fab, Grid } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
 import { map } from "lodash";
