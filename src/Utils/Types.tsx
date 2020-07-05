@@ -219,6 +219,10 @@ export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Margin: React.FC;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
+  Design: {
+    Card: React.FC<{ children; hoverable?: true; title?: string; style? }>;
+  };
+
   Layouts: {
     Object: {
       ObjectLayout: React.FC<{
@@ -314,6 +318,13 @@ export interface UIType {
   }>;
 
   Inputs: {
+    RichText: React.FC<{
+      placeholder?: string;
+      label?: string;
+      value?: string;
+      mode?: "classic" | "balloon";
+      onChange?: (value: string) => void;
+    }>;
     TextInput: React.FC<{
       label: string;
       value: string;

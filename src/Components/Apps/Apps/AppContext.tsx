@@ -15,6 +15,8 @@ import Margin from "./AppUI/Margin";
 import FieldDisplay from "../../Object/FieldDisplay";
 import GridItemLayout from "../Apps/AppUI/Layouts/GridItemLayout";
 import LayoutDesigner from "../../../Components/LayoutDesigner";
+import Card from "../../Design/Card";
+import InputRichText from "../../Inputs/RichText";
 
 export class AppContext {
   appId: string;
@@ -29,6 +31,7 @@ export class AppContext {
   setAppButtons;
   appConfig;
   user;
+  onNoAction;
 
   constructor(appId, setDialog, appButtons, setAppButtons, user) {
     this.appId = appId;
@@ -39,8 +42,11 @@ export class AppContext {
     this.UI = {
       Loading,
       Margin: Margin,
+      Design: {
+        Card,
+      },
       Animations: { AnimationContainer, AnimationItem },
-      Inputs: { ...Forms, Switch: InputSwitch },
+      Inputs: { ...Forms, Switch: InputSwitch, RichText: InputRichText },
       Field: AppUiField,
       FieldDisplay,
       Layouts: {
@@ -81,6 +87,7 @@ export class AppContext {
             const AppCode = app.default;
             this.appCode = new AppCode(this);
             this.appConfig = this.appCode.appConfig;
+            this.onNoAction = this.appCode.onNoAction;
             this.appCode.getActions().then((actions) => {
               this.actions = actions;
               resolve();

@@ -60,6 +60,7 @@ const AppUIDesktop: React.FC<{ appContext; currentPage; setCurrentPage }> = ({
               }}
             />
           )}
+          {appContext.onNoAction && <Route component={appContext.onNoAction} />}
         </Switch>
       </div>
     </>
