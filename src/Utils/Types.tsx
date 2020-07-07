@@ -255,6 +255,7 @@ export interface UIType {
       list?: {}[];
       remoteList?: string;
       title?: string;
+      baseUrl?: string;
       dataMap: {
         title: string;
         description?: string;

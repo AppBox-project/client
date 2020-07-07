@@ -32,24 +32,23 @@ const AppAHMyApps: React.FC<{
   if (!apps) return <context.UI.Loading />;
   return (
     <List>
-      {apps ||
-        [].map((app) => {
-          return (
-            <ListItem key={app._id}>
-              <ListItemText>{app.data.name}</ListItemText>
-              <ListItemSecondaryAction>
-                <IconButton
-                  color="primary"
-                  onClick={() => {
-                    console.log("Todo: update");
-                  }}
-                >
-                  <FaCloudDownloadAlt />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+      {(apps || []).map((app) => {
+        return (
+          <ListItem key={app._id}>
+            <ListItemText>{app.data.name}</ListItemText>
+            <ListItemSecondaryAction>
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  console.log("Todo: update");
+                }}
+              >
+                <FaCloudDownloadAlt />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        );
+      })}
     </List>
   );
 };

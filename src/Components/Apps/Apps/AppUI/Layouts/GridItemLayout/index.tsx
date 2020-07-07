@@ -5,6 +5,7 @@ import GridItemLayoutSkeleton from "./Skeleton";
 import { Typography, Grid } from "@material-ui/core";
 import { get } from "lodash";
 import styles from "./styles.module.scss";
+import { useHistory } from "react-router-dom";
 
 const GridItemLayout: React.FC<{
   list?: {}[];
@@ -19,9 +20,19 @@ const GridItemLayout: React.FC<{
   };
   onClick?: (item) => void;
   descriptionIsHtml?: true;
-}> = ({ list, remoteList, title, dataMap, descriptionIsHtml, onClick }) => {
+  baseUrl?: string;
+}> = ({
+  list,
+  remoteList,
+  title,
+  dataMap,
+  descriptionIsHtml,
+  onClick,
+  baseUrl,
+}) => {
   // Vars
   const [data, setData] = useState<{}[]>(list ? list : undefined);
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -87,6 +98,10 @@ const GridItemLayout: React.FC<{
                 style={{ cursor: (url || onClick) && "pointer" }}
                 onClick={() => {
                   if (onClick) onClick(item);
+                  if (url)
+                    baseUrl
+                      ? history.push(`${baseUrl}/${url}`)
+                      : history.push(url);
                 }}
               >
                 {image && (
