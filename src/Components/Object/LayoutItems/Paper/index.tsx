@@ -1,8 +1,8 @@
 import React from "react";
-import { Paper } from "@material-ui/core";
+import Card from "../../../Design/Card";
 
 const ObjectLayoutItemPaper: React.FC<{ children }> = ({ children }) => {
-  return <Paper className="paper">{children}</Paper>;
+  return <Card hoverable>{children}</Card>;
 };
 
 export default ObjectLayoutItemPaper;

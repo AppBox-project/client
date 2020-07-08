@@ -5,7 +5,6 @@ import {
   ModelType,
 } from "../../../../../../Utils/Types";
 import {
-  Paper,
   Typography,
   Grid,
   Button,
@@ -84,7 +83,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </Grid>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <Paper className="paper" style={{ margin: "0 0 15px 0" }}>
+            <context.UI.Design.Card hoverable style={{ margin: "0 0 15px 0" }}>
               <Typography variant="h6">Options</Typography>
               <Grid container>
                 <Grid
@@ -129,10 +128,10 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   />
                 </Grid>
               </Grid>
-            </Paper>
+            </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <Paper className="paper" style={{ margin: "0 0 15px 0" }}>
+            <context.UI.Design.Card hoverable style={{ margin: "0 0 15px 0" }}>
               <Typography variant="h6">Type</Typography>
               <Grid container>
                 <Grid
@@ -389,12 +388,12 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   </Grid>
                 )}
               </Grid>
-            </Paper>
+            </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <Paper className="paper" style={{ margin: "0 7px 0 0" }}>
+            <context.UI.Design.Card hoverable style={{ margin: "0 7px 0 0" }}>
               <Tooltip placement="left" title="Add validation">
                 <IconButton
                   style={{ float: "right" }}
@@ -446,12 +445,12 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <ListItem>No validations</ListItem>
                 )}
               </List>
-            </Paper>
+            </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <Paper className="paper" style={{ margin: "0 0 0 7px" }}>
+            <context.UI.Design.Card hoverable style={{ margin: "0 0 0 7px" }}>
               <Tooltip placement="left" title="Add transformation">
                 <IconButton
                   style={{ float: "right" }}
@@ -497,7 +496,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <ListItem>No transformations</ListItem>
                 )}
               </List>
-            </Paper>
+            </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
         </Grid>
         {field !== model.fields[detailId] && (

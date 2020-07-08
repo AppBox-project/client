@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  AppContextType,
-  ModelType,
-} from "../../../../../../Utils/Types";
-import { Paper, Button } from "@material-ui/core";
+import { AppContextType, ModelType } from "../../../../../../Utils/Types";
+import { Button } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 
 const AppActionManageObjectActionsDetail: React.FC<{
@@ -29,7 +26,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
   return (
     <context.UI.Animations.AnimationContainer>
       <context.UI.Animations.AnimationItem>
-        <Paper className="paper" style={{ margin: 15 }}>
+        <context.UI.Design.Card hoverable style={{ margin: 15 }}>
           {!action ? (
             <>
               <Skeleton variant="text" />
@@ -53,7 +50,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
               />
             </>
           )}
-        </Paper>
+        </context.UI.Design.Card>
       </context.UI.Animations.AnimationItem>
       <context.UI.Animations.AnimationItem>
         {action !== model.actions[detailId] && (

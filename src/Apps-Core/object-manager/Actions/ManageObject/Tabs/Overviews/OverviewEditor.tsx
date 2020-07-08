@@ -7,7 +7,6 @@ import {
   UIType,
 } from "../../../../../../Utils/Types";
 import {
-  Paper,
   Typography,
   Table,
   TableHead,
@@ -79,7 +78,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
           <Grid container>
             <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
               <UI.Animations.AnimationItem>
-                <Paper className="paper">
+                <context.UI.Design.Card hoverable>
                   <Typography variant="h6">Available</Typography>
                   <List>
                     {map(model.fields, (field, key: string) => {
@@ -108,13 +107,13 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                       }
                     })}
                   </List>
-                </Paper>
+                </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
             <Grid xs={12} md={1}></Grid>
             <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
               <UI.Animations.AnimationItem>
-                <Paper className="paper">
+                <context.UI.Design.Card hoverable>
                   <Typography variant="h6">Selected</Typography>
                   <List>
                     {overview.fields.map((fieldId) => {
@@ -179,12 +178,12 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                       );
                     })}
                   </List>
-                </Paper>
+                </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
               <UI.Animations.AnimationItem>
-                <Paper className="paper">
+                <context.UI.Design.Card hoverable>
                   <Typography variant="h6">Buttons</Typography>
                   <List>
                     {map(model.actions, (action, key) => {
@@ -241,12 +240,12 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                       );
                     })}
                   </List>
-                </Paper>
+                </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
               <UI.Animations.AnimationItem>
-                <Paper className="paper">
+                <context.UI.Design.Card hoverable>
                   <Typography variant="h6">Actions</Typography>
                   <List>
                     {map({ delete: { label: "Delete" } }, (action, key) => {
@@ -303,7 +302,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                       );
                     })}
                   </List>
-                </Paper>
+                </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
           </Grid>

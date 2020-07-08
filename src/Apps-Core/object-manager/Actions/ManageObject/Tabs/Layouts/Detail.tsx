@@ -8,12 +8,13 @@ import {
   AnimationContainer,
   AnimationItem,
 } from "../../../../../../Components/Apps/Apps/AppUI/Animations";
+import Card from "../../../../../../Components/Design/Card";
 
 const WrapperPaper: React.FC = (Props) => {
   return (
-    <Paper className="paper" {...Props}>
+    <Card hoverable {...Props}>
       {Props.children}
-    </Paper>
+    </Card>
   );
 };
 
@@ -79,7 +80,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   if (!fieldList || !layout) return <context.UI.Loading />;
   return (
     <>
-      <Paper className="paper" style={{ marginTop: 15 }}>
+      <context.UI.Design.Card style={{ marginTop: 15 }}>
         <LayoutDesigner
           componentList={{
             GridContainer: {
@@ -408,7 +409,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
             setHasChanged(true);
           }}
         />
-      </Paper>
+      </context.UI.Design.Card>
       {hasChanged && (
         <Fab
           color="primary"

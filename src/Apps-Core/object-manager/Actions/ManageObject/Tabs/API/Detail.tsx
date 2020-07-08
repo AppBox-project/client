@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Paper, Typography, Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 
 const typeInfo = {
   read: {
@@ -107,7 +107,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
           <Grid container>
             <Grid item xs={12}>
               <context.UI.Animations.AnimationItem>
-                <Paper className="paper" style={{ margin: "15px 0" }}>
+                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
                   <Typography variant="h6">Settings</Typography>
                   <Grid container>
                     <Grid item xs={6}>
@@ -142,22 +142,22 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
                       />
                     </Grid>
                   </Grid>
-                </Paper>
+                </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={12} md={5}>
               <context.UI.Animations.AnimationItem>
-                <Paper className="paper" style={{ margin: "15px 0" }}>
+                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
                   <Typography variant="h6">Log</Typography>
-                </Paper>
+                </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={12} md={2} />
             <Grid item xs={12} md={5}>
               <context.UI.Animations.AnimationItem>
-                <Paper className="paper" style={{ margin: "15px 0" }}>
+                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
                   <Typography variant="h6">Stats</Typography>
-                </Paper>
+                </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
           </Grid>

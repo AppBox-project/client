@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { AppContextType, UIType, ModelType } from "../../../../Utils/Types";
-import { Paper, Typography, Divider, Button, Grid } from "@material-ui/core";
+import React, { useState } from "react";
+import { AppContextType } from "../../../../Utils/Types";
+import { Typography, Divider, Button, Grid } from "@material-ui/core";
 
 const AppActionAddObject: React.FC<{
   context: AppContextType;
@@ -20,7 +20,7 @@ const AppActionAddObject: React.FC<{
     <context.UI.Margin>
       <context.UI.Animations.AnimationContainer>
         <context.UI.Animations.AnimationItem>
-          <Paper className="paper">
+          <context.UI.Design.Card hoverable>
             <Typography variant="h6">Create new model</Typography>
             <Divider style={{ marginTop: 5 }} />
             <Grid container>
@@ -63,7 +63,7 @@ const AppActionAddObject: React.FC<{
             >
               Save
             </Button>
-          </Paper>
+          </context.UI.Design.Card>
         </context.UI.Animations.AnimationItem>
       </context.UI.Animations.AnimationContainer>
     </context.UI.Margin>

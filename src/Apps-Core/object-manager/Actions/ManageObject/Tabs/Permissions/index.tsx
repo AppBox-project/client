@@ -4,7 +4,7 @@ import {
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import { Paper, Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Typography, Button } from "@material-ui/core";
 import Select from "react-select";
 
 const permissionTypes = [
@@ -127,7 +127,7 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
   });
   // UI
   return (
-    <Paper className="paper" style={{ margin: "0 10px 0 10px" }}>
+    <UI.Design.Card hoverable style={{ margin: "0 10px 0 10px" }}>
       <Typography variant="h6">{permission.label}</Typography>
       <Typography variant="subtitle2">{permission.description}</Typography>
       <Select
@@ -149,7 +149,7 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
           setPermissions({ ...permissions, [permission.key]: newValue });
         }}
       />
-    </Paper>
+    </UI.Design.Card>
   );
 };
 
