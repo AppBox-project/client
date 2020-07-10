@@ -91,7 +91,7 @@ const ObjectFieldDisplayRelationship: React.FC<{
     return <Skeleton variant="rect" width={125} height={10} />;
   return (
     <Link
-      to={`/data-explorer/${modelField.typeArgs.relationshipTo}/${objectField}`}
+      to={`/o/${objectField}`}
     >
       <Typography
         variant="body1"
