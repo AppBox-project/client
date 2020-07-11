@@ -200,7 +200,7 @@ const App: React.FC<{
                     key={index}
                     onClick={() => {
                       const defaultDialogContent = {};
-                      dialog.form.map((formItem) => {
+                      (dialog.form || []).map((formItem) => {
                         defaultDialogContent[formItem.key] = formItem.value;
                       });
 

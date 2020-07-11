@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import uniqid from "uniqid";
 
 const AppAHMyApps: React.FC<{
   match: { isExact: boolean };
@@ -16,6 +17,7 @@ const AppAHMyApps: React.FC<{
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
   const [apps, setApps] = useState<any>([]);
+  const [updating, setUpdating] = useState<{}>({});
 
   // Lifecycle
   useEffect(() => {
@@ -40,10 +42,44 @@ const AppAHMyApps: React.FC<{
               <IconButton
                 color="primary"
                 onClick={() => {
-                  console.log("Todo: update");
+                  context.addObject(
+                    "system-task",
+                    {
+                      name: `Update ${app.data.id}`,
+                      type: "App update",
+                      description: `Triggered manually`,
+                      when: "asap",
+                      action: "app-update",
+                      done: false,
+                      arguments: { appId: app.data.id },
+                    },
+                    (response) => {
+                      console.log("e", response.data._id);
+
+                      const requestId = uniqid();
+                      context.getObjects(
+                        "system-task",
+                        { _id: response.data._id },
+                        (response) => {
+                          console.log("o", response);
+
+                          setUpdating({
+                            ...updating,
+                            [app.data.id]: response.data[0],
+                          });
+                        }
+                      );
+                    }
+                  );
                 }}
               >
-                <FaCloudDownloadAlt />
+                {updating[app.data.id] ? (
+                  <context.UI.Loading
+                    label={updating[app.data.id].data.progress}
+                  />
+                ) : (
+                  <FaCloudDownloadAlt />
+                )}
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>

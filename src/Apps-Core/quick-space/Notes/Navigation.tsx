@@ -40,7 +40,7 @@ const AppQSNotesNavigation: React.FC<{
   useEffect(() => {
     setProject(
       find(flatProjects, (o) => {
-        return o._id == selectedProject;
+        return o._id === selectedProject;
       })
     );
     setActiveMemos(
