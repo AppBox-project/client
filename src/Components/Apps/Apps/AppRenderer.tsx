@@ -199,10 +199,19 @@ const App: React.FC<{
                   <Button
                     key={index}
                     onClick={() => {
-                      setDialog({ ...dialog, display: false });
-                      button.onClick(
-                        dialogFormContent ? dialogFormContent : {}
-                      );
+                      const defaultDialogContent = {};
+                      dialog.form.map((formItem) => {
+                        defaultDialogContent[formItem.key] = formItem.value;
+                      });
+
+                      setDialog({
+                        ...dialog,
+                        display: false,
+                      });
+                      button.onClick({
+                        ...defaultDialogContent,
+                        ...dialogFormContent,
+                      });
                     }}
                   >
                     {button.label}

@@ -186,7 +186,7 @@ export interface WidgetContextType {
 
 export interface dialogType {
   display: boolean;
-  title?: string;
+  title?: string | JSX.Element;
   content?: any;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   onClose?: () => void;
