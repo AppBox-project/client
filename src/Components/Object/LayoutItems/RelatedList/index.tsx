@@ -85,9 +85,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                       hover
                       style={{ cursor: "pointer" }}
                       onClick={() => {
-                        history.push(
-                          `/data-explorer/${layoutItem.object}/${item._id}`
-                        );
+                        history.push(`/o/${item._id}`);
                       }}
                     >
                       {layoutItem.displayfields.split(",").map((field) => {
@@ -129,9 +127,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                                 <TableRow
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
-                                    history.push(
-                                      `/data-explorer/${layoutItem.object}/${item._id}`
-                                    );
+                                    history.push(`/o/${item._id}`);
                                   }}
                                 >
                                   {layoutItem.displayfields

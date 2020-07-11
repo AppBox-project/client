@@ -33,7 +33,7 @@ export default class App {
                 let group = result.app;
                 if (!group) group = "Other";
                 if (group !== "Other" && group !== "System") {
-                  group = apps[group].name;
+                  group = apps[group]?.name || "Other";
                 }
 
                 actions.push({

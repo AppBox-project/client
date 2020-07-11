@@ -68,7 +68,7 @@ const ObjectFieldDisplayRelationshipM: React.FC<{
                       history.push(
                         baseUrl
                           ? `${baseUrl}/${object._id}`
-                          : `/data-explorer/${modelField.typeArgs.relationshipTo}/${object._id}`
+                          : `/o/${object._id}`
                       );
                     }}
                     icon={<Icon style={{ color: "white" }} />}

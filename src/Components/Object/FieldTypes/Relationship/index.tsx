@@ -49,9 +49,7 @@ const FieldTypeRelationship: React.FC<{
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Link
-                  to={`/data-explorer/${field.typeArgs.relationshipTo}/${newValue}`}
-                >
+                <Link to={`/o/${newValue}`}>
                   <Typography variant="body2">{newValue}</Typography>
                 </Link>
               </Grid>
