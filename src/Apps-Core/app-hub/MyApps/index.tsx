@@ -51,6 +51,7 @@ const AppAHMyApps: React.FC<{
                       when: "asap",
                       action: "app-update",
                       done: false,
+                      progress: 0,
                       arguments: { appId: app.data.id },
                     },
                     (response) => {
