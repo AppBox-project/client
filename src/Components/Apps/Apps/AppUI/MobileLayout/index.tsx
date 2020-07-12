@@ -78,6 +78,7 @@ const AppUIMobile: React.FC<{
             variant="scrollable"
             aria-label="App actions"
             scrollButtons="on"
+            indicatorColor="primary"
             value={currentAction}
             onChange={(event, newValue) => {
               history.push(`/${appContext.appId}/${newValue}`);
