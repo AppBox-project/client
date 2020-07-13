@@ -38,7 +38,7 @@ const BrowseComponent: React.FC<{ context: AppContextType }> = ({
   // UI
   return (
     <context.UI.Layouts.GridItemLayout
-      remoteList="https://appbox.vicvancooten.nl/api/appbox-app/read"
+      remoteList="https://appbox.vicvancooten.nl/api/appbox-app/read?baseUrl=base"
       title="Browse apps"
       dataMap={{
         title: "data.name",

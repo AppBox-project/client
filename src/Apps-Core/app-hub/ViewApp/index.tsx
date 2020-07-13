@@ -32,7 +32,9 @@ const AppAHViewApp: React.FC<{
   // Lifecycle
   useEffect(() => {
     axios
-      .get(`https://appbox.vicvancooten.nl/api/appbox-app/read/?key=${appId}`)
+      .get(
+        `https://appbox.vicvancooten.nl/api/appbox-app/read/?baseUrl=base&key=${appId}`
+      )
       .then((response) => {
         setApp(response.data[0]);
       });

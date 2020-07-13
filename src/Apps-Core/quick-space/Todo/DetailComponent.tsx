@@ -26,6 +26,7 @@ const AppQSActionTodoDetail: React.FC<{
 }) => {
   // Vars
   const [todos, setTodos] = useState<any>();
+  const [allTodos, setAllTodos] = useState<any>();
   const [doneTodos, setDoneTodos] = useState<any>();
   const [subTodos, setSubTodos] = useState<any>();
   const [newTodo, setNewTodo] = useState<any>("");
@@ -42,6 +43,7 @@ const AppQSActionTodoDetail: React.FC<{
       { "data.project": detailId, "data.owner": context.user._id },
       (response) => {
         if (response.success) {
+          setAllTodos(response.data);
           setTodos(
             sortBy(
               filter(response.data, (o) => {
@@ -87,13 +89,13 @@ const AppQSActionTodoDetail: React.FC<{
   }, [detailId, context]);
 
   useEffect(() => {
-    if (window.location.href.match("#") && todos && model) {
+    if (window.location.href.match("#") && allTodos && model) {
       // We came here via an /o/ link
       setDisplayTodo(
-        find(todos, (o) => o._id === window.location.href.split("#")[1])
+        find(allTodos, (o) => o._id === window.location.href.split("#")[1])
       );
     }
-  }, [model, todos]);
+  }, [model, allTodos]);
 
   useEffect(() => {
     context.setButton("toggleMode", {
