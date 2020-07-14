@@ -71,6 +71,7 @@ const DropTarget: React.FC<{
       <Typography
         variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
         style={{ textAlign: "center", cursor: "default", width: "100%" }}
+        ref={drop}
       >
         {componentList[layoutItem.type].popup && (
           <IconButton
@@ -88,7 +89,7 @@ const DropTarget: React.FC<{
             <FaCog style={{ height: 18, width: 18 }} />
           </IconButton>
         )}
-        {componentList[layoutItem.type].label}
+        {layoutItem.title || componentList[layoutItem.type].label}
         {componentList[layoutItem.type].dynamicLabel &&
           ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
       </Typography>
@@ -96,12 +97,11 @@ const DropTarget: React.FC<{
         <>
           <Typography
             variant="caption"
-            ref={drop}
             style={{ width: "100%", textAlign: "center" }}
           >
             Drop items here
           </Typography>
-          <Wrapper className={className}>{children && children}</Wrapper>
+          {children && children}
         </>
       )}
     </Wrapper>

@@ -366,6 +366,7 @@ export interface UIType {
 }
 
 export interface LayoutDesignerItem {
+  title?: string;
   type: string;
   field?: string;
   xs?: number;

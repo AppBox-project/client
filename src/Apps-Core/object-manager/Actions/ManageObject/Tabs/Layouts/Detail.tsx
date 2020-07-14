@@ -10,15 +10,23 @@ import {
 } from "../../../../../../Components/Apps/Apps/AppUI/Animations";
 import Card from "../../../../../../Components/Design/Card";
 
-const WrapperPaper: React.FC = (Props) => {
+interface WrapperPropsType {
+  title?: string;
+  children;
+  ref;
+}
+
+const WrapperPaper: React.FC = (Props: WrapperPropsType) => {
   return (
-    <Card hoverable {...Props}>
+    <Card hoverable {...Props} withMargin>
       {Props.children}
     </Card>
   );
 };
 
 const WrapperGridContainer: React.FC = (Props) => {
+  console.log(Props);
+
   return (
     <Grid container {...Props}>
       {Props.children}
@@ -226,7 +234,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
             },
           },
           Paper: {
-            label: "Paper",
+            label: "Card",
             wrapper: WrapperPaper,
             droppable: true,
             popup: (component, layoutItem, respond, deleteItem) => {
@@ -234,7 +242,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               context.setDialog({
                 display: true,
                 title: component.label,
-                form: [],
+                form: [{ label: "Title", key: "title" }],
                 buttons: [
                   {
                     label: <div style={{ color: "red" }}>Delete</div>,

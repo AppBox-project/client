@@ -4,7 +4,7 @@ import Component from "./Component";
 import { DndProvider } from "react-dnd";
 import MultiBackend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or any other pipeline
-import { Grid, IconButton, List, ListItem } from "@material-ui/core";
+import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutDesignerItem } from "../../Utils/Types";
 import { findIndex, remove } from "lodash";
@@ -13,7 +13,7 @@ import {
   AnimationContainer,
   AnimationItem,
 } from "../Apps/Apps/AppUI/Animations";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { BsBoxArrowRight, BsBoxArrowLeft } from "react-icons/bs";
 import styles from "./styles.module.scss";
 
 const LayoutDesigner: React.FC<{
@@ -27,7 +27,12 @@ const LayoutDesigner: React.FC<{
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <Grid container style={{ overflow: "hidden", height: "100%" }}>
-        <Grid item xs={expandTray ? 9 : 11} className={styles.designer}>
+        <Grid
+          item
+          xs={expandTray ? 9 : 11}
+          md={expandTray ? 10 : 11}
+          className={styles.designer}
+        >
           <DropTarget
             Wrapper={EmptyWrapper}
             root
@@ -52,14 +57,25 @@ const LayoutDesigner: React.FC<{
             })}
           </DropTarget>
         </Grid>
-        <Grid item xs={expandTray ? 3 : 1} className={styles.tray}>
-          <IconButton
-            onClick={() => {
-              setExpandTray(!expandTray);
-            }}
+        <Grid
+          item
+          xs={expandTray ? 3 : 1}
+          md={expandTray ? 2 : 1}
+          className={styles.tray}
+        >
+          <Tooltip
+            placement="left"
+            title={expandTray ? "Hide components" : "Show components"}
           >
-            {expandTray ? <FaAngleRight /> : <FaAngleLeft />}
-          </IconButton>
+            <IconButton
+              onClick={() => {
+                setExpandTray(!expandTray);
+              }}
+            >
+              {expandTray ? <BsBoxArrowRight /> : <BsBoxArrowLeft />}
+            </IconButton>
+          </Tooltip>
+
           {expandTray && (
             <AnimationContainer>
               <List>

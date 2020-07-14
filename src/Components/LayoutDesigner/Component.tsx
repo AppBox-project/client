@@ -6,7 +6,7 @@ import Card from "../Design/Card";
 const Component: React.FC<{ label; id: string }> = ({ label, id }) => {
   const [, drag] = useDrag({ item: { type: "box", id } });
   return (
-    <div ref={drag} className={styles.component}>
+    <div ref={drag} style={{ margin: "0 auto" }}>
       <Card style={{ cursor: "grab" }} hoverable>
         {label}
       </Card>
