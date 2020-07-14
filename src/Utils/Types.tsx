@@ -221,7 +221,15 @@ export interface UIType {
   Margin: React.FC;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
   Design: {
-    Card: React.FC<{ children; hoverable?: true; title?: string; style? }>;
+    Card: React.FC<{
+      children;
+      hoverable?: true;
+      title?: string;
+      style?;
+      centerTitle?: true;
+      titleDivider?: true;
+      withMargin?: true;
+    }>;
   };
 
   Layouts: {

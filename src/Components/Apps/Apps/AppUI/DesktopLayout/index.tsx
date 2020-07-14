@@ -125,34 +125,36 @@ const ActionMenu: React.FC<{
       variants={list}
       className={styles.menu}
     >
-      <motion.div variants={item}>
-        <Link to={`/${context.app.data.id}`}>
-          <Typography
-            variant="h6"
-            style={{
-              textAlign: "center",
-              color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
-            }}
-            className="cursor"
-          >
-            {context.app.data.name}
-          </Typography>
-        </Link>
-      </motion.div>
-      {context.appConfig?.actions?.filter && (
+      <div style={{ height: context.appConfig?.actions?.filter ? 100 : 30 }}>
         <motion.div variants={item}>
-          <InputInput
-            style={{ width: "87%" }}
-            placeholder="Filter actions"
-            value={filter}
-            onChange={(value) => {
-              setFilter(value);
-            }}
-          />
+          <Link to={`/${context.app.data.id}`}>
+            <Typography
+              variant="h6"
+              style={{
+                textAlign: "center",
+                color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
+              }}
+              className="cursor"
+            >
+              {context.app.data.name}
+            </Typography>
+          </Link>
         </motion.div>
-      )}
-      <div className={styles.scrollable}>
-        <List>
+        {context.appConfig?.actions?.filter && (
+          <motion.div variants={item}>
+            <InputInput
+              style={{ width: "78%", margin: "15px 15px" }}
+              placeholder="Filter actions"
+              value={filter}
+              onChange={(value) => {
+                setFilter(value);
+              }}
+            />
+          </motion.div>
+        )}
+      </div>
+      <div className={styles.menuBottom}>
+        <List style={{ margin: 10 }}>
           {context.appConfig?.actions?.group
             ? map(groupedActions, (actions, group) => {
                 return (

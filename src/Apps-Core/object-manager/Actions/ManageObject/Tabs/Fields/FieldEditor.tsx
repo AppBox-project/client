@@ -83,8 +83,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </Grid>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card hoverable style={{ margin: "0 0 15px 0" }}>
-              <Typography variant="h6">Options</Typography>
+            <context.UI.Design.Card
+              hoverable
+              style={{ margin: "0 0 15px 0" }}
+              title="Options"
+            >
               <Grid container>
                 <Grid
                   item
@@ -131,8 +134,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card hoverable style={{ margin: "0 0 15px 0" }}>
-              <Typography variant="h6">Type</Typography>
+            <context.UI.Design.Card
+              hoverable
+              style={{ margin: "0 0 15px 0" }}
+              title="Type"
+            >
               <Grid container>
                 <Grid
                   item

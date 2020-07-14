@@ -7,18 +7,36 @@ const Card: React.FC<{
   hoverable?: true;
   title?: string;
   style?;
-}> = ({ children, hoverable, title, style }) => {
+  centerTitle?: true;
+  titleDivider?: true;
+  withMargin?: true;
+}> = ({
+  children,
+  hoverable,
+  title,
+  style,
+  centerTitle,
+  titleDivider,
+  withMargin,
+}) => {
+  const addMargin = withMargin ? { margin: 15 } : {};
+
   return (
     <div
       className={`${styles.root} ${hoverable && styles.hoverable}`}
-      style={style}
+      style={{ ...style, ...addMargin }}
     >
       {title && (
         <>
-          <Typography variant="h6" style={{ textAlign: "center" }}>
+          <Typography
+            variant="h6"
+            style={{ textAlign: centerTitle ? "center" : "left" }}
+          >
             {title}
           </Typography>
-          <Divider style={{ marginBottom: 10, marginTop: 5 }} />
+          {titleDivider && (
+            <Divider style={{ marginBottom: 10, marginTop: 5 }} />
+          )}
         </>
       )}
       {children}

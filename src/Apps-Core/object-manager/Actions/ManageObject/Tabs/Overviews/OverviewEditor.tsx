@@ -76,10 +76,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
         </UI.Animations.AnimationItem>
         <div style={{ marginTop: 15, height: 500 }}>
           <Grid container>
-            <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
+            <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable>
-                  <Typography variant="h6">Available</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Available">
                   <List>
                     {map(model.fields, (field, key: string) => {
                       if (!overview.fields.includes(key)) {
@@ -110,11 +109,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
-            <Grid xs={12} md={1}></Grid>
-            <Grid item xs={12} md={5} style={{ marginTop: 15 }}>
+            <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable>
-                  <Typography variant="h6">Selected</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Selected">
                   <List>
                     {overview.fields.map((fieldId) => {
                       const field: ModelFieldType = model.fields[fieldId];
@@ -181,10 +178,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
+            <Grid item xs={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable>
-                  <Typography variant="h6">Buttons</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Buttons">
                   <List>
                     {map(model.actions, (action, key) => {
                       return (
@@ -243,10 +239,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={6} style={{ padding: 15, boxSizing: "border-box" }}>
+            <Grid item xs={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable>
-                  <Typography variant="h6">Actions</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Actions">
                   <List>
                     {map({ delete: { label: "Delete" } }, (action, key) => {
                       return (

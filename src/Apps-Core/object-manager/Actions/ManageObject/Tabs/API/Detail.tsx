@@ -74,32 +74,34 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
     <>
       <context.UI.Animations.AnimationContainer>
         <context.UI.Animations.AnimationItem>
-          <div style={{ float: "right" }}>
-            <context.UI.Inputs.Switch
-              label="Active"
-              value={isActive}
-              onChange={(active) => {
-                context.updateModel(
-                  model.key,
-                  {
-                    ...newModel,
-                    api: {
-                      ...(newModel.api || {}),
-                      [detailId]: {
-                        ...(newModel?.api ? [detailId] || {} : {}),
-                        active,
+          <context.UI.Design.Card>
+            <div style={{ float: "right" }}>
+              <context.UI.Inputs.Switch
+                label="Active"
+                value={isActive}
+                onChange={(active) => {
+                  context.updateModel(
+                    model.key,
+                    {
+                      ...newModel,
+                      api: {
+                        ...(newModel.api || {}),
+                        [detailId]: {
+                          ...(newModel?.api ? [detailId] || {} : {}),
+                          active,
+                        },
                       },
                     },
-                  },
-                  model._id
-                );
-              }}
-            />
-          </div>
-          <Typography variant="h4" style={{ marginBottom: 15 }}>
-            {modelInfo.title}
-          </Typography>
-          <Typography variant="body1">{modelInfo.description}</Typography>
+                    model._id
+                  );
+                }}
+              />
+            </div>
+            <Typography variant="h4" style={{ marginBottom: 15 }}>
+              {modelInfo.title}
+            </Typography>
+            <Typography variant="body1">{modelInfo.description}</Typography>
+          </context.UI.Design.Card>
         </context.UI.Animations.AnimationItem>
       </context.UI.Animations.AnimationContainer>
       {isActive && (
@@ -107,8 +109,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
           <Grid container>
             <Grid item xs={12}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
-                  <Typography variant="h6">Settings</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Settings">
                   <Grid container>
                     <Grid item xs={6}>
                       <context.UI.Inputs.SelectInput
@@ -145,18 +146,17 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
-                  <Typography variant="h6">Log</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Log">
+                  {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={12} md={2} />
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable style={{ margin: "15px 0" }}>
-                  <Typography variant="h6">Stats</Typography>
+                <context.UI.Design.Card hoverable withMargin title="Stats">
+                  {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>

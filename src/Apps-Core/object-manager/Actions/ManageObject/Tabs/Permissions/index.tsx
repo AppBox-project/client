@@ -127,8 +127,7 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
   });
   // UI
   return (
-    <UI.Design.Card hoverable style={{ margin: "0 10px 0 10px" }}>
-      <Typography variant="h6">{permission.label}</Typography>
+    <UI.Design.Card hoverable withMargin title={permission.label}>
       <Typography variant="subtitle2">{permission.description}</Typography>
       <Select
         options={permissionOptions}

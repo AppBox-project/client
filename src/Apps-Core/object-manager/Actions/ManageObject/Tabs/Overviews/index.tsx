@@ -26,6 +26,7 @@ const AppActionManageObjectTabOverviews: React.FC<{
       DetailComponent={AppActionManageObjectOverviewEditor}
       context={context}
       detailComponentProps={{ model }}
+      navWidth={2}
       addFunction={() => {
         context.setDialog({
           display: true,

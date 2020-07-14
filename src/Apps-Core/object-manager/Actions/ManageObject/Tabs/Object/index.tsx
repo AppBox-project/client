@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import {
   ModelType,
   UIType,
@@ -20,10 +20,7 @@ const AppActionManageObjectTabObject: React.FC<{
     <div className={styles.root}>
       <UI.Animations.AnimationContainer>
         <UI.Animations.AnimationItem>
-          <context.UI.Design.Card hoverable>
-            <Typography variant="h5" className="cursor">
-              {model.name}
-            </Typography>
+          <context.UI.Design.Card hoverable title={model.name}>
             <Grid container>
               <Grid item xs={6}>
                 <UI.Inputs.TextInput
