@@ -41,7 +41,13 @@ const AppActionManageObject: React.FC<{
   // UI
   if (!model) return <UI.Loading />;
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "column",
+        height: "100%",
+      }}
+    >
       <Tabs
         value={currentTab}
         onChange={(event, value) => {
@@ -60,52 +66,58 @@ const AppActionManageObject: React.FC<{
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
       </Tabs>
-      {currentTab === "object" && (
-        <AppActionManageObjectTabObject
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "fields" && (
-        <AppActionManageObjectTabFields
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "layouts" && (
-        <AppActionManageObjectTabLayouts
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "overviews" && (
-        <AppActionManageObjectTabOverviews
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "permissions" && (
-        <AppActionManageObjectTabPermissions
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "actions" && (
-        <AppActionManageObjectTabActions
-          model={model}
-          UI={UI}
-          context={context}
-        />
-      )}
-      {currentTab === "api" && (
-        <AppActionManageObjectTabAPI model={model} UI={UI} context={context} />
-      )}
-    </>
+      <div style={{ flexGrow: 1, overflow: "auto" }}>
+        {currentTab === "object" && (
+          <AppActionManageObjectTabObject
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "fields" && (
+          <AppActionManageObjectTabFields
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "layouts" && (
+          <AppActionManageObjectTabLayouts
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "overviews" && (
+          <AppActionManageObjectTabOverviews
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "permissions" && (
+          <AppActionManageObjectTabPermissions
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "actions" && (
+          <AppActionManageObjectTabActions
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "api" && (
+          <AppActionManageObjectTabAPI
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

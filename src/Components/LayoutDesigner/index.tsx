@@ -14,6 +14,7 @@ import {
   AnimationItem,
 } from "../Apps/Apps/AppUI/Animations";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import styles from "./styles.module.scss";
 
 const LayoutDesigner: React.FC<{
   layout: LayoutDesignerItem[];
@@ -25,35 +26,33 @@ const LayoutDesigner: React.FC<{
   // UI
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-      <Grid container>
-        <Grid item xs={expandTray ? 9 : 11}>
-          <div style={{ overflow: "hidden", clear: "both", marginTop: 10 }}>
-            <DropTarget
-              Wrapper={EmptyWrapper}
-              root
-              onChange={(response) => {
-                onChange([
-                  ...layout,
-                  { type: response.id, xs: 12, id: uniqid() },
-                ]);
-              }}
-            >
-              {layout.map((layoutItem, key) => {
-                return (
-                  <LayoutItem
-                    key={key}
-                    layoutItem={layoutItem}
-                    componentList={componentList}
-                    onDrop={onChange}
-                    layout={layout}
-                    path=""
-                  />
-                );
-              })}
-            </DropTarget>
-          </div>
+      <Grid container style={{ overflow: "hidden", height: "100%" }}>
+        <Grid item xs={expandTray ? 9 : 11} className={styles.designer}>
+          <DropTarget
+            Wrapper={EmptyWrapper}
+            root
+            onChange={(response) => {
+              onChange([
+                ...layout,
+                { type: response.id, xs: 12, id: uniqid() },
+              ]);
+            }}
+          >
+            {layout.map((layoutItem, key) => {
+              return (
+                <LayoutItem
+                  key={key}
+                  layoutItem={layoutItem}
+                  componentList={componentList}
+                  onDrop={onChange}
+                  layout={layout}
+                  path=""
+                />
+              );
+            })}
+          </DropTarget>
         </Grid>
-        <Grid item xs={expandTray ? 3 : 1}>
+        <Grid item xs={expandTray ? 3 : 1} className={styles.tray}>
           <IconButton
             onClick={() => {
               setExpandTray(!expandTray);

@@ -1,3 +1,9 @@
+.appRightWrapper {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
 .appbar {
   width: 64px;
   height: 100vh;
@@ -18,6 +24,7 @@
   height: 100vh;
   left: 64px;
   top: 64px;
+  flex-grow: 1;
 }
 
 .shadow {

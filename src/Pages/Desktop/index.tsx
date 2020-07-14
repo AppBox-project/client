@@ -37,20 +37,24 @@ const Desktop: React.FC = () => {
   // UI
   return (
     <>
-      <AppBar currentApp={currentApp} />
       <NavBar currentApp={currentApp} />
-      <div className={styles.appSpace}>
-        <Switch>
-          <Route path="/o/:objectId" component={LinkHandler} />
-          <Route
-            path="/:appId"
-            render={(params) => {
-              return <AppRenderer {...params} setCurrentApp={setCurrentApp} />;
-            }}
-          />
-          <Route path="/" exact component={StartPage} />
-          <Route component={FourOhFour} />
-        </Switch>
+      <div className={styles.appRightWrapper}>
+        <AppBar currentApp={currentApp} />
+        <div className={styles.appSpace}>
+          <Switch>
+            <Route path="/o/:objectId" component={LinkHandler} />
+            <Route
+              path="/:appId"
+              render={(params) => {
+                return (
+                  <AppRenderer {...params} setCurrentApp={setCurrentApp} />
+                );
+              }}
+            />
+            <Route path="/" exact component={StartPage} />
+            <Route component={FourOhFour} />
+          </Switch>
+        </div>
       </div>
     </>
   );

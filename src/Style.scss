@@ -81,3 +81,24 @@ blockquote:before {
 blockquote p {
   display: inline;
 }
+
+::-webkit-scrollbar {
+  width: 4px; /* for vertical scrollbars */
+  height: 4px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  &:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
