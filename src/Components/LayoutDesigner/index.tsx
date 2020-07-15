@@ -38,9 +38,19 @@ const LayoutDesigner: React.FC<{
             Wrapper={EmptyWrapper}
             root
             onChange={(response) => {
+              // If there is a migration, delete the old entry first
+              if (response.migration) {
+                remove(layout, response.migration.id);
+              }
+
               onChange([
                 ...layout,
-                { type: response.id, xs: 12, id: uniqid() },
+                {
+                  type: response.id,
+                  xs: 12,
+                  id: uniqid(),
+                  ...response.migration, // migrate any old data to here
+                },
               ]);
             }}
           >
@@ -137,7 +147,12 @@ const LayoutItem: React.FC<{
       }}
       onChange={(response) => {
         if (!layoutItem.items) layoutItem.items = [];
-        layoutItem.items.push({ type: response.id, xs: 12, id: uniqid() });
+        layoutItem.items.push({
+          type: response.id,
+          xs: 12,
+          id: uniqid(),
+          ...response.migration,
+        });
         const itemList = layout;
         const newItemList = itemList;
         newItemList[

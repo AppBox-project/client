@@ -178,18 +178,17 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   );
 };
 
-const MaybeCard: React.FC<{ children; card: boolean; title?: string }> = ({
+const MaybeCard: React.FC<{ card: boolean; title?: string }> = ({
   children,
   card,
   title,
-}) => {
-  return card ? (
-    <Card hoverable title={title}>
+}) =>
+  card ? (
+    <Card hoverable title={title} withMargin>
       {children}
     </Card>
   ) : (
     <>{children}</>
   );
-};
 
 export default ObjectLayoutItemRelatedList;

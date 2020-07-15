@@ -272,7 +272,7 @@ const ViewObject: React.FC<{
   }, [objectTypeId, appId, mode, pageTitle, toChange]);
 
   useEffect(() => {
-    if (object) {
+    if (object && objectType) {
       setPageTitle(object.data[objectType.primary]);
     }
   }, [object, objectType]);

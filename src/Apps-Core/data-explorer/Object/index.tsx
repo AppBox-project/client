@@ -33,9 +33,7 @@ const DetailModule: React.FC<{ object: string; match: { params: { id } } }> = ({
   },
 }) => {
   return (
-    <div style={{ margin: 15 }}>
-      <ViewObject objectTypeId={object} appId="data-explorer" objectId={id} />
-    </div>
+    <ViewObject objectTypeId={object} appId="data-explorer" objectId={id} />
   );
 };
 

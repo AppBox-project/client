@@ -6,7 +6,7 @@ const ObjectLayoutItemPaper: React.FC<{ children; title?: string }> = ({
   title,
 }) => {
   return (
-    <Card hoverable title={title}>
+    <Card hoverable title={title} withMargin>
       {children}
     </Card>
   );

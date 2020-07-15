@@ -4,6 +4,7 @@ import styles from "./styles.module.scss";
 import { Typography, IconButton } from "@material-ui/core";
 import { LayoutDesignerItem } from "../../Utils/Types";
 import { FaCog } from "react-icons/fa";
+import { useDrag } from "react-dnd";
 
 export interface DustbinState {
   hasDropped: boolean;
@@ -29,6 +30,10 @@ const DropTarget: React.FC<{
   onDelete,
   Wrapper,
 }) => {
+  const [, drag] = useDrag({
+    item: { type: "box", id: layoutItem?.type, migration: layoutItem },
+  });
+
   const [{ isOver, isOverCurrent }, drop] = useDrop({
     accept: "box",
     drop(item, monitor) {
@@ -49,7 +54,7 @@ const DropTarget: React.FC<{
 
   if (root)
     return (
-      <Wrapper {...layoutItem}>
+      <Wrapper {...layoutItem} ref={drag}>
         <div ref={drop} className={className}>
           {children ? (
             <>{children}</>
@@ -61,6 +66,7 @@ const DropTarget: React.FC<{
     );
   return (
     <Wrapper
+      ref={drag}
       className={
         componentList[layoutItem.type].droppable
           ? styles.componentWrapper
