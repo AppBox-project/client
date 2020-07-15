@@ -14,6 +14,7 @@ import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { useHistory } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import Card from "../../../Design/Card";
 
 const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   layoutItem,
@@ -57,12 +58,19 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
     };
   }, [objectId]);
 
+  const hideElement =
+    layoutItem.onlyVisibleWithResults && (relatedItems || [1]).length === 0; // It needs to be hidden when both these things are true
+
   // UI
-  return (
-    <>
-      <Typography variant="h6" style={{ textAlign: "center" }}>
-        {layoutItem.title}
-      </Typography>
+  return hideElement ? (
+    <></>
+  ) : (
+    <MaybeCard card={layoutItem.displayCard} title={layoutItem.title}>
+      {!layoutItem.displayCard && (
+        <Typography variant="h6" style={{ textAlign: "center" }}>
+          {layoutItem.title}
+        </Typography>
+      )}
       {relatedItems && relatedModel ? (
         relatedItems.length > 0 ? (
           <TableContainer>
@@ -71,7 +79,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                 <TableRow>
                   {layoutItem.displayfields.split(",").map((field) => {
                     return (
-                      <TableCell style={{ textAlign: "center" }}>
+                      <TableCell style={{ textAlign: "center" }} key={field}>
                         {relatedModel.fields[field].name}
                       </TableCell>
                     );
@@ -83,6 +91,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                   return (
                     <TableRow
                       hover
+                      key={item._id}
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         history.push(`/o/${item._id}`);
@@ -90,7 +99,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                     >
                       {layoutItem.displayfields.split(",").map((field) => {
                         return (
-                          <TableCell>
+                          <TableCell key={field}>
                             {item.data[field] ? item.data[field] : " "}
                           </TableCell>
                         );
@@ -125,6 +134,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                             .map((item, index) => {
                               return (
                                 <TableRow
+                                  key={item._id}
                                   style={{ cursor: "pointer" }}
                                   onClick={() => {
                                     history.push(`/o/${item._id}`);
@@ -134,7 +144,7 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                                     .split(",")
                                     .map((field) => {
                                       return (
-                                        <TableCell>
+                                        <TableCell key={field}>
                                           {item.data[field]
                                             ? item.data[field]
                                             : " "}
@@ -164,7 +174,21 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
           <Skeleton variant="text" height={25} />
         </>
       )}
-    </>
+    </MaybeCard>
+  );
+};
+
+const MaybeCard: React.FC<{ children; card: boolean; title?: string }> = ({
+  children,
+  card,
+  title,
+}) => {
+  return card ? (
+    <Card hoverable title={title}>
+      {children}
+    </Card>
+  ) : (
+    <>{children}</>
   );
 };
 
