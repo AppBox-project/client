@@ -333,6 +333,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
             label: "Related List",
             Wrapper: WrapperRelatedList,
             popup: (component, layoutItem, respond, deleteItem) => {
+              console.log(layoutItem);
+
               // Show tweak UI
               context.setDialog({
                 display: true,
@@ -366,6 +368,12 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     key: "onlyVisibleWithResults",
                     label: "Only visible with results",
                     value: layoutItem.onlyVisibleWithResults || false,
+                    type: "boolean",
+                  },
+                  {
+                    key: "displayCard",
+                    label: "Wrap in card",
+                    value: layoutItem.displayCard || false,
                     type: "boolean",
                   },
                 ],

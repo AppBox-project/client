@@ -194,16 +194,17 @@ const App: React.FC<{
                       <FormControlLabel
                         control={
                           <Checkbox
-                            onChange={(value) => {
+                            color="primary"
+                            onChange={(e) => {
                               setDialogFormContent({
                                 ...dialogFormContent,
-                                [formItem.key]: value,
+                                [formItem.key]: e.target.checked,
                               });
                             }}
-                            value={
+                            checked={
                               dialogFormContent !== undefined
                                 ? dialogFormContent[formItem.key]
-                                : formItem.value
+                                : formItem.value || false
                             }
                           />
                         }
