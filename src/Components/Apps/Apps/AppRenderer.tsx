@@ -7,6 +7,8 @@ import {
   Button,
   Grid,
   Hidden,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
 import Loading from "../../Loading";
 import { AppContextType, dialogType } from "../../../Utils/Types";
@@ -185,6 +187,27 @@ const App: React.FC<{
                             [formItem.key]: value,
                           });
                         }}
+                      />
+                    )}
+
+                    {formItem.type === "boolean" && (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={(value) => {
+                              setDialogFormContent({
+                                ...dialogFormContent,
+                                [formItem.key]: value,
+                              });
+                            }}
+                            value={
+                              dialogFormContent !== undefined
+                                ? dialogFormContent[formItem.key]
+                                : formItem.value
+                            }
+                          />
+                        }
+                        label={formItem.label}
                       />
                     )}
                   </Grid>

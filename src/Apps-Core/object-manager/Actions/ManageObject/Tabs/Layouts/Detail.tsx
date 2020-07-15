@@ -25,8 +25,6 @@ const WrapperPaper: React.FC = (Props: WrapperPropsType) => {
 };
 
 const WrapperGridContainer: React.FC = (Props) => {
-  console.log(Props);
-
   return (
     <Grid container {...Props}>
       {Props.children}
@@ -242,7 +240,9 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               context.setDialog({
                 display: true,
                 title: component.label,
-                form: [{ label: "Title", key: "title" }],
+                form: [
+                  { label: "Title", key: "title", value: layoutItem.title },
+                ],
                 buttons: [
                   {
                     label: <div style={{ color: "red" }}>Delete</div>,
@@ -359,10 +359,14 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                   {
                     key: "displayfields",
                     label: "Display fields (comma seperated)",
-                    value: layoutItem.displayfields
-                      ? layoutItem.displayfields
-                      : "",
+                    value: layoutItem.displayfields || "",
                     type: "text",
+                  },
+                  {
+                    key: "onlyVisibleWithResults",
+                    label: "Only visible with results",
+                    value: layoutItem.onlyVisibleWithResults || false,
+                    type: "boolean",
                   },
                 ],
                 buttons: [

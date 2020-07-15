@@ -7,7 +7,7 @@ import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or 
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutDesignerItem } from "../../Utils/Types";
-import { findIndex, remove } from "lodash";
+import { findIndex } from "lodash";
 import uniqid from "uniqid";
 import {
   AnimationContainer,
@@ -15,6 +15,7 @@ import {
 } from "../Apps/Apps/AppUI/Animations";
 import { BsBoxArrowRight, BsBoxArrowLeft } from "react-icons/bs";
 import styles from "./styles.module.scss";
+import { remove } from "../../Utils/Functions/General";
 
 const LayoutDesigner: React.FC<{
   layout: LayoutDesignerItem[];
@@ -122,9 +123,7 @@ const LayoutItem: React.FC<{
       componentList={componentList}
       layoutItem={layoutItem}
       onDelete={() => {
-        remove(layout, (o) => {
-          return o.id === layoutItem.id;
-        });
+        remove(layout, layoutItem.id);
       }}
       onChangeProps={(result) => {
         map(result, (change, key) => {

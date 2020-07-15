@@ -193,7 +193,7 @@ export interface dialogType {
   form?: {
     key: string;
     label: string;
-    type?: "text" | "number" | "dropdown";
+    type?: "text" | "number" | "dropdown" | "boolean";
     value?: string;
     dropdownOptions?: { label: string; value: string }[];
     xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
