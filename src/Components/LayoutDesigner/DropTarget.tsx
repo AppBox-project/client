@@ -55,7 +55,7 @@ const DropTarget: React.FC<{
   if (root)
     return (
       <Wrapper {...layoutItem} ref={drag}>
-        <div ref={drag}>
+        <div ref={drop} className={class Name} >
           {children ? (
             <>{children}</>
           ) : (
@@ -74,7 +74,7 @@ const DropTarget: React.FC<{
       }
       {...layoutItem}
     >
-              <div ref={drop} className={className}>
+              <div ref={drag}>
 <Typography
         variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
         style={{ textAlign: "center", cursor: "default", width: "100%" }}
