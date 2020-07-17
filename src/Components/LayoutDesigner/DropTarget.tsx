@@ -55,7 +55,7 @@ const DropTarget: React.FC<{
   if (root)
     return (
       <Wrapper {...layoutItem} ref={drag}>
-        <div ref={drop} className={class Name} >
+        <div ref={drop} className={className}>
           {children ? (
             <>{children}</>
           ) : (
