@@ -56,13 +56,11 @@ const DropTarget: React.FC<{
     return (
       <Wrapper {...layoutItem} ref={drag}>
         <div ref={drag}>
-        <div ref={drop} className={className}>
           {children ? (
             <>{children}</>
           ) : (
             <Typography variant="caption">Drop items here</Typography>
           )}
-          </div>
         </div>
       </Wrapper>
     );
@@ -76,7 +74,8 @@ const DropTarget: React.FC<{
       }
       {...layoutItem}
     >
-      <Typography
+              <div ref={drop} className={className}>
+<Typography
         variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
         style={{ textAlign: "center", cursor: "default", width: "100%" }}
         ref={drop}
@@ -100,7 +99,7 @@ const DropTarget: React.FC<{
         {layoutItem.title || componentList[layoutItem.type].label}
         {componentList[layoutItem.type].dynamicLabel &&
           ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
-      </Typography>
+                </Typography></div>
       {componentList[layoutItem.type].droppable && (
         <>
           <Typography
