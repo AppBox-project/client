@@ -95,6 +95,9 @@ const AppSettingsProcessEdit: React.FC<{
           <Skeleton width={350} height={42} />
         )}{" "}
       </div>
+      <Typography variant="subtitle1" className={styles.title}>
+        Process triggers...
+      </Typography>
       <div
         className={styles.row}
         onClick={() => {
@@ -108,9 +111,6 @@ const AppSettingsProcessEdit: React.FC<{
           setHasChanged(true);
         }}
       >
-        <Typography variant="subtitle1" className={styles.title}>
-          Process triggers...
-        </Typography>
         {process ? (
           <>
             {(process.triggers || []).map((trigger, index) => {
@@ -136,6 +136,10 @@ const AppSettingsProcessEdit: React.FC<{
       </div>
       {process ? (
         <>
+          {" "}
+          <Typography variant="subtitle1" className={styles.title}>
+            and performs...
+          </Typography>
           {(process.actions || []).map((action, index) => {
             return (
               <div
@@ -149,9 +153,6 @@ const AppSettingsProcessEdit: React.FC<{
                   setHasChanged(true);
                 }}
               >
-                <Typography variant="subtitle1" className={styles.title}>
-                  and performs...
-                </Typography>
                 <ConditionsBlock
                   condition={action.condition}
                   onClick={(e) => {

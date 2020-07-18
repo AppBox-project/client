@@ -128,9 +128,11 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         <Grid item xs={1} className={styles.item}>
           <motion.div variants={item} style={{ width: "100%" }}>
             <Link to="/">
-              <IconButton style={{ color: "white" }}>
-                <GiCardboardBox style={{ width: 40, height: 40 }} />
-              </IconButton>
+              <Tooltip title="Home" placement="right">
+                <IconButton style={{ color: "white" }}>
+                  <icons.FaBoxOpen style={{ width: 40, height: 40 }} />
+                </IconButton>
+              </Tooltip>
             </Link>
           </motion.div>
         </Grid>
@@ -177,7 +179,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           style={{ alignItems: "flex-end" }}
         >
           <motion.div variants={item}>
-            <Link to="/settings/update">
+            <Link to={`/o/${user._id}`}>
               <Tooltip placement="right" title={`Hi ${user.data.first_name}`}>
                 <IconButton style={{ width: 64 }}>
                   {user.data.picture ? (

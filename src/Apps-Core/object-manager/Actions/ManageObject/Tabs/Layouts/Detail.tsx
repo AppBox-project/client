@@ -304,12 +304,6 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     type: "dropdown",
                     dropdownOptions: fieldList,
                   },
-                  {
-                    key: "xs",
-                    label: "XS",
-                    value: layoutItem.xs ? layoutItem.xs : 12,
-                    type: "number",
-                  },
                 ],
                 buttons: [
                   {
