@@ -6,7 +6,7 @@ import MultiBackend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or any other pipeline
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
-import { LayoutDesignerItem, LayoutType } from "../../Utils/Types";
+import { LayoutType } from "../../Utils/Types";
 import { findIndex } from "lodash";
 import uniqid from "uniqid";
 import {
@@ -15,7 +15,7 @@ import {
 } from "../Apps/Apps/AppUI/Animations";
 import { BsBoxArrowRight, BsBoxArrowLeft } from "react-icons/bs";
 import styles from "./styles.module.scss";
-import { remove } from "../../Utils/Functions/General";
+import { remove, updateById } from "../../Utils/Functions/General";
 
 const LayoutDesigner: React.FC<{
   layout: LayoutType;
@@ -43,15 +43,15 @@ const LayoutDesigner: React.FC<{
                 remove(layout.layout, response.migration.id);
               }
 
-              onChange([
-                ...layout.layout,
+              onChange({
+                ...layout, layout: [...layout.layout,
                 {
                   type: response.id,
                   xs: 12,
                   id: uniqid(),
                   ...response.migration, // migrate any old data to here
-                },
-              ]);
+                }],
+              });
             }}
           >
             {layout.layout.map((layoutItem, key) => {
@@ -104,7 +104,7 @@ const LayoutDesigner: React.FC<{
           )}
         </Grid>
       </Grid>
-    </DndProvider>
+    </DndProvider >
   );
 };
 
@@ -119,7 +119,7 @@ const LayoutItem: React.FC<{
   layoutItem;
   componentList;
   onDrop;
-  layout;
+  layout: LayoutType;
   path;
 }> = ({ key, layoutItem, componentList, onDrop, layout, path }) => {
   const Wrapper = componentList[layoutItem.type].wrapper
@@ -133,38 +133,28 @@ const LayoutItem: React.FC<{
       componentList={componentList}
       layoutItem={layoutItem}
       onDelete={() => {
-        remove(layout, layoutItem.id);
+        remove(layout.layout, layoutItem.id);
       }}
       onChangeProps={(result) => {
         map(result, (change, key) => {
           layoutItem[key] = change;
         });
-        layout[
-          findIndex(layout, (o) => {
-            return o.id === layoutItem.id;
-          })
-        ] = layoutItem;
+        updateById(layout.layout, layoutItem)
       }}
       onChange={(response) => {
-        if (!layoutItem.items) layoutItem.items = [];
+        console.log(layout, layoutItem, response);
         if (response.migration) {
-          remove(layout, response.migration.id);
+          remove(layout.layout, response.migration.id);
         }
-
+        if (!layoutItem?.items) layoutItem.items = []
         layoutItem.items.push({
           type: response.id,
           xs: 12,
           id: uniqid(),
           ...response.migration,
         });
-        const itemList = layout;
-        const newItemList = itemList;
-        newItemList[
-          findIndex(itemList, (o) => {
-            return o.id === layoutItem.id;
-          })
-        ] = layoutItem;
-        onDrop(newItemList);
+        updateById(layout.layout, layoutItem)
+        onDrop(layout);
       }}
     >
       {layoutItem.items &&
