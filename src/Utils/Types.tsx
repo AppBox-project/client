@@ -242,6 +242,7 @@ export interface UIType {
         objectId?: string;
         popup?: true;
         defaults?: { [key: string]: string };
+        context?: AppContextType;
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;
@@ -366,8 +367,8 @@ export interface UIType {
 }
 
 export interface LayoutType {
-  layout: LayoutDesignerItem[]
-  buttons: string[]
+  layout: LayoutDesignerItem[];
+  buttons: string[];
 }
 
 export interface LayoutDesignerItem {

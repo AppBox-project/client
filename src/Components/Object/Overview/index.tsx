@@ -158,7 +158,7 @@ const Overview: React.FC<{
                         onClick={() => {
                           setDialogContent(
                             <ViewObject
-                              objectTypeId={model.key}
+                              modelId={model.key}
                               layoutId={button.layout}
                               popup={true}
                               appId={appId}

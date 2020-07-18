@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.1.2-1",
-  "description": "Seperate layout in buttons + layout",
+  "version": "0.1.2-2",
+  "description": "Add buttons to layouts",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

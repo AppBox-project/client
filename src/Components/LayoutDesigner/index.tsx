@@ -142,7 +142,6 @@ const LayoutItem: React.FC<{
         updateById(layout.layout, layoutItem)
       }}
       onChange={(response) => {
-        console.log(layout, layoutItem, response);
         if (response.migration) {
           remove(layout.layout, response.migration.id);
         }

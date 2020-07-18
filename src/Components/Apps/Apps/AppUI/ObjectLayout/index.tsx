@@ -46,7 +46,7 @@ const UIObjectLayout: React.FC<{
   return (
     <ViewObject
       popup={popup}
-      objectTypeId={appliedModel.key}
+      modelId={appliedModel.key}
       layoutId={layoutId}
       appId={appId}
       defaults={defaults}
