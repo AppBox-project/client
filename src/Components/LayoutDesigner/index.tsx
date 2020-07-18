@@ -147,6 +147,10 @@ const LayoutItem: React.FC<{
       }}
       onChange={(response) => {
         if (!layoutItem.items) layoutItem.items = [];
+        if (response.migration) {
+          remove(layout, response.migration.id);
+        }
+
         layoutItem.items.push({
           type: response.id,
           xs: 12,
