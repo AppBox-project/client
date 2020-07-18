@@ -365,6 +365,11 @@ export interface UIType {
   };
 }
 
+export interface LayoutType {
+  layout: LayoutDesignerItem[]
+  buttons: string[]
+}
+
 export interface LayoutDesignerItem {
   title?: string;
   type: string;

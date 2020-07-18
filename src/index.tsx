@@ -30,6 +30,7 @@ setGlobal({
       tonalOffset: 0.2,
     },
   },
+  focusSearch: true
 });
 
 ReactDOM.render(<App />, document.getElementById("root"));

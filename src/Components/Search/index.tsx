@@ -17,7 +17,7 @@ import { find } from "lodash";
 
 var debounce = require("debounce-promise");
 
-const Search: React.FC<{ style?; setSearchExpanded? }> = ({
+const Search: React.FC<{ style?; setSearchExpanded?}> = ({
   style,
   setSearchExpanded,
 }) => {
@@ -83,8 +83,8 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
         components={{
           MenuList: (props) => {
             return (
-              <components.MenuList {...props}>
-                <List>{props.children}</List>
+              <components.MenuList {...props} >
+                <List style={{ zIndex: 2 }}>{props.children}</List>
               </components.MenuList>
             );
           },
@@ -146,7 +146,8 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             ...provided,
             borderBottom: "1px solid #efefef",
             color: state.isSelected ? "white" : "black",
-            padding: 20,
+            padding: 20, zIndex: 100
+
           }),
           input: (styles) => {
             return { ...styles, color: "white" };

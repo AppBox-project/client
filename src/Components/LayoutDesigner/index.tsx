@@ -6,7 +6,7 @@ import MultiBackend from "react-dnd-multi-backend";
 import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or any other pipeline
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
-import { LayoutDesignerItem } from "../../Utils/Types";
+import { LayoutDesignerItem, LayoutType } from "../../Utils/Types";
 import { findIndex } from "lodash";
 import uniqid from "uniqid";
 import {
@@ -18,7 +18,7 @@ import styles from "./styles.module.scss";
 import { remove } from "../../Utils/Functions/General";
 
 const LayoutDesigner: React.FC<{
-  layout: LayoutDesignerItem[];
+  layout: LayoutType;
   onChange: (layout) => void;
   componentList: {};
 }> = ({ layout, onChange, componentList }) => {
@@ -40,11 +40,11 @@ const LayoutDesigner: React.FC<{
             onChange={(response) => {
               // If there is a migration, delete the old entry first
               if (response.migration) {
-                remove(layout, response.migration.id);
+                remove(layout.layout, response.migration.id);
               }
 
               onChange([
-                ...layout,
+                ...layout.layout,
                 {
                   type: response.id,
                   xs: 12,
@@ -54,7 +54,7 @@ const LayoutDesigner: React.FC<{
               ]);
             }}
           >
-            {layout.map((layoutItem, key) => {
+            {layout.layout.map((layoutItem, key) => {
               return (
                 <LayoutItem
                   key={key}
