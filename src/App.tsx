@@ -18,6 +18,8 @@ import { Alert } from "@material-ui/lab";
 import { FaWifi } from "react-icons/fa";
 import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
 import PageOnboarding from "./Pages/Onboarding/Onboarding";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
@@ -108,48 +110,50 @@ const App: React.FC = () => {
   if (!user && !noDb && !noInit) return <CircularProgress className="center" />;
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        {noDb || noInit ? (
-          noInit ? (
-            <PageOnboarding />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <BrowserRouter>
+          {noDb || noInit ? (
+            noInit ? (
+              <PageOnboarding />
+            ) : (
+              <PageOnboardingNoDb />
+            )
+          ) : user === "error" || user === "none" ? (
+            <LoginPage />
           ) : (
-            <PageOnboardingNoDb />
-          )
-        ) : user === "error" || user === "none" ? (
-          <LoginPage />
-        ) : (
-          <>
-            <Hidden xsDown>
-              <Desktop />
-            </Hidden>
-            <Hidden smUp>
-              <MobileLayout />
-            </Hidden>
-          </>
+            <>
+              <Hidden xsDown>
+                <Desktop />
+              </Hidden>
+              <Hidden smUp>
+                <MobileLayout />
+              </Hidden>
+            </>
+          )}
+        </BrowserRouter>
+        {snackbar && (
+          <Snackbar
+            open={snackbar.display}
+            autoHideDuration={snackbar.duration}
+            TransitionComponent={TransitionUp}
+            anchorOrigin={{
+              vertical: snackbar.position?.vertical
+                ? snackbar.position.vertical
+                : "bottom",
+              horizontal: snackbar.position?.horizontal
+                ? snackbar.position.horizontal
+                : "center",
+            }}
+            onClose={() => {
+              setSnackbar({ ...snackbar, display: false });
+            }}
+          >
+            <Alert icon={snackbar.icon} severity={snackbar.type}>
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         )}
-      </BrowserRouter>
-      {snackbar && (
-        <Snackbar
-          open={snackbar.display}
-          autoHideDuration={snackbar.duration}
-          TransitionComponent={TransitionUp}
-          anchorOrigin={{
-            vertical: snackbar.position?.vertical
-              ? snackbar.position.vertical
-              : "bottom",
-            horizontal: snackbar.position?.horizontal
-              ? snackbar.position.horizontal
-              : "center",
-          }}
-          onClose={() => {
-            setSnackbar({ ...snackbar, display: false });
-          }}
-        >
-          <Alert icon={snackbar.icon} severity={snackbar.type}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      )}
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 };

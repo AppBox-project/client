@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import { ChromePicker } from "react-color";
+
 const InputColor: React.FC<{
   placeholder?: string;
   label?: string;
