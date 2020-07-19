@@ -34,7 +34,6 @@ const App: React.FC<{
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
-  const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [actions, setActions] = useGlobal<any>("actions");
   const [appButtons, setAppButtons] = useState<any>({});
 

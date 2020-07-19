@@ -11,6 +11,7 @@
 .designer {
   height: 100%;
   overflow-y: auto;
+  padding-bottom: 84px; /* Compensates for spacing required above */
 }
 
 .componentWrapperSmall {
@@ -21,8 +22,8 @@
 
 .dropTarget {
   border: 1px dotted rgba(0, 0, 0, 0.01);
-  width: 99%;
-  margin: 10px 1%;
+  box-sizing: border-box;
+  width: 97%;
   padding: 5px;
   box-sizing: border-box;
   text-align: center;
@@ -31,7 +32,7 @@
   border-radius: 8px;
   transition: all 0.3s;
 
-  &:hover{
+  &:hover {
     border: 1px dotted rgba(0, 0, 0, 0.2);
   }
 }

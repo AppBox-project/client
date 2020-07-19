@@ -32,9 +32,8 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
           width: 25,
           height: 25,
         }}
-      >
-        <Icon style={{ width: 15, height: 15 }} />
-      </Avatar>
+        src={baseUrl + object.data[model.preview.picture]}
+      />
     ) : (
       <Avatar
         color="primary"
@@ -42,8 +41,9 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
           width: 25,
           height: 25,
         }}
-        src={baseUrl + object.data[model.preview.picture]}
-      />
+      >
+        <Icon style={{ width: 15, height: 15 }} />
+      </Avatar>
     );
 
   return (

@@ -27,49 +27,48 @@ const AppUIDesktop: React.FC<{
     <>
       <ActionMenu context={appContext} currentPage={currentPage} />
       <div className={styles.app}>
-        <div style={{ marginBottom: 84 }}>
-          <Switch>
-            {appContext.actions.map((action) => {
-              return (
-                <Route
-                  key={action.key}
-                  path={`/${appContext.appId}/${action.key}`}
-                  render={(props) => {
-                    const Component = action.component;
-                    setCurrentPage(action.key);
-                    return (
-                      <Component
-                        {...props}
-                        context={appContext}
-                        action={action.key}
-                      />
-                    );
-                  }}
-                />
-              );
-            })}
-            {appContext.appConfig && appContext.appConfig.settings && (
+        <Switch>
+          {appContext.actions.map((action) => {
+            return (
               <Route
-                path={`/${appContext.appId}/settings`}
+                key={action.key}
+                path={`/${appContext.appId}/${action.key}`}
                 render={(props) => {
+                  const Component = action.component;
+                  setCurrentPage(action.key);
                   return (
-                    <appContext.appConfig.settings
-                      context={appContext}
+                    <Component
                       {...props}
+                      context={appContext}
+                      action={action.key}
                     />
                   );
                 }}
               />
-            )}
-            {appContext.onNoAction && (
-              <Route
-                render={(props) => (
-                  <appContext.onNoAction {...props} context={appContext} />
-                )}
-              />
-            )}
-          </Switch>
-        </div></div>
+            );
+          })}
+          {appContext.appConfig && appContext.appConfig.settings && (
+            <Route
+              path={`/${appContext.appId}/settings`}
+              render={(props) => {
+                return (
+                  <appContext.appConfig.settings
+                    context={appContext}
+                    {...props}
+                  />
+                );
+              }}
+            />
+          )}
+          {appContext.onNoAction && (
+            <Route
+              render={(props) => (
+                <appContext.onNoAction {...props} context={appContext} />
+              )}
+            />
+          )}
+        </Switch>
+      </div>
     </>
   );
 };
@@ -158,103 +157,103 @@ const ActionMenu: React.FC<{
         <List style={{ margin: 10 }}>
           {context.appConfig?.actions?.group
             ? map(groupedActions, (actions, group) => {
-              return (
-                <div key={group}>
-                  <motion.div variants={item}>
-                    {group !== "undefined" && (
-                      <ListSubheader
-                        color="primary"
-                        style={{ cursor: "default" }}
-                      >
-                        {group ? group : "Other"}
-                      </ListSubheader>
-                    )}
-                  </motion.div>
-                  {actions.map((action) => {
-                    const ActionIcon: React.FC<{ style }> = action.icon;
-
-                    return (
-                      <motion.div variants={item} key={action.key}>
-                        <Link
-                          className="no-link"
-                          to={`/${context.app.data.id}/${action.key}`}
-                          style={{ color: "rgb(66, 82, 110)" }}
+                return (
+                  <div key={group}>
+                    <motion.div variants={item}>
+                      {group !== "undefined" && (
+                        <ListSubheader
+                          color="primary"
+                          style={{ cursor: "default" }}
                         >
-                          <ListItem
-                            button
-                            selected={currentPage === action.key}
+                          {group ? group : "Other"}
+                        </ListSubheader>
+                      )}
+                    </motion.div>
+                    {actions.map((action) => {
+                      const ActionIcon: React.FC<{ style }> = action.icon;
+
+                      return (
+                        <motion.div variants={item} key={action.key}>
+                          <Link
+                            className="no-link"
+                            to={`/${context.app.data.id}/${action.key}`}
+                            style={{ color: "rgb(66, 82, 110)" }}
                           >
-                            {ActionIcon && (
-                              <ListItemIcon>
-                                <Icon
+                            <ListItem
+                              button
+                              selected={currentPage === action.key}
+                            >
+                              {ActionIcon && (
+                                <ListItemIcon>
+                                  <Icon
+                                    color={
+                                      currentPage === action.key
+                                        ? "primary"
+                                        : "inherit"
+                                    }
+                                  >
+                                    <ActionIcon
+                                      style={{ width: 18, height: 18 }}
+                                    />
+                                  </Icon>
+                                </ListItemIcon>
+                              )}
+                              <ListItemText>
+                                <Typography
                                   color={
                                     currentPage === action.key
                                       ? "primary"
                                       : "inherit"
                                   }
                                 >
-                                  <ActionIcon
-                                    style={{ width: 18, height: 18 }}
-                                  />
-                                </Icon>
-                              </ListItemIcon>
-                            )}
-                            <ListItemText>
-                              <Typography
-                                color={
-                                  currentPage === action.key
-                                    ? "primary"
-                                    : "inherit"
-                                }
-                              >
-                                {action.label}
-                              </Typography>
-                            </ListItemText>
-                          </ListItem>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              );
-            })
+                                  {action.label}
+                                </Typography>
+                              </ListItemText>
+                            </ListItem>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                );
+              })
             : actions.map((action) => {
-              const ActionIcon: React.FC<{ style }> = action.icon;
-              return (
-                <motion.div variants={item} key={action.key}>
-                  <Link
-                    className="no-link"
-                    to={`/${context.app.data.id}/${action.key}`}
-                    style={{ color: "rgb(66, 82, 110)" }}
-                  >
-                    <ListItem button selected={currentPage === action.key}>
-                      {ActionIcon && (
-                        <ListItemIcon>
-                          <Icon
+                const ActionIcon: React.FC<{ style }> = action.icon;
+                return (
+                  <motion.div variants={item} key={action.key}>
+                    <Link
+                      className="no-link"
+                      to={`/${context.app.data.id}/${action.key}`}
+                      style={{ color: "rgb(66, 82, 110)" }}
+                    >
+                      <ListItem button selected={currentPage === action.key}>
+                        {ActionIcon && (
+                          <ListItemIcon>
+                            <Icon
+                              color={
+                                currentPage === action.key
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              <ActionIcon style={{ width: 18, height: 18 }} />
+                            </Icon>
+                          </ListItemIcon>
+                        )}
+                        <ListItemText>
+                          <Typography
                             color={
-                              currentPage === action.key
-                                ? "primary"
-                                : "inherit"
+                              currentPage === action.key ? "primary" : "inherit"
                             }
                           >
-                            <ActionIcon style={{ width: 18, height: 18 }} />
-                          </Icon>
-                        </ListItemIcon>
-                      )}
-                      <ListItemText>
-                        <Typography
-                          color={
-                            currentPage === action.key ? "primary" : "inherit"
-                          }
-                        >
-                          {action.label}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                  </Link>
-                </motion.div>
-              );
-            })}
+                            {action.label}
+                          </Typography>
+                        </ListItemText>
+                      </ListItem>
+                    </Link>
+                  </motion.div>
+                );
+              })}
         </List>
       </div>
       {context.appConfig && context.appConfig.settings && (

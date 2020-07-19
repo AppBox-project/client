@@ -102,28 +102,6 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
 
   return (
     <>
-      <Grid container>
-        <Grid item xs="auto" md={8}></Grid>
-        <Grid item xs={12} md={4}>
-          <Typography variant="body1">Buttons</Typography>
-          <Select
-            style={{ float: "right", width: "30%" }}
-            isMulti
-            name="colors"
-            defaultValue={selectedButtons}
-            onChange={(selected) => {
-              const s = [];
-              selected.map((sel) => {
-                s.push(sel.value);
-              });
-              setLayout({ ...layout, buttons: s });
-              setHasChanged(true);
-            }}
-            options={buttonOptions}
-          />
-        </Grid>
-      </Grid>
-
       <LayoutDesigner
         componentList={{
           GridContainer: {
