@@ -30,11 +30,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         isMobile ? ` ${styles.isMobile}` : ""
       }`}
     >
-      <AppBar
-        position="static"
-        style={{ display: "flex", height: 64 }}
-        elevation={0}
-      >
+      <AppBar position="static" style={{ display: "flex" }} elevation={0}>
         <Toolbar>
           {isMobile && searchExpanded ? (
             <Search

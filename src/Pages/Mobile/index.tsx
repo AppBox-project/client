@@ -157,7 +157,13 @@ const MobileLayout: React.FC = () => {
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                setDrawerOpen(false);
+                history.push(`/o/${gUser._id}`);
+              }}
+            >
               <ListItemIcon>
                 {gUser.data.picture ? (
                   <Avatar src={baseUrl + gUser.data.picture} />

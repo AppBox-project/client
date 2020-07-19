@@ -45,7 +45,7 @@ const AppActionManageObjectTabPreview: React.FC<{
     <div style={{ height: "100%" }}>
       <context.UI.Animations.AnimationContainer>
         <Grid container>
-          <Grid item xs={9}>
+          <Grid item xs={12} md={9}>
             <context.UI.Animations.AnimationItem>
               <context.UI.Design.Card withMargin title="Design">
                 <Grid container>
@@ -135,7 +135,7 @@ const AppActionManageObjectTabPreview: React.FC<{
               </context.UI.Design.Card>
             </context.UI.Animations.AnimationItem>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             {JSON.stringify(newModel) !== JSON.stringify(model) && (
               <Button
                 style={{ margin: 15 }}
