@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.1.2-2",
-  "description": "Add buttons to layouts",
+  "version": "0.1.2-3",
+  "description": "Add popup previews",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
