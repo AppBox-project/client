@@ -52,11 +52,11 @@ const AppActionManageObjectTabPreview: React.FC<{
                   <Grid item xs={12}>
                     <context.UI.Inputs.SelectInput
                       label="Picture"
-                      value={newModel?.preview?.icon || "modelicon"}
+                      value={newModel?.preview?.picture || "modelicon"}
                       onChange={(value) => {
                         setNewModel({
                           ...newModel,
-                          preview: { ...newModel.preview, icon: value },
+                          preview: { ...newModel.preview, picture: value },
                         });
                       }}
                       options={[
