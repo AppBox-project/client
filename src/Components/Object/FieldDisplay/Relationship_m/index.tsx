@@ -124,10 +124,14 @@ const ChipComponent: React.FC<{ size; baseUrl; object; model: ModelType }> = ({
         aria-owns={Boolean(anchorEl) ? "relationshipPreview" : undefined}
         aria-haspopup="true"
         onMouseEnter={(event) => {
-          setAnchorEl(anchorEl ? null : event.currentTarget);
+          setAnchorEl(event.currentTarget);
+        }}
+        onMouseLeave={() => {
+          setAnchorEl(null);
         }}
       />
       <Popover
+        style={{ pointerEvents: "none" }}
         disableRestoreFocus
         id="relationshipPreview"
         open={Boolean(anchorEl)}

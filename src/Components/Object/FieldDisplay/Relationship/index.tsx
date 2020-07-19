@@ -100,15 +100,18 @@ const ObjectFieldDisplayRelationship: React.FC<{
           color="primary"
           aria-owns={Boolean(anchorEl) ? "relationshipPreview" : undefined}
           aria-haspopup="true"
-          onMouseEnter={(event) => {
-            setAnchorEl(anchorEl ? null : event.currentTarget);
+          onMouseOver={(event) => {
+            setAnchorEl(event.currentTarget);
+          }}
+          onMouseOut={(event) => {
+            setAnchorEl(null);
           }}
         >
           {object.data[model.primary]}
         </Typography>
       </Link>
       <Popover
-        disableRestoreFocus
+        style={{ pointerEvents: "none" }}
         id="relationshipPreview"
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
