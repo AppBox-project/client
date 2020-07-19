@@ -9,6 +9,7 @@ import AppActionManageObjectTabPermissions from "./Tabs/Permissions";
 import AppActionManageObjectTabAPI from "./Tabs/API";
 import AppActionManageObjectTabLayouts from "./Tabs/Layouts";
 import AppActionManageObjectTabActions from "./Tabs/Actions";
+import AppActionManageObjectTabPreview from "./Tabs/Preview";
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -62,6 +63,7 @@ const AppActionManageObject: React.FC<{
         <Tab label="Fields" value="fields" />
         <Tab label="Actions" value="actions" />
         <Tab label="Overviews" value="overviews" />
+        <Tab label="Popup preview" value="preview" />
         <Tab label="Lay-outs" value="layouts" />
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
@@ -97,6 +99,13 @@ const AppActionManageObject: React.FC<{
         )}
         {currentTab === "permissions" && (
           <AppActionManageObjectTabPermissions
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "preview" && (
+          <AppActionManageObjectTabPreview
             model={model}
             UI={UI}
             context={context}

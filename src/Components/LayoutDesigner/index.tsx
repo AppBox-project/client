@@ -7,7 +7,6 @@ import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or 
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutType } from "../../Utils/Types";
-import { findIndex } from "lodash";
 import uniqid from "uniqid";
 import {
   AnimationContainer,
@@ -44,13 +43,16 @@ const LayoutDesigner: React.FC<{
               }
 
               onChange({
-                ...layout, layout: [...layout.layout,
-                {
-                  type: response.id,
-                  xs: 12,
-                  id: uniqid(),
-                  ...response.migration, // migrate any old data to here
-                }],
+                ...layout,
+                layout: [
+                  ...layout.layout,
+                  {
+                    type: response.id,
+                    xs: 12,
+                    id: uniqid(),
+                    ...response.migration, // migrate any old data to here
+                  },
+                ],
               });
             }}
           >
@@ -104,7 +106,7 @@ const LayoutDesigner: React.FC<{
           )}
         </Grid>
       </Grid>
-    </DndProvider >
+    </DndProvider>
   );
 };
 
@@ -139,20 +141,20 @@ const LayoutItem: React.FC<{
         map(result, (change, key) => {
           layoutItem[key] = change;
         });
-        updateById(layout.layout, layoutItem)
+        updateById(layout.layout, layoutItem);
       }}
       onChange={(response) => {
         if (response.migration) {
           remove(layout.layout, response.migration.id);
         }
-        if (!layoutItem?.items) layoutItem.items = []
+        if (!layoutItem?.items) layoutItem.items = [];
         layoutItem.items.push({
           type: response.id,
           xs: 12,
           id: uniqid(),
           ...response.migration,
         });
-        updateById(layout.layout, layoutItem)
+        updateById(layout.layout, layoutItem);
         onDrop(layout);
       }}
     >

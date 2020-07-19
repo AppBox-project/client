@@ -10,6 +10,7 @@ const Card: React.FC<{
   centerTitle?: true;
   titleDivider?: true;
   withMargin?: true;
+  className?;
 }> = ({
   children,
   hoverable,
@@ -18,12 +19,13 @@ const Card: React.FC<{
   centerTitle,
   titleDivider,
   withMargin,
+  className,
 }) => {
   const addMargin = withMargin ? { margin: 15 } : {};
 
   return (
     <div
-      className={`${styles.root} ${hoverable && styles.hoverable}`}
+      className={`${styles.root} ${hoverable && styles.hoverable} ${className}`}
       style={{ ...style, ...addMargin }}
     >
       {title && (

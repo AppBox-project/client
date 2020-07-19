@@ -52,6 +52,7 @@ export interface ModelType {
   indexed_fields: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
+  preview?: { picture: string; fields: string[] };
   handlers: {};
   layouts: any;
   actions: any;
@@ -242,7 +243,6 @@ export interface UIType {
         objectId?: string;
         popup?: true;
         defaults?: { [key: string]: string };
-        context?: AppContextType;
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;

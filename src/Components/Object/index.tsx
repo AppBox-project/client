@@ -24,17 +24,7 @@ const ViewObject: React.FC<{
   onSuccess?: () => void;
   popup?: true;
   defaults?: { [key: string]: string };
-  context?: AppContextType;
-}> = ({
-  modelId,
-  layoutId,
-  appId,
-  objectId,
-  onSuccess,
-  popup,
-  defaults,
-  context,
-}) => {
+}> = ({ modelId, layoutId, appId, objectId, onSuccess, popup, defaults }) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
@@ -46,6 +36,7 @@ const ViewObject: React.FC<{
   const [defaultButton] = useGlobal<any>("defaultButton");
   const [pageTitle, setPageTitle] = useState<any>(undefined);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+  const [dialog, setDialog] = useGlobal<any>("dialog");
   const history = useHistory();
 
   const getFeedback = (feedback) => {
@@ -308,7 +299,7 @@ const ViewObject: React.FC<{
               variant: "outlined",
               label: "Clone",
               onClick: () => {
-                context.setDialog({
+                setDialog({
                   display: true,
                   title: "Feature in progress",
                   content: "Sadly, I did not build this yet.",
@@ -319,7 +310,7 @@ const ViewObject: React.FC<{
               variant: "text",
               label: "Delete",
               onClick: () => {
-                context.setDialog({
+                setDialog({
                   display: true,
                   title: "Delete?",
                   content: "Are you sure? For now, this can't be reverted!",
@@ -327,17 +318,17 @@ const ViewObject: React.FC<{
                     {
                       label: "No",
                       onClick: () => {
-                        context.setDialog({ display: false });
+                        setDialog({ display: false });
                       },
                     },
                     {
                       label: <span style={{ color: "red" }}>Yes, delete</span>,
                       onClick: () => {
-                        context
-                          .deleteObjects(model.key, { _id: objectId })
-                          .then((result) => {
-                            history.replace(`/${appId}/${modelId}`);
-                          });
+                        const requestId = uniqid();
+                        Server.emit("deleteObject", { requestId, objectId });
+                        Server.on(`receive-${requestId}`, () => {
+                          history.replace(`/${appId}/${modelId}`);
+                        });
                       },
                     },
                   ],

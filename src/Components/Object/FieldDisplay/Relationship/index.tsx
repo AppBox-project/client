@@ -3,7 +3,8 @@ import { Skeleton } from "@material-ui/lab";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { Link } from "react-router-dom";
-import { Typography } from "@material-ui/core";
+import { Typography, Popover } from "@material-ui/core";
+import ObjectPreview from "../../ObjectPreview";
 
 const ObjectFieldDisplayRelationship: React.FC<{
   modelField;
@@ -23,6 +24,7 @@ const ObjectFieldDisplayRelationship: React.FC<{
   // Vars
   const [model, setModel] = useState<any>();
   const [object, setObject] = useState<any>();
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // Lifecycle
   useEffect(() => {
@@ -90,17 +92,45 @@ const ObjectFieldDisplayRelationship: React.FC<{
   if (!model || !object)
     return <Skeleton variant="rect" width={125} height={10} />;
   return (
-    <Link
-      to={`/o/${objectField}`}
-    >
-      <Typography
-        variant="body1"
-        color="primary"
-        style={{ fontWeight: "bold" }}
+    <>
+      <Link to={`/o/${objectField}`}>
+        <Typography
+          style={{ display: "inline", fontWeight: "bold" }}
+          variant="body1"
+          color="primary"
+          aria-owns={Boolean(anchorEl) ? "relationshipPreview" : undefined}
+          aria-haspopup="true"
+          onMouseEnter={(event) => {
+            setAnchorEl(anchorEl ? null : event.currentTarget);
+          }}
+        >
+          {object.data[model.primary]}
+        </Typography>
+      </Link>
+      <Popover
+        disableRestoreFocus
+        id="relationshipPreview"
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        onClose={() => {
+          setAnchorEl(null);
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        elevation={0}
+        PaperProps={{
+          style: { backgroundColor: "transparent" },
+        }}
       >
-        {object.data[model.primary]}
-      </Typography>
-    </Link>
+        <ObjectPreview model={model} object={object} />
+      </Popover>
+    </>
   );
 };
 
