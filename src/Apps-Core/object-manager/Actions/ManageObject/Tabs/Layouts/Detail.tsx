@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Fab, Grid, Typography } from "@material-ui/core";
+import { Fab, Grid } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
 import { map, find } from "lodash";
@@ -9,7 +9,7 @@ import {
   AnimationItem,
 } from "../../../../../../Components/Apps/Apps/AppUI/Animations";
 import Card from "../../../../../../Components/Design/Card";
-import Select from "react-select";
+import { useHistory } from "react-router-dom";
 
 interface WrapperPropsType {
   title?: string;
@@ -72,15 +72,20 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   const [hasChanged, setHasChanged] = useState<any>(false);
   const [fieldList, setFieldList] = useState<any>([]);
   const [layout, setLayout] = useState<any>();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
-    const newFieldList = [];
-    map(model.fields, (field, key) => {
-      newFieldList.push({ value: key, label: field.name });
-    });
-    setFieldList(newFieldList);
-    setLayout(model.layouts[detailId]);
+    if ((model.layouts || {})[detailId]) {
+      const newFieldList = [];
+      map(model.fields, (field, key) => {
+        newFieldList.push({ value: key, label: field.name });
+      });
+      setFieldList(newFieldList);
+      setLayout(model.layouts[detailId]);
+    } else {
+      history.replace(`/object-manager/${model.key}/layouts`); // Redirect back to overview if there is no such layout
+    }
   }, [model, detailId]);
 
   // UI

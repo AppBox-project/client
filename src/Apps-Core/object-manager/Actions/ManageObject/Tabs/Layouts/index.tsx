@@ -70,7 +70,7 @@ const AppActionManageObjectTabLayouts: React.FC<{
                     ...model,
                     layouts: {
                       ...model.layouts,
-                      [response.key]: [],
+                      [response.key]: { layout: [], buttons: [] },
                     },
                   },
                   model._id
