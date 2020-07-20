@@ -5,21 +5,25 @@ const InputDate: React.FC<{
   placeholder?: string;
   label?: string;
   value?: string;
-  onChange?: (value: string) => void;
-}> = ({ placeholder, label, value, onChange }) => {
-  const [newValue, setNewValue] = useState(new Date());
+  onChange?: (value: Date) => void;
+  disableFuture?: boolean;
+  disablePast?: boolean;
+}> = ({ placeholder, label, value, onChange, disableFuture, disablePast }) => {
+  const [selectedDate, setSelectedDate] = useState(value || new Date());
 
   return (
     <DatePicker
-      disableFuture
-      openTo="year"
-      format="dd/MM/yyyy"
-      label="Date of birth"
-      views={["year", "month", "date"]}
-      value={newValue}
+      label={label}
+      value={selectedDate}
       onChange={(value) => {
-        console.log(value);
+        setSelectedDate(value);
+        if (onChange) onChange(value);
       }}
+      animateYearScrolling
+      fullWidth
+      autoOk
+      disableFuture={disableFuture}
+      disablePast={disablePast}
     />
   );
 };

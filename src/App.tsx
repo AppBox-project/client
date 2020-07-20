@@ -19,7 +19,7 @@ import { FaWifi } from "react-icons/fa";
 import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
 import PageOnboarding from "./Pages/Onboarding/Onboarding";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+import DateFnsUtils from "@date-io/date-fns";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
@@ -110,7 +110,7 @@ const App: React.FC = () => {
   if (!user && !noDb && !noInit) return <CircularProgress className="center" />;
   return (
     <ThemeProvider theme={theme}>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <BrowserRouter>
           {noDb || noInit ? (
             noInit ? (

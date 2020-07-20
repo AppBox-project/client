@@ -7,6 +7,7 @@ import ObjectFieldDisplayHtml from "./FieldDisplay/HTML";
 import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 import ObjectFieldDisplayFile from "./FieldDisplay/File";
+import ObjectFieldDisplayDate from "./FieldDisplay/Date";
 
 const FieldDisplay: React.FC<{
   objectField;
@@ -86,6 +87,13 @@ const FieldDisplay: React.FC<{
       )}
       {modelField.type === "color" && (
         <ObjectFieldDisplayColor
+          modelField={modelField}
+          objectField={objectField}
+          {...props}
+        />
+      )}{" "}
+      {modelField.type === "date" && (
+        <ObjectFieldDisplayDate
           modelField={modelField}
           objectField={objectField}
           {...props}

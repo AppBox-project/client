@@ -23,7 +23,7 @@ const ObjectLayoutItemField: React.FC<{
   mode;
   setMode;
   model: ModelType;
-  onChange?: (value: string | boolean) => void;
+  onChange?: (value: string | boolean | Date) => void;
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
