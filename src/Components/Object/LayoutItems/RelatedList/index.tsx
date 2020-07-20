@@ -8,6 +8,7 @@ import {
   TableBody,
   Collapse,
   Table,
+  Popover,
 } from "@material-ui/core";
 import Skeleton from "@material-ui/lab/Skeleton";
 import uniqid from "uniqid";
@@ -15,6 +16,8 @@ import Server from "../../../../Utils/Server";
 import { useHistory } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Card from "../../../Design/Card";
+import * as icons from "react-icons/fa";
+import ObjectPreview from "../../ObjectPreview";
 
 const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   layoutItem,
@@ -89,22 +92,13 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
               <TableBody>
                 {relatedItems.slice(0, 3).map((item, index) => {
                   return (
-                    <TableRow
-                      hover
+                    <ResultRow
+                      item={item}
+                      history={history}
+                      layoutItem={layoutItem}
                       key={item._id}
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        history.push(`/o/${item._id}`);
-                      }}
-                    >
-                      {layoutItem.displayfields.split(",").map((field) => {
-                        return (
-                          <TableCell key={field}>
-                            {item.data[field] ? item.data[field] : " "}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
+                      model={relatedModel}
+                    />
                   );
                 })}
                 {relatedItems.length > 3 && (
@@ -133,25 +127,13 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
                             .slice(3, relatedItems.length)
                             .map((item, index) => {
                               return (
-                                <TableRow
+                                <ResultRow
+                                  item={item}
                                   key={item._id}
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => {
-                                    history.push(`/o/${item._id}`);
-                                  }}
-                                >
-                                  {layoutItem.displayfields
-                                    .split(",")
-                                    .map((field) => {
-                                      return (
-                                        <TableCell key={field}>
-                                          {item.data[field]
-                                            ? item.data[field]
-                                            : " "}
-                                        </TableCell>
-                                      );
-                                    })}
-                                </TableRow>
+                                  history={history}
+                                  layoutItem={layoutItem}
+                                  model={relatedModel}
+                                />
                               );
                             })}
                         </TableBody>
@@ -191,4 +173,75 @@ const MaybeCard: React.FC<{ card: boolean; title?: string }> = ({
     <>{children}</>
   );
 
+const ResultRow: React.FC<{ item; history; layoutItem; key; model }> = ({
+  item,
+  history,
+  layoutItem,
+  key,
+  model,
+}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const Icon = icons[model.icon ? model.icon : "FaTags"];
+
+  return (
+    <>
+      <TableRow
+        hover
+        key={key}
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          history.push(`/o/${item._id}`);
+        }}
+        onMouseEnter={
+          model.preview.enabled
+            ? (event) => {
+                setAnchorEl(event.currentTarget);
+              }
+            : () => {}
+        }
+        onMouseLeave={
+          model.preview.enabled
+            ? () => {
+                setAnchorEl(null);
+              }
+            : () => {}
+        }
+      >
+        {layoutItem.displayfields.split(",").map((field) => {
+          return (
+            <TableCell key={field}>
+              {item.data[field] ? item.data[field] : " "}
+            </TableCell>
+          );
+        })}
+      </TableRow>
+      {model.preview.enabled && (
+        <Popover
+          style={{ pointerEvents: "none" }}
+          disableRestoreFocus
+          id="relationshipPreview"
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          onClose={() => {
+            setAnchorEl(null);
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          elevation={0}
+          PaperProps={{
+            style: { backgroundColor: "transparent" },
+          }}
+        >
+          <ObjectPreview model={model} object={item} />
+        </Popover>
+      )}
+    </>
+  );
+};
 export default ObjectLayoutItemRelatedList;
