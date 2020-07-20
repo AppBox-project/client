@@ -52,7 +52,7 @@ export interface ModelType {
   indexed_fields: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
-  preview?: { picture: string; fields: string[] };
+  preview?: { enabled: boolean; picture: string; fields: string[] };
   handlers: {};
   layouts: any;
   actions: any;

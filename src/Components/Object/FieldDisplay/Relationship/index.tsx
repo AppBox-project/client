@@ -100,39 +100,49 @@ const ObjectFieldDisplayRelationship: React.FC<{
           color="primary"
           aria-owns={Boolean(anchorEl) ? "relationshipPreview" : undefined}
           aria-haspopup="true"
-          onMouseOver={(event) => {
-            setAnchorEl(event.currentTarget);
-          }}
-          onMouseOut={(event) => {
-            setAnchorEl(null);
-          }}
+          onMouseEnter={
+            model.preview.enabled
+              ? (event) => {
+                  setAnchorEl(event.currentTarget);
+                }
+              : () => {}
+          }
+          onMouseLeave={
+            model.preview.enabled
+              ? () => {
+                  setAnchorEl(null);
+                }
+              : () => {}
+          }
         >
           {object.data[model.primary]}
         </Typography>
       </Link>
-      <Popover
-        style={{ pointerEvents: "none" }}
-        id="relationshipPreview"
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        onClose={() => {
-          setAnchorEl(null);
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        elevation={0}
-        PaperProps={{
-          style: { backgroundColor: "transparent" },
-        }}
-      >
-        <ObjectPreview model={model} object={object} />
-      </Popover>
+      {model.preview.enabled && (
+        <Popover
+          style={{ pointerEvents: "none" }}
+          id="relationshipPreview"
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          onClose={() => {
+            setAnchorEl(null);
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          elevation={0}
+          PaperProps={{
+            style: { backgroundColor: "transparent" },
+          }}
+        >
+          <ObjectPreview model={model} object={object} />
+        </Popover>
+      )}
     </>
   );
 };
