@@ -30,89 +30,90 @@ const DropTarget: React.FC<{
   onDelete,
   Wrapper,
 }) => {
-    const [, drag] = useDrag({
-      item: { type: "box", id: layoutItem?.type, migration: layoutItem },
-    });
+  const [, drag] = useDrag({
+    item: { type: "box", id: layoutItem?.type, migration: layoutItem },
+  });
 
-    const [{ isOver, isOverCurrent }, drop] = useDrop({
-      accept: "box",
-      drop(item, monitor) {
-        const didDrop = monitor.didDrop();
-        if (didDrop) {
-          return;
-        }
-        onChange(item);
-      },
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-        isOverCurrent: monitor.isOver({ shallow: true }),
-      }),
-    });
+  const [{ isOver, isOverCurrent }, drop] = useDrop({
+    accept: "box",
+    drop(item, monitor) {
+      const didDrop = monitor.didDrop();
+      if (didDrop) {
+        return;
+      }
+      onChange(item);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverCurrent: monitor.isOver({ shallow: true }),
+    }),
+  });
 
-    let className = styles.dropTarget;
-    if (isOverCurrent) className += " " + styles.dropTargetActive;
+  let className = styles.dropTarget;
+  if (isOverCurrent) className += " " + styles.dropTargetActive;
 
-    if (root)
-      return (
-        <Wrapper {...layoutItem} ref={drag}>
-          <div ref={drop} className={className}>
-            {children ? (
-              <>{children}</>
-            ) : (
-                <Typography variant="caption">Drop items here</Typography>
-              )}
-          </div>
-        </Wrapper>
-      );
+  if (root)
     return (
-      <Wrapper
-        ref={drag}
-        className={
-          componentList[layoutItem.type].droppable
-            ? `${styles.componentWrapper} ${className}`
-            : styles.componentWrapperSmall
-        }
-        {...layoutItem}
-      >
-        <div ref={drag}>
-          <Typography
-            variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
-            style={{ textAlign: "center", cursor: "default", width: "100%" }}
-            ref={drop}
-          >
-            {componentList[layoutItem.type].popup && (
-              <IconButton
-                onClick={() => {
-                  componentList[layoutItem.type].popup(
-                    componentList[layoutItem.type],
-                    layoutItem,
-                    (result) => {
-                      onChangeProps(result);
-                    },
-                    onDelete
-                  );
-                }}
-              >
-                <FaCog style={{ height: 18, width: 18 }} />
-              </IconButton>
-            )}
-            {layoutItem.title || componentList[layoutItem.type].label}
-            {componentList[layoutItem.type].dynamicLabel &&
-              ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
-          </Typography></div>
-        {componentList[layoutItem.type].droppable && (
-          <>
-            <Typography
-              variant="caption"
-              style={{ width: "100%", textAlign: "center" }}
-            >
-              Drop items here
-          </Typography>
-            {children && children}
-          </>
-        )}
+      <Wrapper {...layoutItem} ref={drag}>
+        <div ref={drop} className={className}>
+          {children ? (
+            <>{children}</>
+          ) : (
+            <Typography variant="caption">Drop items here</Typography>
+          )}
+        </div>
       </Wrapper>
     );
-  };
+  return (
+    <Wrapper
+      ref={drag}
+      className={
+        componentList[layoutItem.type].droppable
+          ? `${styles.componentWrapper} ${className}`
+          : styles.componentWrapperSmall
+      }
+      {...layoutItem}
+    >
+      <div ref={drag}>
+        <Typography
+          variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
+          style={{ textAlign: "center", cursor: "default", width: "100%" }}
+          ref={drop}
+        >
+          {componentList[layoutItem.type].popup && (
+            <IconButton
+              onClick={() => {
+                componentList[layoutItem.type].popup(
+                  componentList[layoutItem.type],
+                  layoutItem,
+                  (result) => {
+                    onChangeProps(result);
+                  },
+                  onDelete
+                );
+              }}
+            >
+              <FaCog style={{ height: 18, width: 18 }} />
+            </IconButton>
+          )}
+          {componentList[layoutItem.type].label}
+          {componentList[layoutItem.type].dynamicLabel &&
+            ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
+        </Typography>
+      </div>
+      {componentList[layoutItem.type].droppable && (
+        <>
+          <Typography
+            variant="caption"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            Drop items here
+          </Typography>
+          {children && children}
+        </>
+      )}
+    </Wrapper>
+  );
+};
 
 export default DropTarget;

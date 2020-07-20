@@ -505,7 +505,11 @@ const LayoutItem: React.FC<{
       );
     case "Paper":
       return (
-        <ObjectLayoutItemPaper title={layoutItem.title}>
+        <ObjectLayoutItemPaper
+          hoverable={layoutItem.hoverable}
+          withMargin={layoutItem.withMargin}
+          title={layoutItem.title}
+        >
           {layoutItem.items &&
             layoutItem.items.map((item) => {
               return (

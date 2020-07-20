@@ -4,12 +4,12 @@ import { Typography, Divider } from "@material-ui/core";
 
 const Card: React.FC<{
   children;
-  hoverable?: true;
+  hoverable?: true | boolean;
   title?: string;
   style?;
   centerTitle?: true;
   titleDivider?: true;
-  withMargin?: true;
+  withMargin?: true | boolean;
   className?;
 }> = ({
   children,

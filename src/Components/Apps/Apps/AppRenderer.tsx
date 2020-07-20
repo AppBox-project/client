@@ -210,6 +210,23 @@ const App: React.FC<{
                         label={formItem.label}
                       />
                     )}
+                    {formItem.type === "custom" && (
+                      <formItem.customInput
+                        {...(formItem.customInputProps || {})}
+                        context={appContext}
+                        value={
+                          dialogFormContent
+                            ? dialogFormContent[formItem.key] || formItem.value
+                            : formItem.value
+                        }
+                        onChange={(value) => {
+                          setDialogFormContent({
+                            ...dialogFormContent,
+                            [formItem.key]: value,
+                          });
+                        }}
+                      />
+                    )}
                   </Grid>
                 );
               })}

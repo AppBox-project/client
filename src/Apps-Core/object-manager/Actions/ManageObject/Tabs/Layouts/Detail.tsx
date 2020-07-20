@@ -10,6 +10,7 @@ import {
 } from "../../../../../../Components/Apps/Apps/AppUI/Animations";
 import Card from "../../../../../../Components/Design/Card";
 import { useHistory } from "react-router-dom";
+import AppObjectLayoutFieldGridEditor from "./FieldGridEditor";
 
 interface WrapperPropsType {
   title?: string;
@@ -18,11 +19,7 @@ interface WrapperPropsType {
 }
 
 const WrapperPaper: React.FC = (Props: WrapperPropsType) => {
-  return (
-    <Card hoverable {...Props} withMargin>
-      {Props.children}
-    </Card>
-  );
+  return <Card {...Props}>{Props.children}</Card>;
 };
 
 const WrapperGridContainer: React.FC = (Props) => {
@@ -263,6 +260,18 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 title: component.label,
                 form: [
                   { label: "Title", key: "title", value: layoutItem.title },
+                  {
+                    label: "Hover effect",
+                    key: "hoverable",
+                    value: layoutItem.hoverable,
+                    type: "boolean",
+                  },
+                  {
+                    label: "With margin",
+                    key: "withMargin",
+                    value: layoutItem.withMargin,
+                    type: "boolean",
+                  },
                 ],
                 buttons: [
                   {
@@ -282,33 +291,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
-          Group: {
-            label: "Group",
-            droppable: true,
-            popup: (component, layoutItem, respond, deleteItem) => {
-              // Show tweak UI
-              context.setDialog({
-                display: true,
-                title: component.label,
-                form: [],
-                buttons: [
-                  {
-                    label: <div style={{ color: "red" }}>Delete</div>,
-                    onClick: (response) => {
-                      deleteItem();
-                    },
-                  },
-                  {
-                    label: "Update",
-                    onClick: (response) => {
-                      respond(response);
-                      setHasChanged(true);
-                    },
-                  },
-                ],
-              });
-            },
-          },
+
           Field: {
             label: "Field",
             dynamicLabel: "field",
@@ -324,6 +307,48 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     value: layoutItem.field ? layoutItem.field : "",
                     type: "dropdown",
                     dropdownOptions: fieldList,
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
+          FieldGrid: {
+            label: "Field grid",
+            dynamicLabel: "title",
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                size: "lg",
+                title: component.label,
+                form: [
+                  {
+                    key: "title",
+                    label: "Title",
+                    value: layoutItem.title || "",
+                  },
+                  {
+                    key: "layout",
+                    type: "custom",
+                    label: "Layout",
+                    value: layoutItem.layout || [],
+                    customInput: AppObjectLayoutFieldGridEditor,
+                    customInputProps: { model },
                   },
                 ],
                 buttons: [

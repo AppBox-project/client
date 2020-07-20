@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { AnyARecord } from "dns";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
@@ -194,7 +195,13 @@ export interface dialogType {
   form?: {
     key: string;
     label: string;
-    type?: "text" | "number" | "dropdown" | "boolean";
+    type?: "text" | "number" | "dropdown" | "boolean" | "custom";
+    customInput?: React.FC<{
+      value;
+      onChange: (value) => void;
+      context: AppContextType;
+    }>;
+    customInputProps?: {};
     value?: string;
     dropdownOptions?: { label: string; value: string }[];
     xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
