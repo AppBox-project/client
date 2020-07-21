@@ -15,7 +15,7 @@ import { AppContextType, ModelType } from "../../../../../../Utils/Types";
 import uniqid from "uniqid";
 import { MdBorderTop, MdBorderClear, MdDeleteForever } from "react-icons/md";
 import { BsChevronBarContract, BsChevronBarExpand } from "react-icons/bs";
-import { map } from "lodash";
+import { map, pickBy } from "lodash";
 import { FaPlus } from "react-icons/fa";
 
 const AppObjectLayoutFieldGridEditor: React.FC<{
@@ -33,9 +33,15 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
 }> = ({ value, onChange, context, model }) => {
   // Vars
   const itemList = [];
-  map(model.fields, (field, key) => {
-    itemList.push({ label: field.name, value: key });
-  });
+  const selectedFields = [];
+  value.map((val) => selectedFields.push(...(val.items || [])));
+
+  map(
+    pickBy(model.fields, (value, key) => !selectedFields.includes(key)),
+    (field, key) => {
+      itemList.push({ label: field.name, value: key });
+    }
+  );
   // Lifecycle
   // UI
   return (
@@ -56,7 +62,14 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                   <MdDeleteForever style={{ width: 18, height: 18 }} />
                 </IconButton>
               </ListItemIcon>
-              {group.name}
+              <context.UI.Inputs.TextInput
+                value={group.name}
+                onChange={(newValue) => {
+                  const newGroups = value;
+                  newGroups[index].name = newValue;
+                  onChange(newGroups);
+                }}
+              />
               <ListItemSecondaryAction>
                 <IconButton
                   onClick={() => {
@@ -93,35 +106,42 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 </IconButton>
               </ListItemSecondaryAction>
             </ListSubheader>
-            <Grid container>
+            <Grid container spacing={3}>
               {(group.items || []).map((item) => (
                 <Grid
                   item
                   //@ts-ignore
                   xs={12 / group.columns}
-                  style={{ textAlign: "center", padding: 5 }}
+                  style={{
+                    textAlign: "center",
+                    padding: 10,
+                    boxSizing: "border-box",
+                    border: "1px solid #efefef",
+                  }}
                   key={item}
                 >
                   {item}
                 </Grid>
               ))}
             </Grid>
-            <ListItem>
-              <ListItemIcon>
-                <FaPlus />
-              </ListItemIcon>
-              <context.UI.Inputs.SelectInput
-                label="Add field"
-                options={itemList}
-                value={""}
-                onChange={(selected) => {
-                  const newGroups = value;
-                  if (!newGroups[index].items) newGroups[index].items = [];
-                  newGroups[index].items.push(selected);
-                  onChange(newGroups);
-                }}
-              />
-            </ListItem>
+            {itemList.length > 0 && (
+              <ListItem>
+                <ListItemIcon>
+                  <FaPlus />
+                </ListItemIcon>
+                <context.UI.Inputs.SelectInput
+                  label="Add field"
+                  options={itemList}
+                  value={""}
+                  onChange={(selected) => {
+                    const newGroups = value;
+                    if (!newGroups[index].items) newGroups[index].items = [];
+                    newGroups[index].items.push(selected);
+                    onChange(newGroups);
+                  }}
+                />
+              </ListItem>
+            )}
             <Divider />
           </>
         ))}

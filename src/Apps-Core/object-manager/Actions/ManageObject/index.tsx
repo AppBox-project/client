@@ -68,7 +68,14 @@ const AppActionManageObject: React.FC<{
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
       </Tabs>
-      <div style={{ flexGrow: 1, overflow: "auto" }}>
+      <div
+        style={{
+          flexGrow: 1,
+          overflow: "auto",
+          paddingBottom: 110,
+          marginBottom: -48,
+        }}
+      >
         {currentTab === "object" && (
           <AppActionManageObjectTabObject
             model={model}

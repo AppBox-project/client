@@ -68,7 +68,11 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   return hideElement ? (
     <></>
   ) : (
-    <MaybeCard card={layoutItem.displayCard} title={layoutItem.title}>
+    <MaybeCard
+      withMargin={layoutItem.cardMargin}
+      card={layoutItem.displayCard}
+      title={layoutItem.title}
+    >
       {!layoutItem.displayCard && (
         <Typography variant="h6" style={{ textAlign: "center" }}>
           {layoutItem.title}
@@ -160,13 +164,13 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
   );
 };
 
-const MaybeCard: React.FC<{ card: boolean; title?: string }> = ({
-  children,
-  card,
-  title,
-}) =>
+const MaybeCard: React.FC<{
+  card: boolean;
+  title?: string;
+  withMargin?: boolean;
+}> = ({ children, card, title, withMargin }) =>
   card ? (
-    <Card hoverable title={title} withMargin>
+    <Card hoverable title={title} withMargin={withMargin}>
       {children}
     </Card>
   ) : (

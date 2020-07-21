@@ -344,7 +344,7 @@ export interface UIType {
       onChange?: (value: string) => void;
     }>;
     TextInput: React.FC<{
-      label: string;
+      label?: string;
       value: string;
       type?: "text" | "number";
       onChange?: (value: string) => void;

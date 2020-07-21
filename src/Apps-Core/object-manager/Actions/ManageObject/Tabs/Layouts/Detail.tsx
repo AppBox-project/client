@@ -372,6 +372,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
           RelatedList: {
             label: "Related List",
             Wrapper: WrapperRelatedList,
+            dynamicLabel: "title",
+
             popup: (component, layoutItem, respond, deleteItem) => {
               // Show tweak UI
               context.setDialog({
@@ -412,6 +414,12 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     key: "displayCard",
                     label: "Wrap in card",
                     value: layoutItem.displayCard || false,
+                    type: "boolean",
+                  },
+                  {
+                    key: "cardMargin",
+                    label: "Card has margin",
+                    value: layoutItem.cardMargin || false,
                     type: "boolean",
                   },
                 ],

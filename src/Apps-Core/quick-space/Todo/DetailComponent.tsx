@@ -192,7 +192,7 @@ const AppQSActionTodoDetail: React.FC<{
         />
       )}
       {view === "todo" && (
-        <List>
+        <List style={{ marginBottom: 40 }}>
           <context.UI.Animations.AnimationContainer>
             <Grid container>
               <Grid
