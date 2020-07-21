@@ -42,6 +42,11 @@ interface ModelApiType {
   authentication?: "none" | "user";
 }
 
+export interface ObjectType {
+  _id: any;
+  data: {};
+}
+
 export interface ModelType {
   key: string;
   name: string;

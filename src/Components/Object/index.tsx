@@ -15,6 +15,7 @@ import ObjectLayoutItemAnimationContainer from "./LayoutItems/AnimationContainer
 import ObjectLayoutItemRelatedList from "./LayoutItems/RelatedList";
 import { AppContextType } from "../../Utils/Types";
 import { useHistory } from "react-router-dom";
+import ObjectLayoutItemFieldGrid from "./LayoutItems/FieldGrid";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -458,7 +459,6 @@ const LayoutItem: React.FC<{
             })}
         </ObjectLayoutItemGridItem>
       );
-
     case "AnimationContainer":
       return (
         <ObjectLayoutItemAnimationContainer>
@@ -502,6 +502,18 @@ const LayoutItem: React.FC<{
               );
             })}
         </ObjectLayoutItemAnimationItem>
+      );
+    case "FieldGrid":
+      return (
+        <ObjectLayoutItemFieldGrid
+          layoutItem={layoutItem}
+          model={model}
+          object={object}
+          setToChange={setToChange}
+          toChange={toChange}
+          mode={mode}
+          setMode={setMode}
+        />
       );
     case "Paper":
       return (

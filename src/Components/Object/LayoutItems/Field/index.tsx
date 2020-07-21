@@ -43,6 +43,7 @@ const ObjectLayoutItemField: React.FC<{
   }, [model]);
 
   // UI
+
   switch (mode) {
     case "view":
       return (

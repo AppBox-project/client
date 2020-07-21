@@ -16,7 +16,7 @@ import uniqid from "uniqid";
 import { MdBorderTop, MdBorderClear, MdDeleteForever } from "react-icons/md";
 import { BsChevronBarContract, BsChevronBarExpand } from "react-icons/bs";
 import { map, pickBy } from "lodash";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaCaretUp, FaCaretDown } from "react-icons/fa";
 
 const AppObjectLayoutFieldGridEditor: React.FC<{
   value: {
@@ -63,6 +63,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 </IconButton>
               </ListItemIcon>
               <context.UI.Inputs.TextInput
+                style={{ display: "inline", width: "80%" }}
                 value={group.name}
                 onChange={(newValue) => {
                   const newGroups = value;
@@ -106,21 +107,78 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 </IconButton>
               </ListItemSecondaryAction>
             </ListSubheader>
-            <Grid container spacing={3}>
-              {(group.items || []).map((item) => (
+            <Grid container spacing={1} style={{ margin: 10 }}>
+              {(group.items || []).map((item, itemIndex) => (
                 <Grid
                   item
                   //@ts-ignore
                   xs={12 / group.columns}
-                  style={{
-                    textAlign: "center",
-                    padding: 10,
-                    boxSizing: "border-box",
-                    border: "1px solid #efefef",
-                  }}
                   key={item}
                 >
-                  {item}
+                  <div
+                    style={{
+                      boxSizing: "border-box",
+                      border: "1px solid #efefef",
+                      borderRadius: 5,
+                      overflow: "hidden",
+                      padding: 10,
+                      textAlign: "center",
+                    }}
+                  >
+                    <span style={{ float: "right" }}>
+                      <IconButton
+                        disabled={itemIndex === 0}
+                        style={{ padding: 3 }}
+                        onClick={() => {
+                          const newValue = value;
+                          let cutOut = newValue[index].items.splice(
+                            itemIndex,
+                            1
+                          )[0];
+                          newValue[index].items.splice(
+                            itemIndex - 1,
+                            0,
+                            cutOut
+                          );
+                          console.log(newValue);
+
+                          onChange(newValue);
+                        }}
+                      >
+                        <FaCaretUp />
+                      </IconButton>
+                      <IconButton
+                        disabled={itemIndex === group.items.length - 1}
+                        style={{ padding: 3 }}
+                        onClick={() => {
+                          const newValue = value;
+                          let cutOut = newValue[index].items.splice(
+                            itemIndex,
+                            1
+                          )[0]; // cut the element at index 'from'
+                          newValue[index].items.splice(
+                            itemIndex + 1,
+                            0,
+                            cutOut
+                          ); // insert it at index 'to'
+                          onChange(newValue);
+                        }}
+                      >
+                        <FaCaretDown />
+                      </IconButton>
+                      <IconButton
+                        style={{ padding: 3 }}
+                        onClick={() => {
+                          const newValue = value;
+                          newValue[index].items.splice(itemIndex, 1);
+                          onChange(newValue);
+                        }}
+                      >
+                        <MdDeleteForever />
+                      </IconButton>
+                    </span>
+                    {model.fields[item].name}
+                  </div>
                 </Grid>
               ))}
             </Grid>
@@ -132,7 +190,6 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 <context.UI.Inputs.SelectInput
                   label="Add field"
                   options={itemList}
-                  value={""}
                   onChange={(selected) => {
                     const newGroups = value;
                     if (!newGroups[index].items) newGroups[index].items = [];
