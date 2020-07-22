@@ -140,7 +140,7 @@ const AppQSActionTodoDetail: React.FC<{
   // UI
   if (!todos || !model) return <context.UI.Loading />;
   return (
-    <>
+    <context.UI.Design.Card withMargin style={{ overflowX: "auto" }}>
       {view === "board" && (
         <context.UI.Layouts.Object.BoardLayout
           context={context}
@@ -306,7 +306,7 @@ const AppQSActionTodoDetail: React.FC<{
           </context.UI.Animations.AnimationContainer>
         </List>
       )}
-    </>
+    </context.UI.Design.Card>
   );
 };
 

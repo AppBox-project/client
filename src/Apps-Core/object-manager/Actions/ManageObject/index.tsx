@@ -54,8 +54,7 @@ const AppActionManageObject: React.FC<{
         onChange={(event, value) => {
           history.push(`/object-manager/${action}/${value}`);
         }}
-        indicatorColor="primary"
-        textColor="primary"
+        style={{ color: "white" }}
         aria-label="Object aspects navigation"
         variant="scrollable"
       >

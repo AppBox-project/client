@@ -268,8 +268,12 @@ const Overview: React.FC<{
   );
 };
 
-const CardWithMargin: React.FC = ({children}) => {
-return <Card withMargin>{children}</Card>
-}
+const CardWithMargin: React.FC = ({ children }) => {
+  return (
+    <Card withMargin style={{ overflowX: "auto" }}>
+      {children}
+    </Card>
+  );
+};
 
 export default Overview;

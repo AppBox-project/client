@@ -20,4 +20,6 @@
 .appbar {
   display: flex;
   height: 20vh;
+  position: relative;
+  z-index: 3;
 }

@@ -70,128 +70,130 @@ const AppQSNotesNavigation: React.FC<{
 
   // UI
   return (
-    <Grid container style={{ height: "100%" }}>
-      <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
-        <Typography
-          variant="h6"
-          color="primary"
-          style={{ textAlign: "center" }}
-        >
-          Projects
-        </Typography>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <List>
-            {projects.map((project) => {
-              return (
-                <div key={project.value}>
-                  <ListSubheader
-                    color="primary"
-                    onClick={() => {
-                      setSelectedProject(project.value);
-                    }}
-                  >
-                    {project.label}
-                  </ListSubheader>
-                  <Droppable droppableId={project.value}>
-                    {(droppableProvided, droppableSnapshot) => (
-                      <div
-                        ref={droppableProvided.innerRef}
-                        style={{
-                          transition: "all 1s",
-                          padding: grid,
-                        }}
-                      >
-                        {project.subprojects.map((subproject, index) => {
-                          return (
-                            <Draggable
-                              key={subproject.value}
-                              draggableId={subproject.value}
-                              index={index}
-                            >
-                              {(draggableProvided, draggableSnapshot) => (
-                                <ListItem
-                                  selected={
-                                    subproject.value === selectedProject
-                                  }
-                                  ref={draggableProvided.innerRef}
-                                  {...draggableProvided.draggableProps}
-                                  {...draggableProvided.dragHandleProps}
-                                  button
-                                  onClick={() => {
-                                    setSelectedProject(subproject.value);
-                                  }}
-                                >
-                                  <ListItemIcon>
-                                    <FaGripLines />
-                                  </ListItemIcon>
-                                  <ListItemText>
-                                    {subproject.label}
-                                  </ListItemText>
-                                </ListItem>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {droppableProvided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-              );
-            })}
-          </List>
-        </DragDropContext>
-      </Grid>
-      <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
-        {project && (
-          <>
-            <Typography
-              variant="h6"
-              color="primary"
-              style={{ textAlign: "center" }}
-            >
-              {project.data.name}
-            </Typography>
-            <context.UI.Layouts.SortableList
-              listItems={activeMemos}
-              listTextPath="data.title"
-              customItem={(object) => {
+    <context.UI.Design.Card>
+      <Grid container style={{ height: "100%" }}>
+        <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
+          <Typography
+            variant="h6"
+            color="primary"
+            style={{ textAlign: "center" }}
+          >
+            Projects
+          </Typography>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <List>
+              {projects.map((project) => {
                 return (
-                  <ListItem
-                    key={object._id}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      history.push(`/quick-space/notes/${object._id}`);
-                    }}
-                  >
-                    {object.data.image && (
-                      <ListItemAvatar>
-                        <Avatar src={baseUrl + object.data.image} />
-                      </ListItemAvatar>
-                    )}
-                    <ListItemText>{object.data.title}</ListItemText>
-                  </ListItem>
+                  <div key={project.value}>
+                    <ListSubheader
+                      color="primary"
+                      onClick={() => {
+                        setSelectedProject(project.value);
+                      }}
+                    >
+                      {project.label}
+                    </ListSubheader>
+                    <Droppable droppableId={project.value}>
+                      {(droppableProvided, droppableSnapshot) => (
+                        <div
+                          ref={droppableProvided.innerRef}
+                          style={{
+                            transition: "all 1s",
+                            padding: grid,
+                          }}
+                        >
+                          {project.subprojects.map((subproject, index) => {
+                            return (
+                              <Draggable
+                                key={subproject.value}
+                                draggableId={subproject.value}
+                                index={index}
+                              >
+                                {(draggableProvided, draggableSnapshot) => (
+                                  <ListItem
+                                    selected={
+                                      subproject.value === selectedProject
+                                    }
+                                    ref={draggableProvided.innerRef}
+                                    {...draggableProvided.draggableProps}
+                                    {...draggableProvided.dragHandleProps}
+                                    button
+                                    onClick={() => {
+                                      setSelectedProject(subproject.value);
+                                    }}
+                                  >
+                                    <ListItemIcon>
+                                      <FaGripLines />
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                      {subproject.label}
+                                    </ListItemText>
+                                  </ListItem>
+                                )}
+                              </Draggable>
+                            );
+                          })}
+                          {droppableProvided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
                 );
-              }}
-              baseUrl="/quick-space/notes"
-              linkToPath="_id"
-              button
-              onAdd={() => {
-                context.addObject(
-                  "qs-note",
-                  {
-                    title: "Fresh note",
-                    project: selectedProject,
-                    owner: context.user._id,
-                  },
-                  () => {}
-                );
-              }}
-            />
-          </>
-        )}
+              })}
+            </List>
+          </DragDropContext>
+        </Grid>
+        <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
+          {project && (
+            <>
+              <Typography
+                variant="h6"
+                color="primary"
+                style={{ textAlign: "center" }}
+              >
+                {project.data.name}
+              </Typography>
+              <context.UI.Layouts.SortableList
+                listItems={activeMemos}
+                listTextPath="data.title"
+                customItem={(object) => {
+                  return (
+                    <ListItem
+                      key={object._id}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        history.push(`/quick-space/notes/${object._id}`);
+                      }}
+                    >
+                      {object.data.image && (
+                        <ListItemAvatar>
+                          <Avatar src={baseUrl + object.data.image} />
+                        </ListItemAvatar>
+                      )}
+                      <ListItemText>{object.data.title}</ListItemText>
+                    </ListItem>
+                  );
+                }}
+                baseUrl="/quick-space/notes"
+                linkToPath="_id"
+                button
+                onAdd={() => {
+                  context.addObject(
+                    "qs-note",
+                    {
+                      title: "Fresh note",
+                      project: selectedProject,
+                      owner: context.user._id,
+                    },
+                    () => {}
+                  );
+                }}
+              />
+            </>
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+    </context.UI.Design.Card>
   );
 };
 

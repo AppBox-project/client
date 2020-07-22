@@ -52,7 +52,7 @@ const AppQSNotesDetail: React.FC<{
   // UI
   if (!note || !model) return <context.UI.Loading />;
   return (
-    <>
+    <context.UI.Design.Card withMargin>
       <context.UI.Field
         modelId="qs-note"
         field={model.fields["title"]}
@@ -71,7 +71,7 @@ const AppQSNotesDetail: React.FC<{
         directSave
         directSaveDelay={1500}
       />
-    </>
+    </context.UI.Design.Card>
   );
 };
 

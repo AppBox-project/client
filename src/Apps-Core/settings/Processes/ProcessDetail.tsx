@@ -15,13 +15,13 @@ const AppSettingsProcessDetail: React.FC<{
   model,
 }) => {
   return (
-    <>
+    <context.UI.Design.Card withMargin>
       {detailId === "create" ? (
         <AppSettingsProcessCreate context={context} />
       ) : (
         <AppSettingsProcessEdit context={context} processId={detailId} />
       )}
-    </>
+    </context.UI.Design.Card>
   );
 };
 
