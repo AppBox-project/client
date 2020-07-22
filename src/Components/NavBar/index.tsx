@@ -30,7 +30,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         isMobile ? ` ${styles.isMobile}` : ""
       }`}
     >
-      <AppBar position="static" style={{ display: "flex" }} elevation={0}>
+      <AppBar position="static" className={styles.appbar} elevation={0}>
         <Toolbar>
           {isMobile && searchExpanded ? (
             <Search
@@ -59,18 +59,23 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
               ) : (
                 <Icon>{navBar.backButton.icon}</Icon>
               )}
-              <Link to="/" style={{ color: "white", flex: 1 }}>
-                <Typography variant="h6">
-                  {navBar.title
-                    ? navBar.title
-                    : currentApp
-                    ? app
-                      ? app.data.name
-                      : ""
-                    : "AppBox"}
-                </Typography>
-              </Link>
-              {!isMobile && <Search style={{ flex: 5, margin: "0 35px" }} />}
+              <Typography
+                variant="h6"
+                style={{ color: "white", flex: 1, cursor: "default" }}
+                noWrap
+              >
+                {navBar.title
+                  ? navBar.title
+                  : currentApp
+                  ? app
+                    ? app.data.name
+                    : ""
+                  : "AppBox"}
+              </Typography>
+              {!isMobile && (
+                <Search style={{ flex: 4, maxWidth: 650, margin: "0 35px" }} />
+              )}
+              <div style={{ flex: 1 }} />
               {actions &&
                 map(actions, (button, key) => {
                   if (button) {

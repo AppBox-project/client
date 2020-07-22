@@ -22,6 +22,7 @@ import OverviewFilter from "./Filter";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
+import Card from "../../Design/Card";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -112,7 +113,10 @@ const Overview: React.FC<{
         <DialogContent>{dialogContent}</DialogContent>
       </Dialog>
 
-      <TableContainer component="div" style={{ height: "100%", width: "100%" }}>
+      <TableContainer
+        component={CardWithMargin}
+        style={{ height: "100%", width: "100%" }}
+      >
         <Toolbar style={{ display: "flex" }}>
           {selected.length > 0 ? (
             <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
@@ -263,5 +267,9 @@ const Overview: React.FC<{
     </>
   );
 };
+
+const CardWithMargin: React.FC = ({children}) => {
+return <Card withMargin>{children}</Card>
+}
 
 export default Overview;

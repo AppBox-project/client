@@ -9,6 +9,7 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
   context,
 }) => {
   return (
+    <div style={{paddingBottom: 80}}>
     <Switch>
       <Route
         path={`/data-explorer/${action}/:id`}
@@ -22,7 +23,7 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
           return <OverviewModule {...props} object={action} />;
         }}
       />
-    </Switch>
+    </Switch></div>
   );
 };
 
