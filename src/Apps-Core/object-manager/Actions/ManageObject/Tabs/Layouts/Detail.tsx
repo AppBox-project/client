@@ -103,7 +103,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   });
 
   return (
-    <>
+    <context.UI.Design.Card withBigMargin>
       <LayoutDesigner
         componentList={{
           GridContainer: {
@@ -517,7 +517,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
           <FaSave />
         </Fab>
       )}
-    </>
+    </context.UI.Design.Card>
   );
 };
 

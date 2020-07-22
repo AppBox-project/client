@@ -57,10 +57,7 @@ const GridItemLayout: React.FC<{
     return (
       <>
         {title && (
-          <Typography
-            variant="h6"
-            style={{ textAlign: "center", cursor: "default" }}
-          >
+          <Typography variant="h6" className={styles.title}>
             {title}
           </Typography>
         )}
@@ -70,10 +67,7 @@ const GridItemLayout: React.FC<{
   return (
     <>
       {title && (
-        <Typography
-          variant="h6"
-          style={{ textAlign: "center", cursor: "default" }}
-        >
+        <Typography variant="h6" className={styles.title}>
           {title}
         </Typography>
       )}

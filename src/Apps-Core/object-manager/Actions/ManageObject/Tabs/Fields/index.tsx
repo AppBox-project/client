@@ -24,6 +24,7 @@ const AppActionManageObjectTabFields: React.FC<{
   return (
     <UI.Layouts.ListDetailLayout
       list={list}
+      title="Available fields"
       baseUrl={`/object-manager/${model.key}/fields`}
       DetailComponent={AppActionManageObjectTabFieldsEditor}
       context={context}

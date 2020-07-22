@@ -9,6 +9,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Typography,
+  Divider,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -17,7 +18,8 @@ import {
   TreeViewDataItem,
   ColumnWidth,
 } from "../../../../../Utils/Types";
-import { FaPlus, FaTrash, FaAngleLeft } from "react-icons/fa";
+import { FaTrash, FaAngleLeft } from "react-icons/fa";
+import { GrAdd } from "react-icons/gr";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
@@ -166,118 +168,131 @@ const ListNav: React.FC<{
   title,
 }) => {
   return (
-    <div className={styles.root}>
-      <List>
-        <AnimationContainer>
-          <AnimationItem>
-            <Typography
-              variant="h6"
-              color="primary"
-              style={{ textAlign: "center" }}
-              gutterBottom
-            >
-              {title}
-            </Typography>
-          </AnimationItem>
-          {addFunction && (
-            <AnimationItem>
-              <ListItem button onClick={addFunction}>
-                <ListItemIcon>
-                  <FaPlus />
+    <AnimationContainer>
+      <AnimationItem>
+        <div className={styles.root}>
+          <List>
+            {title && (
+              <>
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  style={{ textAlign: "center", margin: 13, cursor: "default" }}
+                  gutterBottom
+                >
+                  {title}
+                </Typography>
+                <Divider />
+              </>
+            )}
+
+            {addFunction && (
+              <ListItem divider button onClick={addFunction}>
+                <ListItemIcon style={{ minWidth: 25 }}>
+                  <GrAdd style={{ width: 15, height: 15 }} />
                 </ListItemIcon>
+
                 <ListItemText>Add new</ListItemText>
               </ListItem>
-            </AnimationItem>
-          )}
-          {list.map((listItem) => {
-            return (
-              <AnimationItem key={listItem.id}>
-                {listItem.subItems ? (
-                  <>
-                    <Link to={`${baseUrl}/${listItem.id}`}>
-                      <ListSubheader color="primary" style={{ marginTop: 10 }}>
-                        <Typography variant="h6">{listItem.label}</Typography>
-                      </ListSubheader>
-                    </Link>
-                    {listItem.subItems.map((subItem) => {
-                      return (
-                        <Link to={`${baseUrl}/${subItem.id}`} key={subItem.id}>
-                          <ListItem
-                            button
-                            selected={selectedItem === subItem.id}
+            )}
+            {list.map((listItem) => {
+              return (
+                <React.Fragment key={listItem.id}>
+                  {listItem.subItems ? (
+                    <>
+                      <Link to={`${baseUrl}/${listItem.id}`}>
+                        <ListSubheader
+                          color="primary"
+                          style={{ marginTop: 10 }}
+                        >
+                          <Typography variant="h6">{listItem.label}</Typography>
+                        </ListSubheader>
+                      </Link>
+                      {listItem.subItems.map((subItem) => {
+                        return (
+                          <Link
+                            to={`${baseUrl}/${subItem.id}`}
+                            key={subItem.id}
                           >
-                            {navFixedIcon && (
-                              <ListItemIcon>{navFixedIcon}</ListItemIcon>
-                            )}
-                            {subItem.icon && (
-                              <ListItemIcon>
-                                <subItem.icon />
-                              </ListItemIcon>
-                            )}
-                            <ListItemText
-                              color={
-                                selectedItem === listItem.id
-                                  ? "primary"
-                                  : "inherit"
-                              }
+                            <ListItem
+                              button
+                              selected={selectedItem === subItem.id}
                             >
-                              {subItem.label}
-                            </ListItemText>
-                            {deleteFunction && (
-                              <ListItemSecondaryAction>
-                                <IconButton
-                                  onClick={() => {
-                                    deleteFunction(subItem.id);
-                                  }}
-                                  color="primary"
-                                >
-                                  <FaTrash style={{ width: 18, height: 18 }} />
-                                </IconButton>
-                              </ListItemSecondaryAction>
-                            )}
-                          </ListItem>
-                        </Link>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <Link to={`${baseUrl}/${listItem.id}`}>
-                    <ListItem button selected={selectedItem === listItem.id}>
-                      {navFixedIcon && (
-                        <ListItemIcon>{navFixedIcon}</ListItemIcon>
-                      )}
-                      {listItem.icon && (
-                        <ListItemIcon>
-                          <listItem.icon />
-                        </ListItemIcon>
-                      )}
-                      <ListItemText
-                        color={
-                          selectedItem === listItem.id ? "primary" : "inherit"
-                        }
-                      >
-                        {listItem.label}
-                      </ListItemText>
-                      {deleteFunction && (
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            onClick={() => {
-                              deleteFunction(listItem.id);
-                            }}
-                            color="primary"
-                          >
-                            <FaTrash style={{ width: 18, height: 18 }} />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      )}
-                    </ListItem>
-                  </Link>
-                )}
-              </AnimationItem>
-            );
-          })}
-        </AnimationContainer>
-      </List>
-    </div>
+                              {navFixedIcon && (
+                                <ListItemIcon>{navFixedIcon}</ListItemIcon>
+                              )}
+                              {subItem.icon && (
+                                <ListItemIcon>
+                                  <subItem.icon />
+                                </ListItemIcon>
+                              )}
+                              <ListItemText
+                                color={
+                                  selectedItem === listItem.id
+                                    ? "primary"
+                                    : "inherit"
+                                }
+                              >
+                                {subItem.label}
+                              </ListItemText>
+                              {deleteFunction && (
+                                <ListItemSecondaryAction>
+                                  <IconButton
+                                    onClick={() => {
+                                      deleteFunction(subItem.id);
+                                    }}
+                                    color="primary"
+                                  >
+                                    <FaTrash
+                                      style={{ width: 18, height: 18 }}
+                                    />
+                                  </IconButton>
+                                </ListItemSecondaryAction>
+                              )}
+                            </ListItem>
+                          </Link>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <Link to={`${baseUrl}/${listItem.id}`}>
+                      <ListItem button selected={selectedItem === listItem.id}>
+                        {navFixedIcon && (
+                          <ListItemIcon>{navFixedIcon}</ListItemIcon>
+                        )}
+                        {listItem.icon && (
+                          <ListItemIcon>
+                            <listItem.icon />
+                          </ListItemIcon>
+                        )}
+                        <ListItemText
+                          color={
+                            selectedItem === listItem.id ? "primary" : "inherit"
+                          }
+                        >
+                          {listItem.label}
+                        </ListItemText>
+                        {deleteFunction && (
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              onClick={() => {
+                                deleteFunction(listItem.id);
+                              }}
+                              color="primary"
+                            >
+                              <FaTrash style={{ width: 18, height: 18 }} />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        )}
+                      </ListItem>
+                    </Link>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </List>
+        </div>
+      </AnimationItem>
+    </AnimationContainer>
   );
 };

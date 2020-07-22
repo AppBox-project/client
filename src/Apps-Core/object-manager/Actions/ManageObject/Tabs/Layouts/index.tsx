@@ -23,6 +23,7 @@ const AppActionManageObjectTabLayouts: React.FC<{
   return (
     <context.UI.Layouts.ListDetailLayout
       list={list}
+      title="Lay-outs"
       baseUrl={`/object-manager/${model.key}/layouts`}
       DetailComponent={AppActionManageObjectTabLayoutsDetail}
       detailComponentProps={{ model }}

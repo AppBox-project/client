@@ -48,13 +48,13 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
 
   return (
     <UI.Animations.AnimationContainer>
-      <Grid container style={{ width: "100%", padding: 15 }}>
+      <Grid container style={{ width: "100%" }}>
         <Grid item xs={12}>
           <UI.Animations.AnimationItem>
             <Grid container style={{ marginBottom: 15 }}>
               <Grid item xs={12} style={{ textAlign: "right" }}>
                 <Button
-                  variant="outlined"
+                  style={{ color: "white", border: "white", marginRight: 15 }}
                   onClick={() => {
                     context.setDialog({
                       display: true,
@@ -83,11 +83,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </Grid>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card
-              hoverable
-              style={{ margin: "0 0 15px 0" }}
-              title="Options"
-            >
+            <context.UI.Design.Card title="Options" withBigMargin>
               <Grid container>
                 <Grid
                   item
@@ -134,11 +130,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card
-              hoverable
-              style={{ margin: "0 0 15px 0" }}
-              title="Type"
-            >
+            <context.UI.Design.Card withBigMargin title="Type">
               <Grid container>
                 <Grid
                   item
@@ -399,7 +391,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card hoverable style={{ margin: "0 7px 0 0" }}>
+            <context.UI.Design.Card withBigMargin>
               <Tooltip placement="left" title="Add validation">
                 <IconButton
                   style={{ float: "right" }}
@@ -456,7 +448,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
         </Grid>
         <Grid item xs={6}>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card hoverable style={{ margin: "0 0 0 7px" }}>
+            <context.UI.Design.Card withBigMargin>
               <Tooltip placement="left" title="Add transformation">
                 <IconButton
                   style={{ float: "right" }}

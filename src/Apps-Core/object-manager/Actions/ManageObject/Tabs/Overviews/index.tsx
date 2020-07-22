@@ -22,6 +22,7 @@ const AppActionManageObjectTabOverviews: React.FC<{
   return (
     <UI.Layouts.ListDetailLayout
       list={list}
+      title="All overviews"
       baseUrl={`/object-manager/${model.key}/overviews`}
       DetailComponent={AppActionManageObjectOverviewEditor}
       context={context}

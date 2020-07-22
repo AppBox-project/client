@@ -22,6 +22,7 @@ const AppActionManageObjectTabActions: React.FC<{
   return (
     <UI.Layouts.ListDetailLayout
       list={list}
+      title="All actions"
       baseUrl={`/object-manager/${model.key}/actions`}
       DetailComponent={AppActionManageObjectActionsDetail}
       context={context}

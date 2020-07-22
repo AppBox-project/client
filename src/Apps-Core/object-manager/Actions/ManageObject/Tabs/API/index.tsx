@@ -13,6 +13,7 @@ const AppActionManageObjectTabAPI: React.FC<{
 }> = ({ model, UI, context }) => {
   return (
     <context.UI.Layouts.ListDetailLayout
+      title="API's"
       list={[
         { label: "Read", id: "read" },
         { label: "Create", id: "create" },

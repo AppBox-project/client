@@ -26,7 +26,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
   return (
     <context.UI.Animations.AnimationContainer>
       <context.UI.Animations.AnimationItem>
-        <context.UI.Design.Card hoverable style={{ margin: 15 }} title="Action">
+        <context.UI.Design.Card withBigMargin title="Action">
           {!action ? (
             <>
               <Skeleton variant="text" />

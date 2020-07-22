@@ -74,7 +74,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
     <>
       <context.UI.Animations.AnimationContainer>
         <context.UI.Animations.AnimationItem>
-          <context.UI.Design.Card>
+          <context.UI.Design.Card withBigMargin>
             <div style={{ float: "right" }}>
               <context.UI.Inputs.Switch
                 label="Active"
@@ -109,11 +109,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
           <Grid container>
             <Grid item xs={12}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card
-                  hoverable
-                  withBigMargin
-                  title="Settings"
-                >
+                <context.UI.Design.Card withBigMargin title="Settings">
                   <Grid container>
                     <Grid item xs={6}>
                       <context.UI.Inputs.SelectInput
@@ -152,14 +148,14 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
             </Grid>
             <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withBigMargin title="Log">
+                <context.UI.Design.Card withBigMargin title="Log">
                   {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withBigMargin title="Stats">
+                <context.UI.Design.Card withBigMargin title="Stats">
                   {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
