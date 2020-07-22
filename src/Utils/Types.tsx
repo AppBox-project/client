@@ -241,7 +241,9 @@ export interface UIType {
       style?;
       centerTitle?: true;
       titleDivider?: true;
-      withMargin?: true;
+      withBigMargin?: true | boolean;
+      withSmallMargin?: true | boolean;
+      sideMarginOnly?: true | boolean;
     }>;
   };
 

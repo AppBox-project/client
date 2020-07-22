@@ -13,44 +13,44 @@
 - [ ] Security test
 - [x] Make accessible via the web
   - [x] Package as docker container
-- [X] App store
-  - [X] Browsing apps
-  - [X] Installing apps
-- [ ] OTA updates
-  - [ ] Apps
+- [x] App store
+  - [x] Browsing apps
+  - [x] Installing apps
+- [x] OTA updates
+  - [x] Apps
     - [ ] Improvements
       - [ ] Batch update (with one build)
-      - [ ] Schedulable update (with one build)
+      - [x] Schedulable update (with one build)
   - [x] System
     - [x] Simple git pull update
     - [ ] Better update UI
     - [ ] Changelogs
-- [ ] Better app context
-  - [X] Data interactions
-    - [X] Subscribing to data
-    - [X] Cancelling listeners before the app closes
-    - [X] Updating data
-  - [ ] More UI elements
-    - [ ] Pre-made UI lay-outs
+- [x] Better app context
+  - [x] Data interactions
+    - [x] Subscribing to data
+    - [x] Cancelling listeners before the app closes
+    - [x] Updating data
+  - [x] More UI elements
+    - [x] Pre-made UI lay-outs
       - [x] ListDetail-Layout
 - [ ] Layouts
   - [x] Desktop-layout
-  - [X] Mobile layout
-    - [X] Design layout
-    - [X] Make existing properties more responsive
-    - [X] PWA
+  - [x] Mobile layout
+    - [x] Design layout
+    - [x] Make existing properties more responsive
+    - [x] PWA
 - [ ] Improve app logic
   - [ ] Every app will have it's own desktop
 - [ ] Make apps
-  - [ ] Quick space
-    - [X] Notes
-      - [X] Eventually: clone onenote
-    - [ ] To-do
+  - [x] Quick space
+    - [x] Notes
+      - [ ] Eventually: clone onenote
+    - [x] To-do
       - [x] Base version
       - [x] Mobile friendly
-      - [ ] Drag and drop order
-      - [ ] Sub to-do's
-    - [ ] File / dropzone
+      - [x] Drag and drop order
+      - [x] Sub to-do's
+    - [x] File / dropzone
   - [ ] All-purpose CRM app
   - [ ] Website builder
 - [ ] Data model improvements
@@ -61,5 +61,5 @@
     - [x] Local (within objects)
     - [x] Following the relationship model
   - [ ] Improved permissions system
-    - [ ] Global controls
+    - [x] Global controls
     - [ ] Per-field controls

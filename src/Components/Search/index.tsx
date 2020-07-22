@@ -148,6 +148,12 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             backgroundColor: "rgba(255,255,255,0.1)",
             border: 0,
             color: "white",
+            borderRadius: 5,
+            transition: "all 0.3s",
+            boxShadow: "none",
+            "&:active": {
+              backgroundColor: "rgba(255,255,255,0.2)",
+            },
           }),
           option: (provided, state) => ({
             ...provided,

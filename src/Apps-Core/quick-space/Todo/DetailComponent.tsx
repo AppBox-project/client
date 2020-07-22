@@ -140,7 +140,7 @@ const AppQSActionTodoDetail: React.FC<{
   // UI
   if (!todos || !model) return <context.UI.Loading />;
   return (
-    <context.UI.Design.Card withMargin style={{ overflowX: "auto" }}>
+    <context.UI.Design.Card withBigMargin style={{ overflowX: "auto" }}>
       {view === "board" && (
         <context.UI.Layouts.Object.BoardLayout
           context={context}

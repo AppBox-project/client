@@ -109,7 +109,11 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
           <Grid container>
             <Grid item xs={12}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Settings">
+                <context.UI.Design.Card
+                  hoverable
+                  withBigMargin
+                  title="Settings"
+                >
                   <Grid container>
                     <Grid item xs={6}>
                       <context.UI.Inputs.SelectInput
@@ -148,14 +152,14 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
             </Grid>
             <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Log">
+                <context.UI.Design.Card hoverable withBigMargin title="Log">
                   {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>
             </Grid>
             <Grid item xs={12} md={6}>
               <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Stats">
+                <context.UI.Design.Card hoverable withBigMargin title="Stats">
                   {" "}
                 </context.UI.Design.Card>
               </context.UI.Animations.AnimationItem>

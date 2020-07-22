@@ -9,7 +9,9 @@ const Card: React.FC<{
   style?;
   centerTitle?: true;
   titleDivider?: true;
-  withMargin?: true | boolean;
+  withBigMargin?: true | boolean;
+  withSmallMargin?: true | boolean;
+  sideMarginOnly?: true | boolean;
   className?;
 }> = ({
   children,
@@ -18,10 +20,29 @@ const Card: React.FC<{
   style,
   centerTitle,
   titleDivider,
-  withMargin,
   className,
+  withBigMargin,
+  withSmallMargin,
+  sideMarginOnly,
 }) => {
-  const addMargin = withMargin ? { margin: 15 } : {};
+  const addMargin = {
+    marginLeft: withBigMargin ? 15 : withSmallMargin ? 5 : 0,
+    marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0,
+    marginTop: !sideMarginOnly
+      ? withBigMargin
+        ? 15
+        : withSmallMargin
+        ? 5
+        : 0
+      : 0,
+    marginBottom: !sideMarginOnly
+      ? withBigMargin
+        ? 15
+        : withSmallMargin
+        ? 5
+        : 0
+      : 0,
+  };
 
   return (
     <div

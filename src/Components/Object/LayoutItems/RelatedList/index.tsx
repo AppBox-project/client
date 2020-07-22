@@ -69,7 +69,9 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
     <></>
   ) : (
     <MaybeCard
-      withMargin={layoutItem.cardMargin}
+      withBigMargin={layoutItem.withBigMargin}
+      withSmallMargin={layoutItem.withSmallMargin}
+      sideMarginOnly={layoutItem.sideMarginOnly}
       card={layoutItem.displayCard}
       title={layoutItem.title}
     >
@@ -167,10 +169,25 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
 const MaybeCard: React.FC<{
   card: boolean;
   title?: string;
-  withMargin?: boolean;
-}> = ({ children, card, title, withMargin }) =>
+  withBigMargin: boolean;
+  withSmallMargin: boolean;
+  sideMarginOnly: boolean;
+}> = ({
+  children,
+  card,
+  title,
+  withBigMargin,
+  withSmallMargin,
+  sideMarginOnly,
+}) =>
   card ? (
-    <Card hoverable title={title} withMargin={withMargin}>
+    <Card
+      hoverable
+      title={title}
+      withBigMargin={withBigMargin}
+      withSmallMargin={withSmallMargin}
+      sideMarginOnly={sideMarginOnly}
+    >
       {children}
     </Card>
   ) : (

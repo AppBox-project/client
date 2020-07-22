@@ -52,7 +52,7 @@ const AppQSNotesDetail: React.FC<{
   // UI
   if (!note || !model) return <context.UI.Loading />;
   return (
-    <context.UI.Design.Card withMargin>
+    <context.UI.Design.Card withBigMargin>
       <context.UI.Field
         modelId="qs-note"
         field={model.fields["title"]}

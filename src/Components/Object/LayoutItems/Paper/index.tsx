@@ -5,10 +5,25 @@ const ObjectLayoutItemPaper: React.FC<{
   children;
   title?: string;
   hoverable: boolean;
-  withMargin: boolean;
-}> = ({ children, title, hoverable, withMargin }) => {
+  withBigMargin: boolean;
+  withSmallMargin: boolean;
+  sideMarginOnly: boolean;
+}> = ({
+  children,
+  title,
+  hoverable,
+  withBigMargin,
+  withSmallMargin,
+  sideMarginOnly,
+}) => {
   return (
-    <Card hoverable={hoverable} title={title} withMargin={withMargin}>
+    <Card
+      hoverable={hoverable}
+      title={title}
+      withBigMargin={withBigMargin}
+      withSmallMargin={withSmallMargin}
+      sideMarginOnly={sideMarginOnly}
+    >
       {children}
     </Card>
   );

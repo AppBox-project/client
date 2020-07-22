@@ -47,7 +47,7 @@ const AppActionManageObjectTabPreview: React.FC<{
         <Grid container>
           <Grid item xs={12} md={9}>
             <context.UI.Animations.AnimationItem>
-              <context.UI.Design.Card withMargin title="Design">
+              <context.UI.Design.Card withBigMargin title="Design">
                 <context.UI.Inputs.Switch
                   label="Enable preview"
                   value={newModel?.preview?.enabled || false}
@@ -181,7 +181,7 @@ const AppActionManageObjectTabPreview: React.FC<{
             )}
 
             <context.UI.Animations.AnimationItem>
-              <context.UI.Design.Card withMargin title="Preview">
+              <context.UI.Design.Card withBigMargin title="Preview">
                 Test
               </context.UI.Design.Card>
             </context.UI.Animations.AnimationItem>

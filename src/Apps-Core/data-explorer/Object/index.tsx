@@ -9,21 +9,24 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
   context,
 }) => {
   return (
-    <div style={{paddingBottom: 80}}>
-    <Switch>
-      <Route
-        path={`/data-explorer/${action}/:id`}
-        render={(props) => {
-          return <DetailModule context={context} {...props} object={action} />;
-        }}
-      />
-      <Route
-        path={`/data-explorer/${action}`}
-        render={(props) => {
-          return <OverviewModule {...props} object={action} />;
-        }}
-      />
-    </Switch></div>
+    <div style={{ paddingBottom: 80 }}>
+      <Switch>
+        <Route
+          path={`/data-explorer/${action}/:id`}
+          render={(props) => {
+            return (
+              <DetailModule context={context} {...props} object={action} />
+            );
+          }}
+        />
+        <Route
+          path={`/data-explorer/${action}`}
+          render={(props) => {
+            return <OverviewModule {...props} object={action} />;
+          }}
+        />
+      </Switch>
+    </div>
   );
 };
 

@@ -519,7 +519,9 @@ const LayoutItem: React.FC<{
       return (
         <ObjectLayoutItemPaper
           hoverable={layoutItem.hoverable}
-          withMargin={layoutItem.withMargin}
+          withBigMargin={layoutItem.withBigMargin}
+          withSmallMargin={layoutItem.withSmallMargin}
+          sideMarginOnly={layoutItem.sideMarginOnly}
           title={layoutItem.title}
         >
           {layoutItem.items &&

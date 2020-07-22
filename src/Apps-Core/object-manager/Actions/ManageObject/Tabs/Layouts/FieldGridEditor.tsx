@@ -45,7 +45,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
   // Lifecycle
   // UI
   return (
-    <context.UI.Design.Card title="Layout" withMargin>
+    <context.UI.Design.Card title="Layout" withBigMargin>
       <Divider />
       <List>
         {value.map((group, index) => (

@@ -23,6 +23,10 @@ import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
 import Card from "../../Design/Card";
+import {
+  AnimationContainer,
+  AnimationItem,
+} from "../../Apps/Apps/AppUI/Animations";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -86,7 +90,14 @@ const Overview: React.FC<{
   }, [overviewFilter]);
 
   // UI
-  if (!objects || !model || !layout) return <Skeleton />;
+  if (!objects || !model || !layout)
+    return (
+      <AnimationContainer>
+        <AnimationItem>
+          <Skeleton />
+        </AnimationItem>
+      </AnimationContainer>
+    );
   // Calculate heaviness. A heavy overview is virtualized.
   let heaviness = 1;
   layout.fields.map((field) => {
@@ -112,110 +123,119 @@ const Overview: React.FC<{
       >
         <DialogContent>{dialogContent}</DialogContent>
       </Dialog>
-
-      <TableContainer
-        component={CardWithMargin}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <Toolbar style={{ display: "flex" }}>
-          {selected.length > 0 ? (
-            <Typography variant="subtitle1" component="div" style={{ flex: 1 }}>
-              {selected.length === objects.length ? "All" : selected.length}{" "}
-              {selected.length === 1
-                ? model.name.toLowerCase()
-                : model.name_plural.toLowerCase()}{" "}
-              selected
-            </Typography>
-          ) : (
-            <Typography
-              variant="h6"
-              id="tableTitle"
-              component="div"
-              style={{ flex: 1 }}
-            >
-              {model.name_plural}
-            </Typography>
-          )}
-
-          {selected.length > 0 ? (
-            <Tooltip title="Apply to selection" placement="left">
-              <IconButton
-                style={{ float: "right" }}
-                onClick={(event) => {
-                  setAnchorEl(event.currentTarget);
-                }}
-              >
-                <FaEdit style={{ width: 18, height: 18 }} />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <>
-              {layout.buttons.map((buttonInfo) => {
-                if (model.actions[buttonInfo]) {
-                  const button = model.actions[buttonInfo];
-                  return (
-                    <Tooltip
-                      title={button.label ? button.label : `New ${model.name}`}
-                      placement="left"
-                    >
-                      <IconButton
-                        onClick={() => {
-                          setDialogContent(
-                            <ViewObject
-                              modelId={model.key}
-                              layoutId={button.layout}
-                              popup={true}
-                              appId={appId}
-                              onSuccess={() => {
-                                setDialogContent(undefined);
-                              }}
-                            />
-                          );
-                        }}
-                      >
-                        <IoIosAddCircleOutline />
-                      </IconButton>
-                    </Tooltip>
-                  );
-                }
-              })}
-              <Tooltip title="Filter and tweak list" placement="left">
-                <IconButton
-                  aria-label="filter list"
-                  onClick={() => {
-                    setDrawerOpen(true);
-                  }}
+      <AnimationContainer>
+        <AnimationItem>
+          <TableContainer
+            component={CardWithMargin}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <Toolbar style={{ display: "flex" }}>
+              {selected.length > 0 ? (
+                <Typography
+                  variant="subtitle1"
+                  component="div"
+                  style={{ flex: 1 }}
                 >
-                  <FaPencilRuler style={{ width: 18, height: 18 }} />
-                </IconButton>
-              </Tooltip>
-            </>
-          )}
-        </Toolbar>
-        {heavynessScore > 500 ? (
-          <ReactVirtualizedTable
-            data={objects}
-            columns={layout.fields}
-            model={model}
-            baseUrl={`/${appId}/${objectTypeId}`}
-            history={history}
-            setSelected={setSelected}
-            selected={selected}
-            setAnchorEl={setAnchorEl}
-          />
-        ) : (
-          <RegularTable
-            data={objects}
-            layout={layout}
-            model={model}
-            baseUrl={`/${appId}/${objectTypeId}`}
-            history={history}
-            setSelected={setSelected}
-            selected={selected}
-            setAnchorEl={setAnchorEl}
-          />
-        )}
-      </TableContainer>
+                  {selected.length === objects.length ? "All" : selected.length}{" "}
+                  {selected.length === 1
+                    ? model.name.toLowerCase()
+                    : model.name_plural.toLowerCase()}{" "}
+                  selected
+                </Typography>
+              ) : (
+                <Typography
+                  variant="h6"
+                  id="tableTitle"
+                  component="div"
+                  style={{ flex: 1 }}
+                >
+                  {model.name_plural}
+                </Typography>
+              )}
+
+              {selected.length > 0 ? (
+                <Tooltip title="Apply to selection" placement="left">
+                  <IconButton
+                    style={{ float: "right" }}
+                    onClick={(event) => {
+                      setAnchorEl(event.currentTarget);
+                    }}
+                  >
+                    <FaEdit style={{ width: 18, height: 18 }} />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <>
+                  {layout.buttons.map((buttonInfo) => {
+                    if (model.actions[buttonInfo]) {
+                      const button = model.actions[buttonInfo];
+                      return (
+                        <Tooltip
+                          title={
+                            button.label ? button.label : `New ${model.name}`
+                          }
+                          placement="left"
+                        >
+                          <IconButton
+                            onClick={() => {
+                              setDialogContent(
+                                <ViewObject
+                                  modelId={model.key}
+                                  layoutId={button.layout}
+                                  popup={true}
+                                  appId={appId}
+                                  onSuccess={() => {
+                                    setDialogContent(undefined);
+                                  }}
+                                />
+                              );
+                            }}
+                          >
+                            <IoIosAddCircleOutline />
+                          </IconButton>
+                        </Tooltip>
+                      );
+                    }
+                  })}
+                  <Tooltip title="Filter and tweak list" placement="left">
+                    <IconButton
+                      aria-label="filter list"
+                      onClick={() => {
+                        setDrawerOpen(true);
+                      }}
+                    >
+                      <FaPencilRuler style={{ width: 18, height: 18 }} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
+            </Toolbar>
+            {heavynessScore > 500 ? (
+              <ReactVirtualizedTable
+                data={objects}
+                columns={layout.fields}
+                model={model}
+                baseUrl={`/${appId}/${objectTypeId}`}
+                history={history}
+                setSelected={setSelected}
+                selected={selected}
+                setAnchorEl={setAnchorEl}
+              />
+            ) : (
+              <RegularTable
+                data={objects}
+                layout={layout}
+                model={model}
+                baseUrl={`/${appId}/${objectTypeId}`}
+                history={history}
+                setSelected={setSelected}
+                selected={selected}
+                setAnchorEl={setAnchorEl}
+              />
+            )}
+          </TableContainer>
+        </AnimationItem>
+      </AnimationContainer>
 
       <Menu
         id="simple-menu"
@@ -270,7 +290,7 @@ const Overview: React.FC<{
 
 const CardWithMargin: React.FC = ({ children }) => {
   return (
-    <Card withMargin style={{ overflowX: "auto" }}>
+    <Card withBigMargin style={{ overflowX: "auto" }}>
       {children}
     </Card>
   );

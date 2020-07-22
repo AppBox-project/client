@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, UIType, ModelType } from "../../../../Utils/Types";
-import { AppBar, Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, makeStyles } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import AppActionManageObjectTabObject from "./Tabs/Object";
 import AppActionManageObjectTabFields from "./Tabs/Fields";
@@ -10,6 +10,15 @@ import AppActionManageObjectTabAPI from "./Tabs/API";
 import AppActionManageObjectTabLayouts from "./Tabs/Layouts";
 import AppActionManageObjectTabActions from "./Tabs/Actions";
 import AppActionManageObjectTabPreview from "./Tabs/Preview";
+
+const useStyles = makeStyles((theme) => ({
+  customTabRoot: {
+    color: "white",
+  },
+  customTabIndicator: {
+    backgroundColor: "white",
+  },
+}));
 
 const AppActionManageObject: React.FC<{
   context: AppContextType;
@@ -27,6 +36,7 @@ const AppActionManageObject: React.FC<{
   // States & hooks
   const [model, setModel] = useState<ModelType | void>();
   const history = useHistory();
+  const classes = useStyles();
 
   // Lifecycle
   useEffect(() => {
@@ -54,9 +64,12 @@ const AppActionManageObject: React.FC<{
         onChange={(event, value) => {
           history.push(`/object-manager/${action}/${value}`);
         }}
-        style={{ color: "white" }}
         aria-label="Object aspects navigation"
         variant="scrollable"
+        classes={{
+          root: classes.customTabRoot,
+          indicator: classes.customTabIndicator,
+        }}
       >
         <Tab label="Object" value="object" />
         <Tab label="Fields" value="fields" />

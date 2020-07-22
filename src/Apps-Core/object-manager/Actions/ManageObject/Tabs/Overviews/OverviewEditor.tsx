@@ -78,7 +78,11 @@ const AppActionManageObjectOverviewEditor: React.FC<{
           <Grid container>
             <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Available">
+                <context.UI.Design.Card
+                  hoverable
+                  withBigMargin
+                  title="Available"
+                >
                   <List>
                     {map(model.fields, (field, key: string) => {
                       if (!overview.fields.includes(key)) {
@@ -111,7 +115,11 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             </Grid>
             <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Selected">
+                <context.UI.Design.Card
+                  hoverable
+                  withBigMargin
+                  title="Selected"
+                >
                   <List>
                     {overview.fields.map((fieldId) => {
                       const field: ModelFieldType = model.fields[fieldId];
@@ -180,7 +188,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             </Grid>
             <Grid item xs={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Buttons">
+                <context.UI.Design.Card hoverable withBigMargin title="Buttons">
                   <List>
                     {map(model.actions, (action, key) => {
                       return (
@@ -241,7 +249,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             </Grid>
             <Grid item xs={6}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withMargin title="Actions">
+                <context.UI.Design.Card hoverable withBigMargin title="Actions">
                   <List>
                     {map({ delete: { label: "Delete" } }, (action, key) => {
                       return (

@@ -15,7 +15,7 @@ const AppSettingsProcessDetail: React.FC<{
   model,
 }) => {
   return (
-    <context.UI.Design.Card withMargin>
+    <context.UI.Design.Card withBigMargin>
       {detailId === "create" ? (
         <AppSettingsProcessCreate context={context} />
       ) : (
