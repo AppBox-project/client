@@ -19,6 +19,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [navBar] = useGlobal<any>("navBar");
   const [actions] = useGlobal<any>("actions");
   const [isMobile] = useGlobal<any>("isMobile");
+  const [noActions] = useGlobal<any>("noActions");
   const [searchExpanded, setSearchExpanded] = useState<any>(false);
 
   // Lifecycle
@@ -26,9 +27,9 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // UI
   return (
     <div
-      className={`${styles.root}${currentApp ? ` ${styles.withApp}` : ""}${
-        isMobile ? ` ${styles.isMobile}` : ""
-      }`}
+      className={`${styles.root}${
+        currentApp && !noActions ? ` ${styles.withApp}` : ""
+      }${isMobile ? ` ${styles.isMobile}` : ""}`}
     >
       <AppBar position="static" className={styles.appbar} elevation={0}>
         <Toolbar>

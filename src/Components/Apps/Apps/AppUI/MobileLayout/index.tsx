@@ -62,12 +62,14 @@ const AppUIMobile: React.FC<{
     actions = searcher.search(filter);
   }
   if (appContext.appConfig?.actions?.group) {
-    actions.map((action) => {
-      if (!groupedActions[action.group]) {
-        groupedActions[action.group] = [];
-      }
-      groupedActions[action.group].push(action);
-    });
+    if (typeof actions === "object") {
+      actions.map((action) => {
+        if (!groupedActions[action.group]) {
+          groupedActions[action.group] = [];
+        }
+        groupedActions[action.group].push(action);
+      });
+    }
   }
 
   return (
@@ -85,11 +87,17 @@ const AppUIMobile: React.FC<{
             }}
           >
             <Tab value="home" label="Home" />
-            {appContext.actions.map((action) => {
-              return (
-                <Tab key={action.key} value={action.key} label={action.label} />
-              );
-            })}
+            {typeof actions === "object" &&
+              //@ts-ignore
+              appContext.actions.map((action) => {
+                return (
+                  <Tab
+                    key={action.key}
+                    value={action.key}
+                    label={action.label}
+                  />
+                );
+              })}
           </Tabs>
         ))}
       <div
@@ -99,25 +107,27 @@ const AppUIMobile: React.FC<{
         }}
       >
         <Switch>
-          {appContext.actions.map((action) => {
-            return (
-              <Route
-                key={action.key}
-                path={`/${appContext.appId}/${action.key}`}
-                render={(props) => {
-                  const Component = action.component;
-                  setCurrentPage(action.key);
-                  return (
-                    <Component
-                      {...props}
-                      context={appContext}
-                      action={action.key}
-                    />
-                  );
-                }}
-              />
-            );
-          })}
+          {typeof actions === "object" &&
+            //@ts-ignore
+            appContext.actions.map((action) => {
+              return (
+                <Route
+                  key={action.key}
+                  path={`/${appContext.appId}/${action.key}`}
+                  render={(props) => {
+                    const Component = action.component;
+                    setCurrentPage(action.key);
+                    return (
+                      <Component
+                        {...props}
+                        context={appContext}
+                        action={action.key}
+                      />
+                    );
+                  }}
+                />
+              );
+            })}
           {appContext.onNoAction && (
             <Route
               render={(props) => (
@@ -211,7 +221,8 @@ const AppUIMobile: React.FC<{
                         </div>
                       );
                     })
-                  : actions.map((action) => {
+                  : typeof actions === "object" &&
+                    actions.map((action) => {
                       const Icon = action.icon;
                       return (
                         <ListItem
@@ -243,23 +254,25 @@ const AppUIMobile: React.FC<{
             }}
             style={{ bottom: 0, position: "absolute", width: "100%" }}
           >
-            {appContext.actions.map((action) => {
-              const Icon: React.FC<{ style }> = action.icon;
-              return (
-                <BottomNavigationAction
-                  key={action.key}
-                  label={action.label}
-                  value={action.key}
-                  icon={
-                    Icon ? (
-                      <Icon style={{ height: 20, width: 20 }} />
-                    ) : (
-                      <FaLemon />
-                    )
-                  }
-                />
-              );
-            })}
+            {typeof actions === "object" &&
+              //@ts-ignore
+              appContext.actions.map((action) => {
+                const Icon: React.FC<{ style }> = action.icon;
+                return (
+                  <BottomNavigationAction
+                    key={action.key}
+                    label={action.label}
+                    value={action.key}
+                    icon={
+                      Icon ? (
+                        <Icon style={{ height: 20, width: 20 }} />
+                      ) : (
+                        <FaLemon />
+                      )
+                    }
+                  />
+                );
+              })}
           </BottomNavigation>
         )}
       </div>

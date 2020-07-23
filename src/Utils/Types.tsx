@@ -115,15 +115,17 @@ export interface AppContextType {
       mobile?: { displayAs?: "menu" | "bottom-navigation" | "tabs" };
     };
   };
-  actions: [
-    {
-      label: string;
-      key: string;
-      component: FC;
-      icon?: React.FC;
-      group?: string;
-    }
-  ];
+  actions:
+    | React.FC
+    | [
+        {
+          label: string;
+          key: string;
+          component: FC;
+          icon?: React.FC;
+          group?: string;
+        }
+      ];
   UI: UIType;
   setButton: (
     buttonId,

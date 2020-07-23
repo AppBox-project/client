@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useGlobal } from "reactn";
 import { AppContextType } from "../../../../../Utils/Types";
 import { motion } from "framer-motion";
 import { Link, Switch, Route } from "react-router-dom";
@@ -17,36 +17,56 @@ import { FaWrench } from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import { map } from "lodash";
+import { useEffect } from "reactn";
 
 const AppUIDesktop: React.FC<{
   appContext: AppContextType;
   currentPage;
   setCurrentPage;
 }> = ({ appContext, currentPage, setCurrentPage }) => {
+  const [noActions, setNoActions] = useGlobal<any>("noActions");
+
+  // Effects
+  useEffect(() => {
+    if (typeof appContext.actions === "function") setNoActions(true);
+    return () => {
+      setNoActions(false);
+    };
+  }, []);
+  // UI
   return (
     <>
-      <ActionMenu context={appContext} currentPage={currentPage} />
-      <div className={styles.app}>
+      {typeof appContext.actions === "object" && (
+        <ActionMenu context={appContext} currentPage={currentPage} />
+      )}
+      <div
+        className={styles.app}
+        style={typeof appContext.actions === "function" ? { left: 0 } : {}}
+      >
         <Switch>
-          {appContext.actions.map((action) => {
-            return (
-              <Route
-                key={action.key}
-                path={`/${appContext.appId}/${action.key}`}
-                render={(props) => {
-                  const Component = action.component;
-                  setCurrentPage(action.key);
-                  return (
-                    <Component
-                      {...props}
-                      context={appContext}
-                      action={action.key}
-                    />
-                  );
-                }}
-              />
-            );
-          })}
+          {typeof appContext.actions === "function" ? (
+            <appContext.actions />
+          ) : (
+            appContext.actions.map((action) => {
+              return (
+                <Route
+                  key={action.key}
+                  path={`/${appContext.appId}/${action.key}`}
+                  render={(props) => {
+                    const Component = action.component;
+                    setCurrentPage(action.key);
+                    return (
+                      <Component
+                        {...props}
+                        context={appContext}
+                        action={action.key}
+                      />
+                    );
+                  }}
+                />
+              );
+            })
+          )}
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route
               path={`/${appContext.appId}/settings`}
@@ -110,12 +130,14 @@ const ActionMenu: React.FC<{
     actions = searcher.search(filter);
   }
   if (context.appConfig?.actions?.group) {
-    actions.map((action) => {
-      if (!groupedActions[action.group]) {
-        groupedActions[action.group] = [];
-      }
-      groupedActions[action.group].push(action);
-    });
+    if (typeof actions === "object") {
+      actions.map((action) => {
+        if (!groupedActions[action.group]) {
+          groupedActions[action.group] = [];
+        }
+        groupedActions[action.group].push(action);
+      });
+    }
   }
 
   return (
@@ -217,7 +239,8 @@ const ActionMenu: React.FC<{
                   </div>
                 );
               })
-            : actions.map((action) => {
+            : typeof actions === "object" &&
+              actions.map((action) => {
                 const ActionIcon: React.FC<{ style }> = action.icon;
                 return (
                   <motion.div variants={item} key={action.key}>
