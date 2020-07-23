@@ -12,7 +12,7 @@ const Card: React.FC<{
   withBigMargin?: true | boolean;
   withSmallMargin?: true | boolean;
   sideMarginOnly?: true | boolean;
-  className?;
+  className?: string;
 }> = ({
   children,
   hoverable,
@@ -46,7 +46,9 @@ const Card: React.FC<{
 
   return (
     <div
-      className={`${styles.root} ${hoverable && styles.hoverable} ${className}`}
+      className={`${styles.root} ${
+        hoverable && styles.hoverable
+      } ${className} ${className}`}
       style={{ ...style, ...addMargin }}
     >
       {title && (

@@ -116,7 +116,7 @@ export interface AppContextType {
     };
   };
   actions:
-    | React.FC
+    | React.FC<{ context: AppContextType }>
     | [
         {
           label: string;
@@ -246,6 +246,7 @@ export interface UIType {
       withBigMargin?: true | boolean;
       withSmallMargin?: true | boolean;
       sideMarginOnly?: true | boolean;
+      className?: string;
     }>;
   };
 

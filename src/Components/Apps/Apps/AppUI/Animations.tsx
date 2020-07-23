@@ -10,25 +10,30 @@ const list = {
       delay: 0.1,
       when: "beforeChildren",
       staggerChildren: 0.08,
-      ease: "easeOut"
-    }
+      ease: "easeOut",
+    },
   },
   hidden: {
     opacity: 0,
     x: -10,
     transition: {
-      when: "afterChildren"
-    }
-  }
+      when: "afterChildren",
+    },
+  },
 };
 const item = {
   visible: { opacity: 1, y: 0 },
-  hidden: { opacity: 0, y: 10 }
+  hidden: { opacity: 0, y: 10 },
 };
 
 const AnimationContainer: React.FC<{ children: any }> = ({ children }) => {
   return (
-    <motion.div initial="hidden" animate="visible" variants={list}>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={list}
+      style={{ height: "100%" }}
+    >
       {children}
     </motion.div>
   );

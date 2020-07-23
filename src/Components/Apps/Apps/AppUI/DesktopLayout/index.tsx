@@ -41,11 +41,15 @@ const AppUIDesktop: React.FC<{
       )}
       <div
         className={styles.app}
-        style={typeof appContext.actions === "function" ? { left: 0 } : {}}
+        style={
+          typeof appContext.actions === "function"
+            ? { left: 0, width: "100%" }
+            : {}
+        }
       >
         <Switch>
           {typeof appContext.actions === "function" ? (
-            <appContext.actions />
+            <appContext.actions context={appContext} />
           ) : (
             appContext.actions.map((action) => {
               return (
