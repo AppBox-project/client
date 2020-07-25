@@ -45,7 +45,14 @@ const DetailModule: React.FC<{
   },
   context,
 }) => {
-  return <ViewObject modelId={object} appId="data-explorer" objectId={id} />;
+  return (
+    <ViewObject
+      modelId={object}
+      appId="data-explorer"
+      objectId={id}
+      context={context}
+    />
+  );
 };
 
 export default AppActionObject;

@@ -107,7 +107,9 @@ const AppUIMobile: React.FC<{
         }}
       >
         <Switch>
-          {typeof actions === "object" &&
+          {typeof appContext.actions === "function" ? (
+            <appContext.actions context={appContext} />
+          ) : (
             //@ts-ignore
             appContext.actions.map((action) => {
               return (
@@ -127,7 +129,8 @@ const AppUIMobile: React.FC<{
                   }}
                 />
               );
-            })}
+            })
+          )}
           {appContext.onNoAction && (
             <Route
               render={(props) => (

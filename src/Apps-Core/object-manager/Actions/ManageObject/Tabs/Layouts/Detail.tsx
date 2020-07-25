@@ -11,6 +11,7 @@ import {
 import Card from "../../../../../../Components/Design/Card";
 import { useHistory } from "react-router-dom";
 import AppObjectLayoutFieldGridEditor from "./FieldGridEditor";
+import Select from "react-select";
 
 interface WrapperPropsType {
   title?: string;
@@ -92,6 +93,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   const buttonOptions = [
     { label: "Delete", value: "delete" },
     { label: "Clone", value: "clone" },
+    { label: "Archive", value: "archive" },
   ];
   const selectedButtons = [];
   (layout.buttons || []).map((b) => {
@@ -104,6 +106,17 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
 
   return (
     <context.UI.Design.Card withBigMargin>
+      <Select
+        isMulti
+        options={buttonOptions}
+        value={selectedButtons}
+        onChange={(value) => {
+          const newButtons = [];
+          value.map((val) => newButtons.push(val.value));
+          setLayout({ ...layout, buttons: newButtons }); // Spread operator is required to force react to redraw
+          setHasChanged(true);
+        }}
+      />
       <LayoutDesigner
         componentList={{
           GridContainer: {

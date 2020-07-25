@@ -14,7 +14,7 @@ const DnDCalendar = withDragAndDrop(Calendar);
 const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
   return (
     <context.UI.Animations.AnimationContainer>
-      <Grid container>
+      <Grid container style={{ height: "100%" }}>
         <Grid item xs={12} md={9}>
           <context.UI.Animations.AnimationItem>
             <context.UI.Design.Card

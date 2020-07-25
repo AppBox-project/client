@@ -2,7 +2,13 @@ import React, { useEffect, useState, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../Loading";
-import { Button, ListItem, List, ListItemText } from "@material-ui/core";
+import {
+  Button,
+  ListItem,
+  List,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { ModelType } from "../../Utils/Types";
@@ -25,7 +31,17 @@ const ViewObject: React.FC<{
   onSuccess?: () => void;
   popup?: true;
   defaults?: { [key: string]: string };
-}> = ({ modelId, layoutId, appId, objectId, onSuccess, popup, defaults }) => {
+  context?: AppContextType;
+}> = ({
+  modelId,
+  layoutId,
+  appId,
+  objectId,
+  onSuccess,
+  popup,
+  defaults,
+  context,
+}) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
   const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
@@ -336,14 +352,40 @@ const ViewObject: React.FC<{
                 });
               },
             },
+            archive: {
+              varian: "text",
+              label: "Archive",
+              onClick: () => {
+                context.setDialog({
+                  display: true,
+                  title: "Are you sure?",
+                  content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+                  buttons: [
+                    {
+                      label: "Cancel",
+                      onClick: () => {
+                        context.setDialog({ display: false });
+                      },
+                    },
+                    {
+                      label: (
+                        <Typography style={{ color: "red" }}>
+                          Archive
+                        </Typography>
+                      ),
+                      onClick: () => {},
+                    },
+                  ],
+                });
+              },
+            },
           }[button];
-
           return (
             <Button
               color="primary"
               variant={buttonInfo.variant}
               onClick={buttonInfo.onClick}
-              style={{ margin: 5 }}
+              style={{ margin: 5, color: "white" }}
             >
               {buttonInfo.label}
             </Button>
