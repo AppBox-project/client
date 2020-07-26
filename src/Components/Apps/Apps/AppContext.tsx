@@ -140,7 +140,45 @@ export class AppContext {
       appId: this.appId,
       modelId,
     });
-    Server.on(`receive-${requestId}`, then);
+    Server.on(`receive-${requestId}`, (response) => {
+      if (response.reason === "no-read-permission-app") {
+        this.setDialog({
+          display: true,
+          title: `${this.app.data.name} wants to read '${modelId}'`,
+          content: "Do you wish to allow this?",
+          size: "xs",
+          buttons: [
+            {
+              label: "No",
+              onClick: () => {
+                then({
+                  success: false,
+                  reason: "permission-denied-by-user",
+                });
+              },
+            },
+            {
+              label: "Yes",
+              onClick: () => {
+                const allowPermissionRequestId = uniqid();
+                Server.emit("allowAppAccess", {
+                  requestId: allowPermissionRequestId,
+                  appId: this.appId,
+                  objectType: modelId,
+                  permissionType: "read",
+                });
+                Server.on(`receive-${allowPermissionRequestId}`, (response) => {
+                  // Retry
+                  this.getModel(modelId, then);
+                });
+              },
+            },
+          ],
+        });
+      } else {
+        then(response);
+      }
+    });
     // Return the controller element with a stop() function
     return new AppDataController("appUnlistensForObjectTypes", requestId);
   };

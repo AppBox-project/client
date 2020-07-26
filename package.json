@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.1.2-6",
-  "description": "Small improvements to field grid",
+  "version": "0.1.2-7",
+  "description": "Usable calendar",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
@@ -22,6 +22,7 @@
     "@types/jest": "^26.0.3",
     "@types/node": "^14.0.14",
     "@types/react": "^16.9.41",
+    "@types/react-big-calendar": "^0.24.4",
     "@types/react-dom": "^16.9.0",
     "@types/react-select": "^3.0.10",
     "@types/socket.io-client": "^1.4.32",
@@ -32,7 +33,6 @@
     "framer-motion": "^1.8.3",
     "fuzzy-search": "^3.2.1",
     "global": "^4.4.0",
-    "moment": "^2.27.0",
     "node-sass": "^4.13.1",
     "prettier": "^2.0.5",
     "react": "^16.12.0",

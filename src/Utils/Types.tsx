@@ -135,7 +135,7 @@ export interface AppContextType {
   getObjects: (
     type: string,
     filter: {},
-    then: (response: any) => void
+    then: (response: ServerResponse) => void
   ) => AppRequestController;
   addObject: (type: string, object: {}, then: (response: any) => void) => void;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
