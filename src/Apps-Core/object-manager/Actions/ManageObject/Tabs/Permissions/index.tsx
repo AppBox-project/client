@@ -38,6 +38,16 @@ const permissionTypes = [
     label: "Delete (own)",
     description: "Allows the user to delete entries they've made themselves",
   },
+  {
+    key: "archive",
+    label: "Archive",
+    description: "Allows the user full archivation permissions",
+  },
+  {
+    key: "archiveOwn",
+    label: "Archive (own)",
+    description: "Allows the user to archive entries they've made themselves",
+  },
 ];
 const AppActionManageObjectTabPermissions: React.FC<{
   model: ModelType;
@@ -122,8 +132,8 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
 }> = ({ permission, UI, permissions, setPermissions, permissionOptions }) => {
   // Vars
   const selected = [];
-  permissions[permission.key].map((p) => {
-    selected.push({ label: p, value: p });
+  (permissions[permission.key] || []).map((p) => {
+    (selected || []).push({ label: p, value: p });
   });
   // UI
   return (

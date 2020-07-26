@@ -373,7 +373,9 @@ const ViewObject: React.FC<{
                           Archive
                         </Typography>
                       ),
-                      onClick: () => {},
+                      onClick: () => {
+                        context.archiveObject(modelId, objectId);
+                      },
                     },
                   ],
                 });
