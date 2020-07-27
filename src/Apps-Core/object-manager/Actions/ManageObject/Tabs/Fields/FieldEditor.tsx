@@ -83,7 +83,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </Grid>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card title="Options" withBigMargin>
+            <context.UI.Design.Card title="About this field" withBigMargin>
               <Grid container>
                 <Grid
                   item
@@ -130,7 +130,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card withBigMargin title="Type">
+            <context.UI.Design.Card withBigMargin title="Data type">
               <Grid container>
                 <Grid
                   item
@@ -440,6 +440,10 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 </IconButton>
               </Tooltip>
               <Typography variant="h5">Validations</Typography>
+              <Typography variant="body2">
+                Validations are rules that the data is tested to.
+              </Typography>
+
               <List>
                 {field.validations ? (
                   field.validations.map((validation) => {
@@ -498,7 +502,12 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   <FaPlus style={{ height: 15, width: 15 }} />
                 </IconButton>
               </Tooltip>
-              <Typography variant="h5">Transformations</Typography>
+              <Typography variant="h5">Transformators</Typography>
+              <Typography variant="body2">
+                Transformators transform the data <em>after</em> validating it
+                and <em>before</em> saving it.
+              </Typography>
+
               <List>
                 {field.transformations ? (
                   field.transformations.map((transformation) => {
@@ -514,6 +523,23 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
               </List>
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
+        </Grid>
+        <Grid item xs={12}>
+          <context.UI.Animations.AnimationItem>
+            <context.UI.Design.Card withBigMargin title="Conditional display">
+              <Typography variant="body2">
+                Only display this field when the current object matches the
+                following criteria.
+              </Typography>
+              <context.UI.Layouts.Specialized.ConditionDesigner
+                model={model}
+                value={field.conditions || []}
+                onChange={(value) => {
+                  console.log(value);
+                }}
+              />
+            </context.UI.Design.Card>
+          </context.UI.Animations.AnimationItem>
         </Grid>
         {field !== model.fields[detailId] && (
           <Grid item xs={12}>

@@ -17,12 +17,19 @@ export interface UserType {
   objectId: string;
 }
 
+export interface ConditionType {
+  field: string;
+  operator: "equals";
+  value;
+}
+
 export interface ModelFieldType {
   name: string;
   required: boolean;
   unique: boolean;
   validations: [string];
   transformations: [string];
+  conditions: ConditionType[];
   type?: string;
   typeArgs?: {
     type?: string;
@@ -276,6 +283,11 @@ export interface UIType {
         layout: LayoutDesignerItem[];
         onChange: (layout) => void;
         componentList: {};
+      }>;
+      ConditionDesigner: React.FC<{
+        model: ModelType;
+        value: ConditionType[];
+        onChange: (value: ConditionType[]) => void;
       }>;
     };
     GridItemLayout: React.FC<{

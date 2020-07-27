@@ -16,17 +16,25 @@ const ObjectFieldDisplayInput: React.FC<{ modelField; objectField }> = ({
     <Typography variant="body1">
       {typeof objectField === "string" ? (
         modelField?.typeArgs?.type === "email" ? (
-          <a href={`mailto:${objectField}`} target="_blank">
+          <a
+            href={`mailto:${objectField}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaExternalLinkAlt style={{ width: 15, height: 15 }} />{" "}
             {objectField}
           </a>
         ) : modelField?.typeArgs?.type === "url" ? (
-          <a href={objectField} target="_blank">
+          <a href={objectField} target="_blank" rel="noopener noreferrer">
             <FaExternalLinkAlt style={{ width: 15, height: 15 }} />{" "}
             {objectField}
           </a>
         ) : modelField?.typeArgs?.type === "phone" ? (
-          <a href={`tel:${objectField}`} target="_blank">
+          <a
+            href={`tel:${objectField}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <FaExternalLinkAlt style={{ width: 15, height: 15 }} />{" "}
             {objectField}
           </a>

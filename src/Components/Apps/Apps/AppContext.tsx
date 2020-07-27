@@ -17,6 +17,7 @@ import GridItemLayout from "../Apps/AppUI/Layouts/GridItemLayout";
 import LayoutDesigner from "../../../Components/LayoutDesigner";
 import Card from "../../Design/Card";
 import InputRichText from "../../Inputs/RichText";
+import ConditionDesigner from "../../ConditionDesigner";
 
 export class AppContext {
   appId: string;
@@ -60,6 +61,7 @@ export class AppContext {
         },
         Specialized: {
           LayoutDesigner,
+          ConditionDesigner,
         },
       },
     };
