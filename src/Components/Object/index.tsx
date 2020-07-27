@@ -374,7 +374,9 @@ const ViewObject: React.FC<{
                         </Typography>
                       ),
                       onClick: () => {
-                        context.archiveObject(modelId, objectId);
+                        context.archiveObject(modelId, objectId).then(() => {
+                          history.replace(`/${appId}/${modelId}`);
+                        });
                       },
                     },
                   ],

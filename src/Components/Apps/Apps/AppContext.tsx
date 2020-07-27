@@ -509,53 +509,56 @@ export class AppContext {
   };
 
   archiveObject = (modelId, objectId) => {
-    const requestId = uniqid();
-    Server.emit("appArchivesObject", {
-      modelId,
-      objectId,
-      appId: this.appId,
-      requestId,
-    });
+    return new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("appArchivesObject", {
+        modelId,
+        objectId,
+        appId: this.appId,
+        requestId,
+      });
 
-    Server.on(`receive-${requestId}`, (response) => {
-      console.log(response);
-
-      if (response.success) {
-      } else {
-        if (response.reason === "no-archive-permission-app") {
-          this.setDialog({
-            display: true,
-            title: `${this.app.data.name} wants to archive '${modelId}'`,
-            content: "Do you wish to allow this?",
-            size: "xs",
-            buttons: [
-              {
-                label: "No",
-                onClick: () => {},
-              },
-              {
-                label: "Yes",
-                onClick: () => {
-                  const allowPermissionRequestId = uniqid();
-                  Server.emit("allowAppAccess", {
-                    requestId: allowPermissionRequestId,
-                    appId: this.appId,
-                    objectType: modelId,
-                    permissionType: "archive",
-                  });
-                  Server.on(
-                    `receive-${allowPermissionRequestId}`,
-                    (response) => {
-                      // Retry
-                      this.archiveObject(modelId, objectId);
-                    }
-                  );
+      Server.on(`receive-${requestId}`, (response) => {
+        if (response.success) {
+          resolve();
+        } else {
+          if (response.reason === "no-archive-permission-app") {
+            this.setDialog({
+              display: true,
+              title: `${this.app.data.name} wants to archive '${modelId}'`,
+              content: "Do you wish to allow this?",
+              size: "xs",
+              buttons: [
+                {
+                  label: "No",
+                  onClick: () => {
+                    reject("permission-denied-by-user");
+                  },
                 },
-              },
-            ],
-          });
+                {
+                  label: "Yes",
+                  onClick: () => {
+                    const allowPermissionRequestId = uniqid();
+                    Server.emit("allowAppAccess", {
+                      requestId: allowPermissionRequestId,
+                      appId: this.appId,
+                      objectType: modelId,
+                      permissionType: "archive",
+                    });
+                    Server.on(
+                      `receive-${allowPermissionRequestId}`,
+                      (response) => {
+                        // Retry
+                        this.archiveObject(modelId, objectId);
+                      }
+                    );
+                  },
+                },
+              ],
+            });
+          }
         }
-      }
+      });
     });
   };
 }
