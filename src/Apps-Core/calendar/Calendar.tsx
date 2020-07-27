@@ -62,6 +62,13 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
         if (response.success) {
           setCalendars(response.data);
           setDefaultCalendar(response.data[0]._id);
+          const selectedCals = [];
+          response.data.map((calendar) => {
+            selectedCals.push(calendar._id);
+          });
+          setTimeout(() => {
+            setSelectedCalendars(selectedCals); // Also select calendars by default on page load
+          }, 100);
         } else {
           console.log(response);
         }

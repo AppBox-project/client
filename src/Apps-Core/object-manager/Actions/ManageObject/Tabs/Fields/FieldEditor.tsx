@@ -363,7 +363,25 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     />
                   </Grid>
                 )}
-
+                {field.type === "date" && (
+                  <Grid item xs={6}>
+                    <UI.Inputs.SelectInput
+                      label="Type"
+                      value={field.typeArgs ? field.typeArgs.type : "date"}
+                      options={[
+                        { value: "date", label: "Date" },
+                        { value: "datetime", label: "Date/Time" },
+                        { value: "time", label: "Time" },
+                      ]}
+                      onChange={(value) => {
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, type: value },
+                        });
+                      }}
+                    />
+                  </Grid>
+                )}
                 {(field.type === "relationship" ||
                   field.type === "relationship_m") && (
                   <Grid item xs={6}>

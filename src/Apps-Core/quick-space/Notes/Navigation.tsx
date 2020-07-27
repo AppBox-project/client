@@ -70,7 +70,7 @@ const AppQSNotesNavigation: React.FC<{
 
   // UI
   return (
-    <context.UI.Design.Card>
+    <context.UI.Design.Card withBigMargin>
       <Grid container style={{ height: "100%" }}>
         <Grid item xs={6} style={{ borderRight: "1px solid #eeeeee" }}>
           <Typography

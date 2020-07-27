@@ -15,7 +15,7 @@ import FieldDisplay from "../../FieldDisplay";
 import InputRelationShipM from "../../../Inputs/Relationship _m";
 import InputFile from "../../../Inputs/File";
 import InputAddress from "../../../Inputs/Address";
-import InputDate from "../../../Inputs/Date";
+import FieldTypeDate from "../../FieldTypes/Date";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -192,12 +192,12 @@ const ObjectLayoutItemField: React.FC<{
               />
             )}
             {modelField.type === "date" && (
-              <InputDate
+              <FieldTypeDate
                 onChange={(value) => {
                   onChange(value);
                 }}
-                placeholder={modelField.name}
-                value={objectField}
+                modelField={modelField}
+                objectField={objectField}
               />
             )}
           </Grid>

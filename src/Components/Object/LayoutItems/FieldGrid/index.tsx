@@ -5,6 +5,7 @@ import {
   Typography,
   AccordionDetails,
   Grid,
+  Divider,
 } from "@material-ui/core";
 import { MdExpandMore } from "react-icons/md";
 import { ModelType, ObjectType } from "../../../../Utils/Types";
@@ -34,11 +35,15 @@ const ObjectLayoutItemFieldGrid: React.FC<{
   return (
     <>
       {layoutItem.layout.map((group) => (
-        <Accordion defaultExpanded={group.defaultExpanded} elevation={1}>
+        <Accordion
+          defaultExpanded={group.defaultExpanded}
+          elevation={0}
+          style={{ border: "1px solid rgba(0,0,0,0.1)", marginBottom: 15 }}
+        >
           <AccordionSummary expandIcon={<MdExpandMore />}>
             <Typography variant="h6">{group.name}</Typography>
+            <Divider />
           </AccordionSummary>
-
           <AccordionDetails>
             <Grid container>
               {group.items.map((item) => (
