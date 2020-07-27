@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ColorType, ModelType } from "../../Utils/Types";
+import { AppContextType, ModelType } from "../../Utils/Types";
 import {
   Grid,
   List,
@@ -21,6 +21,7 @@ import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import parseISO from "date-fns/parseISO";
+import RRule from "rrule";
 
 const locales = {
   nl: require("date-fns/locale/nl"),
@@ -99,15 +100,72 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
       (response) => {
         if (response.success) {
           const newEvents = [];
-          response.data.map((event) => {
-            newEvents.push({
-              name: event.data.name,
-              start: parseISO(event.data.from),
-              end: parseISO(event.data.until),
-              allday: event.data.allday,
-              event: event,
-              calendar: find(calendars, (o) => o._id === event.data.calendar),
-            });
+          response.data.map((event: AppCalEventType) => {
+            if (event.data.recurring) {
+              // Add all recurrant events
+              let frequency = RRule.WEEKLY;
+              switch (event.data.recurring_frequency) {
+                case "Secondly":
+                  frequency = RRule.WEEKLY;
+                  break;
+                case "Minutely":
+                  frequency = RRule.MINUTELY;
+                  break;
+                case "Hourly":
+                  frequency = RRule.HOURLY;
+                  break;
+                case "Daily":
+                  frequency = RRule.DAILY;
+                  break;
+                case "Weekly":
+                  frequency = RRule.WEEKLY;
+                  break;
+                case "Monthly":
+                  frequency = RRule.MONTHLY;
+                  break;
+                case "Yearly":
+                  frequency = RRule.YEARLY;
+                  break;
+                default:
+                  frequency = RRule.WEEKLY;
+                  break;
+              }
+
+              const rule = new RRule({
+                freq: frequency,
+                interval: event.data.recurring_interval || 1,
+                ...(event.data.recurring_weekday
+                  ? { byweekday: event.data.recurring_weekday }
+                  : {}),
+                dtstart: parseISO(event.data.from),
+                until: event.data.recurring_until
+                  ? parseISO(event.data.recurring_until)
+                  : new Date(Date.UTC(2030, 12, 31, 0, 0, 0)),
+              });
+
+              rule.all().map((recEvent) => {
+                newEvents.push({
+                  name: event.data.name,
+                  start: recEvent,
+                  end: recEvent,
+                  allday: event.data.allday,
+                  event: event,
+                  calendar: find(
+                    calendars,
+                    (o) => o._id === event.data.calendar
+                  ),
+                });
+              });
+            } else {
+              newEvents.push({
+                name: event.data.name,
+                start: parseISO(event.data.from),
+                end: parseISO(event.data.until),
+                allday: event.data.allday,
+                event: event,
+                calendar: find(calendars, (o) => o._id === event.data.calendar),
+              });
+            }
           });
           setEvents(newEvents);
         } else {
@@ -222,6 +280,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                 <List>
                   {calendars.map((calendar) => (
                     <ListItem
+                      key={calendar._id}
                       button
                       onClick={() => {
                         if (selectedCalendars.includes(calendar._id)) {

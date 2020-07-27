@@ -6,8 +6,6 @@ const FieldTypeDate: React.FC<{ onChange; modelField; objectField }> = ({
   modelField,
   objectField,
 }) => {
-  console.log(modelField);
-
   return (
     <InputDate
       onChange={(value) => {

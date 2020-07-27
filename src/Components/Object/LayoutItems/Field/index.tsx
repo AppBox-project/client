@@ -23,7 +23,7 @@ const ObjectLayoutItemField: React.FC<{
   mode;
   setMode;
   model: ModelType;
-  onChange?: (value: string | boolean | Date) => void;
+  onChange?: (value: string | boolean | Date | number) => void;
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
@@ -92,7 +92,11 @@ const ObjectLayoutItemField: React.FC<{
             {modelField.type === "input" && (
               <InputInput
                 onChange={(value) => {
-                  onChange(value);
+                  if (modelField?.typeArgs?.type === "number") {
+                    onChange(parseInt(value));
+                  } else {
+                    onChange(value);
+                  }
                 }}
                 placeholder={modelField.name}
                 value={objectField}
