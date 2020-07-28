@@ -49,8 +49,9 @@ const ObjectLayoutItemFieldGrid: React.FC<{
               {group.items.map((item) => (
                 <Grid
                   item
+                  xs={12}
                   //@ts-ignore
-                  xs={12 / group.columns}
+                  md={12 / group.columns}
                   style={{ overflow: "hidden" }}
                 >
                   <ObjectLayoutItemField

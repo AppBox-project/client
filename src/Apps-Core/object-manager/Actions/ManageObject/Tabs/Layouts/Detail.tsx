@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ModelType } from "../../../../../../Utils/Types";
-import { Fab, Grid } from "@material-ui/core";
+import {
+  AppContextType,
+  ModelType,
+  LayoutType,
+} from "../../../../../../Utils/Types";
+import { Fab, Grid, Divider, Typography } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
 import { map, find } from "lodash";
@@ -69,7 +73,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   // Global
   const [hasChanged, setHasChanged] = useState<any>(false);
   const [fieldList, setFieldList] = useState<any>([]);
-  const [layout, setLayout] = useState<any>();
+  const [layout, setLayout] = useState<LayoutType>();
   const history = useHistory();
 
   // Lifecycle
@@ -103,20 +107,44 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       })
     );
   });
+  const factsBarItems = [];
+  (layout.factsBar || []).map((b) => {
+    factsBarItems.push(find(fieldList, (o) => o.value === b));
+  });
 
   return (
     <context.UI.Design.Card withBigMargin>
-      <Select
-        isMulti
-        options={buttonOptions}
-        value={selectedButtons}
-        onChange={(value) => {
-          const newButtons = [];
-          value.map((val) => newButtons.push(val.value));
-          setLayout({ ...layout, buttons: newButtons }); // Spread operator is required to force react to redraw
-          setHasChanged(true);
-        }}
-      />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="body1">Actions</Typography>
+          <Select
+            isMulti
+            options={buttonOptions}
+            value={selectedButtons}
+            onChange={(value) => {
+              const newButtons = [];
+              (value || []).map((val) => newButtons.push(val.value));
+              setLayout({ ...layout, buttons: newButtons }); // Spread operator is required to force react to redraw
+              setHasChanged(true);
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="body1">Facts bar</Typography>
+          <Select
+            isMulti
+            options={fieldList}
+            value={factsBarItems}
+            onChange={(value) => {
+              const newFactsBar = [];
+              (value || []).map((val) => newFactsBar.push(val.value));
+              setLayout({ ...layout, factsBar: newFactsBar }); // Spread operator is required to force react to redraw
+              setHasChanged(true);
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Divider style={{ margin: 15 }} />
       <LayoutDesigner
         componentList={{
           GridContainer: {

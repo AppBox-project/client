@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { ModelType } from "../../Utils/Types";
+import { ModelType, LayoutType } from "../../Utils/Types";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
@@ -22,6 +22,7 @@ import ObjectLayoutItemRelatedList from "./LayoutItems/RelatedList";
 import { AppContextType } from "../../Utils/Types";
 import { useHistory } from "react-router-dom";
 import ObjectLayoutItemFieldGrid from "./LayoutItems/FieldGrid";
+import Card from "../Design/Card";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -291,7 +292,7 @@ const ViewObject: React.FC<{
 
   // UI
   if (!model || (!object && objectId)) return <Loading />;
-  const layout = model.layouts[layoutId || "default"];
+  const layout: LayoutType = model.layouts[layoutId || "default"];
 
   return (
     <div
@@ -309,93 +310,101 @@ const ViewObject: React.FC<{
         }
       }}
     >
-      <div style={{ textAlign: "right", margin: "0 20px" }}>
-        {(layout.buttons || []).map((button) => {
-          const buttonInfo = {
-            clone: {
-              variant: "outlined",
-              label: "Clone",
-              onClick: () => {
-                setDialog({
-                  display: true,
-                  title: "Feature in progress",
-                  content: "Sadly, I did not build this yet.",
-                });
+      {layout.factsBar && <Card withBigMargin>Test</Card>}
+      {layout.buttons && !layout.factsBar && (
+        /* Button layout without factsbar*/ <div
+          style={{ textAlign: "right", margin: "0 20px" }}
+        >
+          {(layout.buttons || []).map((button) => {
+            const buttonInfo = {
+              clone: {
+                variant: "outlined",
+                label: "Clone",
+                onClick: () => {
+                  setDialog({
+                    display: true,
+                    title: "Feature in progress",
+                    content: "Sadly, I did not build this yet.",
+                  });
+                },
               },
-            },
-            delete: {
-              variant: "text",
-              label: "Delete",
-              onClick: () => {
-                setDialog({
-                  display: true,
-                  title: "Delete?",
-                  content: "Are you sure? For now, this can't be reverted!",
-                  buttons: [
-                    {
-                      label: "No",
-                      onClick: () => {
-                        setDialog({ display: false });
+              delete: {
+                variant: "text",
+                label: "Delete",
+                onClick: () => {
+                  setDialog({
+                    display: true,
+                    title: "Delete?",
+                    content: "Are you sure? For now, this can't be reverted!",
+                    buttons: [
+                      {
+                        label: "No",
+                        onClick: () => {
+                          setDialog({ display: false });
+                        },
                       },
-                    },
-                    {
-                      label: <span style={{ color: "red" }}>Yes, delete</span>,
-                      onClick: () => {
-                        const requestId = uniqid();
-                        Server.emit("deleteObject", { requestId, objectId });
-                        Server.on(`receive-${requestId}`, () => {
-                          history.replace(`/${appId}/${modelId}`);
-                        });
+                      {
+                        label: (
+                          <span style={{ color: "red" }}>Yes, delete</span>
+                        ),
+                        onClick: () => {
+                          const requestId = uniqid();
+                          Server.emit("deleteObject", { requestId, objectId });
+                          Server.on(`receive-${requestId}`, () => {
+                            history.replace(`/${appId}/${modelId}`);
+                          });
+                        },
                       },
-                    },
-                  ],
-                });
+                    ],
+                  });
+                },
               },
-            },
-            archive: {
-              varian: "text",
-              label: "Archive",
-              onClick: () => {
-                context.setDialog({
-                  display: true,
-                  title: "Are you sure?",
-                  content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
-                  buttons: [
-                    {
-                      label: "Cancel",
-                      onClick: () => {
-                        context.setDialog({ display: false });
+              archive: {
+                varian: "text",
+                label: "Archive",
+                onClick: () => {
+                  context.setDialog({
+                    display: true,
+                    title: "Are you sure?",
+                    content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+                    buttons: [
+                      {
+                        label: "Cancel",
+                        onClick: () => {
+                          context.setDialog({ display: false });
+                        },
                       },
-                    },
-                    {
-                      label: (
-                        <Typography style={{ color: "red" }}>
-                          Archive
-                        </Typography>
-                      ),
-                      onClick: () => {
-                        context.archiveObject(modelId, objectId).then(() => {
-                          history.replace(`/${appId}/${modelId}`);
-                        });
+                      {
+                        label: (
+                          <Typography style={{ color: "red" }}>
+                            Archive
+                          </Typography>
+                        ),
+                        onClick: () => {
+                          context.archiveObject(modelId, objectId).then(() => {
+                            history.replace(`/${appId}/${modelId}`);
+                          });
+                        },
                       },
-                    },
-                  ],
-                });
+                    ],
+                  });
+                },
               },
-            },
-          }[button];
-          return (
-            <Button
-              color="primary"
-              variant={buttonInfo.variant}
-              onClick={buttonInfo.onClick}
-              style={{ margin: 5, color: "white" }}
-            >
-              {buttonInfo.label}
-            </Button>
-          );
-        })}
-      </div>
+            }[button];
+            return (
+              <Button
+                color="primary"
+                variant={buttonInfo.variant}
+                onClick={buttonInfo.onClick}
+                style={{ margin: 5, color: "white" }}
+              >
+                {buttonInfo.label}
+              </Button>
+            );
+          })}
+        </div>
+      )}
+
       {model.layouts[layoutId || "default"].layout ? (
         layout.layout.map((layoutItem, id) => {
           return (

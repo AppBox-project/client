@@ -22,9 +22,11 @@ import getDay from "date-fns/getDay";
 import parseISO from "date-fns/parseISO";
 import RRule from "rrule";
 import { BsCalendar, BsCalendarFill } from "react-icons/bs";
+import { nl, enGB } from "date-fns/esm/locale";
 
 const locales = {
-  nl: require("date-fns/locale/nl"),
+  nl,
+  enGB,
 };
 
 const localizer = dateFnsLocalizer({
@@ -186,15 +188,12 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
         <Grid container>
           <Grid item xs={12} md={9}>
             <context.UI.Animations.AnimationItem>
-              <context.UI.Design.Card
-                withBigMargin
-                title="2020"
-                className={styles.root}
-              >
+              <context.UI.Design.Card withBigMargin className={styles.root}>
                 <DnDCalendar
                   defaultView="month"
                   events={events}
                   localizer={localizer}
+                  culture="nl"
                   onEventDrop={(data) => {
                     context.updateObject(
                       "calendar-events",
@@ -210,7 +209,6 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                     );
                   }}
                   resizable
-                  style={{ height: "95%" }}
                   selectable
                   titleAccessor="name"
                   startAccessor="start"
@@ -304,13 +302,17 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                       <ListItemIcon>
                         <Avatar
                           style={{
-                            backgroundColor: `rgb(${calendar.data.color.r},${calendar.data.color.g},${calendar.data.color.b})`,
+                            ...(selectedCalendars.includes(calendar._id)
+                              ? {
+                                  backgroundColor: `rgb(${calendar.data.color.r},${calendar.data.color.g},${calendar.data.color.b})`,
+                                }
+                              : {}),
                           }}
                         >
                           {selectedCalendars.includes(calendar._id) ? (
-                            <BsCalendarFill style={{ width: 20, height: 20 }} />
+                            <BsCalendarFill style={{ width: 18, height: 18 }} />
                           ) : (
-                            <BsCalendar style={{ width: 20, height: 20 }} />
+                            <BsCalendar style={{ width: 18, height: 18 }} />
                           )}
                         </Avatar>
                       </ListItemIcon>

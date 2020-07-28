@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useGlobal } from "reactn";
 import { ModelType } from "../../../Utils/Types";
 import Card from "../../Design/Card";
 import styles from "./styles.module.scss";
@@ -13,6 +13,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
   object,
 }) => {
   const Icon = icons[model.icon];
+  const [theme] = useGlobal<any>("theme");
 
   const Picture =
     (model.preview?.picture || "modelicon") === "modelicon" ? (
@@ -21,6 +22,8 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
         style={{
           width: 25,
           height: 25,
+          color: theme.palette.primary.main,
+          backgroundColor: "white",
         }}
       >
         <Icon style={{ width: 15, height: 15 }} />
@@ -31,6 +34,8 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
         style={{
           width: 25,
           height: 25,
+          color: theme.palette.primary.main,
+          backgroundColor: "white",
         }}
         src={baseUrl + object.data[model.preview.picture]}
       />
@@ -49,7 +54,11 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
   return (
     <Card withBigMargin className={styles.root}>
       <Link to={`/o/${object._id}`}>
-        <Grid container className={styles.header}>
+        <Grid
+          container
+          className={styles.header}
+          style={{ backgroundColor: theme.palette.primary.main }}
+        >
           <Grid item xs={1}>
             {Picture}
           </Grid>

@@ -66,6 +66,11 @@ const MobileLayout: React.FC = () => {
     });
 
     return () => {
+      setDefaultButton({
+        icon: undefined,
+        url: undefined,
+        function: undefined,
+      });
       Server.emit("unlistenForObjects", { requestId });
       setIsMobile(undefined);
       setNavBar({

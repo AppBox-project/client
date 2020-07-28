@@ -404,6 +404,7 @@ export interface UIType {
 export interface LayoutType {
   layout: LayoutDesignerItem[];
   buttons: string[];
+  factsBar: string[];
 }
 
 export interface LayoutDesignerItem {

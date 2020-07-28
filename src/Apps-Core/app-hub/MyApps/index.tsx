@@ -37,10 +37,12 @@ const AppAHMyApps: React.FC<{
       {(apps || []).map((app) => {
         return (
           <ListItem key={app._id}>
-            <ListItemText>{app.data.name}</ListItemText>
+            <ListItemText style={{ color: "white", cursor: "default" }}>
+              {app.data.name}
+            </ListItemText>
             <ListItemSecondaryAction>
               <IconButton
-                color="primary"
+                style={{ color: "white" }}
                 onClick={() => {
                   context.addObject(
                     "system-task",
@@ -55,8 +57,6 @@ const AppAHMyApps: React.FC<{
                       arguments: { appId: app.data.id },
                     },
                     (response) => {
-                      console.log("e", response.data._id);
-
                       const requestId = uniqid();
                       context.getObjects(
                         "system-task",
