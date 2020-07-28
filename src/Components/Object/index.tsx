@@ -8,6 +8,7 @@ import {
   List,
   ListItemText,
   Typography,
+  Grid,
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -23,6 +24,11 @@ import { AppContextType } from "../../Utils/Types";
 import { useHistory } from "react-router-dom";
 import ObjectLayoutItemFieldGrid from "./LayoutItems/FieldGrid";
 import Card from "../Design/Card";
+import {
+  AnimationContainer,
+  AnimationItem,
+} from "../Apps/Apps/AppUI/Animations";
+import FieldDisplay from "./FieldDisplay";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -310,134 +316,171 @@ const ViewObject: React.FC<{
         }
       }}
     >
-      {layout.factsBar && <Card withBigMargin>Test</Card>}
-      {layout.buttons && !layout.factsBar && (
-        /* Button layout without factsbar*/ <div
-          style={{ textAlign: "right", margin: "0 20px" }}
-        >
-          {(layout.buttons || []).map((button) => {
-            const buttonInfo = {
-              clone: {
-                variant: "outlined",
-                label: "Clone",
-                onClick: () => {
-                  setDialog({
-                    display: true,
-                    title: "Feature in progress",
-                    content: "Sadly, I did not build this yet.",
-                  });
-                },
-              },
-              delete: {
-                variant: "text",
-                label: "Delete",
-                onClick: () => {
-                  setDialog({
-                    display: true,
-                    title: "Delete?",
-                    content: "Are you sure? For now, this can't be reverted!",
-                    buttons: [
-                      {
-                        label: "No",
-                        onClick: () => {
-                          setDialog({ display: false });
-                        },
-                      },
-                      {
-                        label: (
-                          <span style={{ color: "red" }}>Yes, delete</span>
-                        ),
-                        onClick: () => {
-                          const requestId = uniqid();
-                          Server.emit("deleteObject", { requestId, objectId });
-                          Server.on(`receive-${requestId}`, () => {
-                            history.replace(`/${appId}/${modelId}`);
-                          });
-                        },
-                      },
-                    ],
-                  });
-                },
-              },
-              archive: {
-                varian: "text",
-                label: "Archive",
-                onClick: () => {
-                  context.setDialog({
-                    display: true,
-                    title: "Are you sure?",
-                    content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
-                    buttons: [
-                      {
-                        label: "Cancel",
-                        onClick: () => {
-                          context.setDialog({ display: false });
-                        },
-                      },
-                      {
-                        label: (
-                          <Typography style={{ color: "red" }}>
-                            Archive
-                          </Typography>
-                        ),
-                        onClick: () => {
-                          context.archiveObject(modelId, objectId).then(() => {
-                            history.replace(`/${appId}/${modelId}`);
-                          });
-                        },
-                      },
-                    ],
-                  });
-                },
-              },
-            }[button];
-            return (
-              <Button
-                color="primary"
-                variant={buttonInfo.variant}
-                onClick={buttonInfo.onClick}
-                style={{ margin: 5, color: "white" }}
-              >
-                {buttonInfo.label}
-              </Button>
-            );
-          })}
-        </div>
-      )}
+      <AnimationContainer>
+        {layout.factsBar && (
+          <AnimationItem>
+            <Card withBigMargin>
+              <Typography variant="h6" style={{ cursor: "default" }}>
+                {object.data[model.primary]}
+              </Typography>
 
-      {model.layouts[layoutId || "default"].layout ? (
-        layout.layout.map((layoutItem, id) => {
-          return (
-            <LayoutItem
-              key={id}
-              layoutItem={layoutItem}
-              setToUpload={setToUpload}
-              toUpload={toUpload}
-              model={model}
-              mode={mode}
-              setMode={setMode}
-              setToChange={setToChange}
-              toChange={toChange}
-              object={object}
-            />
-          );
-        })
-      ) : (
-        <>Layout {layoutId} not found </>
-      )}
-
-      {(!objectId || popup) && (
-        <div style={{ float: "right" }}>
-          <Button
-            color="primary"
-            onClick={() => {
-              save();
-            }}
+              <Grid container spacing={3}>
+                {layout.factsBar.map((fact) => {
+                  const field = model.fields[fact];
+                  return (
+                    <Grid
+                      item
+                      //@ts-ignore
+                      xs={12 / layout.factsBar.length}
+                      key={fact}
+                    >
+                      <Typography variant="body1">{field.name}</Typography>
+                      <Typography variant="body2">
+                        <FieldDisplay
+                          objectField={object.data[fact]}
+                          modelField={field}
+                        />
+                      </Typography>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Card>
+          </AnimationItem>
+        )}
+        {layout.buttons && !layout.factsBar && (
+          /* Button layout without factsbar*/ <div
+            style={{ textAlign: "right", margin: "0 20px" }}
           >
-            Save
-          </Button>
-        </div>
-      )}
+            {(layout.buttons || []).map((button) => {
+              const buttonInfo = {
+                clone: {
+                  variant: "outlined",
+                  label: "Clone",
+                  onClick: () => {
+                    setDialog({
+                      display: true,
+                      title: "Feature in progress",
+                      content: "Sadly, I did not build this yet.",
+                    });
+                  },
+                },
+                delete: {
+                  variant: "text",
+                  label: "Delete",
+                  onClick: () => {
+                    setDialog({
+                      display: true,
+                      title: "Delete?",
+                      content: "Are you sure? For now, this can't be reverted!",
+                      buttons: [
+                        {
+                          label: "No",
+                          onClick: () => {
+                            setDialog({ display: false });
+                          },
+                        },
+                        {
+                          label: (
+                            <span style={{ color: "red" }}>Yes, delete</span>
+                          ),
+                          onClick: () => {
+                            const requestId = uniqid();
+                            Server.emit("deleteObject", {
+                              requestId,
+                              objectId,
+                            });
+                            Server.on(`receive-${requestId}`, () => {
+                              history.replace(`/${appId}/${modelId}`);
+                            });
+                          },
+                        },
+                      ],
+                    });
+                  },
+                },
+                archive: {
+                  varian: "text",
+                  label: "Archive",
+                  onClick: () => {
+                    context.setDialog({
+                      display: true,
+                      title: "Are you sure?",
+                      content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+                      buttons: [
+                        {
+                          label: "Cancel",
+                          onClick: () => {
+                            context.setDialog({ display: false });
+                          },
+                        },
+                        {
+                          label: (
+                            <Typography style={{ color: "red" }}>
+                              Archive
+                            </Typography>
+                          ),
+                          onClick: () => {
+                            context
+                              .archiveObject(modelId, objectId)
+                              .then(() => {
+                                history.replace(`/${appId}/${modelId}`);
+                              });
+                          },
+                        },
+                      ],
+                    });
+                  },
+                },
+              }[button];
+              return (
+                <Button
+                  color="primary"
+                  variant={buttonInfo.variant}
+                  onClick={buttonInfo.onClick}
+                  style={{ margin: 5, color: "white" }}
+                >
+                  {buttonInfo.label}
+                </Button>
+              );
+            })}
+          </div>
+        )}
+
+        {model.layouts[layoutId || "default"].layout ? (
+          layout.layout.map((layoutItem, id) => {
+            return (
+              <LayoutItem
+                key={id}
+                layoutItem={layoutItem}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
+                model={model}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+              />
+            );
+          })
+        ) : (
+          <>Layout {layoutId} not found </>
+        )}
+
+        {(!objectId || popup) && (
+          <div style={{ float: "right" }}>
+            <Button
+              color="primary"
+              onClick={() => {
+                save();
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        )}
+      </AnimationContainer>
     </div>
   );
 };

@@ -10,7 +10,7 @@ const ObjectLayoutItemGridItem: React.FC<{
   xl?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 }> = ({ children, xs, sm, md, lg, xl }) => {
   return (
-    <Grid item xs={xs} sm={sm} md={md} lg={lg} xl={xl} style={{ padding: 5 }}>
+    <Grid item xs={xs} sm={sm} md={md} lg={lg} xl={xl}>
       {children}
     </Grid>
   );
