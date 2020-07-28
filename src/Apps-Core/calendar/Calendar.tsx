@@ -7,7 +7,6 @@ import {
   ListItem,
   ListItemIcon,
   Avatar,
-  Checkbox,
 } from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
@@ -22,6 +21,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import parseISO from "date-fns/parseISO";
 import RRule from "rrule";
+import { BsCalendar, BsCalendarFill } from "react-icons/bs";
 
 const locales = {
   nl: require("date-fns/locale/nl"),
@@ -307,10 +307,11 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                             backgroundColor: `rgb(${calendar.data.color.r},${calendar.data.color.g},${calendar.data.color.b})`,
                           }}
                         >
-                          <Checkbox
-                            style={{ color: "white" }}
-                            checked={selectedCalendars.includes(calendar._id)}
-                          />
+                          {selectedCalendars.includes(calendar._id) ? (
+                            <BsCalendarFill style={{ width: 20, height: 20 }} />
+                          ) : (
+                            <BsCalendar style={{ width: 20, height: 20 }} />
+                          )}
                         </Avatar>
                       </ListItemIcon>
                       <ListItemText>{calendar.data.name}</ListItemText>

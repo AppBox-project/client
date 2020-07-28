@@ -17,6 +17,11 @@ export interface UserType {
   objectId: string;
 }
 
+export interface ConditionsType {
+  logic: string;
+  conditions: ConditionType[];
+}
+
 export interface ConditionType {
   field: string;
   operator: "equals";
@@ -29,7 +34,7 @@ export interface ModelFieldType {
   unique: boolean;
   validations: [string];
   transformations: [string];
-  conditions: ConditionType[];
+  conditions: ConditionsType;
   type?: string;
   typeArgs?: {
     type?: string;
@@ -408,4 +413,9 @@ export interface LayoutDesignerItem {
   xs?: number;
   droppable?: boolean;
   label?: string;
+}
+
+export interface SelectOptionType {
+  label: string;
+  value: string;
 }

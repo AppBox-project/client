@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
-import { ModelType } from "../../../../Utils/Types";
+import { ModelType, ModelFieldType } from "../../../../Utils/Types";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
@@ -27,7 +27,7 @@ const ObjectLayoutItemField: React.FC<{
   toChange;
 }> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
   // Vars
-  const [modelField, setModelField] = useState<any>(
+  const [modelField, setModelField] = useState<ModelFieldType>(
     model.fields[layoutItem.field]
   );
   const [objectField, setObjectField] = useState<any>(
@@ -42,8 +42,26 @@ const ObjectLayoutItemField: React.FC<{
     setModelField(model.fields[layoutItem.field]);
   }, [model]);
 
-  // UI
+  // Calculate conditions
+  // Todo: respect AND OR logic
+  let conditionsMet = true;
+  if (modelField?.conditions) {
+    modelField.conditions.conditions.map((condition) => {
+      const objectField =
+        toChange[condition.field] === null ||
+        toChange[condition.field] === undefined
+          ? object.data[condition.field]
+          : toChange[condition.field];
+      if (condition.operator === "equals") {
+        if (objectField !== condition.value) {
+          conditionsMet = false;
+        }
+      }
+    });
+  }
 
+  // UI
+  if (!conditionsMet) return <></>;
   switch (mode) {
     case "view":
       return (

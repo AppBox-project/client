@@ -15,9 +15,10 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Tooltip,
+  Fab,
 } from "@material-ui/core";
 import FormulaEditor from "../../../../../../Components/FormulaEditor";
-import { FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt, FaSave } from "react-icons/fa";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
   match: { params: { detailId } };
@@ -534,8 +535,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
               <context.UI.Layouts.Specialized.ConditionDesigner
                 model={model}
                 value={field.conditions || []}
-                onChange={(value) => {
-                  console.log(value);
+                onChange={(conditions) => {
+                  setField({
+                    ...field,
+                    conditions,
+                  });
                 }}
               />
             </context.UI.Design.Card>
@@ -544,9 +548,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
         {field !== model.fields[detailId] && (
           <Grid item xs={12}>
             <UI.Animations.AnimationItem>
-              <Button
-                style={{ marginTop: 15 }}
-                fullWidth
+              <Fab
+                style={{ position: "fixed", bottom: 15, right: 15, zIndex: 30 }}
                 color="primary"
                 onClick={() => {
                   context.updateModel(
@@ -572,8 +575,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   }
                 }}
               >
-                Save
-              </Button>
+                <FaSave style={{ width: 18, height: 18 }} />
+              </Fab>
             </UI.Animations.AnimationItem>
           </Grid>
         )}
