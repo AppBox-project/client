@@ -319,11 +319,7 @@ const ViewObject: React.FC<{
       <AnimationContainer>
         {layout.factsBar && (
           <AnimationItem>
-            <Card withBigMargin>
-              <Typography variant="h6" style={{ cursor: "default" }}>
-                {object.data[model.primary]}
-              </Typography>
-
+            <Card withBigMargin title={object.data[model.primary]}>
               <Grid container spacing={3}>
                 {layout.factsBar.map((fact) => {
                   const field = model.fields[fact];
