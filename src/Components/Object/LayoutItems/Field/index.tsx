@@ -62,9 +62,10 @@ const ObjectLayoutItemField: React.FC<{
 
   // UI
   if (!conditionsMet) return <></>;
+
   switch (mode) {
     case "view":
-      return (
+      return layoutItem.hideView !== true ? (
         <Grid
           container
           style={{ cursor: "context-menu" }}
@@ -82,6 +83,8 @@ const ObjectLayoutItemField: React.FC<{
             <FieldDisplay objectField={objectField} modelField={modelField} />
           </Grid>
         </Grid>
+      ) : (
+        <></>
       );
     case "edit":
       return (

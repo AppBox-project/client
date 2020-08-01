@@ -361,6 +361,16 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     type: "dropdown",
                     dropdownOptions: fieldList,
                   },
+                  {
+                    label: "Hide while viewing",
+                    key: "hideView",
+                    type: "boolean",
+                  },
+                  {
+                    label: "Hide while editing",
+                    key: "hideEdit",
+                    type: "boolean",
+                  },
                 ],
                 buttons: [
                   {

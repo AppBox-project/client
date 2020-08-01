@@ -4,7 +4,7 @@ import { DatePicker, DateTimePicker, TimePicker } from "@material-ui/pickers";
 const InputDate: React.FC<{
   placeholder?: string;
   label?: string;
-  value?: string;
+  value?: Date;
   onChange?: (value: Date) => void;
   disableFuture?: boolean;
   disablePast?: boolean;
@@ -18,7 +18,7 @@ const InputDate: React.FC<{
   disablePast,
   type,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(value || new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(value);
 
   switch (type) {
     case "time":

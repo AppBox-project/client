@@ -26,22 +26,19 @@ const Card: React.FC<{
   sideMarginOnly,
 }) => {
   const addMargin = {
-    marginLeft: withBigMargin ? 15 : withSmallMargin ? 5 : 0,
-    marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0,
-    marginTop: !sideMarginOnly
-      ? withBigMargin
-        ? 15
-        : withSmallMargin
-        ? 5
-        : 0
-      : 0,
-    marginBottom: !sideMarginOnly
-      ? withBigMargin
-        ? 15
-        : withSmallMargin
-        ? 5
-        : 0
-      : 0,
+    ...(withBigMargin
+      ? {
+          marginLeft: 15,
+          margingRight: 15,
+          ...(sideMarginOnly ? {} : { marginTop: 15, marginBottom: 15 }),
+        }
+      : withSmallMargin
+      ? {
+          marginLeft: 5,
+          margingRight: 5,
+          ...(sideMarginOnly ? {} : { marginTop: 5, marginBottom: 5 }),
+        }
+      : {}),
   };
 
   return (
@@ -49,7 +46,7 @@ const Card: React.FC<{
       className={`${styles.root} ${
         hoverable && styles.hoverable
       } ${className} ${className}`}
-      style={{ ...style, ...addMargin }}
+      style={{ ...addMargin, ...style }}
     >
       {title && (
         <>

@@ -9,6 +9,7 @@ import {
   ListItemText,
   Typography,
   Grid,
+  Divider,
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -29,6 +30,8 @@ import {
   AnimationItem,
 } from "../Apps/Apps/AppUI/Animations";
 import FieldDisplay from "./FieldDisplay";
+import styles from "./styles.module.scss";
+import { baseUrl } from "../../Utils/Utils";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -300,6 +303,21 @@ const ViewObject: React.FC<{
   if (!model || (!object && objectId)) return <Loading />;
   const layout: LayoutType = model.layouts[layoutId || "default"];
 
+  // Factsbar
+  let factsBarPicture;
+  let factsBarTitle;
+  let factsBar;
+  if (layout.factsBar) {
+    if (model.fields[layout.factsBar[0]].type === "picture") {
+      factsBarPicture = object.data[layout.factsBar[0]];
+      factsBarTitle = object.data[layout.factsBar[1]];
+      factsBar = layout.factsBar.slice(2);
+    } else {
+      factsBarTitle = object.data[layout.factsBar[0]];
+      factsBar = layout.factsBar.slice(1);
+    }
+  }
+
   return (
     <div
       onKeyDown={(event) => {
@@ -317,30 +335,53 @@ const ViewObject: React.FC<{
       }}
     >
       <AnimationContainer>
-        {layout.factsBar && (
+        {factsBar && (
           <AnimationItem>
-            <Card withBigMargin title={object.data[model.primary]}>
-              <Grid container spacing={3}>
-                {layout.factsBar.map((fact) => {
-                  const field = model.fields[fact];
-                  return (
-                    <Grid
-                      item
-                      //@ts-ignore
-                      xs={12 / layout.factsBar.length}
-                      key={fact}
-                    >
-                      <Typography variant="body1">{field.name}</Typography>
-                      <Typography variant="body2">
-                        <FieldDisplay
-                          objectField={object.data[fact]}
-                          modelField={field}
-                        />
-                      </Typography>
-                    </Grid>
-                  );
-                })}
-              </Grid>
+            <Card withBigMargin className={styles.factsBar}>
+              <div style={{ display: "flex" }}>
+                {factsBarPicture && (
+                  <div style={{ width: 125 }}>
+                    <div
+                      style={{
+                        backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                        height: 100,
+                        width: 100,
+                      }}
+                    />
+                  </div>
+                )}
+                <div style={{ flex: 1 }}>
+                  <Typography variant="h6">{factsBarTitle}</Typography>
+                  <Divider style={{ margin: "15px 0" }} />
+                  <Grid container spacing={3}>
+                    {factsBar.map((fact) => {
+                      const field = model.fields[fact];
+                      return (
+                        <Grid
+                          item
+                          //@ts-ignore
+                          xs={12 / factsBar.length}
+                          key={fact}
+                          style={{ textAlign: "center" }}
+                        >
+                          <Typography
+                            variant="body1"
+                            style={{ fontWeight: "bold" }}
+                          >
+                            {field.name}
+                          </Typography>
+                          <Typography variant="body2" noWrap>
+                            <FieldDisplay
+                              objectField={object.data[fact]}
+                              modelField={field}
+                            />
+                          </Typography>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </div>
+              </div>
             </Card>
           </AnimationItem>
         )}
