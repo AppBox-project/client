@@ -63,7 +63,6 @@ const ViewObject: React.FC<{
   const [defaultButton] = useGlobal<any>("defaultButton");
   const [pageTitle, setPageTitle] = useState<any>(undefined);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
-  const [dialog, setDialog] = useGlobal<any>("dialog");
   const history = useHistory();
 
   const getFeedback = (feedback) => {
@@ -318,6 +317,99 @@ const ViewObject: React.FC<{
     }
   }
 
+  // Buttons
+  const buttons = (layout.buttons || []).map((button) => {
+    const buttonInfo = {
+      clone: {
+        variant: "text",
+        label: "Clone",
+        onClick: () => {
+          context.setDialog({
+            display: true,
+            title: "Feature in progress",
+            content: "Sadly, I did not build this yet.",
+          });
+        },
+      },
+      delete: {
+        variant: "outlined",
+        label: "Delete",
+        onClick: () => {
+          context.setDialog({
+            display: true,
+            title: "Delete?",
+            content: "Are you sure? For now, this can't be reverted!",
+            buttons: [
+              {
+                label: "No",
+                onClick: () => {
+                  context.setDialog({ display: false });
+                },
+              },
+              {
+                label: <span style={{ color: "red" }}>Yes, delete</span>,
+                onClick: () => {
+                  const requestId = uniqid();
+                  Server.emit("deleteObject", {
+                    requestId,
+                    objectId,
+                  });
+                  Server.on(`receive-${requestId}`, () => {
+                    history.replace(`/${appId}/${modelId}`);
+                  });
+                },
+              },
+            ],
+          });
+        },
+      },
+      archive: {
+        varian: "text",
+        label: "Archive",
+        onClick: () => {
+          context.setDialog({
+            display: true,
+            title: "Are you sure?",
+            content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+            buttons: [
+              {
+                label: "Cancel",
+                onClick: () => {
+                  context.setDialog({ display: false });
+                },
+              },
+              {
+                label: (
+                  <Typography style={{ color: "red" }}>Archive</Typography>
+                ),
+                onClick: () => {
+                  context.archiveObject(modelId, objectId).then(() => {
+                    history.replace(`/${appId}/${modelId}`);
+                  });
+                },
+              },
+            ],
+          });
+        },
+      },
+    }[button];
+    return (
+      <Button
+        color="primary"
+        variant={buttonInfo.variant}
+        onClick={buttonInfo.onClick}
+        style={{
+          margin: 5,
+          color: layout.factsBar
+            ? `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
+            : "white",
+        }}
+      >
+        {buttonInfo.label}
+      </Button>
+    );
+  });
+
   return (
     <div
       onKeyDown={(event) => {
@@ -344,13 +436,19 @@ const ViewObject: React.FC<{
                     <div
                       style={{
                         backgroundImage: `url(${baseUrl + factsBarPicture}`,
-                        height: 100,
-                        width: 100,
+                        height: 115,
+                        width: 115,
+                        backgroundSize: "cover",
                       }}
                     />
                   </div>
                 )}
                 <div style={{ flex: 1 }}>
+                  <div
+                    style={{ float: "right", marginRight: 5, marginTop: -5 }}
+                  >
+                    {buttons}
+                  </div>
                   <Typography variant="h6">{factsBarTitle}</Typography>
                   <Divider style={{ margin: "15px 0" }} />
                   <Grid container spacing={3}>
@@ -389,98 +487,7 @@ const ViewObject: React.FC<{
           /* Button layout without factsbar*/ <div
             style={{ textAlign: "right", margin: "0 20px" }}
           >
-            {(layout.buttons || []).map((button) => {
-              const buttonInfo = {
-                clone: {
-                  variant: "outlined",
-                  label: "Clone",
-                  onClick: () => {
-                    setDialog({
-                      display: true,
-                      title: "Feature in progress",
-                      content: "Sadly, I did not build this yet.",
-                    });
-                  },
-                },
-                delete: {
-                  variant: "text",
-                  label: "Delete",
-                  onClick: () => {
-                    setDialog({
-                      display: true,
-                      title: "Delete?",
-                      content: "Are you sure? For now, this can't be reverted!",
-                      buttons: [
-                        {
-                          label: "No",
-                          onClick: () => {
-                            setDialog({ display: false });
-                          },
-                        },
-                        {
-                          label: (
-                            <span style={{ color: "red" }}>Yes, delete</span>
-                          ),
-                          onClick: () => {
-                            const requestId = uniqid();
-                            Server.emit("deleteObject", {
-                              requestId,
-                              objectId,
-                            });
-                            Server.on(`receive-${requestId}`, () => {
-                              history.replace(`/${appId}/${modelId}`);
-                            });
-                          },
-                        },
-                      ],
-                    });
-                  },
-                },
-                archive: {
-                  varian: "text",
-                  label: "Archive",
-                  onClick: () => {
-                    context.setDialog({
-                      display: true,
-                      title: "Are you sure?",
-                      content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
-                      buttons: [
-                        {
-                          label: "Cancel",
-                          onClick: () => {
-                            context.setDialog({ display: false });
-                          },
-                        },
-                        {
-                          label: (
-                            <Typography style={{ color: "red" }}>
-                              Archive
-                            </Typography>
-                          ),
-                          onClick: () => {
-                            context
-                              .archiveObject(modelId, objectId)
-                              .then(() => {
-                                history.replace(`/${appId}/${modelId}`);
-                              });
-                          },
-                        },
-                      ],
-                    });
-                  },
-                },
-              }[button];
-              return (
-                <Button
-                  color="primary"
-                  variant={buttonInfo.variant}
-                  onClick={buttonInfo.onClick}
-                  style={{ margin: 5, color: "white" }}
-                >
-                  {buttonInfo.label}
-                </Button>
-              );
-            })}
+            {buttons}
           </div>
         )}
 
@@ -651,7 +658,10 @@ const LayoutItem: React.FC<{
         />
       );
     case "Paper":
-      return (
+      return (layoutItem.hideEdit && mode === "edit") ||
+        (layoutItem.hideView && mode === "view") ? (
+        <></>
+      ) : (
         <ObjectLayoutItemPaper
           hoverable={layoutItem.hoverable}
           withBigMargin={layoutItem.withBigMargin}

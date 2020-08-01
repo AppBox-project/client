@@ -25,7 +25,7 @@ const Card: React.FC<{
   withSmallMargin,
   sideMarginOnly,
 }) => {
-  const addMargin = {
+  const margins = {
     ...(withBigMargin
       ? {
           marginLeft: 15,
@@ -43,10 +43,14 @@ const Card: React.FC<{
 
   return (
     <div
-      className={`${styles.root} ${
+      className={`test ${styles.root} ${
         hoverable && styles.hoverable
       } ${className} ${className}`}
-      style={{ ...addMargin, ...style }}
+      style={{
+        ...margins,
+        ...style,
+        marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
+      }}
     >
       {title && (
         <>
