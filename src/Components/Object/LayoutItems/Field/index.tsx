@@ -50,7 +50,7 @@ const ObjectLayoutItemField: React.FC<{
       const objectField =
         toChange[condition.field] === null ||
         toChange[condition.field] === undefined
-          ? object.data[condition.field]
+          ? (object?.data || {})[condition.field]
           : toChange[condition.field];
       if (condition.operator === "equals") {
         if (objectField !== condition.value) {

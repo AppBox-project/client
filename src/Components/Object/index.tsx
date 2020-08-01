@@ -10,6 +10,7 @@ import {
   Typography,
   Grid,
   Divider,
+  Hidden,
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -432,18 +433,20 @@ const ViewObject: React.FC<{
             <Card withBigMargin className={styles.factsBar}>
               <div style={{ display: "flex" }}>
                 {factsBarPicture && (
-                  <div style={{ width: 125 }}>
-                    <div
-                      style={{
-                        backgroundImage: `url(${baseUrl + factsBarPicture}`,
-                        height: 115,
-                        width: 115,
-                        backgroundSize: "cover",
-                      }}
-                    />
-                  </div>
+                  <Hidden smDown>
+                    <div style={{ width: 125 }}>
+                      <div
+                        style={{
+                          backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                          height: 115,
+                          width: 115,
+                          backgroundSize: "cover",
+                        }}
+                      />
+                    </div>
+                  </Hidden>
                 )}
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, width: "100%" }}>
                   <div
                     style={{ float: "right", marginRight: 5, marginTop: -5 }}
                   >
@@ -454,17 +457,43 @@ const ViewObject: React.FC<{
                   <Grid container spacing={3}>
                     {factsBar.map((fact) => {
                       const field = model.fields[fact];
+                      type ColType =
+                        | 1
+                        | 2
+                        | 3
+                        | 4
+                        | 5
+                        | 6
+                        | 7
+                        | 8
+                        | 9
+                        | 10
+                        | 11
+                        | 12;
+
+                      //@ts-ignore
+                      const colsSmall: ColType = (12 / factsBar.length) * 2;
+                      //@ts-ignore
+                      const colsExtraSmall: ColType =
+                        (12 / factsBar.length) * 3;
+                      //@ts-ignore
+                      const cols: ColType = 12 / factsBar.length;
                       return (
                         <Grid
                           item
-                          //@ts-ignore
-                          xs={12 / factsBar.length}
+                          xs={colsExtraSmall}
+                          sm={colsSmall}
+                          md={cols}
                           key={fact}
-                          style={{ textAlign: "center" }}
+                          style={{
+                            textAlign: "center",
+                          }}
                         >
                           <Typography
                             variant="body1"
-                            style={{ fontWeight: "bold" }}
+                            style={{
+                              fontWeight: "bold",
+                            }}
                           >
                             {field.name}
                           </Typography>
