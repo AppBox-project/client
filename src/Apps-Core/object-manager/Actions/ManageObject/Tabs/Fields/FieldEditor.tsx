@@ -327,7 +327,6 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "richtext" && (
                   <Grid item xs={6}>
-                    richtext
                     <UI.Inputs.SelectInput
                       label="Type"
                       value={field.typeArgs ? field.typeArgs.type : "regular"}
@@ -346,6 +345,20 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "formula" && (
                   <Grid item xs={12}>
+                    <UI.Inputs.SelectInput
+                      label="Output type"
+                      value={field.typeArgs ? field.typeArgs.type : "text"}
+                      options={[
+                        { value: "text", label: "Text" },
+                        { value: "picture", label: "Picture" },
+                      ]}
+                      onChange={(value) => {
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, type: value },
+                        });
+                      }}
+                    />
                     <FormulaEditor
                       formulaContext={model.key}
                       onChange={(formula, deps: any) => {

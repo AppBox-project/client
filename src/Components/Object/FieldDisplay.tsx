@@ -17,6 +17,7 @@ const FieldDisplay: React.FC<{
   remoteObjectCache?;
   onLoadRemoteObject?;
   props?;
+  small?: true;
 }> = ({
   objectField,
   modelField,
@@ -25,6 +26,7 @@ const FieldDisplay: React.FC<{
   remoteObjectCache,
   onLoadRemoteObject,
   props,
+  small,
 }) => {
   return (
     <>
@@ -68,6 +70,7 @@ const FieldDisplay: React.FC<{
         <ObjectFieldDisplayPicture
           modelField={modelField}
           objectField={objectField}
+          small={small}
           {...props}
         />
       )}

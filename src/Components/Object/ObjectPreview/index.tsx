@@ -67,7 +67,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
             xs={11}
             style={{ verticalAlign: "middle", paddingLeft: 10 }}
           >
-            <Typography>{object.data[model.primary]}</Typography>
+            <Typography noWrap>{object.data[model.primary]}</Typography>
           </Grid>
         </Grid>
       </Link>

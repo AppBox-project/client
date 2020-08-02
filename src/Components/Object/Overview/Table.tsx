@@ -131,6 +131,7 @@ const RegularTable: React.FC<{
                     <FieldDisplay
                       modelField={model.fields[field]}
                       objectField={object.data[field]}
+                      small
                     />
                   </TableCell>
                 );

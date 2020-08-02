@@ -3,18 +3,18 @@ import { Typography } from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { baseUrl } from "../../../../Utils/Utils";
 
-const ObjectFieldDisplayPicture: React.FC<{ modelField; objectField }> = ({
-  objectField,
-  modelField,
-}) => {
+const ObjectFieldDisplayPicture: React.FC<{
+  modelField;
+  objectField;
+  small?: true;
+}> = ({ objectField, modelField, small }) => {
   return (
     <>
       {objectField ? (
         <div
-          className={styles.picturePreview}
+          className={small ? styles.picturePreviewSmall : styles.picturePreview}
           style={{
             backgroundImage: `url(${baseUrl}${objectField})`,
-            backgroundSize: "cover",
           }}
         />
       ) : (

@@ -308,7 +308,13 @@ const ViewObject: React.FC<{
   let factsBarTitle;
   let factsBar;
   if (layout.factsBar) {
-    if (model.fields[layout.factsBar[0]].type === "picture") {
+    if (
+      model.fields[layout.factsBar[0]].type === "picture" ||
+      (model.fields[layout.factsBar[0]].type === "formula" &&
+        model.fields[layout.factsBar[0]].typeArgs.type === "picture")
+    ) {
+      console.log("t");
+
       factsBarPicture = object.data[layout.factsBar[0]];
       factsBarTitle = object.data[layout.factsBar[1]];
       factsBar = layout.factsBar.slice(2);
@@ -447,23 +453,26 @@ const ViewObject: React.FC<{
                     <div style={{ float: "right", marginTop: -5 }}>
                       {buttons}
                     </div>
-                    <Typography variant="h6">{factsBarTitle}</Typography>
+                    <Typography variant="h5" style={{ textAlign: "center" }}>
+                      {factsBarTitle}
+                    </Typography>
                   </Hidden>
                   <Hidden smUp>
                     <div style={{ display: "flex" }}>
-                      <div
-                        style={{
-                          backgroundImage: `url(${baseUrl + factsBarPicture}`,
-                        }}
-                        className={styles.factsBarImageSmall}
-                      />
+                      {factsBarPicture && (
+                        <div
+                          style={{
+                            backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                          }}
+                          className={styles.factsBarImageSmall}
+                        />
+                      )}
                       <div style={{ textAlign: "center", flex: 1 }}>
                         <Typography variant="h6">{factsBarTitle}</Typography>
                         {buttons}
                       </div>
                     </div>
                   </Hidden>
-
                   <Divider style={{ margin: "15px 0" }} />
                   <Grid container spacing={3}>
                     {factsBar.map((fact) => {
