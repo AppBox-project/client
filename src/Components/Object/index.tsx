@@ -430,29 +430,40 @@ const ViewObject: React.FC<{
       <AnimationContainer>
         {factsBar && (
           <AnimationItem>
-            <Card withBigMargin className={styles.factsBar}>
+            <Card withBigMargin hoverable className={styles.factsBar}>
               <div style={{ display: "flex" }}>
                 {factsBarPicture && (
-                  <Hidden smDown>
-                    <div style={{ width: 125 }}>
-                      <div
-                        style={{
-                          backgroundImage: `url(${baseUrl + factsBarPicture}`,
-                          height: 115,
-                          width: 115,
-                          backgroundSize: "cover",
-                        }}
-                      />
-                    </div>
+                  <Hidden xsDown>
+                    <div
+                      style={{
+                        backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                      }}
+                      className={styles.factsBarImage}
+                    />
                   </Hidden>
                 )}
                 <div style={{ flex: 1, width: "100%" }}>
-                  <div
-                    style={{ float: "right", marginRight: 5, marginTop: -5 }}
-                  >
-                    {buttons}
-                  </div>
-                  <Typography variant="h6">{factsBarTitle}</Typography>
+                  <Hidden xsDown>
+                    <div style={{ float: "right", marginTop: -5 }}>
+                      {buttons}
+                    </div>
+                    <Typography variant="h6">{factsBarTitle}</Typography>
+                  </Hidden>
+                  <Hidden smUp>
+                    <div style={{ display: "flex" }}>
+                      <div
+                        style={{
+                          backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                        }}
+                        className={styles.factsBarImageSmall}
+                      />
+                      <div style={{ textAlign: "center", flex: 1 }}>
+                        <Typography variant="h6">{factsBarTitle}</Typography>
+                        {buttons}
+                      </div>
+                    </div>
+                  </Hidden>
+
                   <Divider style={{ margin: "15px 0" }} />
                   <Grid container spacing={3}>
                     {factsBar.map((fact) => {
@@ -481,8 +492,7 @@ const ViewObject: React.FC<{
                       return (
                         <Grid
                           item
-                          xs={colsExtraSmall}
-                          sm={colsSmall}
+                          xs={colsSmall}
                           md={cols}
                           key={fact}
                           style={{

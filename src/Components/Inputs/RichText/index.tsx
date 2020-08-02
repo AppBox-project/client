@@ -21,6 +21,7 @@ const InputRichText: React.FC<{
   return (
     <CKEditor
       editor={ClassicEditor}
+      config={{}}
       data={newValue}
       onChange={(event, editor) => {
         const data = editor.getData();
