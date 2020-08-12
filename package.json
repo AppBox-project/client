@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.1.2-11",
-  "description": "Improve mobile facts bar",
+  "version": "0.2.0-1",
+  "description": "Add engine to backend",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

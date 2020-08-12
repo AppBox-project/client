@@ -350,6 +350,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       value={field.typeArgs ? field.typeArgs.type : "text"}
                       options={[
                         { value: "text", label: "Text" },
+                        { value: "number", label: "Number" },
                         { value: "picture", label: "Picture" },
                       ]}
                       onChange={(value) => {
@@ -359,21 +360,15 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         });
                       }}
                     />
-                    <FormulaEditor
-                      formulaContext={model.key}
-                      onChange={(formula, deps: any) => {
-                        setFormulaDeps(deps);
-
+                    <context.UI.Inputs.TextInput
+                      label="Formula"
+                      value={field.typeArgs?.formula || ""}
+                      onChange={(value) => {
                         setField({
                           ...field,
-                          typeArgs: {
-                            ...field.typeArgs,
-                            formula,
-                            dependencies: formulaDeps,
-                          },
+                          typeArgs: { ...field.typeArgs, formula: value },
                         });
                       }}
-                      value={field.typeArgs ? field.typeArgs.formula : ""}
                     />
                   </Grid>
                 )}
