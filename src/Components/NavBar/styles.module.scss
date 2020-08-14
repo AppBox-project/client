@@ -18,8 +18,10 @@
 }
 
 .appbar {
+  transition: all 0.3s;
   display: flex;
-  height: 20vh;
+  min-height: 64px;
+  height: 25vh;
   position: relative;
   z-index: 3;
 }
