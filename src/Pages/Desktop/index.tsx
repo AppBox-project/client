@@ -20,6 +20,7 @@ import { GiCardboardBox } from "react-icons/gi";
 import { baseUrl } from "../../Utils/Utils";
 import NavBar from "../../Components/NavBar";
 import LinkHandler from "../LinkHandler";
+import NavBarSkeleton from "./NavBarSkeleton";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -85,10 +86,12 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   };
   const [user] = useGlobal<any>("user");
   const [apps, setApps] = useState<any>();
+  const [userAppList, setUserAppList] = useState<string[]>();
   const [theme] = useGlobal<any>("theme");
 
   // Lifecycle
   useEffect(() => {
+    // Get all apps
     const requestId = uniqid();
     Server.emit("listenForObjects", { requestId, type: "app", filter: {} });
     Server.on(`receive-${requestId}`, (response) => {
@@ -98,13 +101,25 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         console.log(response);
       }
     });
+
+    // Get user app list
+    const userRequestId = uniqid();
+    Server.emit("getUserSetting", { requestId: userRequestId, key: "applist" });
+    Server.on(`receive-${userRequestId}`, (response) => {
+      if (response.success) {
+        setUserAppList(response.data);
+      } else {
+        console.log(response);
+        //setUserAppList([]);
+      }
+    });
+
     return () => {
       Server.emit("unlistenForObjects", { requestId });
     };
   }, []);
 
   // UI
-  if (!apps) return <CircularProgress />;
   return (
     <motion.div
       initial="hidden"
@@ -134,35 +149,50 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           overflow: "hidden",
         }}
       >
-        {apps.map((app) => {
-          const Icon = icons[app.data.icon];
-          return (
-            <div
-              className={`${styles.item} ${
-                currentApp === app.data.id && styles.active
-              }`}
-              key={app._id}
-            >
-              <motion.div variants={item} style={{ width: 64 }}>
-                <Tooltip placement="right" title={app.data.name}>
-                  <Link to={`/${app.data.id}`} className="no-link">
-                    <IconButton>
-                      <Avatar
-                        variant="rounded"
-                        style={{
-                          transition: "all 1s",
-                          backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                        }}
-                      >
-                        <Icon />
-                      </Avatar>
-                    </IconButton>
-                  </Link>
-                </Tooltip>
-              </motion.div>
-            </div>
-          );
-        })}
+        {userAppList ? (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={list}
+            className={styles.appbar}
+            style={{
+              backgroundColor: theme.palette.primary.main,
+              transition: "all 0.3s",
+            }}
+          >
+            {apps.map((app) => {
+              const Icon = icons[app.data.icon];
+              return (
+                <div
+                  className={`${styles.item} ${
+                    currentApp === app.data.id && styles.active
+                  }`}
+                  key={app._id}
+                >
+                  <motion.div variants={item} style={{ width: 64 }}>
+                    <Tooltip placement="right" title={app.data.name}>
+                      <Link to={`/${app.data.id}`} className="no-link">
+                        <IconButton>
+                          <Avatar
+                            variant="rounded"
+                            style={{
+                              transition: "all 1s",
+                              backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                            }}
+                          >
+                            <Icon />
+                          </Avatar>
+                        </IconButton>
+                      </Link>
+                    </Tooltip>
+                  </motion.div>
+                </div>
+              );
+            })}
+          </motion.div>
+        ) : (
+          <NavBarSkeleton />
+        )}
       </div>
       <motion.div variants={item} style={{ height: 64, zIndex: 502 }}>
         <Link to={`/o/${user._id}`}>
