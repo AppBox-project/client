@@ -1,18 +1,12 @@
 import React, { useGlobal } from "reactn";
 import styles from "./styles.module.scss";
 import { motion } from "framer-motion";
-import {
-  IconButton,
-  Avatar,
-  CircularProgress,
-  Tooltip,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { IconButton, Avatar, Tooltip, Popover } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
 import * as icons from "react-icons/fa";
-import { Switch, Route } from "react-router-dom";
+import { Link, useHistory, Switch, Route } from "react-router-dom";
 import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
@@ -21,6 +15,9 @@ import { baseUrl } from "../../Utils/Utils";
 import NavBar from "../../Components/NavBar";
 import LinkHandler from "../LinkHandler";
 import NavBarSkeleton from "./NavBarSkeleton";
+import InputInput from "../../Components/Inputs/Input";
+import AppBarAppList from "./AppList";
+import { AppType } from "../../Utils/Types";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -85,9 +82,12 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
     hidden: { opacity: 0, y: 10 },
   };
   const [user] = useGlobal<any>("user");
-  const [apps, setApps] = useState<any>();
+  const [apps, setApps] = useState<{}>();
   const [userAppList, setUserAppList] = useState<string[]>();
+  const [appList, setAppList] = useState<AppType[]>();
   const [theme] = useGlobal<any>("theme");
+  const history = useHistory();
+  const [appListAnchor, setAppListAnchor] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -96,7 +96,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
     Server.emit("listenForObjects", { requestId, type: "app", filter: {} });
     Server.on(`receive-${requestId}`, (response) => {
       if (response.success) {
-        setApps(response.data);
+        const al = {};
+        response.data.map((a) => (al[a._id] = a));
+        setApps(al);
+        setAppList(response.data);
       } else {
         console.log(response);
       }
@@ -110,7 +113,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         setUserAppList(response.data);
       } else {
         console.log(response);
-        //setUserAppList([]);
+        setUserAppList([]);
       }
     });
 
@@ -134,13 +137,51 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       <div className={styles.shadow} />
       <motion.div variants={item} style={{ width: "100%", height: 64 }}>
         <Link to="/">
-          <Tooltip title="Home" placement="right">
-            <IconButton style={{ color: "white" }}>
+          <Tooltip title="Right-click for all apps" placement="right">
+            <IconButton
+              style={{ color: "white" }}
+              onClick={() => {
+                history.push("/");
+              }}
+              onContextMenu={(event) => {
+                setAppListAnchor(event.currentTarget);
+                event.preventDefault();
+              }}
+              onDoubleClick={(event) => {
+                setAppListAnchor(event.currentTarget);
+                event.preventDefault();
+              }}
+            >
               <icons.FaBoxOpen style={{ width: 40, height: 40 }} />
             </IconButton>
           </Tooltip>
         </Link>
       </motion.div>
+      <Popover
+        id="applist"
+        open={Boolean(appListAnchor)}
+        anchorEl={appListAnchor}
+        onClose={() => {
+          setAppListAnchor(null);
+        }}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        classes={{ paper: styles.appList }}
+        PaperProps={{ elevation: 5 }}
+      >
+        <AppBarAppList
+          appList={appList}
+          closePopover={() => {
+            setAppListAnchor(null);
+          }}
+        />
+      </Popover>
       <div
         style={{
           flex: 1,
@@ -149,7 +190,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           overflow: "hidden",
         }}
       >
-        {userAppList ? (
+        {userAppList && apps ? (
           <motion.div
             initial="hidden"
             animate="visible"
@@ -160,7 +201,8 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
               transition: "all 0.3s",
             }}
           >
-            {apps.map((app) => {
+            {userAppList.map((appId) => {
+              const app = apps[appId];
               const Icon = icons[app.data.icon];
               return (
                 <div

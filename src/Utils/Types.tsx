@@ -100,6 +100,7 @@ export interface ColorType {
 }
 
 export interface AppType {
+  _id;
   data: {
     id: string;
     name: string;

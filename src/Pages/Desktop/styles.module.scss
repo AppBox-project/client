@@ -31,7 +31,7 @@
 
 .shadow {
   bottom: 0px;
-  z-index: 100;
+  z-index: 505;
   height: 100vh;
   left: 54px;
   opacity: 1;
@@ -54,4 +54,15 @@
 .active {
   background-color: rgb(244, 245, 247);
   z-index: 999;
+}
+
+.appList {
+  transition: all 0.3s;
+  padding: 15px;
+  margin-left: 60px;
+  margin-top: -12px;
+  width: 40vw;
+  min-width: 350px;
+  min-height: 350px;
+  height: 45vh;
 }
