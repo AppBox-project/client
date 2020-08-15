@@ -119,6 +119,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
 
     return () => {
       Server.emit("unlistenForObjects", { requestId });
+      Server.emit("stopGettingUserSetting", { requestId: userRequestId });
     };
   }, []);
 
@@ -138,11 +139,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       <motion.div variants={item} style={{ width: "100%", height: 64 }}>
         <Link to="/">
           <Tooltip
-            title={
-              window.location.pathname === "/"
-                ? "Open all apps"
-                : "Back (rightclick opens applist)"
-            }
+            title={window.location.pathname === "/" ? "Open all apps" : "Home"}
             placement="right"
           >
             <IconButton

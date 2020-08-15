@@ -8,6 +8,9 @@ import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
 import { debounce } from "lodash";
 import Widget from "../../Widgets";
+import { FaPlus } from "react-icons/fa";
+import { Icon, IconButton } from "@material-ui/core";
+import Card from "../../Design/Card";
 
 const StartPage: React.FC = () => {
   // Vars
@@ -39,6 +42,7 @@ const StartPage: React.FC = () => {
         setDesktop(response.data.value);
       } else {
         console.log(response);
+        setDesktop([]);
       }
     });
 
@@ -51,6 +55,27 @@ const StartPage: React.FC = () => {
   if (!desktop) return <Loading />;
   return (
     <div style={{ margin: 15, marginTop: isMobile ? 15 : 79 }}>
+      <IconButton
+        style={{ float: "right", position: "absolute", right: 15, zIndex: 505 }}
+        onClick={() => {
+          const newDesktop = desktop.layout || [];
+          newDesktop.push({
+            i: uniqid(),
+            x: 1,
+            y: 1,
+            w: 2,
+            h: 3,
+          });
+          Server.emit("setUserSetting", {
+            key: "desktop",
+            value: { ...desktop, layout: newDesktop },
+          });
+        }}
+      >
+        <Icon style={{ color: "white" }}>
+          <FaPlus />
+        </Icon>
+      </IconButton>
       <ResponsiveGridLayout
         className="layout"
         onLayoutChange={handleLayoutChange}
@@ -63,14 +88,18 @@ const StartPage: React.FC = () => {
         {desktop.layout &&
           desktop.layout.map((desktopItem) => {
             return (
-              <div
+              <Card
+                withBigMargin
                 key={desktopItem.i}
                 className={styles.widget}
                 data-grid={desktopItem}
                 style={{ overflow: "hidden" }}
+                title="Testwidget"
+                centerTitle
+                titleDivider
               >
-                <Widget widgetMeta={desktop.widgets[desktopItem.i]} />
-              </div>
+                Testwidget
+              </Card>
             );
           })}
       </ResponsiveGridLayout>

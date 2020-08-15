@@ -52,8 +52,6 @@ const AppUIDesktop: React.FC<{
             <appContext.actions context={appContext} />
           ) : (
             appContext.actions.map((action) => {
-              console.log(action);
-
               return (
                 <Route
                   key={action.key}
