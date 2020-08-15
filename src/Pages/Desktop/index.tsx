@@ -137,11 +137,23 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       <div className={styles.shadow} />
       <motion.div variants={item} style={{ width: "100%", height: 64 }}>
         <Link to="/">
-          <Tooltip title="Right-click for all apps" placement="right">
+          <Tooltip
+            title={
+              window.location.pathname === "/"
+                ? "Open all apps"
+                : "Back (rightclick opens applist)"
+            }
+            placement="right"
+          >
             <IconButton
               style={{ color: "white" }}
-              onClick={() => {
-                history.push("/");
+              onClick={(event) => {
+                if (window.location.pathname === "/") {
+                  setAppListAnchor(event.currentTarget);
+                  event.preventDefault();
+                } else {
+                  history.push("/");
+                }
               }}
               onContextMenu={(event) => {
                 setAppListAnchor(event.currentTarget);
