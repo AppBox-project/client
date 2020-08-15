@@ -72,7 +72,7 @@ const GridItemLayout: React.FC<{
         </Typography>
       )}
       <Grid container>
-        {data.map((item) => {
+        {(data || []).map((item) => {
           const title = get(item, dataMap?.title || "title") || (
             <>
               <b>Error: </b>please provide a dataMap

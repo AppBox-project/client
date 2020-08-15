@@ -48,11 +48,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
   // Vars
   const [newModel, setNewModel] = useState<any>(model);
   const [modelInfo, setModelInfo] = useState<any>();
-  const isActive = model.api
-    ? model.api[detailId]
-      ? model.api[detailId].active
-      : false
-    : false;
+  const isActive = model?.api[detailId]?.active || false;
   const [hasChanged, setHasChanged] = useState<any>(false);
 
   // Lifecycle
@@ -71,115 +67,101 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
   if (!modelInfo) return <context.UI.Loading />;
   if (modelInfo === "error") return <>Unknown API type</>;
   return (
-    <>
-      <context.UI.Animations.AnimationContainer>
-        <context.UI.Animations.AnimationItem>
-          <context.UI.Design.Card withBigMargin>
-            <div style={{ float: "right" }}>
-              <context.UI.Inputs.Switch
-                label="Active"
-                value={isActive}
-                onChange={(active) => {
-                  context.updateModel(
-                    model.key,
-                    {
-                      ...newModel,
-                      api: {
-                        ...(newModel.api || {}),
-                        [detailId]: {
-                          ...(newModel?.api ? [detailId] || {} : {}),
-                          active,
-                        },
+    <context.UI.Animations.AnimationContainer>
+      <context.UI.Animations.AnimationItem>
+        <context.UI.Design.Card withBigMargin>
+          <div style={{ float: "right" }}>
+            <context.UI.Inputs.Switch
+              label="Active"
+              value={isActive}
+              onChange={(active) => {
+                context.updateModel(
+                  model.key,
+                  {
+                    ...newModel,
+                    api: {
+                      ...(newModel.api || {}),
+                      [detailId]: {
+                        ...(newModel?.api ? [detailId] || {} : {}),
+                        active,
                       },
                     },
-                    model._id
-                  );
-                }}
-              />
-            </div>
-            <Typography variant="h4" style={{ marginBottom: 15 }}>
-              {modelInfo.title}
-            </Typography>
-            <Typography variant="body1">{modelInfo.description}</Typography>
-          </context.UI.Design.Card>
-        </context.UI.Animations.AnimationItem>
-      </context.UI.Animations.AnimationContainer>
+                  },
+                  model._id
+                );
+              }}
+            />
+          </div>
+          <Typography variant="h4" style={{ marginBottom: 15 }}>
+            {modelInfo.title}
+          </Typography>
+          <Typography variant="body1">{modelInfo.description}</Typography>
+        </context.UI.Design.Card>
+      </context.UI.Animations.AnimationItem>
       {isActive && (
-        <context.UI.Animations.AnimationContainer>
-          <Grid container>
-            <Grid item xs={12}>
-              <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card withBigMargin title="Settings">
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <context.UI.Inputs.SelectInput
-                        label="Access type"
-                        options={[
-                          { label: "Public access", value: "none" },
-                          { label: "User authentication", value: "user" },
-                        ]}
-                        value={
-                          model.api
-                            ? model.api[detailId]
-                              ? model.api[detailId].authentication
-                                ? model.api[detailId].authentication
-                                : "user"
-                              : "user"
-                            : "user"
-                        }
-                        onChange={(authentication) => {
-                          setHasChanged(true);
-                          setNewModel({
-                            ...newModel,
-                            api: {
-                              ...newModel.api,
-                              [detailId]: {
-                                ...newModel.api[detailId],
-                                authentication,
-                              },
+        <Grid container>
+          <Grid item xs={12}>
+            <context.UI.Animations.AnimationItem>
+              <context.UI.Design.Card withBigMargin title="Settings">
+                <Grid container>
+                  <Grid item xs={6}>
+                    <context.UI.Inputs.SelectInput
+                      label="Access type"
+                      options={[
+                        { label: "Public access", value: "none" },
+                        { label: "User authentication", value: "user" },
+                      ]}
+                      value={model?.api[detailId]?.authentication || "user"}
+                      onChange={(authentication) => {
+                        setHasChanged(true);
+                        setNewModel({
+                          ...newModel,
+                          api: {
+                            ...newModel.api,
+                            [detailId]: {
+                              ...newModel.api[detailId],
+                              authentication,
                             },
-                          });
-                        }}
-                      />
-                    </Grid>
+                          },
+                        });
+                      }}
+                    />
                   </Grid>
-                </context.UI.Design.Card>
-              </context.UI.Animations.AnimationItem>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card withBigMargin title="Log">
-                  {" "}
-                </context.UI.Design.Card>
-              </context.UI.Animations.AnimationItem>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <context.UI.Animations.AnimationItem>
-                <context.UI.Design.Card withBigMargin title="Stats">
-                  {" "}
-                </context.UI.Design.Card>
-              </context.UI.Animations.AnimationItem>
-            </Grid>
+                </Grid>
+              </context.UI.Design.Card>
+            </context.UI.Animations.AnimationItem>
           </Grid>
-        </context.UI.Animations.AnimationContainer>
+          <Grid item xs={12} md={6}>
+            <context.UI.Animations.AnimationItem>
+              <context.UI.Design.Card withBigMargin title="Log">
+                {" "}
+              </context.UI.Design.Card>
+            </context.UI.Animations.AnimationItem>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <context.UI.Animations.AnimationItem>
+              <context.UI.Design.Card withBigMargin title="Stats">
+                {" "}
+              </context.UI.Design.Card>
+            </context.UI.Animations.AnimationItem>
+          </Grid>
+        </Grid>
       )}
       {hasChanged && (
-        <context.UI.Animations.AnimationContainer>
-          <context.UI.Animations.AnimationItem>
-            <Button
-              fullWidth
-              color="primary"
-              onClick={() => {
-                context.updateModel(model.key, newModel, model._id);
-                setHasChanged(false);
-              }}
-            >
-              Save
-            </Button>
-          </context.UI.Animations.AnimationItem>
-        </context.UI.Animations.AnimationContainer>
+        <context.UI.Animations.AnimationItem>
+          <Button
+            fullWidth
+            color="primary"
+            onClick={() => {
+              context.updateModel(model.key, newModel, model._id);
+              setHasChanged(false);
+            }}
+          >
+            Save
+          </Button>
+        </context.UI.Animations.AnimationItem>
       )}
-    </>
+    </context.UI.Animations.AnimationContainer>
   );
 };
 

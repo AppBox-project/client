@@ -110,7 +110,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
     Server.emit("getUserSetting", { requestId: userRequestId, key: "applist" });
     Server.on(`receive-${userRequestId}`, (response) => {
       if (response.success) {
-        setUserAppList(response.data);
+        setUserAppList(response.data.value);
       } else {
         console.log(response);
         setUserAppList([]);
@@ -180,6 +180,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           closePopover={() => {
             setAppListAnchor(null);
           }}
+          userAppList={userAppList}
         />
       </Popover>
       <div
