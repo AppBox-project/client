@@ -6,7 +6,9 @@ import Server from "../../../Utils/Server";
 import { ObjectType } from "../../../Utils/Types";
 import * as icons from "react-icons/fa";
 
-const WidgetList: React.FC<{ onAdd: (widgetId) => void }> = ({ onAdd }) => {
+const WidgetList: React.FC<{ onAdd: (widgetId, name) => void }> = ({
+  onAdd,
+}) => {
   // Vars
   const [widgets, setWidgets] = useState<ObjectType[]>();
 
@@ -39,7 +41,7 @@ const WidgetList: React.FC<{ onAdd: (widgetId) => void }> = ({ onAdd }) => {
               key={widget._id}
               style={{ cursor: "pointer" }}
               onClick={() => {
-                onAdd(widget._id);
+                onAdd(widget._id, widget.data.name);
               }}
             >
               <ListItemIcon>

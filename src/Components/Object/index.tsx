@@ -307,20 +307,20 @@ const ViewObject: React.FC<{
   let factsBarPicture;
   let factsBarTitle;
   let factsBar;
-  if (layout.factsBar) {
+  if (layout.factsBar && !popup) {
     if (
       model.fields[layout.factsBar[0]].type === "picture" ||
       (model.fields[layout.factsBar[0]].type === "formula" &&
         model.fields[layout.factsBar[0]].typeArgs.type === "picture")
     ) {
-      console.log("t");
-
       factsBarPicture = object.data[layout.factsBar[0]];
       factsBarTitle = object.data[layout.factsBar[1]];
       factsBar = layout.factsBar.slice(2);
-    } else {
+    } else if (object.data[layout.factsBar[0]]) {
       factsBarTitle = object.data[layout.factsBar[0]];
       factsBar = layout.factsBar.slice(1);
+    } else {
+      factsBarTitle = object.data[model.primary] || "???";
     }
   }
 
@@ -407,8 +407,8 @@ const ViewObject: React.FC<{
         onClick={buttonInfo.onClick}
         style={{
           margin: 5,
-          color: layout.factsBar
-            ? `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`
+          color: layout?.factsBar
+            ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
             : "white",
         }}
       >
@@ -434,7 +434,7 @@ const ViewObject: React.FC<{
       }}
     >
       <AnimationContainer>
-        {factsBar && (
+        {factsBar && !popup && (
           <AnimationItem>
             <Card withBigMargin hoverable className={styles.factsBar}>
               <div style={{ display: "flex" }}>

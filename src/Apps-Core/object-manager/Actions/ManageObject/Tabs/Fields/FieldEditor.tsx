@@ -351,6 +351,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       options={[
                         { value: "text", label: "Text" },
                         { value: "number", label: "Number" },
+                        { value: "boolean", label: "Boolean" },
                         { value: "picture", label: "Picture" },
                       ]}
                       onChange={(value) => {

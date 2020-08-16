@@ -6,8 +6,7 @@ import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
-import { debounce } from "lodash";
-import Widget from "../../Widgets";
+import Widget from "../../Widgets/WidgetRenderer";
 import { FaStream, FaGripLines } from "react-icons/fa";
 import {
   Icon,
@@ -89,13 +88,13 @@ const StartPage: React.FC = () => {
         }}
       >
         <WidgetList
-          onAdd={(id) => {
+          onAdd={(id, name) => {
             const newDesktop = {
               layout: desktop?.layout || [],
               widgets: desktop?.widgets || {},
             };
             const newId = uniqid();
-            newDesktop.widgets[newId] = { type: id, title: "this is test" };
+            newDesktop.widgets[newId] = { type: id, title: name };
             newDesktop.layout.push({
               i: newId,
               x: 1,
@@ -165,6 +164,7 @@ const StartPage: React.FC = () => {
                   {widget.title}
                 </Typography>
                 <Divider style={{ margin: "15px 0" }} />
+                <Widget settings={widget} />
               </Card>
             </div>
           );
