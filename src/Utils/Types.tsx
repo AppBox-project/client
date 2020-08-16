@@ -56,7 +56,7 @@ interface ModelApiType {
 
 export interface ObjectType {
   _id: any;
-  data: {};
+  data: any;
 }
 
 export interface ModelType {

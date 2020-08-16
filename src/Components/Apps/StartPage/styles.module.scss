@@ -1,8 +1,4 @@
-.widget {
-  background-color: #fefefe;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  & div {
-    margin: 5px;
-  }
+.WidgetCard {
+  width: 100%;
+  height: calc(100% - 15px);
 }

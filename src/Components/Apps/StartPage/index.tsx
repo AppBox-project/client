@@ -2,36 +2,31 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import Loading from "../../Loading";
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
 import { debounce } from "lodash";
 import Widget from "../../Widgets";
-import { FaPlus } from "react-icons/fa";
-import { Icon, IconButton } from "@material-ui/core";
+import { FaStream, FaGripLines } from "react-icons/fa";
+import {
+  Icon,
+  IconButton,
+  Typography,
+  Divider,
+  Tooltip,
+  Popover,
+} from "@material-ui/core";
 import Card from "../../Design/Card";
+import WidgetList from "./WidgetList";
 
 const StartPage: React.FC = () => {
   // Vars
   const [desktop, setDesktop] = useState<any>();
   const [isMobile] = useGlobal<any>("isMobile");
+  const [widgetAnchor, setWidgetAnchor] = useState<any>();
 
   // Functions
-  const handleLayoutChange = debounce((layout) => {
-    let firstLoad = true; // React grid gives a false first callback. Seemingly identifiable by all 0's
-    layout.map((item) => {
-      if (item.w !== 1 || item.h !== 1) {
-        firstLoad = false;
-      }
-    });
-    if (!firstLoad) {
-      Server.emit("setUserSetting", {
-        key: "desktop",
-        value: { layout, widgets: desktop.widgets },
-      });
-    }
-  }, 2500);
 
   // Lifecycle
   useEffect(() => {
@@ -55,54 +50,126 @@ const StartPage: React.FC = () => {
   if (!desktop) return <Loading />;
   return (
     <div style={{ margin: 15, marginTop: isMobile ? 15 : 79 }}>
-      <IconButton
-        style={{ float: "right", position: "absolute", right: 15, zIndex: 505 }}
-        onClick={() => {
-          const newDesktop = desktop.layout || [];
-          newDesktop.push({
-            i: uniqid(),
-            x: 1,
-            y: 1,
-            w: 2,
-            h: 3,
-          });
-          Server.emit("setUserSetting", {
-            key: "desktop",
-            value: { ...desktop, layout: newDesktop },
-          });
+      <Tooltip placement="left" title="Add widget">
+        <IconButton
+          style={{
+            float: "right",
+            position: "absolute",
+            right: 15,
+            top: 1,
+            zIndex: 505,
+          }}
+          onClick={(event) => {
+            setWidgetAnchor(event.currentTarget);
+          }}
+        >
+          <Icon style={{ color: "white" }}>
+            {widgetAnchor ? (
+              <FaGripLines style={{ height: 18, width: 18 }} />
+            ) : (
+              <FaStream style={{ height: 18, width: 18 }} />
+            )}
+          </Icon>
+        </IconButton>
+      </Tooltip>
+      <Popover
+        id="widget-list"
+        open={Boolean(widgetAnchor)}
+        anchorEl={widgetAnchor}
+        onClose={() => {
+          setWidgetAnchor(null);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
         }}
       >
-        <Icon style={{ color: "white" }}>
-          <FaPlus />
-        </Icon>
-      </IconButton>
-      <ResponsiveGridLayout
+        <WidgetList
+          onAdd={(id) => {
+            const newDesktop = {
+              layout: desktop?.layout || [],
+              widgets: desktop?.widgets || {},
+            };
+            const newId = uniqid();
+            newDesktop.widgets[newId] = { type: id, title: "this is test" };
+            newDesktop.layout.push({
+              i: newId,
+              x: 1,
+              y: 1,
+              w: 2,
+              h: 3,
+            });
+            Server.emit("setUserSetting", {
+              key: "desktop",
+              value: newDesktop,
+            });
+          }}
+        />
+      </Popover>
+
+      <GridLayout
         className="layout"
-        onLayoutChange={handleLayoutChange}
+        cols={12}
         rowHeight={30}
-        layout={desktop.layout}
         width={1200}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+        draggableHandle=".draggable"
+        onLayoutChange={(layout) => {
+          let firstLoad = true; // React grid gives a false first callback. Seemingly identifiable by all 0's
+          layout.map((item) => {
+            if (item.w !== 1 || item.h !== 1) {
+              firstLoad = false;
+            }
+          });
+          if (!firstLoad) {
+            // Validate callback (library isn't reliable)
+            layout.map((li) => {
+              if (!li.w) li.w = 1;
+            });
+            Server.emit("setUserSetting", {
+              key: "desktop",
+              value: { layout, widgets: desktop.widgets },
+            });
+          }
+        }}
       >
-        {desktop.layout &&
-          desktop.layout.map((desktopItem) => {
-            return (
-              <Card
-                withBigMargin
-                key={desktopItem.i}
-                className={styles.widget}
-                data-grid={desktopItem}
-                style={{ overflow: "hidden" }}
-                title="Testwidget"
-                centerTitle
-                titleDivider
-              >
-                Testwidget
+        {(desktop?.layout || []).map((item, widgetIndex) => {
+          const widget = desktop.widgets[item.i];
+
+          return (
+            <div
+              key={item.i}
+              data-grid={{ x: item.x, y: item.y, w: item.w, h: item.h }}
+            >
+              <Card className={styles.WidgetCard} hoverable>
+                <Typography
+                  variant="h6"
+                  className="draggable"
+                  style={{ cursor: "move" }}
+                  onContextMenu={(event) => {
+                    const newDesktop = desktop;
+                    newDesktop.layout.splice(widgetIndex, 1);
+                    delete newDesktop.widgets[item.i];
+                    console.log(newDesktop);
+
+                    Server.emit("setUserSetting", {
+                      key: "desktop",
+                      value: newDesktop,
+                    });
+                    event.preventDefault();
+                  }}
+                >
+                  {widget.title}
+                </Typography>
+                <Divider style={{ margin: "15px 0" }} />
               </Card>
-            );
-          })}
-      </ResponsiveGridLayout>
+            </div>
+          );
+        })}
+      </GridLayout>
     </div>
   );
 };
