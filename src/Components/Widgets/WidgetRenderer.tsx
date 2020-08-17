@@ -53,12 +53,6 @@ const Widget: React.FC<{ settings }> = ({ settings }) => {
   if (widgetInfo.data.system) {
     WidgetComponent = require(`./${widgetInfo.data.key}/index`).default;
   } else {
-    console.log(
-      `../../${widgetInfo.data["app_core"] ? "Apps-Core" : "Apps-User"}/${
-        widgetInfo.data["app_id"]
-      }/Widget/${widgetInfo.data.key}/index`
-    );
-
     WidgetComponent = require(`../../${
       widgetInfo.data["app_core"] ? "Apps-Core" : "Apps-User"
     }/${widgetInfo.data["app_id"]}/Widgets/${widgetInfo.data.key}/index`)

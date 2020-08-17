@@ -55,7 +55,7 @@ const StartPage: React.FC = () => {
             float: "right",
             position: "absolute",
             right: 15,
-            top: 1,
+            top: 35,
             zIndex: 505,
           }}
           onClick={(event) => {
@@ -152,8 +152,6 @@ const StartPage: React.FC = () => {
                     const newDesktop = desktop;
                     newDesktop.layout.splice(widgetIndex, 1);
                     delete newDesktop.widgets[item.i];
-                    console.log(newDesktop);
-
                     Server.emit("setUserSetting", {
                       key: "desktop",
                       value: newDesktop,

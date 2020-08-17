@@ -1,0 +1,12 @@
+.root {
+  flex-wrap: wrap;
+  overflow-y: auto;
+  height: 100%;
+}
+.appItem {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  cursor: pointer;
+}

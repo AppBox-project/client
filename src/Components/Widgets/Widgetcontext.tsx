@@ -35,7 +35,7 @@ export class WidgetContext {
   onNoAction;
 
   constructor(appId, setDialog, user) {
-    this.appId = appId;
+    this.appId = appId || "system"; // Todo: this creates a small vulnarability. If you can edit the widget object the widget can run as root.
     this.setDialog = setDialog;
     this.user = user;
     this.UI = {
