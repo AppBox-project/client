@@ -152,24 +152,6 @@ const StartPage: React.FC = () => {
               data-grid={{ x: item.x, y: item.y, w: item.w, h: item.h }}
             >
               <Card className={styles.WidgetCard} hoverable>
-                <Typography
-                  variant="h6"
-                  className="draggable"
-                  style={{ cursor: "move" }}
-                  onContextMenu={(event) => {
-                    const newDesktop = desktop;
-                    newDesktop.layout.splice(widgetIndex, 1);
-                    delete newDesktop.widgets[item.i];
-                    Server.emit("setUserSetting", {
-                      key: "desktop",
-                      value: newDesktop,
-                    });
-                    event.preventDefault();
-                  }}
-                >
-                  {widget.title}
-                </Typography>
-                <Divider style={{ margin: "15px 0" }} />
                 <WidgetRenderer
                   appId={widget.appId}
                   widgetId={widget.widgetId}

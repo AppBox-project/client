@@ -24,6 +24,7 @@ export default class WidgetContext {
   widgetId: string;
   app: AppType;
   isReady: Promise<unknown>;
+  getConfig;
   widgetCode: any;
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
@@ -42,7 +43,11 @@ export default class WidgetContext {
         Card,
       },
       Animations: { AnimationContainer, AnimationItem },
-      Inputs: { ...Forms, Switch: InputSwitch, RichText: InputRichText },
+      Inputs: {
+        ...Forms,
+        Switch: InputSwitch,
+        RichText: InputRichText,
+      },
       Field: AppUiField,
       FieldDisplay,
       Layouts: {
@@ -84,6 +89,7 @@ export default class WidgetContext {
             const WidgetCode = widget.default;
             if (WidgetCode[widgetId]) {
               resolve(WidgetCode[widgetId]);
+              this.getConfig = widget.getConfig();
             } else {
               reject("widget-not-found-in-app");
             }
@@ -98,13 +104,19 @@ export default class WidgetContext {
   // Close active listeners for app
   unload = () => {
     this.dataListeners.map((listener) => {
-      Server.emit(listener.unlistenAction, { requestId: listener.requestId });
+      Server.emit(listener.unlistenAction, {
+        requestId: listener.requestId,
+      });
     });
   };
 
   createModel = (newModel, then: (response: ServerResponse) => void) => {
     const requestId = uniqid();
-    Server.emit("appCreatesModel", { newModel, requestId, appId: this.appId });
+    Server.emit("appCreatesModel", {
+      newModel,
+      requestId,
+      appId: this.appId,
+    });
     Server.on(`receive-${requestId}`, (response) => {
       console.log(response);
     });
@@ -182,7 +194,10 @@ export default class WidgetContext {
       // Return the controller element with a stop() function
       return new AppDataController("appUnlistensForObjectTypes", requestId);
     } else {
-      then({ success: false, reason: "Filter should be object" });
+      then({
+        success: false,
+        reason: "Filter should be object",
+      });
     }
   };
 
@@ -247,7 +262,10 @@ export default class WidgetContext {
       // Return the controller element with a stop() function
       return new AppDataController("appUnlistensForObjects", requestId);
     } else {
-      then({ success: false, reason: "filter-should-be-object" });
+      then({
+        success: false,
+        reason: "filter-should-be-object",
+      });
     }
   };
 

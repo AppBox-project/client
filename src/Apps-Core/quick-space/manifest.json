@@ -1,0 +1,16 @@
+{
+  "widgets": [
+    {
+      "name": "Todo's",
+      "key": "ProjectTodos",
+      "description": "A quick overview of your todos within a project",
+      "icon": "FaClipboardList",
+      "grid": {
+        "defaultX": 3,
+        "defaultY": 8,
+        "minX": 3,
+        "minY": 3
+      }
+    }
+  ]
+}

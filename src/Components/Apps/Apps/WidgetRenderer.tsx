@@ -8,19 +8,21 @@ import {
   Grid,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@material-ui/core";
 import { dialogType, WidgetContextType } from "../../../Utils/Types";
 import { TextInput } from "./AppUI/Forms";
 import Select from "./AppUI/Forms/Select";
 import WidgetContext from "./WidgetContext";
 import { Skeleton } from "@material-ui/lab";
+import { FaCogs } from "react-icons/fa";
 
 const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
   appId,
   widgetId,
 }) => {
   const [context, setContext] = useState<WidgetContext>();
-  const [widget, setWidget] = useState<any>();
+  const [Widget, setWidget] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<any>();
   const [gUser] = useGlobal<any>("user");
@@ -46,10 +48,12 @@ const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
 
   //UI
 
-  if (!context || !widget) return <Skeleton />;
+  if (!context || !Widget) return <Skeleton />;
+
   return (
     <>
-      <widget.widget context={context} />
+      Todo: widget config
+      <Widget context={context} />
       {dialog !== undefined && (
         <Dialog
           onClose={() => {
