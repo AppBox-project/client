@@ -1,11 +1,11 @@
 import React from "react";
-import { WidgetContextType, AppType } from "../../../Utils/Types";
 import { useState, useEffect } from "reactn";
 import { Skeleton } from "@material-ui/lab";
 import styles from "./styles.module.scss";
 import * as icons from "react-icons/fa";
 import { Avatar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { WidgetContextType, AppType } from "../../../../Utils/Types";
 
 const WidgetAppLauncher: React.FC<{ context: WidgetContextType }> = ({
   context,

@@ -1,70 +1,55 @@
 import React, { useGlobal, useEffect, useState } from "reactn";
-import { WidgetContext } from "./Widgetcontext";
-import uniqid from "uniqid";
-import Server from "../../Utils/Server";
-import Loading from "../Loading";
-import { WidgetContextType, dialogType } from "../../Utils/Types";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Grid,
-  FormControlLabel,
-  Checkbox,
   DialogActions,
   Button,
+  Grid,
+  Checkbox,
+  FormControlLabel,
 } from "@material-ui/core";
-import { TextInput } from "../Apps/Apps/AppUI/Forms";
-import Select from "../Apps/Apps/AppUI/Forms/Select";
+import { dialogType, WidgetContextType } from "../../../Utils/Types";
+import { TextInput } from "./AppUI/Forms";
+import Select from "./AppUI/Forms/Select";
+import WidgetContext from "./WidgetContext";
+import { Skeleton } from "@material-ui/lab";
 
-const Widget: React.FC<{ settings }> = ({ settings }) => {
-  // Vars
-  const [widgetInfo, setWidgetInfo] = useState<any>();
-  const [widgetContext, setWidgetContext] = useState<WidgetContextType>();
-  const [user] = useGlobal<any>("user");
-  const [Widget, setWidget] = useState<any>();
+const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
+  appId,
+  widgetId,
+}) => {
+  const [context, setContext] = useState<WidgetContext>();
+  const [widget, setWidget] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<any>();
+  const [gUser] = useGlobal<any>("user");
 
-  // Lifecycle
+  //Lifecycle
   useEffect(() => {
-    const requestId = uniqid();
-    Server.emit("listenForObjects", {
-      requestId,
-      type: "widgets",
-      filter: { _id: settings.type },
+    const context = new WidgetContext(appId, widgetId, setDialog, gUser);
+    context.isReady.then((widget) => {
+      setContext(context);
+      setWidget(widget);
     });
-    Server.on(`receive-${requestId}`, (response) => {
-      if (response.success) {
-        setWidgetInfo(response.data[0]);
-      } else {
-        console.log(response);
-      }
-    });
-
     return () => {
-      Server.emit("unlistenForObjects", { requestId });
+      setDialog({
+        ...dialog,
+        display: false,
+        title: undefined,
+        content: undefined,
+        form: undefined,
+      });
+      context.unload();
     };
-  }, []);
+  }, [appId]);
 
-  // UI
-  if (!widgetInfo) return <Loading />;
-  let WidgetComponent;
-  if (widgetInfo.data.system) {
-    WidgetComponent = require(`./${widgetInfo.data.key}/index`).default;
-  } else {
-    WidgetComponent = require(`../../${
-      widgetInfo.data["app_core"] ? "Apps-Core" : "Apps-User"
-    }/${widgetInfo.data["app_id"]}/Widgets/${widgetInfo.data.key}/index`)
-      .default;
-  }
-  const context = new WidgetContext(
-    widgetInfo.system ? "system" : widgetInfo["app_id"],
-    setDialog,
-    user
-  );
+  //UI
+
+  if (!context || !widget) return <Skeleton />;
   return (
     <>
+      <widget.widget context={context} />
       {dialog !== undefined && (
         <Dialog
           onClose={() => {
@@ -192,9 +177,8 @@ const Widget: React.FC<{ settings }> = ({ settings }) => {
           )}
         </Dialog>
       )}
-      <WidgetComponent context={context} />
     </>
   );
 };
 
-export default Widget;
+export default WidgetRenderer;

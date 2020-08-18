@@ -1,0 +1,18 @@
+{
+  "widgets": [
+    {
+      "name": "App launcher",
+      "key": "AppLauncher",
+      "description": "An overview of launchable apps",
+      "icon": "FaTh",
+      "grid": {
+        "defaultX": 6,
+        "defaultY": 5,
+        "minX": 3,
+        "minY": 1,
+        "maxX": 12,
+        "maxY": 12
+      }
+    }
+  ]
+}

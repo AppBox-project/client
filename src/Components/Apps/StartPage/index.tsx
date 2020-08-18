@@ -6,7 +6,6 @@ import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
-import Widget from "../../Widgets/WidgetRenderer";
 import { FaStream, FaGripLines } from "react-icons/fa";
 import {
   Icon,
@@ -18,6 +17,8 @@ import {
 } from "@material-ui/core";
 import Card from "../../Design/Card";
 import WidgetList from "./WidgetList";
+import WidgetRenderer from "../Apps/WidgetRenderer";
+import { WidgetType } from "../../../Utils/Types";
 
 const StartPage: React.FC = () => {
   // Vars
@@ -88,19 +89,27 @@ const StartPage: React.FC = () => {
         }}
       >
         <WidgetList
-          onAdd={(id, name) => {
+          onAdd={(widget: WidgetType) => {
             const newDesktop = {
               layout: desktop?.layout || [],
               widgets: desktop?.widgets || {},
             };
             const newId = uniqid();
-            newDesktop.widgets[newId] = { type: id, title: name };
+            newDesktop.widgets[newId] = {
+              appId: widget.app,
+              widgetId: widget.key,
+              title: widget.name,
+            };
             newDesktop.layout.push({
               i: newId,
               x: 1,
               y: 1,
-              w: 2,
-              h: 3,
+              w: widget.grid?.defaultX || 1,
+              h: widget.grid?.defaultY || 1,
+              minW: widget.grid?.minX,
+              minH: widget.grid?.minY,
+              maxW: widget.grid?.maxX,
+              maxH: widget.grid?.maxY,
             });
             Server.emit("setUserSetting", {
               key: "desktop",
@@ -137,7 +146,6 @@ const StartPage: React.FC = () => {
       >
         {(desktop?.layout || []).map((item, widgetIndex) => {
           const widget = desktop.widgets[item.i];
-
           return (
             <div
               key={item.i}
@@ -162,7 +170,10 @@ const StartPage: React.FC = () => {
                   {widget.title}
                 </Typography>
                 <Divider style={{ margin: "15px 0" }} />
-                <Widget settings={widget} />
+                <WidgetRenderer
+                  appId={widget.appId}
+                  widgetId={widget.widgetId}
+                />
               </Card>
             </div>
           );

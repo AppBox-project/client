@@ -1,41 +1,38 @@
-import Server from "../../Utils/Server";
+import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { AppType, ServerResponse } from "../../Utils/Types";
-import Loading from "../Apps/Apps/AppUI/Loading";
-import {
-  AnimationContainer,
-  AnimationItem,
-} from "../Apps/Apps/AppUI/Animations";
-import * as Forms from "../Apps/Apps/AppUI/Forms";
-import ListDetailLayout from "../Apps/Apps/AppUI/ListDetailLayout";
-import TreeView from "../Apps/Apps/AppUI/TreeView";
-import AppUiField from "../Apps/Apps/AppUI/Field";
-import SortableList from "../UI/SortableList";
-import InputSwitch from "../Inputs/Switch";
-import ObjectLayout from "../Apps/Apps/AppUI/ObjectLayout";
-import BoardLayout from "../Layouts/ObjectLayouts/Boards";
-import Margin from "../Apps/Apps/AppUI/Margin";
-import FieldDisplay from "../Object/FieldDisplay";
-import GridItemLayout from "../Apps/Apps/AppUI/Layouts/GridItemLayout";
-import LayoutDesigner from "../../Components/LayoutDesigner";
-import Card from "../../Components/Design/Card";
-import InputRichText from "../../Components/Inputs/RichText";
-import ConditionDesigner from "../../Components/ConditionDesigner";
+import { AppType, ServerResponse } from "../../../Utils/Types";
+import Loading from "./AppUI/Loading";
+import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
+import * as Forms from "./AppUI/Forms";
+import ListDetailLayout from "./AppUI/ListDetailLayout";
+import TreeView from "./AppUI/TreeView";
+import AppUiField from "./AppUI/Field";
+import SortableList from "../../UI/SortableList";
+import InputSwitch from "../../Inputs/Switch";
+import ObjectLayout from "./AppUI/ObjectLayout";
+import BoardLayout from "../../Layouts/ObjectLayouts/Boards";
+import Margin from "./AppUI/Margin";
+import FieldDisplay from "../../Object/FieldDisplay";
+import GridItemLayout from "../Apps/AppUI/Layouts/GridItemLayout";
+import LayoutDesigner from "../../../Components/LayoutDesigner";
+import Card from "../../Design/Card";
+import InputRichText from "../../Inputs/RichText";
+import ConditionDesigner from "../../ConditionDesigner";
 
-export class WidgetContext {
+export default class WidgetContext {
   appId: string;
+  widgetId: string;
   app: AppType;
   isReady: Promise<unknown>;
-  actions: [{ label: string; key: string }];
+  widgetCode: any;
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
   setDialog: any;
-  appConfig;
   user;
-  onNoAction;
 
-  constructor(appId, setDialog, user) {
-    this.appId = appId || "system"; // Todo: this creates a small vulnarability. If you can edit the widget object the widget can run as root.
+  constructor(appId, widgetId, setDialog, user) {
+    this.appId = appId;
+    this.widgetId = widgetId;
     this.setDialog = setDialog;
     this.user = user;
     this.UI = {
@@ -79,6 +76,18 @@ export class WidgetContext {
       Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
           this.app = response.data[0];
+          import(
+            `../../../Apps-${this.app.data.core ? "Core" : "User"}/${
+              this.appId
+            }/Widgets/index.tsx`
+          ).then((widget) => {
+            const WidgetCode = widget.default;
+            if (WidgetCode[widgetId]) {
+              resolve(WidgetCode[widgetId]);
+            } else {
+              reject("widget-not-found-in-app");
+            }
+          });
         } else {
           console.log(response);
         }

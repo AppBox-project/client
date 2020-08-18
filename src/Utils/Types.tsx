@@ -181,14 +181,40 @@ export interface WidgetContextType {
   appId: string;
   app: AppType;
   isReady: Promise<unknown>;
+  onNoAction: React.FC;
+  appCode: any;
   user: UserType;
+  appConfig?: {
+    settings?: React.FC;
+    actions?: {
+      filter?: boolean;
+      group?: boolean;
+      mobile?: { displayAs?: "menu" | "bottom-navigation" | "tabs" };
+    };
+  };
+  actions:
+    | React.FC<{ context: AppContextType }>
+    | [
+        {
+          label: string;
+          key: string;
+          component: FC;
+          icon?: React.FC;
+          group?: string;
+        }
+      ];
   UI: UIType;
+  setButton: (
+    buttonId,
+    button: { label?: string; icon; function?; url?: string }
+  ) => void;
+  createModel: (newModel, then: (response: ServerResponse) => void) => void;
   getObjects: (
     type: string,
     filter: {},
-    then: (response: any) => void
+    then: (response: ServerResponse) => void
   ) => AppRequestController;
-  addObject: (type: string, object: {}) => Promise<boolean | string>;
+  addObject: (type: string, object: {}, then: (response: any) => void) => void;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
   updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
@@ -197,6 +223,12 @@ export interface WidgetContextType {
     dependencies,
     fieldId
   ) => Promise<boolean | string>;
+  setDialog: (dialog: dialogType) => void;
+  getModel: (
+    modelId: string,
+    then: (response: ServerResponse) => void
+  ) => AppRequestController;
+
   getTypes: (
     filter: {},
     then: (response: {
@@ -205,6 +237,8 @@ export interface WidgetContextType {
       data?: [any];
     }) => void
   ) => AppRequestController;
+  callBackendAction: (action, args) => void;
+  archiveObject: (modelId: string, objectId: string) => Promise<string | null>;
 }
 
 export interface dialogType {
@@ -420,4 +454,21 @@ export interface LayoutDesignerItem {
 export interface SelectOptionType {
   label: string;
   value: string;
+}
+
+export interface WidgetType {
+  name: string;
+  key: string;
+  app: string;
+  description: string;
+  icon: any;
+  id: string;
+  grid?: {
+    defaultX?: number;
+    defaultY?: number;
+    minX?: number;
+    minY?: number;
+    maxX?: number;
+    maxY?: number;
+  };
 }
