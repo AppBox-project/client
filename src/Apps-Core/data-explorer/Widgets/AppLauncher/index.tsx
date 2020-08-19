@@ -16,14 +16,18 @@ const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("app", {}, (response) => {
+    const request = context.getObjects("app", {}, (response) => {
       if (response.success) {
         setApps(response.data);
       } else {
         console.log(response);
       }
     });
-  });
+
+    return () => {
+      request.stop();
+    };
+  }, []);
 
   // UI
   if (!apps) return <LoadingSkeleton />;

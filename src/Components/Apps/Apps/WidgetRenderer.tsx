@@ -18,11 +18,12 @@ import WidgetContext from "./WidgetContext";
 import { Skeleton } from "@material-ui/lab";
 import { FaCogs } from "react-icons/fa";
 
-const WidgetRenderer: React.FC<{ appId: string; widgetId: string; config }> = ({
-  appId,
-  widgetId,
-  config,
-}) => {
+const WidgetRenderer: React.FC<{
+  appId: string;
+  widgetId: string;
+  config;
+  onSettingsChange: (settings) => void;
+}> = ({ appId, widgetId, config, onSettingsChange }) => {
   const [context, setContext] = useState<WidgetContext>();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<any>();
@@ -30,7 +31,13 @@ const WidgetRenderer: React.FC<{ appId: string; widgetId: string; config }> = ({
 
   //Lifecycle
   useEffect(() => {
-    const context = new WidgetContext(appId, widgetId, setDialog, gUser);
+    const context = new WidgetContext(
+      appId,
+      widgetId,
+      setDialog,
+      gUser,
+      config
+    );
     context.isReady.then(() => {
       setContext(context);
     });
@@ -45,14 +52,31 @@ const WidgetRenderer: React.FC<{ appId: string; widgetId: string; config }> = ({
       context.unload();
     };
   }, [appId]);
-  console.log(config);
 
   //UI
   if (!context) return <Skeleton />;
   return (
     <>
       {context.availableSettings && (
-        <IconButton style={{ float: "right" }} color="primary">
+        <IconButton
+          style={{ float: "right" }}
+          color="primary"
+          onClick={() => {
+            context.setDialog({
+              display: true,
+              title: "Widget settings",
+              form: context.availableSettings,
+              buttons: [
+                {
+                  label: "Save",
+                  onClick: (form) => {
+                    onSettingsChange(form);
+                  },
+                },
+              ],
+            });
+          }}
+        >
           <FaCogs />
         </IconButton>
       )}

@@ -1,6 +1,6 @@
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { AppType, ServerResponse } from "../../../Utils/Types";
+import { AppType, ServerResponse, dialogType } from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
 import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
@@ -28,16 +28,17 @@ export default class WidgetContext {
   Widget: React.FC<{ context: WidgetContext }>;
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
-  setDialog: any;
+  setDialog: (dialog: dialogType) => void;
   user;
   availableSettings;
   widgetSettings;
 
-  constructor(appId, widgetId, setDialog, user) {
+  constructor(appId, widgetId, setDialog, user, config) {
     this.appId = appId;
     this.widgetId = widgetId;
     this.setDialog = setDialog;
     this.user = user;
+    this.widgetSettings = config;
     this.UI = {
       Loading,
       Margin: Margin,
@@ -92,8 +93,7 @@ export default class WidgetContext {
             if (WidgetCode[widgetId]) {
               this.Widget = WidgetCode[widgetId].widget;
               if (WidgetCode[widgetId].getSettings) {
-                WidgetCode[widgetId].getSettings.then((settings) => {
-                  console.log(settings);
+                WidgetCode[widgetId].getSettings(this).then((settings) => {
                   this.availableSettings = settings;
                   resolve();
                 });

@@ -156,6 +156,22 @@ const StartPage: React.FC = () => {
                   appId={widget.appId}
                   widgetId={widget.widgetId}
                   config={widget}
+                  onSettingsChange={(newSettings) => {
+                    const newWidgets = desktop.widgets;
+                    Server.emit("setUserSetting", {
+                      key: "desktop",
+                      value: {
+                        ...desktop,
+                        widgets: {
+                          ...newWidgets,
+                          [item.i]: {
+                            ...newWidgets[item.i],
+                            ...newSettings,
+                          },
+                        },
+                      },
+                    });
+                  }}
                 />
               </Card>
             </div>

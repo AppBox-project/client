@@ -367,7 +367,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                   {
                     key: "field",
                     label: "Field",
-                    value: layoutItem.field ? layoutItem.field : "",
+                    value: layoutItem.field || "",
                     type: "dropdown",
                     dropdownOptions: fieldList,
                   },

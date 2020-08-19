@@ -114,8 +114,6 @@ const AppQSActionTodoDetail: React.FC<{
   // Display todo
   useEffect(() => {
     if (displayTodo) {
-      console.log(model);
-
       context?.setDialog({
         display: true,
         size: "md",
