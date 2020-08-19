@@ -155,6 +155,7 @@ const StartPage: React.FC = () => {
                 <WidgetRenderer
                   appId={widget.appId}
                   widgetId={widget.widgetId}
+                  config={widget}
                 />
               </Card>
             </div>

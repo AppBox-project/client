@@ -45,9 +45,8 @@ const LoadingSkeleton: React.FC = () => {
   return <Skeleton />;
 };
 
-export const getOptions = () => {
-  return new Promise((resolve, reject) => {
-    resolve([{ key: "project" }]);
-  });
-};
+export const getSettings = new Promise((resolve, reject) => {
+  resolve([1, 2]);
+});
+
 export default WidgetProjectTodos;

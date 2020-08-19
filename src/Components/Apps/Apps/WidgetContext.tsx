@@ -24,12 +24,14 @@ export default class WidgetContext {
   widgetId: string;
   app: AppType;
   isReady: Promise<unknown>;
-  getConfig;
   widgetCode: any;
+  Widget: React.FC<{ context: WidgetContext }>;
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
   setDialog: any;
   user;
+  availableSettings;
+  widgetSettings;
 
   constructor(appId, widgetId, setDialog, user) {
     this.appId = appId;
@@ -88,8 +90,16 @@ export default class WidgetContext {
           ).then((widget) => {
             const WidgetCode = widget.default;
             if (WidgetCode[widgetId]) {
-              resolve(WidgetCode[widgetId]);
-              this.getConfig = widget.getConfig();
+              this.Widget = WidgetCode[widgetId].widget;
+              if (WidgetCode[widgetId].getSettings) {
+                WidgetCode[widgetId].getSettings.then((settings) => {
+                  console.log(settings);
+                  this.availableSettings = settings;
+                  resolve();
+                });
+              } else {
+                resolve();
+              }
             } else {
               reject("widget-not-found-in-app");
             }

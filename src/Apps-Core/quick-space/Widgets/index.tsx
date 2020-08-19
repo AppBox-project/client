@@ -1,3 +1,3 @@
-import ProjectTodos from "./ProjectTodos";
+import ProjectTodos, { getSettings } from "./ProjectTodos";
 
-export default { ProjectTodos };
+export default { ProjectTodos: { widget: ProjectTodos, getSettings } };

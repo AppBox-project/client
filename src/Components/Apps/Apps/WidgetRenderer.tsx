@@ -9,6 +9,7 @@ import {
   Checkbox,
   FormControlLabel,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import { dialogType, WidgetContextType } from "../../../Utils/Types";
 import { TextInput } from "./AppUI/Forms";
@@ -17,12 +18,12 @@ import WidgetContext from "./WidgetContext";
 import { Skeleton } from "@material-ui/lab";
 import { FaCogs } from "react-icons/fa";
 
-const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
+const WidgetRenderer: React.FC<{ appId: string; widgetId: string; config }> = ({
   appId,
   widgetId,
+  config,
 }) => {
   const [context, setContext] = useState<WidgetContext>();
-  const [Widget, setWidget] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<any>();
   const [gUser] = useGlobal<any>("user");
@@ -30,9 +31,8 @@ const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
   //Lifecycle
   useEffect(() => {
     const context = new WidgetContext(appId, widgetId, setDialog, gUser);
-    context.isReady.then((widget) => {
+    context.isReady.then(() => {
       setContext(context);
-      setWidget(widget);
     });
     return () => {
       setDialog({
@@ -45,15 +45,21 @@ const WidgetRenderer: React.FC<{ appId: string; widgetId: string }> = ({
       context.unload();
     };
   }, [appId]);
+  console.log(config);
 
   //UI
-
-  if (!context || !Widget) return <Skeleton />;
-
+  if (!context) return <Skeleton />;
   return (
     <>
-      Todo: widget config
-      <Widget context={context} />
+      {context.availableSettings && (
+        <IconButton style={{ float: "right" }} color="primary">
+          <FaCogs />
+        </IconButton>
+      )}
+      <Typography variant="h6" className="draggable">
+        {config.title}
+      </Typography>
+      <context.Widget context={context} />
       {dialog !== undefined && (
         <Dialog
           onClose={() => {
