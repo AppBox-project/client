@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import DropTarget from "./DropTarget";
 import Component from "./Component";
-import { DndProvider } from "react-dnd";
-import MultiBackend from "react-dnd-multi-backend";
-import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or any other pipeline
+import { DndProvider } from "react-dnd-multi-backend";
+import HTML5toTouch from "react-dnd-multi-backend/dist/cjs/HTML5toTouch";
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutType } from "../../Utils/Types";
@@ -25,7 +24,7 @@ const LayoutDesigner: React.FC<{
   const [expandTray, setExpandTray] = useState<any>(false);
   // UI
   return (
-    <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+    <DndProvider options={HTML5toTouch}>
       <Grid container style={{ overflow: "hidden", height: "100%" }}>
         <Grid
           item
