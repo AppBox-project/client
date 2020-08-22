@@ -165,9 +165,7 @@ const App: React.FC<{
                             : "text"
                         }
                         value={
-                          dialogFormContent !== undefined
-                            ? dialogFormContent[formItem.key]
-                            : formItem.value
+                          dialogFormContent[formItem.key] || formItem.value
                         }
                         onChange={(value) => {
                           setDialogFormContent({

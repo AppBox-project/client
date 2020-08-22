@@ -360,6 +360,7 @@ export interface UIType {
       detailComponentProps?: {};
       context: AppContextType;
       addFunction?: () => void;
+      addTitle?: string;
       deleteFunction?: (id) => void;
       navWidth?: ColumnWidth;
       navFixedIcon?: JSX.Element;

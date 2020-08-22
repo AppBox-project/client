@@ -44,6 +44,7 @@ const ListDetailLayout: React.FC<{
   detailComponentProps?: {};
   context: AppContextType;
   addFunction?: () => void;
+  addTitle?: string;
   deleteFunction?: (id) => void;
   navWidth?: ColumnWidth;
   navFixedIcon?: JSX.Element;
@@ -64,6 +65,7 @@ const ListDetailLayout: React.FC<{
   navFixedIcon,
   title,
   isLoading,
+  addTitle,
 }) => {
   // Vars
   const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -119,6 +121,7 @@ const ListDetailLayout: React.FC<{
                 list={list}
                 navFixedIcon={navFixedIcon}
                 title={title}
+                addTitle={addTitle}
               />
             )
           ) : (
@@ -158,6 +161,7 @@ const ListNav: React.FC<{
   list;
   navFixedIcon?;
   title?;
+  addTitle?;
 }> = ({
   addFunction,
   deleteFunction,
@@ -166,6 +170,7 @@ const ListNav: React.FC<{
   list,
   navFixedIcon,
   title,
+  addTitle,
 }) => {
   return (
     <AnimationContainer>
@@ -192,7 +197,7 @@ const ListNav: React.FC<{
                   <GrAdd style={{ width: 15, height: 15 }} />
                 </ListItemIcon>
 
-                <ListItemText>Add new</ListItemText>
+                <ListItemText>{addTitle || "Add new"}</ListItemText>
               </ListItem>
             )}
             {list.map((listItem) => {
