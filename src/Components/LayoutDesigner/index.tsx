@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import DropTarget from "./DropTarget";
 import Component from "./Component";
-import { DndProvider } from "react-dnd-multi-backend";
-import HTML5toTouch from "react-dnd-multi-backend/dist/cjs/HTML5toTouch";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutType } from "../../Utils/Types";
@@ -22,9 +22,10 @@ const LayoutDesigner: React.FC<{
 }> = ({ layout, onChange, componentList }) => {
   // Vars
   const [expandTray, setExpandTray] = useState<any>(false);
+
   // UI
   return (
-    <DndProvider options={HTML5toTouch}>
+    <DndProvider backend={HTML5Backend}>
       <Grid container style={{ overflow: "hidden", height: "100%" }}>
         <Grid
           item
