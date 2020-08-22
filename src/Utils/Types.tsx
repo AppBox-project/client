@@ -260,6 +260,7 @@ export interface dialogType {
     value?: string;
     dropdownOptions?: { label: string; value: string }[];
     xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    onlyDisplayWhen?: {};
   }[];
   buttons?: { label: string | JSX.Element; onClick: (response) => void }[];
 }

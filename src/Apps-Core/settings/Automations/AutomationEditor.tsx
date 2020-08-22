@@ -10,7 +10,7 @@ import {
   ListItem,
   ListItemIcon,
 } from "@material-ui/core";
-import { FaPlus, FaPlay } from "react-icons/fa";
+import { FaPlus, FaCloudSun, FaFileImport } from "react-icons/fa";
 
 const AppSettingsAutomationEditor: React.FC<{
   context: AppContextType;
@@ -59,11 +59,83 @@ const AppSettingsAutomationEditor: React.FC<{
             <List>
               {(newAutomation.data.triggers || []).length > 0 ? (
                 newAutomation.data.triggers.map((trigger, index) => (
-                  <ListItem key={index}>
+                  <ListItem
+                    key={index}
+                    button
+                    onClick={() => {
+                      context.setDialog({
+                        display: true,
+                        title: "Modify trigger",
+                        form: [
+                          {
+                            key: "type",
+                            label: "Trigger type",
+                            type: "dropdown",
+                            value: trigger.type,
+                            dropdownOptions: [
+                              { value: "date", label: "Date" },
+                              { value: "change", label: "Change" },
+                            ],
+                          },
+                          {
+                            key: "trigger",
+                            label: "Trigger",
+                            type: "dropdown",
+                            value: trigger.trigger,
+                            dropdownOptions: [
+                              { value: "second", label: "Every second" },
+                              { value: "minute", label: "every minute" },
+                              { value: "hour", label: "every hour" },
+                              { value: "day", label: "every day" },
+                              { value: "week", label: "every week" },
+                              { value: "month", label: "every month" },
+                              { value: "year", label: "every year" },
+                              { value: "custom", label: "set custom time" },
+                            ],
+                            onlyDisplayWhen: { type: "date" },
+                          },
+                          {
+                            key: "customTrigger",
+                            label: "Trigger when (CRON!)",
+                            type: "text",
+                            value: trigger.trigger,
+                            onlyDisplayWhen: { trigger: "custom" },
+                          },
+                        ],
+                        buttons: [
+                          {
+                            label: "Update",
+                            onClick: (form) => {
+                              if (form.type === "date") {
+                                if (form.trigger === "custom") {
+                                  form.trigger = form.customTrigger;
+                                }
+                              }
+                              const newTriggers = newAutomation.data.triggers;
+                              newTriggers[index] = {
+                                type: form.type,
+                                trigger: form.trigger,
+                              };
+                              setNewAutomation({
+                                ...newAutomation,
+                                data: {
+                                  ...newAutomation.data,
+                                  triggers: newTriggers,
+                                },
+                              });
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                  >
                     <ListItemIcon>
-                      <FaPlay />
+                      {trigger.type === "date" && <FaCloudSun />}
+                      {trigger.type === "change" && <FaFileImport />}
                     </ListItemIcon>
-                    <ListItemText>{trigger.type}</ListItemText>
+                    <ListItemText>
+                      {trigger.type === "date" && `Every ${trigger.trigger}`}
+                    </ListItemText>
                   </ListItem>
                 ))
               ) : (

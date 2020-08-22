@@ -17,6 +17,7 @@ import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
 import Select from "./AppUI/Forms/Select";
+import { map, find } from "lodash";
 
 const App: React.FC<{
   match: { params: { appId } };
@@ -30,7 +31,7 @@ const App: React.FC<{
   const [appContext, setAppcontext] = useState<AppContextType>();
   const [currentPage, setCurrentPage] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
-  const [dialogFormContent, setDialogFormContent] = useState<any>();
+  const [dialogFormContent, setDialogFormContent] = useState<{}>({});
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
   const [gUser] = useGlobal<any>("user");
@@ -136,7 +137,16 @@ const App: React.FC<{
           {dialog.form && (
             <Grid container style={{ width: "90%", marginLeft: 25 }}>
               {dialog.form.map((formItem) => {
-                return (
+                let display = formItem.onlyDisplayWhen ? false : true;
+                if (!display) {
+                  map(formItem.onlyDisplayWhen, (v, k) => {
+                    const depItem = find(dialog.form, (o) => o.key === k);
+
+                    if ((dialogFormContent[k] || depItem.value) === v)
+                      display = true;
+                  });
+                }
+                return display ? (
                   <Grid
                     item
                     xs={formItem.xs ? formItem.xs : 12}
@@ -176,9 +186,7 @@ const App: React.FC<{
                         options={formItem.dropdownOptions}
                         label={formItem.label}
                         value={
-                          dialogFormContent !== undefined
-                            ? dialogFormContent[formItem.key]
-                            : formItem.value
+                          dialogFormContent[formItem.key] || formItem.value
                         }
                         onChange={(value) => {
                           setDialogFormContent({
@@ -228,6 +236,8 @@ const App: React.FC<{
                       />
                     )}
                   </Grid>
+                ) : (
+                  <></>
                 );
               })}
             </Grid>
