@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.0-4",
-  "description": "Automation designer",
+  "version": "0.2.0-5",
+  "description": "Automation from DB",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
