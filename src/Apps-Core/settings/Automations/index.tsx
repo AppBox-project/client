@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { AppContextType } from "../../../Utils/Types";
-import AppSettingsProcessDetail from "./ProcessDetail";
+import AppSettingsProcessDetail from "./AutomationDetail";
 import { useState } from "reactn";
-import { FiGitBranch } from "react-icons/fi";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaRobot } from "react-icons/fa";
 
 const AppSettingsProcesses: React.FC<{
   match: { isExact: boolean };
@@ -15,13 +14,13 @@ const AppSettingsProcesses: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("system-processes", {}, (response) => {
-      const result = [{ label: "Create process", id: "create", icon: FaPlus }];
+    context.getObjects("automations", {}, (response) => {
+      const result = [{ label: "New automation", id: "create", icon: FaPlus }];
       response.data.map((process) => {
         result.push({
           label: process.data.name,
           id: process._id,
-          icon: FiGitBranch,
+          icon: FaRobot,
         });
       });
       setProcesses(result);
@@ -32,9 +31,9 @@ const AppSettingsProcesses: React.FC<{
   return (
     <context.UI.Layouts.ListDetailLayout
       list={processes}
-      baseUrl="/settings/processes"
+      baseUrl="/settings/automations"
       context={context}
-      title="Processes"
+      title="Automations"
       DetailComponent={AppSettingsProcessDetail}
       isLoading={processes.length === 0}
     />

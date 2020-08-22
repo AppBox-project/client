@@ -5,9 +5,10 @@ import FieldTypeBoolean from "../Object/FieldTypes/Boolean";
 import FieldTypeRelationship from "../Object/FieldTypes/Relationship";
 import FieldTypeRichText from "../Object/FieldTypes/RichText";
 import FieldTypeFormula from "../Object/FieldTypes/Formula";
-import { debounce } from "lodash";
+import { debounce, find } from "lodash";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
+import InputSelect from "../Inputs/Select";
 
 const Field: React.FC<{
   field: ModelFieldType;
@@ -101,6 +102,18 @@ const Field: React.FC<{
           fieldKey={fieldId}
           setMode={setMode}
           onChange={onChangeHandler}
+        />
+      )}
+      {field.type === "options" && (
+        <InputSelect
+          label={field.name}
+          value={find(field.typeArgs.options, (o) => {
+            return o.key === object.data[fieldId];
+          })}
+          options={field.typeArgs.options}
+          onChange={(value) => {
+            onChangeHandler(value?.key);
+          }}
         />
       )}
     </>

@@ -1,10 +1,9 @@
 import FourOhFour from "../../Components/FourOhFour";
 import { GrUpdate } from "react-icons/gr";
 import AppSettingsUpdate from "./Updates";
-import { FaServer, FaAddressCard, FaInfoCircle } from "react-icons/fa";
+import { FaServer, FaInfoCircle, FaRobot } from "react-icons/fa";
 import AppSettingsBackup from "./Backup";
-import AppSettingsProcesses from "./Processes";
-import { FiGitBranch } from "react-icons/fi";
+import AppSettingsProcesses from "./Automations";
 import AppSettingsAbout from "./About";
 
 export default class App {
@@ -34,10 +33,10 @@ export default class App {
           icon: FaServer,
         },
         {
-          key: "processes",
-          label: "Processes",
+          key: "automations",
+          label: "Automations",
           component: AppSettingsProcesses,
-          icon: FiGitBranch,
+          icon: FaRobot,
         },
         {
           key: "about",
