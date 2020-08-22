@@ -9,8 +9,17 @@ import {
   ListItemText,
   ListItem,
   ListItemIcon,
+  Fab,
 } from "@material-ui/core";
-import { FaPlus, FaCloudSun, FaFileImport } from "react-icons/fa";
+import {
+  FaPlus,
+  FaCloudSun,
+  FaFileImport,
+  FaTrashAlt,
+  FaPlusSquare,
+  FaEdit,
+  FaSave,
+} from "react-icons/fa";
 
 const AppSettingsAutomationEditor: React.FC<{
   context: AppContextType;
@@ -18,6 +27,7 @@ const AppSettingsAutomationEditor: React.FC<{
 }> = ({ context, detailId }) => {
   // Vars
   const [newAutomation, setNewAutomation] = useState<ObjectType>();
+  const [originalAutomation, setOriginalAutomation] = useState<ObjectType>();
 
   // Lifecycle
   useEffect(() => {
@@ -28,6 +38,7 @@ const AppSettingsAutomationEditor: React.FC<{
       (response) => {
         if (response.success) {
           setNewAutomation(response.data[0]);
+          setOriginalAutomation(response.data[0]);
         } else {
           console.log(response);
         }
@@ -181,11 +192,133 @@ const AppSettingsAutomationEditor: React.FC<{
           />
         </Grid>
         <Grid item xs={12} md={newAutomation.data.type === "Process" ? 12 : 6}>
-          <context.UI.Design.Card withBigMargin title="Test" titleDivider>
-            b
+          <context.UI.Design.Card
+            withBigMargin
+            title={
+              newAutomation.data.type === "Process"
+                ? "Run process"
+                : "Perform actions"
+            }
+            titleDivider
+          >
+            <List>
+              {(newAutomation.data.actions || []).length > 0 ? (
+                newAutomation.data.actions.map((action, index) => (
+                  <ListItem
+                    key={index}
+                    button
+                    onClick={() => {
+                      context.setDialog({
+                        display: true,
+                        title: "Edit action",
+                        form: [
+                          {
+                            key: "type",
+                            label: "Action type",
+                            type: "dropdown",
+                            value: action.type,
+                            dropdownOptions: [
+                              {
+                                label: "Delete objects",
+                                value: "DeleteObjects",
+                              },
+                              {
+                                label: "Insert object",
+                                value: "InsertObject",
+                              },
+                              {
+                                label: "Update current object",
+                                value: "UpdateCurrentObject",
+                              },
+                            ],
+                          },
+                          {
+                            key: "args",
+                            label: "Arguments",
+                            type: "text",
+                            value: JSON.stringify(action.args),
+                          },
+                        ],
+                        buttons: [
+                          {
+                            label: "Update",
+                            onClick: (form) => {
+                              form["args"] = JSON.parse(form["args"]);
+                              const newActions = newAutomation.data.actions;
+                              newActions[index] = {
+                                args: form.args,
+                                type: form.type,
+                              };
+                              setNewAutomation({
+                                ...newAutomation,
+                                data: {
+                                  ...newAutomation.data,
+                                  actions: newActions,
+                                },
+                              });
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                  >
+                    <ListItemIcon>
+                      {action.type === "DeleteObjects" && <FaTrashAlt />}
+                      {action.type === "InsertObject" && <FaPlusSquare />}
+                      {action.type === "UpdateCurrentObject" && <FaEdit />}
+                    </ListItemIcon>
+                    <ListItemText>
+                      {action.type === "DeleteObjects" && "Delete objects"}
+                      {action.type === "InsertObject" && "Insert object"}
+                      {action.type === "UpdateCurrentObject" &&
+                        "Update current object"}
+                    </ListItemText>
+                  </ListItem>
+                ))
+              ) : (
+                <ListItem>
+                  <ListItemText>No actions.</ListItemText>
+                </ListItem>
+              )}
+              <ListItem
+                button
+                onClick={() => {
+                  setNewAutomation({
+                    ...newAutomation,
+                    data: {
+                      ...newAutomation.data,
+                      actions: [
+                        ...(newAutomation.data.actions || []),
+                        { type: "InsertObject", args: {} },
+                      ],
+                    },
+                  });
+                }}
+              >
+                <ListItemIcon>
+                  <FaPlus />
+                </ListItemIcon>
+                <ListItemText>Add trigger</ListItemText>
+              </ListItem>
+            </List>
           </context.UI.Design.Card>
         </Grid>
       </Grid>
+      {JSON.stringify(newAutomation) !== JSON.stringify(originalAutomation) && (
+        <Fab
+          color="primary"
+          style={{ position: "fixed", right: 15, bottom: 15 }}
+          onClick={() => {
+            context.updateObject(
+              "automations",
+              newAutomation.data,
+              newAutomation._id
+            );
+          }}
+        >
+          <FaSave />
+        </Fab>
+      )}
     </>
   ) : (
     <context.UI.Design.Card withBigMargin>
