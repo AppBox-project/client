@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.1-0",
-  "description": "Fictional update to indicate that the automation designer has updated yo software.",
+  "version": "0.2.1-1",
+  "description": "Various frontend improvements.",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

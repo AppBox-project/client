@@ -28,6 +28,7 @@ const WidgetRenderer: React.FC<{
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<any>();
   const [gUser] = useGlobal<any>("user");
+  const [widgetTitle, setWidgetTitle] = useState<string>();
 
   //Lifecycle
   useEffect(() => {
@@ -36,7 +37,8 @@ const WidgetRenderer: React.FC<{
       widgetId,
       setDialog,
       gUser,
-      config
+      config,
+      setWidgetTitle
     );
     context.isReady.then(() => {
       setContext(context);
@@ -81,7 +83,7 @@ const WidgetRenderer: React.FC<{
         </IconButton>
       )}
       <Typography variant="h6" className="draggable">
-        {config.title}
+        {widgetTitle || config.title}
       </Typography>
       <context.Widget context={context} />
       {dialog !== undefined && (

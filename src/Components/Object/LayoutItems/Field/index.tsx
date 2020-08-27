@@ -66,167 +66,162 @@ const ObjectLayoutItemField: React.FC<{
   switch (mode) {
     case "view":
       return layoutItem.hideView !== true ? (
-        <Grid
-          container
-          style={{ cursor: "context-menu" }}
-          className={styles.container}
+        <div
+          className={`${styles.container} ${styles.containerView}`}
           onDoubleClick={() => {
             setMode("edit");
           }}
         >
-          <Grid item xs={4}>
+          <div style={{ width: "25%" }}>
             <Typography variant="body1" style={{ fontWeight: "bold" }}>
               {modelField.name}
             </Typography>
-          </Grid>
-          <Grid item xs={8}>
+          </div>
+          <div style={{ flex: 1 }}>
             <FieldDisplay objectField={objectField} modelField={modelField} />
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       ) : (
         <></>
       );
     case "edit":
       return (
-        <Grid
-          container
-          className={styles.container}
+        <div
+          className={`${styles.container} ${styles.containerEdit}`}
           style={{
             backgroundColor: layoutItem.field in toChange ? "#efefef" : "white",
           }}
         >
-          <Grid item xs={4} style={{ verticalAlign: "middle" }}>
-            <Typography
-              variant="body1"
-              style={{ fontWeight: "bold", verticalAlign: "middle" }}
-            >
-              {modelField.name}
-            </Typography>
-          </Grid>
-          <Grid item xs={8}>
-            {modelField.type === "formula" && (
+          <Typography variant="body1" className={styles.titleEdit}>
+            {modelField.name}
+          </Typography>
+          {modelField.type === "formula" && (
+            <div style={{ textAlign: "center" }}>
               <ObjectFieldDisplayInput
                 modelField={modelField}
                 objectField={objectField}
               />
-            )}
-            {modelField.type === "input" && (
-              <InputInput
-                onChange={(value) => {
-                  if (modelField?.typeArgs?.type === "number") {
-                    onChange(parseInt(value));
-                  } else {
-                    onChange(value);
-                  }
-                }}
-                placeholder={modelField.name}
-                value={objectField}
-                type={modelField.typeArgs && modelField.typeArgs.type}
-              />
-            )}
-            {modelField.type === "address" && (
-              <InputAddress
-                onChange={(value) => {
+              <Typography style={{ fontSize: 12 }}>
+                (automatically calculated)
+              </Typography>
+            </div>
+          )}
+          {modelField.type === "input" && (
+            <InputInput
+              onChange={(value) => {
+                if (modelField?.typeArgs?.type === "number") {
+                  onChange(parseInt(value));
+                } else {
                   onChange(value);
-                }}
-                placeholder={modelField.name}
-                value={objectField}
-                type={modelField.typeArgs && modelField.typeArgs.type}
-              />
-            )}
-            {modelField.type === "boolean" && (
-              <InputCheckbox
-                onChange={(value) => {
-                  onChange(value);
-                }}
-                value={objectField}
-              />
-            )}
-            {modelField.type === "relationship" && (
-              <InputRelationShip
-                label={modelField.name}
-                value={objectField}
-                objectType={modelField.typeArgs.relationshipTo}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-              />
-            )}{" "}
-            {modelField.type === "relationship_m" && (
-              <InputRelationShipM
-                label={modelField.name}
-                value={objectField}
-                objectType={modelField.typeArgs.relationshipTo}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-              />
-            )}
-            {modelField.type === "options" && (
-              <InputSelect
-                label={modelField.name}
-                value={find(modelField.typeArgs.options, (o) => {
-                  return o.key === objectField;
-                })}
-                options={modelField.typeArgs.options}
-                onChange={(value) => {
-                  onChange(value.key);
-                }}
-              />
-            )}
-            {modelField.type === "picture" && (
-              <InputPicture
-                label={modelField.name}
-                value={objectField}
-                model={model}
-                fieldKey={objectField}
-                object={object}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-              />
-            )}
-            {modelField.type === "file" && (
-              <InputFile
-                label={modelField.name}
-                value={objectField}
-                model={model}
-                fieldKey={objectField}
-                object={object}
-                onChange={(value) => {
-                  onChange(value);
-                }}
-              />
-            )}
-            {modelField.type === "richtext" && (
-              <InputRichText
-                onChange={(value) => {
-                  onChange(value);
-                }}
-                placeholder={modelField.name}
-                value={objectField}
-              />
-            )}
-            {modelField.type === "color" && (
-              <InputColor
-                onChange={(value) => {
-                  onChange(value);
-                }}
-                placeholder={modelField.name}
-                value={objectField}
-              />
-            )}
-            {modelField.type === "date" && (
-              <FieldTypeDate
-                onChange={(value) => {
-                  onChange(value);
-                }}
-                modelField={modelField}
-                objectField={objectField}
-              />
-            )}
-          </Grid>
-        </Grid>
+                }
+              }}
+              placeholder={modelField.name}
+              value={objectField}
+              type={modelField.typeArgs && modelField.typeArgs.type}
+            />
+          )}
+          {modelField.type === "address" && (
+            <InputAddress
+              onChange={(value) => {
+                onChange(value);
+              }}
+              placeholder={modelField.name}
+              value={objectField}
+              type={modelField.typeArgs && modelField.typeArgs.type}
+            />
+          )}
+          {modelField.type === "boolean" && (
+            <InputCheckbox
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={objectField}
+            />
+          )}
+          {modelField.type === "relationship" && (
+            <InputRelationShip
+              label={modelField.name}
+              value={objectField}
+              objectType={modelField.typeArgs.relationshipTo}
+              onChange={(value) => {
+                onChange(value);
+              }}
+            />
+          )}{" "}
+          {modelField.type === "relationship_m" && (
+            <InputRelationShipM
+              label={modelField.name}
+              value={objectField}
+              objectType={modelField.typeArgs.relationshipTo}
+              onChange={(value) => {
+                onChange(value);
+              }}
+            />
+          )}
+          {modelField.type === "options" && (
+            <InputSelect
+              label={modelField.name}
+              value={find(modelField.typeArgs.options, (o) => {
+                return o.key === objectField;
+              })}
+              options={modelField.typeArgs.options}
+              onChange={(value) => {
+                onChange(value.key);
+              }}
+            />
+          )}
+          {modelField.type === "picture" && (
+            <InputPicture
+              label={modelField.name}
+              value={objectField}
+              model={model}
+              fieldKey={objectField}
+              object={object}
+              onChange={(value) => {
+                onChange(value);
+              }}
+            />
+          )}
+          {modelField.type === "file" && (
+            <InputFile
+              label={modelField.name}
+              value={objectField}
+              model={model}
+              fieldKey={objectField}
+              object={object}
+              onChange={(value) => {
+                onChange(value);
+              }}
+            />
+          )}
+          {modelField.type === "richtext" && (
+            <InputRichText
+              onChange={(value) => {
+                onChange(value);
+              }}
+              placeholder={modelField.name}
+              value={objectField}
+            />
+          )}
+          {modelField.type === "color" && (
+            <InputColor
+              onChange={(value) => {
+                onChange(value);
+              }}
+              placeholder={modelField.name}
+              value={objectField}
+            />
+          )}
+          {modelField.type === "date" && (
+            <FieldTypeDate
+              onChange={(value) => {
+                onChange(value);
+              }}
+              modelField={modelField}
+              objectField={objectField}
+            />
+          )}
+        </div>
       );
     default:
       return <>Unknown mode</>;

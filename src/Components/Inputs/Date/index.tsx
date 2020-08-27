@@ -64,6 +64,7 @@ const InputDate: React.FC<{
           animateYearScrolling
           fullWidth
           autoOk
+          variant="inline"
           disableFuture={disableFuture}
           disablePast={disablePast}
         />

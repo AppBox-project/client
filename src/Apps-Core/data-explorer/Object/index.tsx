@@ -46,12 +46,14 @@ const DetailModule: React.FC<{
   context,
 }) => {
   return (
-    <ViewObject
-      modelId={object}
-      appId="data-explorer"
-      objectId={id}
-      context={context}
-    />
+    <div style={{ marginTop: 50 }}>
+      <ViewObject
+        modelId={object}
+        appId="data-explorer"
+        objectId={id}
+        context={context}
+      />
+    </div>
   );
 };
 

@@ -32,13 +32,15 @@ export default class WidgetContext {
   user;
   availableSettings;
   widgetSettings;
+  setTitle;
 
-  constructor(appId, widgetId, setDialog, user, config) {
+  constructor(appId, widgetId, setDialog, user, config, setTitle) {
     this.appId = appId;
     this.widgetId = widgetId;
     this.setDialog = setDialog;
     this.user = user;
     this.widgetSettings = config;
+    this.setTitle = setTitle;
     this.UI = {
       Loading,
       Margin: Margin,

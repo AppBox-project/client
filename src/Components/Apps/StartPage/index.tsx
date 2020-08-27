@@ -2,19 +2,12 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import Loading from "../../Loading";
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import GridLayout from "react-grid-layout";
+import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
 import { FaStream, FaGripLines } from "react-icons/fa";
-import {
-  Icon,
-  IconButton,
-  Typography,
-  Divider,
-  Tooltip,
-  Popover,
-} from "@material-ui/core";
+import { Icon, IconButton, Tooltip, Popover } from "@material-ui/core";
 import Card from "../../Design/Card";
 import WidgetList from "./WidgetList";
 import WidgetRenderer from "../Apps/WidgetRenderer";
@@ -25,6 +18,7 @@ const StartPage: React.FC = () => {
   const [desktop, setDesktop] = useState<any>();
   const [isMobile] = useGlobal<any>("isMobile");
   const [widgetAnchor, setWidgetAnchor] = useState<any>();
+  const ResponsiveGridLayout = WidthProvider(Responsive);
 
   // Functions
 
@@ -119,11 +113,12 @@ const StartPage: React.FC = () => {
         />
       </Popover>
 
-      <GridLayout
-        className="layout"
-        cols={12}
+      <ResponsiveGridLayout
+        className={styles.layout}
         rowHeight={30}
         width={1200}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         draggableHandle=".draggable"
         onLayoutChange={(layout) => {
           let firstLoad = true; // React grid gives a false first callback. Seemingly identifiable by all 0's
@@ -144,7 +139,7 @@ const StartPage: React.FC = () => {
           }
         }}
       >
-        {(desktop?.layout || []).map((item, widgetIndex) => {
+        {(desktop?.layout || []).map((item) => {
           const widget = desktop.widgets[item.i];
           return (
             <div
@@ -177,7 +172,7 @@ const StartPage: React.FC = () => {
             </div>
           );
         })}
-      </GridLayout>
+      </ResponsiveGridLayout>
     </div>
   );
 };

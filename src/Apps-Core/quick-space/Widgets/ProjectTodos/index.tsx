@@ -37,9 +37,23 @@ const WidgetProjectTodos: React.FC<{ context: WidgetContext }> = ({
         }
       }
     );
+    const projectRequest = context.getObjects(
+      "qs-project",
+      {
+        _id: context.widgetSettings?.project,
+      },
+      (response) => {
+        if (response.success) {
+          context.setTitle(response.data[0].data.name);
+        } else {
+          console.log(response);
+        }
+      }
+    );
 
     return () => {
       request.stop();
+      projectRequest.stop();
     };
   }, [context.widgetSettings]);
 
