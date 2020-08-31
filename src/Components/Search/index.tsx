@@ -140,7 +140,7 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
         styles={{
           container: (styles) => ({
             ...styles,
-            zIndex: 25,
+            zIndex: 500,
             position: "relative",
           }),
           control: (styles) => ({
@@ -149,6 +149,8 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             border: 0,
             color: "white",
             borderRadius: 5,
+            zIndex: 500,
+
             transition: "all 0.3s",
             boxShadow: "none",
             "&:active": {
@@ -158,9 +160,10 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
           option: (provided, state) => ({
             ...provided,
             borderBottom: "1px solid #efefef",
+            zIndex: 500,
+
             color: state.isSelected ? "white" : "black",
             padding: 20,
-            zIndex: 100,
           }),
           input: (styles) => {
             return { ...styles, color: "white" };

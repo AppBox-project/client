@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.1-3",
-  "description": "Redesigned notes.",
+  "version": "0.2.1-4",
+  "description": "Fix z-index for search (+ update test).",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
