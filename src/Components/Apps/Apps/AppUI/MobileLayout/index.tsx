@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaLemon, FaDropbox } from "react-icons/fa";
+import { FaLemon, FaDropbox, FaCogs } from "react-icons/fa";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
@@ -130,6 +130,19 @@ const AppUIMobile: React.FC<{
                 />
               );
             })
+          )}
+          {appContext.appConfig && appContext.appConfig.settings && (
+            <Route
+              path={`/${appContext.appId}/settings`}
+              render={(props) => {
+                return (
+                  <appContext.appConfig.settings
+                    context={appContext}
+                    {...props}
+                  />
+                );
+              }}
+            />
           )}
           {appContext.onNoAction && (
             <Route
@@ -255,7 +268,12 @@ const AppUIMobile: React.FC<{
             onChange={(event, newValue) => {
               history.push(`/${appContext.appId}/${newValue}`);
             }}
-            style={{ bottom: 0, position: "absolute", width: "100%" }}
+            style={{
+              bottom: 0,
+              position: "absolute",
+              width: "100%",
+              zIndex: 101,
+            }}
           >
             {typeof actions === "object" &&
               //@ts-ignore
@@ -276,6 +294,14 @@ const AppUIMobile: React.FC<{
                   />
                 );
               })}
+            {appContext.appConfig && appContext.appConfig.settings && (
+              <BottomNavigationAction
+                key="settings"
+                label="Settings"
+                value="settings"
+                icon={<FaCogs style={{ height: 20, width: 20 }} />}
+              />
+            )}
           </BottomNavigation>
         )}
       </div>
