@@ -55,7 +55,7 @@ const AppQSActionFile: React.FC<{
         <>
           <div style={{ marginBottom: 25 }}>
             <context.UI.Layouts.Object.ObjectLayout
-              appId={context.appId}
+              context={context}
               layoutId="dropzone"
               model={model}
               defaults={{ owner: context.user._id }}

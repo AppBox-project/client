@@ -2,7 +2,7 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import Loading from "../../Loading";
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import GridLayout, { WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
@@ -18,7 +18,7 @@ const StartPage: React.FC = () => {
   const [desktop, setDesktop] = useState<any>();
   const [isMobile] = useGlobal<any>("isMobile");
   const [widgetAnchor, setWidgetAnchor] = useState<any>();
-  const ResponsiveGridLayout = WidthProvider(Responsive);
+  const ResponsiveGridLayout = WidthProvider(GridLayout);
 
   // Functions
 
@@ -117,8 +117,7 @@ const StartPage: React.FC = () => {
         className={styles.layout}
         rowHeight={30}
         width={1200}
-        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+        cols={12}
         draggableHandle=".draggable"
         onLayoutChange={(layout) => {
           let firstLoad = true; // React grid gives a false first callback. Seemingly identifiable by all 0's

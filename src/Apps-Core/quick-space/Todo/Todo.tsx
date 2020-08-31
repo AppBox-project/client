@@ -79,7 +79,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
                   model={model}
                   layoutId="popup"
                   popup
-                  appId="quick-space"
+                  context={context}
                   objectId={todo._id}
                 />
               ),

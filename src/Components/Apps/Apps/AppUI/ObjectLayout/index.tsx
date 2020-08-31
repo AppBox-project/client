@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ModelType } from "../../../../../Utils/Types";
+import { ModelType, AppContextType } from "../../../../../Utils/Types";
 import Loading from "../../../../Loading";
 import Server from "../../../../../Utils/Server";
 import uniqid from "uniqid";
@@ -9,11 +9,11 @@ const UIObjectLayout: React.FC<{
   model?: ModelType;
   modelId?: string;
   layoutId: string;
-  appId: string;
   objectId?: string;
   popup?: true;
   defaults?: { [key: string]: string };
-}> = ({ model, modelId, layoutId, appId, objectId, popup, defaults }) => {
+  context: AppContextType;
+}> = ({ model, modelId, layoutId, context, objectId, popup, defaults }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
 
@@ -48,7 +48,7 @@ const UIObjectLayout: React.FC<{
       popup={popup}
       modelId={appliedModel.key}
       layoutId={layoutId}
-      appId={appId}
+      appId={context.appId}
       defaults={defaults}
       objectId={objectId}
     />

@@ -23,6 +23,7 @@ import { GrAdd } from "react-icons/gr";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -50,6 +51,7 @@ const ListDetailLayout: React.FC<{
   navFixedIcon?: JSX.Element;
   title?;
   isLoading?: true | boolean;
+  style?: CSSProperties;
 }> = ({
   list,
   customNavComponent,
@@ -66,9 +68,13 @@ const ListDetailLayout: React.FC<{
   title,
   isLoading,
   addTitle,
+  style,
 }) => {
   // Vars
-  const selectedItem = window.location.href.split(`${baseUrl}/`)[1];
+  let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
+  if ((selectedItem || "").match("/"))
+    selectedItem = selectedItem.split("/")[0];
+
   const [isMobile] = useGlobal<any>("isMobile");
   const navigationWidth = navWidth ? navWidth : 3;
   //@ts-ignore
@@ -104,7 +110,7 @@ const ListDetailLayout: React.FC<{
   // UI
 
   return (
-    <Grid container style={{ height: "100%" }}>
+    <Grid container style={{ ...style, height: "100%" }}>
       {(!selectedItem || !isMobile) && (
         <Grid item xs={12} md={navigationWidth} style={{ height: "100%" }}>
           {!isLoading ? (
@@ -202,97 +208,15 @@ const ListNav: React.FC<{
             )}
             {list.map((listItem) => {
               return (
-                <React.Fragment key={listItem.id}>
-                  {listItem.subItems ? (
-                    <>
-                      <Link to={`${baseUrl}/${listItem.id}`}>
-                        <ListSubheader
-                          color="primary"
-                          style={{ marginTop: 10 }}
-                        >
-                          <Typography variant="h6">{listItem.label}</Typography>
-                        </ListSubheader>
-                      </Link>
-                      {listItem.subItems.map((subItem) => {
-                        return (
-                          <Link
-                            to={`${baseUrl}/${subItem.id}`}
-                            key={subItem.id}
-                          >
-                            <ListItem
-                              button
-                              selected={selectedItem === subItem.id}
-                            >
-                              {navFixedIcon && (
-                                <ListItemIcon>{navFixedIcon}</ListItemIcon>
-                              )}
-                              {subItem.icon && (
-                                <ListItemIcon>
-                                  <subItem.icon />
-                                </ListItemIcon>
-                              )}
-                              <ListItemText
-                                color={
-                                  selectedItem === listItem.id
-                                    ? "primary"
-                                    : "inherit"
-                                }
-                              >
-                                {subItem.label}
-                              </ListItemText>
-                              {deleteFunction && (
-                                <ListItemSecondaryAction>
-                                  <IconButton
-                                    onClick={() => {
-                                      deleteFunction(subItem.id);
-                                    }}
-                                    color="primary"
-                                  >
-                                    <FaTrash
-                                      style={{ width: 18, height: 18 }}
-                                    />
-                                  </IconButton>
-                                </ListItemSecondaryAction>
-                              )}
-                            </ListItem>
-                          </Link>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <Link to={`${baseUrl}/${listItem.id}`}>
-                      <ListItem button selected={selectedItem === listItem.id}>
-                        {navFixedIcon && (
-                          <ListItemIcon>{navFixedIcon}</ListItemIcon>
-                        )}
-                        {listItem.icon && (
-                          <ListItemIcon>
-                            <listItem.icon />
-                          </ListItemIcon>
-                        )}
-                        <ListItemText
-                          color={
-                            selectedItem === listItem.id ? "primary" : "inherit"
-                          }
-                        >
-                          {listItem.label}
-                        </ListItemText>
-                        {deleteFunction && (
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              onClick={() => {
-                                deleteFunction(listItem.id);
-                              }}
-                              color="primary"
-                            >
-                              <FaTrash style={{ width: 18, height: 18 }} />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        )}
-                      </ListItem>
-                    </Link>
-                  )}
-                </React.Fragment>
+                <ListItemObject
+                  baseUrl={baseUrl}
+                  listItem={listItem}
+                  selectedItem={selectedItem}
+                  navFixedIcon={navFixedIcon}
+                  deleteFunction={deleteFunction}
+                  key={listItem.id}
+                  nestedLevel={0}
+                />
               );
             })}
           </List>
@@ -301,3 +225,64 @@ const ListNav: React.FC<{
     </AnimationContainer>
   );
 };
+
+const ListItemObject: React.FC<{
+  baseUrl;
+  listItem;
+  selectedItem;
+  navFixedIcon;
+  deleteFunction;
+  key?;
+  nestedLevel: number;
+}> = ({
+  baseUrl,
+  listItem,
+  selectedItem,
+  navFixedIcon,
+  deleteFunction,
+  nestedLevel,
+}) => (
+  <Link to={`${baseUrl}/${listItem.id}`}>
+    <ListItem button selected={selectedItem === listItem.id}>
+      {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
+      {listItem.icon && (
+        <ListItemIcon>
+          <listItem.icon />
+        </ListItemIcon>
+      )}
+      <ListItemText
+        style={{ paddingLeft: 15 * nestedLevel }}
+        color={selectedItem === listItem.id ? "primary" : "inherit"}
+      >
+        {listItem.label}
+      </ListItemText>
+      {deleteFunction && (
+        <ListItemSecondaryAction>
+          <IconButton
+            onClick={() => {
+              deleteFunction(listItem.id);
+            }}
+            color="primary"
+          >
+            <FaTrash style={{ width: 18, height: 18 }} />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )}
+    </ListItem>
+    {listItem.subItems && (
+      <List style={{ margin: 0, padding: 0 }}>
+        {listItem.subItems.map((item) => (
+          <ListItemObject
+            baseUrl={baseUrl}
+            listItem={item}
+            selectedItem={selectedItem}
+            navFixedIcon={navFixedIcon}
+            deleteFunction={deleteFunction}
+            key={item.id}
+            nestedLevel={nestedLevel + 1}
+          />
+        ))}
+      </List>
+    )}
+  </Link>
+);

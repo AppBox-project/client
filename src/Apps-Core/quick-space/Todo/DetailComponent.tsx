@@ -127,7 +127,7 @@ const AppQSActionTodoDetail: React.FC<{
             model={model}
             layoutId="popup"
             popup
-            appId="quick-space"
+            context={context}
             objectId={displayTodo._id}
           />
         ),
@@ -172,7 +172,7 @@ const AppQSActionTodoDetail: React.FC<{
                           model={model}
                           layoutId="popup"
                           popup
-                          appId="quick-space"
+                          context={context}
                           objectId={todo._id}
                         />
                       ),
@@ -275,7 +275,7 @@ const AppQSActionTodoDetail: React.FC<{
                                   model={model}
                                   layoutId="default"
                                   popup
-                                  appId="quick-space"
+                                  context={context}
                                   objectId={object._id}
                                 />
                               ),

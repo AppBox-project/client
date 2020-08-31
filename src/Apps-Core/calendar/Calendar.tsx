@@ -233,7 +233,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                       content: (
                         <context.UI.Layouts.Object.ObjectLayout
                           model={eventModel}
-                          appId={context.appId}
+                          context={context}
                           objectId={event.event._id}
                           popup
                           layoutId="popup"

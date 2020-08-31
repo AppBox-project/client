@@ -18,7 +18,7 @@ const AppSettingsProcessDetail: React.FC<{
       <context.UI.Layouts.Object.ObjectLayout
         modelId="automations"
         layoutId="create"
-        appId={context.appId}
+        context={context}
         popup
       />
     </context.UI.Design.Card>

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { AnyARecord } from "dns";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
@@ -274,10 +275,10 @@ export interface TreeViewDataItem {
   icon: React.FC;
   subItems?: TreeViewDataItem[];
 }
-interface ListItem {
+export interface ListItemType {
   label: string;
   id: string;
-  subItems?: ListItem[];
+  subItems?: ListItemType[];
 }
 
 export interface UIType {
@@ -305,7 +306,7 @@ export interface UIType {
         model?: ModelType;
         modelId?: string;
         layoutId: string;
-        appId: string;
+        context: AppContextType;
         objectId?: string;
         popup?: true;
         defaults?: { [key: string]: string };
@@ -352,7 +353,7 @@ export interface UIType {
     }>;
     ListDetailLayout: React.FC<{
       mode?: "normal" | "tree";
-      list?: ListItem[];
+      list?: ListItemType[];
       treeList?: TreeViewDataItem[];
       baseUrl: string;
       customNavComponent?;
@@ -366,6 +367,7 @@ export interface UIType {
       navFixedIcon?: JSX.Element;
       title?: string;
       isLoading?: true | boolean;
+      style?: CSSProperties;
     }>;
     SortableList: React.FC<{
       listItems: [];

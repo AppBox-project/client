@@ -286,7 +286,7 @@ const ActionMenu: React.FC<{
       {context.appConfig && context.appConfig.settings && (
         <motion.div
           variants={item}
-          style={{ position: "absolute", bottom: 0, width: "85%" }}
+          style={{ position: "absolute", bottom: 0, width: "100%" }}
         >
           <Divider />
           <List>

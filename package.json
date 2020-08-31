@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.1-1",
-  "description": "Various frontend improvements.",
+  "version": "0.2.1-2",
+  "description": "QS: settings",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

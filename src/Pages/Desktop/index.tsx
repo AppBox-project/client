@@ -10,12 +10,10 @@ import { Link, useHistory, Switch, Route } from "react-router-dom";
 import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
 import AppRenderer from "../../Components/Apps/Apps/AppRenderer";
-import { GiCardboardBox } from "react-icons/gi";
 import { baseUrl } from "../../Utils/Utils";
 import NavBar from "../../Components/NavBar";
 import LinkHandler from "../LinkHandler";
 import NavBarSkeleton from "./NavBarSkeleton";
-import InputInput from "../../Components/Inputs/Input";
 import AppBarAppList from "./AppList";
 import { AppType } from "../../Utils/Types";
 
