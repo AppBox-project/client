@@ -1,4 +1,8 @@
 {
+  "handlerFor": {
+    "qs-todo": "/quick-space/todo/{object:data.project}#{object:_id}",
+    "qs-note": "/quick-space/notes/{object:data.project}/{object:_id}"
+  },
   "widgets": [
     {
       "name": "Todo's",

@@ -371,6 +371,8 @@ export interface UIType {
       title?: string;
       isLoading?: true | boolean;
       style?: CSSProperties;
+      imageField?: string;
+      objects?: ObjectType[];
     }>;
     SortableList: React.FC<{
       listItems: [];

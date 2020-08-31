@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useGlobal } from "reactn";
+import React, { useState, useEffect } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
-import { filter, sortBy } from "lodash";
-import AppQSNotesNavigation from "./Navigation";
-import { Grid } from "@material-ui/core";
-import { Route } from "react-router-dom";
 import AppQSNotesDetail from "./NotesDetail";
+import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
+import { AppProjectType } from "../Types";
 
 const AppQSActionNotes: React.FC<{
   match: { isExact: boolean };
@@ -13,75 +11,42 @@ const AppQSActionNotes: React.FC<{
 }> = ({ context, action, match: { isExact } }) => {
   //Vars
   const [projects, setProjects] = useState<any>();
-  const [flatProjects, setFlatProjects] = useState<any>();
-  const [memos, setMemos] = useState<any>();
-  const [selectedMemo, setSelectedMemo] = useState<any>();
+  const [flatProjects, setFlatProjects] = useState<{}>();
 
   // Lifecycle
   useEffect(() => {
     context.getObjects(
       "qs-project",
-      { "data.owner": context.user._id },
+      { "data.owner": context.user._id, "data.show_in_notes": { $ne: false } },
       (response) => {
         if (response.success) {
-          const newProjects = [];
-          response.data.map((project) => {
-            if (!project.data.parent) {
-              const subprojects = [];
-              filter(response.data, (o) => {
-                return o.data.parent === project._id;
-              }).map((subProject) => {
-                subprojects.push({
-                  value: subProject._id,
-                  label: subProject.data.name,
-                });
-              });
-              newProjects.push({
-                value: project._id,
-                label: project.data.name,
-                subprojects,
-              });
-            }
-          });
-          //@ts-ignore
-          setProjects(newProjects);
-          setFlatProjects(response.data);
+          const newFlat = {};
+          response.data.map((o: AppProjectType) => (newFlat[o._id] = o));
+          setFlatProjects(newFlat);
+          setProjects(
+            array2dTo3d(response.data, "data.parent", true, "data.name")
+          );
         } else {
           console.log(response);
         }
       }
     );
-
-    context.getObjects("qs-note", {}, (response) => {
-      if (response.success) {
-        setMemos(sortBy(response.data, ["data.order"]));
-      } else {
-        console.log(response);
-      }
-    });
   }, []);
 
   // UI
 
-  if (!projects || !memos) return <context.UI.Loading />;
+  if (!projects) return <context.UI.Loading />;
   return (
     <context.UI.Layouts.ListDetailLayout
-      navWidth={5}
-      customNavComponent={
-        <AppQSNotesNavigation
-          memos={memos}
-          flatProjects={flatProjects}
-          projects={projects}
-          context={context}
-          selectedMemo={selectedMemo}
-        />
-      }
+      title="Projects"
+      navWidth={2}
+      list={projects}
       context={context}
       baseUrl="/quick-space/notes"
       DetailComponent={AppQSNotesDetail}
       detailComponentProps={{
-        setSelectedMemo: setSelectedMemo,
         context: context,
+        projects: flatProjects,
       }}
     />
   );

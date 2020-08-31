@@ -9,6 +9,7 @@ import {
   IconButton,
   Typography,
   Divider,
+  Avatar,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
@@ -16,6 +17,7 @@ import {
   AppContextType,
   TreeViewDataItem,
   ColumnWidth,
+  ObjectType,
 } from "../../../../../Utils/Types";
 import { FaTrash, FaAngleLeft } from "react-icons/fa";
 import { GrAdd } from "react-icons/gr";
@@ -23,6 +25,7 @@ import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { find } from "lodash";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -37,6 +40,7 @@ interface ListItem {
 const ListDetailLayout: React.FC<{
   mode?: "normal" | "tree";
   list?: ListItem[];
+  objects?: ObjectType[];
   treeList?: TreeViewDataItem[];
   baseUrl: string;
   customNavComponent?;
@@ -51,6 +55,7 @@ const ListDetailLayout: React.FC<{
   title?;
   isLoading?: true | boolean;
   style?: CSSProperties;
+  imageField?: string;
 }> = ({
   list,
   customNavComponent,
@@ -68,6 +73,8 @@ const ListDetailLayout: React.FC<{
   isLoading,
   addTitle,
   style,
+  imageField,
+  objects,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -127,6 +134,8 @@ const ListDetailLayout: React.FC<{
                 navFixedIcon={navFixedIcon}
                 title={title}
                 addTitle={addTitle}
+                imageField={imageField}
+                objects={objects}
               />
             )
           ) : (
@@ -167,6 +176,8 @@ const ListNav: React.FC<{
   navFixedIcon?;
   title?;
   addTitle?;
+  imageField: string;
+  objects?;
 }> = ({
   addFunction,
   deleteFunction,
@@ -176,6 +187,8 @@ const ListNav: React.FC<{
   navFixedIcon,
   title,
   addTitle,
+  imageField,
+  objects,
 }) => {
   return (
     <AnimationContainer>
@@ -205,7 +218,7 @@ const ListNav: React.FC<{
                 <ListItemText>{addTitle || "Add new"}</ListItemText>
               </ListItem>
             )}
-            {list.map((listItem) => {
+            {(list || []).map((listItem) => {
               return (
                 <ListItemObject
                   baseUrl={baseUrl}
@@ -215,6 +228,8 @@ const ListNav: React.FC<{
                   deleteFunction={deleteFunction}
                   key={listItem.id}
                   nestedLevel={0}
+                  imageField={imageField}
+                  objects={objects}
                 />
               );
             })}
@@ -233,6 +248,8 @@ const ListItemObject: React.FC<{
   deleteFunction;
   key?;
   nestedLevel: number;
+  imageField: string;
+  objects;
 }> = ({
   baseUrl,
   listItem,
@@ -240,50 +257,63 @@ const ListItemObject: React.FC<{
   navFixedIcon,
   deleteFunction,
   nestedLevel,
-}) => (
-  <Link to={`${baseUrl}/${listItem.id}`}>
-    <ListItem button selected={selectedItem === listItem.id}>
-      {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
-      {listItem.icon && (
-        <ListItemIcon>
-          <listItem.icon />
-        </ListItemIcon>
+  imageField,
+  objects,
+}) => {
+  const object = objects ? find(objects, (o) => o._id === listItem.id) : false;
+
+  return (
+    <Link to={`${baseUrl}/${listItem.id}`}>
+      <ListItem button selected={selectedItem === listItem.id}>
+        {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
+        {listItem.icon && (
+          <ListItemIcon>
+            <listItem.icon />
+          </ListItemIcon>
+        )}
+        {imageField && object && object.data[imageField] && (
+          <ListItemIcon>
+            <Avatar src={object.data[imageField]} />
+          </ListItemIcon>
+        )}
+        <ListItemText
+          style={{
+            paddingLeft: 15 * nestedLevel,
+          }}
+          color={selectedItem === listItem.id ? "primary" : "inherit"}
+        >
+          {listItem.label}
+        </ListItemText>
+        {deleteFunction && (
+          <ListItemSecondaryAction>
+            <IconButton
+              onClick={() => {
+                deleteFunction(listItem.id);
+              }}
+              color="primary"
+            >
+              <FaTrash style={{ width: 18, height: 18 }} />
+            </IconButton>
+          </ListItemSecondaryAction>
+        )}
+      </ListItem>
+      {listItem.subItems && (
+        <List style={{ margin: 0, padding: 0 }}>
+          {listItem.subItems.map((item) => (
+            <ListItemObject
+              baseUrl={baseUrl}
+              listItem={item}
+              selectedItem={selectedItem}
+              navFixedIcon={navFixedIcon}
+              deleteFunction={deleteFunction}
+              key={item.id}
+              nestedLevel={nestedLevel + 1}
+              imageField={imageField}
+              objects={objects}
+            />
+          ))}
+        </List>
       )}
-      <ListItemText
-        style={{
-          paddingLeft: 15 * nestedLevel,
-        }}
-        color={selectedItem === listItem.id ? "primary" : "inherit"}
-      >
-        {listItem.label}
-      </ListItemText>
-      {deleteFunction && (
-        <ListItemSecondaryAction>
-          <IconButton
-            onClick={() => {
-              deleteFunction(listItem.id);
-            }}
-            color="primary"
-          >
-            <FaTrash style={{ width: 18, height: 18 }} />
-          </IconButton>
-        </ListItemSecondaryAction>
-      )}
-    </ListItem>
-    {listItem.subItems && (
-      <List style={{ margin: 0, padding: 0 }}>
-        {listItem.subItems.map((item) => (
-          <ListItemObject
-            baseUrl={baseUrl}
-            listItem={item}
-            selectedItem={selectedItem}
-            navFixedIcon={navFixedIcon}
-            deleteFunction={deleteFunction}
-            key={item.id}
-            nestedLevel={nestedLevel + 1}
-          />
-        ))}
-      </List>
-    )}
-  </Link>
-);
+    </Link>
+  );
+};

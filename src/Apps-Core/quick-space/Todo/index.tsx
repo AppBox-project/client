@@ -16,7 +16,7 @@ const AppQSActionTodo: React.FC<{
   useEffect(() => {
     const projectRequest = context.getObjects(
       "qs-project",
-      { "data.owner": context.user._id },
+      { "data.owner": context.user._id, "data.show_in_todos": { $ne: false } },
       (response) => {
         if (response.success) {
           const newProjects = [];
