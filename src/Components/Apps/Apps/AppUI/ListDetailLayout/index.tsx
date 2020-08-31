@@ -5,7 +5,6 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  ListSubheader,
   ListItemSecondaryAction,
   IconButton,
   Typography,
@@ -251,7 +250,9 @@ const ListItemObject: React.FC<{
         </ListItemIcon>
       )}
       <ListItemText
-        style={{ paddingLeft: 15 * nestedLevel }}
+        style={{
+          paddingLeft: 15 * nestedLevel,
+        }}
         color={selectedItem === listItem.id ? "primary" : "inherit"}
       >
         {listItem.label}

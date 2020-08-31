@@ -33,14 +33,14 @@ const AppBarAppList: React.FC<{
         <Divider style={{ margin: 15 }} />
       </div>
 
-      <Grid container spacing={10} style={{ flex: 1, overflowX: "hidden" }}>
+      <Grid container spacing={1} style={{ overflowX: "hidden" }}>
         {appList.map((app) => {
           const Icon = icons[app.data.icon];
 
           return (
             <Grid
               key={app._id}
-              xs={4}
+              xs={3}
               className={styles.appListApp}
               onClick={() => {
                 history.push(`/${app.data.id}`);

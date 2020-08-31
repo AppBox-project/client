@@ -10,7 +10,7 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
   context,
 }) => {
   // Vars
-  const [projects, setProjects] = useState<AppProjectType[]>([]);
+  const [projects, setProjects] = useState<{}>([]);
   const [projectsList, setProjectsList] = useState<ListItemType[]>([]);
 
   // Lifecycle
@@ -19,6 +19,7 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
       "qs-project",
       { "data.owner": context.user._id },
       (response) => {
+        const pList = {};
         if (response.success) {
           const pl = array2dTo3d(
             response.data,
@@ -26,9 +27,8 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
             true,
             "data.name"
           );
-          console.log(pl);
-
-          setProjects(response.data);
+          response.data.map((p) => (pList[p._id] = p));
+          setProjects(pList);
           setProjectsList(pl);
         } else {
           console.log(response);
@@ -39,33 +39,30 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
 
   // UI
   return (
-    <context.UI.Animations.AnimationContainer>
-      <context.UI.Animations.AnimationItem>
-        <context.UI.Layouts.ListDetailLayout
-          baseUrl="/quick-space/settings/projects"
-          DetailComponent={AppQSSettingsProjectDetail}
-          context={context}
-          list={projectsList}
-          title="Projects"
-          addFunction={() => {
-            context.setDialog({
-              display: true,
-              title: "New project",
-              content: (
-                <context.UI.Layouts.Object.ObjectLayout
-                  modelId="qs-project"
-                  layoutId="create"
-                  popup
-                  context={context}
-                  defaults={{ owner: context.user._id }}
-                />
-              ),
-            });
-          }}
-          style={{ marginBottom: 64 }}
-        />
-      </context.UI.Animations.AnimationItem>
-    </context.UI.Animations.AnimationContainer>
+    <context.UI.Layouts.ListDetailLayout
+      baseUrl="/quick-space/settings/projects"
+      DetailComponent={AppQSSettingsProjectDetail}
+      detailComponentProps={{ projects }}
+      context={context}
+      list={projectsList}
+      title="Projects"
+      addFunction={() => {
+        context.setDialog({
+          display: true,
+          title: "New project",
+          content: (
+            <context.UI.Layouts.Object.ObjectLayout
+              modelId="qs-project"
+              layoutId="create"
+              popup
+              context={context}
+              defaults={{ owner: context.user._id }}
+            />
+          ),
+        });
+      }}
+      style={{ height: "100%" }}
+    />
   );
 };
 

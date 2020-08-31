@@ -32,7 +32,8 @@ import {
 } from "../Apps/Apps/AppUI/Animations";
 import FieldDisplay from "./FieldDisplay";
 import styles from "./styles.module.scss";
-import { baseUrl } from "../../Utils/Utils";
+import { baseUrl as baseAppUrl } from "../../Utils/Utils";
+import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -43,6 +44,7 @@ const ViewObject: React.FC<{
   popup?: true;
   defaults?: { [key: string]: string };
   context?: AppContextType;
+  baseUrl?: string;
 }> = ({
   modelId,
   layoutId,
@@ -52,6 +54,7 @@ const ViewObject: React.FC<{
   popup,
   defaults,
   context,
+  baseUrl,
 }) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
@@ -245,7 +248,7 @@ const ViewObject: React.FC<{
           backButton: {
             ...navBar.backButton,
             icon: <FaAngleLeft />,
-            url: `/${appId}/${modelId}`,
+            url: baseUrl || `/${appId}/${modelId}`,
             function: undefined,
           },
           title: pageTitle ? pageTitle : undefined,
@@ -419,6 +422,7 @@ const ViewObject: React.FC<{
 
   return (
     <div
+      style={{ height: "100%" }}
       onKeyDown={(event) => {
         if (
           mode === "edit" &&
@@ -442,7 +446,7 @@ const ViewObject: React.FC<{
                   <Hidden xsDown>
                     <div
                       style={{
-                        backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                        backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
                       }}
                       className={styles.factsBarImage}
                     />
@@ -462,7 +466,9 @@ const ViewObject: React.FC<{
                       {factsBarPicture && (
                         <div
                           style={{
-                            backgroundImage: `url(${baseUrl + factsBarPicture}`,
+                            backgroundImage: `url(${
+                              baseAppUrl + factsBarPicture
+                            }`,
                           }}
                           className={styles.factsBarImageSmall}
                         />
@@ -553,6 +559,7 @@ const ViewObject: React.FC<{
                 setToChange={setToChange}
                 toChange={toChange}
                 object={object}
+                baseUrl={baseUrl}
               />
             );
           })
@@ -587,6 +594,7 @@ const LayoutItem: React.FC<{
   object: any;
   setToUpload;
   toUpload;
+  baseUrl: string;
 }> = ({
   layoutItem,
   model,
@@ -597,28 +605,29 @@ const LayoutItem: React.FC<{
   setToChange,
   setToUpload,
   toUpload,
+  baseUrl,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
       return (
         <ObjectLayoutItemGridContainer>
-          {layoutItem.items &&
-            layoutItem.items.map((item) => {
-              return (
-                <LayoutItem
-                  key={item.id}
-                  layoutItem={item}
-                  setToUpload={setToUpload}
-                  toUpload={toUpload}
-                  model={model}
-                  mode={mode}
-                  setMode={setMode}
-                  setToChange={setToChange}
-                  toChange={toChange}
-                  object={object}
-                />
-              );
-            })}
+          {(layoutItem.items || []).map((item) => {
+            return (
+              <LayoutItem
+                key={item.id}
+                layoutItem={item}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
+                model={model}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+                baseUrl={baseUrl}
+              />
+            );
+          })}
         </ObjectLayoutItemGridContainer>
       );
     case "GridItem":
@@ -644,6 +653,7 @@ const LayoutItem: React.FC<{
                   setToChange={setToChange}
                   toChange={toChange}
                   object={object}
+                  baseUrl={baseUrl}
                 />
               );
             })}
@@ -666,6 +676,7 @@ const LayoutItem: React.FC<{
                   setToChange={setToChange}
                   toChange={toChange}
                   object={object}
+                  baseUrl={baseUrl}
                 />
               );
             })}
@@ -674,23 +685,23 @@ const LayoutItem: React.FC<{
     case "AnimationItem":
       return (
         <ObjectLayoutItemAnimationItem>
-          {layoutItem.items &&
-            layoutItem.items.map((item) => {
-              return (
-                <LayoutItem
-                  key={item.id}
-                  layoutItem={item}
-                  setToUpload={setToUpload}
-                  toUpload={toUpload}
-                  model={model}
-                  mode={mode}
-                  setMode={setMode}
-                  setToChange={setToChange}
-                  toChange={toChange}
-                  object={object}
-                />
-              );
-            })}
+          {(layoutItem?.items || []).map((item) => {
+            return (
+              <LayoutItem
+                key={item.id}
+                layoutItem={item}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
+                model={model}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+                baseUrl={baseUrl}
+              />
+            );
+          })}
         </ObjectLayoutItemAnimationItem>
       );
     case "FieldGrid":
@@ -717,23 +728,23 @@ const LayoutItem: React.FC<{
           sideMarginOnly={layoutItem.sideMarginOnly}
           title={layoutItem.title}
         >
-          {layoutItem.items &&
-            layoutItem.items.map((item) => {
-              return (
-                <LayoutItem
-                  key={item.id}
-                  setToUpload={setToUpload}
-                  toUpload={toUpload}
-                  layoutItem={item}
-                  model={model}
-                  mode={mode}
-                  setMode={setMode}
-                  setToChange={setToChange}
-                  toChange={toChange}
-                  object={object}
-                />
-              );
-            })}
+          {(layoutItem?.items || []).map((item) => {
+            return (
+              <LayoutItem
+                key={item.id}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
+                layoutItem={item}
+                model={model}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+                baseUrl={baseUrl}
+              />
+            );
+          })}
         </ObjectLayoutItemPaper>
       );
     case "Field":
@@ -758,7 +769,38 @@ const LayoutItem: React.FC<{
         />
       );
 
-      break;
+    case "TabContainer":
+      const items = {};
+      (layoutItem.items || []).map((TabItem) => {
+        const subItems = [];
+        (TabItem.items || []).map((subItem) => {
+          subItems.push(
+            <LayoutItem
+              key={subItem.id}
+              setToUpload={setToUpload}
+              toUpload={toUpload}
+              layoutItem={subItem}
+              model={model}
+              mode={mode}
+              setMode={setMode}
+              setToChange={setToChange}
+              toChange={toChange}
+              object={object}
+              baseUrl={baseUrl}
+            />
+          );
+        });
+        items[TabItem.identifier] = subItems;
+      });
+
+      return (
+        <ObjectLayoutItemTabContainer
+          layoutItem={layoutItem}
+          tabs={layoutItem?.items}
+          baseUrl={baseUrl}
+          items={items}
+        />
+      );
     default:
       return <>Unknown layoutItem type:{layoutItem.type}</>;
   }

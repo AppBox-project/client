@@ -11,6 +11,7 @@ const Card: React.FC<{
   titleDivider?: true;
   withBigMargin?: true | boolean;
   withSmallMargin?: true | boolean;
+  titleInPrimaryColor?: true | boolean;
   sideMarginOnly?: true | boolean;
   className?: string;
 }> = ({
@@ -24,6 +25,7 @@ const Card: React.FC<{
   withBigMargin,
   withSmallMargin,
   sideMarginOnly,
+  titleInPrimaryColor,
 }) => {
   const margins = {
     ...(withBigMargin
@@ -56,6 +58,7 @@ const Card: React.FC<{
         <>
           <Typography
             variant="h6"
+            color={titleInPrimaryColor ? "primary" : "initial"}
             style={{ textAlign: centerTitle ? "center" : "left" }}
           >
             {title}

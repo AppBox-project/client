@@ -296,6 +296,8 @@ export interface UIType {
       withBigMargin?: true | boolean;
       withSmallMargin?: true | boolean;
       sideMarginOnly?: true | boolean;
+      titleInPrimaryColor?: true | boolean;
+
       className?: string;
     }>;
   };
@@ -310,6 +312,7 @@ export interface UIType {
         objectId?: string;
         popup?: true;
         defaults?: { [key: string]: string };
+        baseUrl?: string;
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;

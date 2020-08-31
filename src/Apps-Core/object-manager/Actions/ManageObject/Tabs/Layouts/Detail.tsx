@@ -290,6 +290,74 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
+          TabContainer: {
+            label: "Tab container",
+            droppable: true,
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                form: [
+                  {
+                    label: "Tabs identifier",
+                    key: "identifier",
+                    value: layoutItem.identifier,
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
+          TabItem: {
+            label: "Tab Item",
+            droppable: true,
+            dynamicLabel: "title",
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                form: [
+                  { label: "Title", key: "title", value: layoutItem.title },
+                  {
+                    label: "Identifier",
+                    key: "identifier",
+                    value: layoutItem.identifier,
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
           Paper: {
             label: "Card",
             wrapper: WrapperPaper,
