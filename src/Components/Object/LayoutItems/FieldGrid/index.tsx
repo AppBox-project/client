@@ -8,7 +8,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import { MdExpandMore } from "react-icons/md";
-import { ModelType, ObjectType } from "../../../../Utils/Types";
+import { ModelType, ObjectType, AppContextType } from "../../../../Utils/Types";
 import ObjectLayoutItemField from "../Field";
 
 const ObjectLayoutItemFieldGrid: React.FC<{
@@ -28,7 +28,17 @@ const ObjectLayoutItemFieldGrid: React.FC<{
   toChange;
   setMode;
   mode;
-}> = ({ layoutItem, object, model, setToChange, toChange, setMode, mode }) => {
+  context: AppContextType;
+}> = ({
+  layoutItem,
+  object,
+  model,
+  setToChange,
+  toChange,
+  setMode,
+  mode,
+  context,
+}) => {
   // Vars
   // Lifecycle
   // UI
@@ -64,6 +74,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
                     onChange={(value) => {
                       setToChange({ ...toChange, [item]: value });
                     }}
+                    context={context}
                   />
                 </Grid>
               ))}

@@ -4,6 +4,7 @@ import {
   ModelType,
   ModelFieldType,
   CustomFieldType,
+  AppContextType,
 } from "../../../../Utils/Types";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import InputInput from "../../../Inputs/Input";
@@ -31,6 +32,7 @@ const ObjectLayoutItemField: React.FC<{
   onChange?: (value: string | boolean | Date | number) => void;
   toChange;
   customFieldTypes?: { [key: string]: React.FC<CustomFieldType> };
+  context: AppContextType;
 }> = ({
   layoutItem,
   object,
@@ -40,6 +42,7 @@ const ObjectLayoutItemField: React.FC<{
   onChange,
   toChange,
   customFieldTypes,
+  context,
 }) => {
   // Vars
   const [modelField, setModelField] = useState<ModelFieldType>(
@@ -101,6 +104,7 @@ const ObjectLayoutItemField: React.FC<{
               objectField={objectField}
               modelField={modelField}
               CustomField={CustomField}
+              context={context}
             />
           </div>
         </div>
@@ -244,7 +248,9 @@ const ObjectLayoutItemField: React.FC<{
               objectField={objectField}
             />
           )}
-          {modelField.type === "custom" && <CustomField mode={mode} />}
+          {modelField.type === "custom" && (
+            <CustomField mode={mode} value={objectField} context={context} />
+          )}
         </div>
       );
     default:

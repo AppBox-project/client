@@ -488,4 +488,6 @@ export interface WidgetType {
 
 export interface CustomFieldType {
   mode: "view" | "edit";
+  value;
+  context: AppContextType;
 }

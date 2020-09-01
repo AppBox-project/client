@@ -573,6 +573,7 @@ const ViewObject: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={provideCustomFields}
+                context={context}
               />
             );
           })
@@ -609,6 +610,7 @@ const LayoutItem: React.FC<{
   toUpload;
   baseUrl: string;
   customFieldTypes: { [key: string]: React.FC };
+  context: AppContextType;
 }> = ({
   layoutItem,
   model,
@@ -621,6 +623,7 @@ const LayoutItem: React.FC<{
   toUpload,
   baseUrl,
   customFieldTypes,
+  context,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -641,6 +644,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                context={context}
               />
             );
           })}
@@ -671,6 +675,7 @@ const LayoutItem: React.FC<{
                   object={object}
                   baseUrl={baseUrl}
                   customFieldTypes={customFieldTypes}
+                  context={context}
                 />
               );
             })}
@@ -695,6 +700,7 @@ const LayoutItem: React.FC<{
                   object={object}
                   baseUrl={baseUrl}
                   customFieldTypes={customFieldTypes}
+                  context={context}
                 />
               );
             })}
@@ -718,6 +724,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                context={context}
               />
             );
           })}
@@ -733,6 +740,7 @@ const LayoutItem: React.FC<{
           toChange={toChange}
           mode={mode}
           setMode={setMode}
+          context={context}
         />
       );
     case "Paper":
@@ -762,6 +770,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                context={context}
               />
             );
           })}
@@ -780,6 +789,7 @@ const LayoutItem: React.FC<{
             setToChange({ ...toChange, [layoutItem.field]: value });
           }}
           customFieldTypes={customFieldTypes}
+          context={context}
         />
       );
     case "RelatedList":
@@ -809,6 +819,7 @@ const LayoutItem: React.FC<{
               object={object}
               baseUrl={baseUrl}
               customFieldTypes={customFieldTypes}
+              context={context}
             />
           );
         });
