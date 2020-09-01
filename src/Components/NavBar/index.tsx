@@ -24,7 +24,6 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [searchExpanded, setSearchExpanded] = useState<any>(false);
 
   // Lifecycle
-  console.log(page);
 
   // UI
   return (
@@ -42,10 +41,10 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
             backgroundImage: `url(${page.image})`,
             backgroundSize: "cover",
             height: "45vh",
-            backgroundBlendMode: "multiply",
+            backgroundBlendMode: "overlay",
             backgroundColor: `rgba(${app?.data?.color?.r || 2},${
               app?.data?.color?.g || 71
-            },${app?.data?.color?.b || 161},1)`,
+            },${app?.data?.color?.b || 161},0.5)`,
           }),
         }}
       >
