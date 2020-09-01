@@ -5,6 +5,7 @@ export interface AppProjectType {
     parent: string;
     owner: string;
     display_in: string;
+    notes_type: "Default" | "Recipes" | "Code";
   };
 }
 

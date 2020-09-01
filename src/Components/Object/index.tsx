@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { ModelType, LayoutType } from "../../Utils/Types";
+import { ModelType, LayoutType, CustomFieldType } from "../../Utils/Types";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
@@ -47,6 +47,7 @@ const ViewObject: React.FC<{
   baseUrl?: string;
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
+  provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
 }> = ({
   modelId,
   layoutId,
@@ -59,6 +60,7 @@ const ViewObject: React.FC<{
   baseUrl,
   onObjectDisappears,
   mode,
+  provideCustomFields,
 }) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
@@ -570,6 +572,7 @@ const ViewObject: React.FC<{
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
+                customFieldTypes={provideCustomFields}
               />
             );
           })
@@ -605,6 +608,7 @@ const LayoutItem: React.FC<{
   setToUpload;
   toUpload;
   baseUrl: string;
+  customFieldTypes: { [key: string]: React.FC };
 }> = ({
   layoutItem,
   model,
@@ -616,6 +620,7 @@ const LayoutItem: React.FC<{
   setToUpload,
   toUpload,
   baseUrl,
+  customFieldTypes,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -635,6 +640,7 @@ const LayoutItem: React.FC<{
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
+                customFieldTypes={customFieldTypes}
               />
             );
           })}
@@ -664,6 +670,7 @@ const LayoutItem: React.FC<{
                   toChange={toChange}
                   object={object}
                   baseUrl={baseUrl}
+                  customFieldTypes={customFieldTypes}
                 />
               );
             })}
@@ -687,6 +694,7 @@ const LayoutItem: React.FC<{
                   toChange={toChange}
                   object={object}
                   baseUrl={baseUrl}
+                  customFieldTypes={customFieldTypes}
                 />
               );
             })}
@@ -709,6 +717,7 @@ const LayoutItem: React.FC<{
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
+                customFieldTypes={customFieldTypes}
               />
             );
           })}
@@ -752,6 +761,7 @@ const LayoutItem: React.FC<{
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
+                customFieldTypes={customFieldTypes}
               />
             );
           })}
@@ -769,6 +779,7 @@ const LayoutItem: React.FC<{
           onChange={(value) => {
             setToChange({ ...toChange, [layoutItem.field]: value });
           }}
+          customFieldTypes={customFieldTypes}
         />
       );
     case "RelatedList":
@@ -797,6 +808,7 @@ const LayoutItem: React.FC<{
               toChange={toChange}
               object={object}
               baseUrl={baseUrl}
+              customFieldTypes={customFieldTypes}
             />
           );
         });

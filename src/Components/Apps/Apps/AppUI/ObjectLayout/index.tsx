@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ModelType, AppContextType } from "../../../../../Utils/Types";
+import {
+  ModelType,
+  AppContextType,
+  CustomFieldType,
+} from "../../../../../Utils/Types";
 import Loading from "../../../../Loading";
 import Server from "../../../../../Utils/Server";
 import uniqid from "uniqid";
@@ -16,6 +20,7 @@ const UIObjectLayout: React.FC<{
   baseUrl?: string;
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
+  provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
 }> = ({
   model,
   modelId,
@@ -27,6 +32,7 @@ const UIObjectLayout: React.FC<{
   baseUrl,
   onObjectDisappears,
   mode,
+  provideCustomFields,
 }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
@@ -69,6 +75,7 @@ const UIObjectLayout: React.FC<{
       context={context}
       onObjectDisappears={onObjectDisappears}
       mode={mode}
+      provideCustomFields={provideCustomFields}
     />
   );
 };

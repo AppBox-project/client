@@ -46,7 +46,7 @@ const AppQSNotesDetail: React.FC<{
       context={context}
       baseUrl={`/quick-space/notes/${detailId}`}
       DetailComponent={AppQSNote}
-      detailComponentProps={{ context, notes: mappedNotes }}
+      detailComponentProps={{ context, notes: mappedNotes, project }}
       title={project.data.name}
       addFunction={() => {
         context.addObject(

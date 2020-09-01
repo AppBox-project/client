@@ -8,6 +8,8 @@ import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 import ObjectFieldDisplayFile from "./FieldDisplay/File";
 import ObjectFieldDisplayDate from "./FieldDisplay/Date";
+import { CustomFieldType } from "../../Utils/Types";
+import FourOhFour from "../FourOhFour";
 
 const FieldDisplay: React.FC<{
   objectField;
@@ -18,6 +20,7 @@ const FieldDisplay: React.FC<{
   onLoadRemoteObject?;
   props?;
   small?: true;
+  CustomField?: React.FC<CustomFieldType>;
 }> = ({
   objectField,
   modelField,
@@ -27,6 +30,7 @@ const FieldDisplay: React.FC<{
   onLoadRemoteObject,
   props,
   small,
+  CustomField,
 }) => {
   return (
     <>
@@ -102,6 +106,7 @@ const FieldDisplay: React.FC<{
           {...props}
         />
       )}
+      {modelField.type === "custom" && <CustomField mode="view" />}
     </>
   );
 };

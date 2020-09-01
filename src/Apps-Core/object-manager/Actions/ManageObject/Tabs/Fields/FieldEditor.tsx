@@ -159,6 +159,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       { value: "file", label: "File" },
                       { value: "picture", label: "Picture" },
                       { value: "data", label: "Free data" },
+                      { value: "custom", label: "Custom" },
                     ]}
                     onChange={(value) => {
                       setField({ ...field, type: value });
@@ -408,6 +409,20 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                             ...field.typeArgs,
                             relationshipTo: value,
                           },
+                        });
+                      }}
+                    />
+                  </Grid>
+                )}
+                {field.type === "custom" && (
+                  <Grid item xs={6}>
+                    <UI.Inputs.TextInput
+                      label="Custom key"
+                      value={field?.typeArgs?.key || ""}
+                      onChange={(key) => {
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, key },
                         });
                       }}
                     />

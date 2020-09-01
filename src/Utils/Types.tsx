@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { AnyARecord } from "dns";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -41,6 +40,7 @@ export interface ModelFieldType {
     type?: string;
     relationshipTo?: string;
     options?: { label: string; value: string }[];
+    key?: string;
   };
 }
 
@@ -299,7 +299,6 @@ export interface UIType {
       withSmallMargin?: true | boolean;
       sideMarginOnly?: true | boolean;
       titleInPrimaryColor?: true | boolean;
-
       className?: string;
     }>;
   };
@@ -317,6 +316,7 @@ export interface UIType {
         baseUrl?: string;
         onObjectDisappears?: (history) => void;
         mode?: "view" | "edit";
+        provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;
@@ -484,4 +484,8 @@ export interface WidgetType {
     maxX?: number;
     maxY?: number;
   };
+}
+
+export interface CustomFieldType {
+  mode: "view" | "edit";
 }

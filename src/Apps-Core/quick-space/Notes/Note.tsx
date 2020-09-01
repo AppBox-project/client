@@ -1,18 +1,21 @@
 import React from "react";
 import { AppContextType } from "../../../Utils/Types";
-import { AppNoteType } from "../Types";
+import { AppProjectType } from "../Types";
 import { useEffect } from "reactn";
+import CERecipeEditor from "./RecipeEditor";
 
 const AppQSNote: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
   notes;
+  project: AppProjectType;
 }> = ({
   context,
   match: {
     params: { detailId },
   },
   notes,
+  project,
 }) => {
   // Lifecycle
   useEffect(() => {
@@ -27,7 +30,11 @@ const AppQSNote: React.FC<{
     <context.UI.Layouts.Object.ObjectLayout
       modelId="qs-note"
       objectId={detailId}
-      layoutId="app"
+      layoutId={
+        project?.data?.notes_type
+          ? `app_${project.data.notes_type.toLowerCase()}`
+          : "app_default"
+      }
       mode="edit"
       context={context}
       defaults={{ owner: context.user._id }}
@@ -39,6 +46,7 @@ const AppQSNote: React.FC<{
           }`
         );
       }}
+      provideCustomFields={{ recipe: CERecipeEditor }}
     />
   );
 };

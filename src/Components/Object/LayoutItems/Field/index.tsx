@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
-import { ModelType, ModelFieldType } from "../../../../Utils/Types";
+import {
+  ModelType,
+  ModelFieldType,
+  CustomFieldType,
+} from "../../../../Utils/Types";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
@@ -16,6 +20,7 @@ import InputRelationShipM from "../../../Inputs/Relationship _m";
 import InputFile from "../../../Inputs/File";
 import InputAddress from "../../../Inputs/Address";
 import FieldTypeDate from "../../FieldTypes/Date";
+import FourOhFour from "../../../FourOhFour";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -25,7 +30,17 @@ const ObjectLayoutItemField: React.FC<{
   model: ModelType;
   onChange?: (value: string | boolean | Date | number) => void;
   toChange;
-}> = ({ layoutItem, object, mode, setMode, model, onChange, toChange }) => {
+  customFieldTypes?: { [key: string]: React.FC<CustomFieldType> };
+}> = ({
+  layoutItem,
+  object,
+  mode,
+  setMode,
+  model,
+  onChange,
+  toChange,
+  customFieldTypes,
+}) => {
   // Vars
   const [modelField, setModelField] = useState<ModelFieldType>(
     model.fields[layoutItem.field]
@@ -33,7 +48,6 @@ const ObjectLayoutItemField: React.FC<{
   const [objectField, setObjectField] = useState<any>(
     object ? object.data[layoutItem.field] : ""
   );
-
   // Lifecycle
   useEffect(() => {
     setObjectField(object ? object.data[layoutItem.field] : "");
@@ -63,6 +77,11 @@ const ObjectLayoutItemField: React.FC<{
   // UI
   if (!conditionsMet) return <></>;
 
+  // Map custom field
+  let CustomField: React.FC<CustomFieldType> = FourOhFour;
+  if (customFieldTypes && modelField?.typeArgs?.key)
+    CustomField = customFieldTypes[modelField?.typeArgs?.key];
+
   switch (mode) {
     case "view":
       return layoutItem.hideView !== true ? (
@@ -78,7 +97,11 @@ const ObjectLayoutItemField: React.FC<{
             </Typography>
           </div>
           <div style={{ flex: 1 }}>
-            <FieldDisplay objectField={objectField} modelField={modelField} />
+            <FieldDisplay
+              objectField={objectField}
+              modelField={modelField}
+              CustomField={CustomField}
+            />
           </div>
         </div>
       ) : (
@@ -221,6 +244,7 @@ const ObjectLayoutItemField: React.FC<{
               objectField={objectField}
             />
           )}
+          {modelField.type === "custom" && <CustomField mode={mode} />}
         </div>
       );
     default:
