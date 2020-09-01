@@ -18,6 +18,7 @@ import LayoutDesigner from "../../../Components/LayoutDesigner";
 import Card from "../../Design/Card";
 import InputRichText from "../../Inputs/RichText";
 import ConditionDesigner from "../../ConditionDesigner";
+import { baseUrl } from "../../../Utils/Utils";
 
 export class AppContext {
   appId: string;
@@ -33,13 +34,22 @@ export class AppContext {
   appConfig;
   user;
   onNoAction;
+  setSessionVariable: (key, value) => {};
 
-  constructor(appId, setDialog, appButtons, setAppButtons, user) {
+  constructor(
+    appId,
+    setDialog,
+    appButtons,
+    setAppButtons,
+    user,
+    setSessionVariable
+  ) {
     this.appId = appId;
     this.setDialog = setDialog;
     this.appButtons = appButtons;
     this.setAppButtons = setAppButtons;
     this.user = user;
+    this.setSessionVariable = setSessionVariable;
     this.UI = {
       Loading,
       Margin: Margin,
@@ -106,7 +116,9 @@ export class AppContext {
   unload = () => {
     this.setAppButtons({});
     this.dataListeners.map((listener) => {
-      Server.emit(listener.unlistenAction, { requestId: listener.requestId });
+      Server.emit(listener.unlistenAction, {
+        requestId: listener.requestId,
+      });
     });
   };
 
@@ -122,9 +134,17 @@ export class AppContext {
     });
   };
 
+  setImage = (img) => {
+    this.setSessionVariable("image", img ? baseUrl + img : undefined);
+  };
+
   createModel = (newModel, then: (response: ServerResponse) => void) => {
     const requestId = uniqid();
-    Server.emit("appCreatesModel", { newModel, requestId, appId: this.appId });
+    Server.emit("appCreatesModel", {
+      newModel,
+      requestId,
+      appId: this.appId,
+    });
     Server.on(`receive-${requestId}`, (response) => {
       console.log(response);
     });

@@ -17,6 +17,7 @@ const AppQSNotesDetail: React.FC<{
   // Vars
   const [notes, setNotes] = useState<ListItemType[]>();
   const [flatNotes, setFlatNotes] = useState<ObjectType[]>();
+  const [mappedNotes, setMappedNotes] = useState<{}>();
   const project: AppProjectType = projects[detailId];
 
   // Lifecycle
@@ -24,10 +25,13 @@ const AppQSNotesDetail: React.FC<{
     context.getObjects("qs-note", { "data.project": detailId }, (response) => {
       if (response.success) {
         setFlatNotes(response.data);
+        const mn = {};
         const newNotes = [];
         response.data.map((o: AppNoteType) => {
           newNotes.push({ label: o.data.title, id: o._id });
+          mn[o._id] = o;
         });
+        setMappedNotes(mn);
         setNotes(newNotes);
       } else {
         console.log(response);
@@ -42,8 +46,22 @@ const AppQSNotesDetail: React.FC<{
       context={context}
       baseUrl={`/quick-space/notes/${detailId}`}
       DetailComponent={AppQSNote}
-      detailComponentProps={{ context }}
+      detailComponentProps={{ context, notes: mappedNotes }}
       title={project.data.name}
+      addFunction={() => {
+        context.addObject(
+          "qs-note",
+          {
+            title: "New note",
+            project: detailId,
+            note: "",
+            owner: context.user._id,
+          },
+          (response) => {
+            console.log(response);
+          }
+        );
+      }}
       imageField="image"
       objects={flatNotes}
     />

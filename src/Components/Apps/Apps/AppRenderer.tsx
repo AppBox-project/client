@@ -34,6 +34,7 @@ const App: React.FC<{
   const [dialogFormContent, setDialogFormContent] = useState<{}>({});
   const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [gApp, setgApp] = useGlobal<any>("app");
+  const [gPage, setgPage] = useGlobal<any>("page");
   const [gUser] = useGlobal<any>("user");
   const [actions, setActions] = useGlobal<any>("actions");
   const [appButtons, setAppButtons] = useState<any>({});
@@ -46,7 +47,10 @@ const App: React.FC<{
       setDialog,
       appButtons,
       setAppButtons,
-      gUser
+      gUser,
+      (key, value) => {
+        setgPage({ ...gPage, [key]: value }); // session variables should do more than just edit page
+      }
     );
     context.isReady.then(() => {
       //@ts-ignore
@@ -94,6 +98,8 @@ const App: React.FC<{
         },
       });
       context.unload();
+
+      setgPage({});
     };
   }, [appId]);
   useEffect(() => {
@@ -101,7 +107,6 @@ const App: React.FC<{
   }, [appButtons]);
 
   //UI
-
   if (!appContext) return <Loading />;
   return (
     <>

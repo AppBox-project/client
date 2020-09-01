@@ -16,6 +16,7 @@ import { FaSearch, FaSearchMinus } from "react-icons/fa";
 const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
   const [app] = useGlobal<any>("app");
+  const [page] = useGlobal<any>("page");
   const [navBar] = useGlobal<any>("navBar");
   const [actions] = useGlobal<any>("actions");
   const [isMobile] = useGlobal<any>("isMobile");
@@ -23,6 +24,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [searchExpanded, setSearchExpanded] = useState<any>(false);
 
   // Lifecycle
+  console.log(page);
 
   // UI
   return (
@@ -31,7 +33,22 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         currentApp && !noActions ? ` ${styles.withApp}` : ""
       }${isMobile ? ` ${styles.isMobile}` : ""}`}
     >
-      <AppBar position="static" className={styles.appbar} elevation={0}>
+      <AppBar
+        position="static"
+        className={styles.appbar}
+        elevation={0}
+        style={{
+          ...(page.image && {
+            backgroundImage: `url(${page.image})`,
+            backgroundSize: "cover",
+            height: "45vh",
+            backgroundBlendMode: "multiply",
+            backgroundColor: `rgba(${app?.data?.color?.r || 2},${
+              app?.data?.color?.g || 71
+            },${app?.data?.color?.b || 161},1)`,
+          }),
+        }}
+      >
         <Toolbar>
           {isMobile && searchExpanded ? (
             <Search

@@ -30,6 +30,9 @@ setGlobal({
       tonalOffset: 0.2,
     },
   },
+  page: {
+    image: undefined,
+  },
   noActions: false,
 });
 

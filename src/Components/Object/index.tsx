@@ -45,6 +45,8 @@ const ViewObject: React.FC<{
   defaults?: { [key: string]: string };
   context?: AppContextType;
   baseUrl?: string;
+  onObjectDisappears?: (history) => void;
+  mode?: "view" | "edit";
 }> = ({
   modelId,
   layoutId,
@@ -55,10 +57,14 @@ const ViewObject: React.FC<{
   defaults,
   context,
   baseUrl,
+  onObjectDisappears,
+  mode,
 }) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
-  const [mode, setMode] = useState<"view" | "edit">(objectId ? "view" : "edit");
+  const [editMode, setMode] = useState<"view" | "edit">(
+    objectId ? (mode ? mode : "view") : "edit"
+  );
   const [toChange, setToChange] = useState<any>({ ...defaults });
   const [feedback, setFeedback] = useState<any>();
   const [toUpload, setToUpload] = useState<any>([]);
@@ -230,7 +236,7 @@ const ViewObject: React.FC<{
     };
   }, [modelId, objectId]);
   useEffect(() => {
-    if (mode === "view") {
+    if (editMode === "view") {
       if (!popup) {
         setActions({
           ...actions,
@@ -294,7 +300,7 @@ const ViewObject: React.FC<{
         });
       }
     };
-  }, [modelId, appId, mode, pageTitle, toChange]);
+  }, [modelId, appId, editMode, pageTitle, toChange]);
 
   useEffect(() => {
     if (object && model) {
@@ -365,7 +371,9 @@ const ViewObject: React.FC<{
                     objectId,
                   });
                   Server.on(`receive-${requestId}`, () => {
-                    history.replace(`/${appId}/${modelId}`);
+                    onObjectDisappears
+                      ? onObjectDisappears(history)
+                      : history.replace(`/${appId}/${modelId}`);
                   });
                 },
               },
@@ -394,7 +402,9 @@ const ViewObject: React.FC<{
                 ),
                 onClick: () => {
                   context.archiveObject(modelId, objectId).then(() => {
-                    history.replace(`/${appId}/${modelId}`);
+                    onObjectDisappears
+                      ? onObjectDisappears(history)
+                      : history.replace(`/${appId}/${modelId}`);
                   });
                 },
               },
@@ -425,7 +435,7 @@ const ViewObject: React.FC<{
       style={{ height: "100%" }}
       onKeyDown={(event) => {
         if (
-          mode === "edit" &&
+          editMode === "edit" &&
           event.ctrlKey &&
           String.fromCharCode(event.which).toLowerCase() === "s"
         ) {
@@ -554,7 +564,7 @@ const ViewObject: React.FC<{
                 setToUpload={setToUpload}
                 toUpload={toUpload}
                 model={model}
-                mode={mode}
+                mode={editMode}
                 setMode={setMode}
                 setToChange={setToChange}
                 toChange={toChange}

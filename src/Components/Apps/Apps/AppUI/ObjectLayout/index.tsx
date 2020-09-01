@@ -14,6 +14,8 @@ const UIObjectLayout: React.FC<{
   defaults?: { [key: string]: string };
   context: AppContextType;
   baseUrl?: string;
+  onObjectDisappears?: (history) => void;
+  mode?: "view" | "edit";
 }> = ({
   model,
   modelId,
@@ -23,6 +25,8 @@ const UIObjectLayout: React.FC<{
   popup,
   defaults,
   baseUrl,
+  onObjectDisappears,
+  mode,
 }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
@@ -62,6 +66,9 @@ const UIObjectLayout: React.FC<{
       defaults={defaults}
       objectId={objectId}
       baseUrl={baseUrl}
+      context={context}
+      onObjectDisappears={onObjectDisappears}
+      mode={mode}
     />
   );
 };

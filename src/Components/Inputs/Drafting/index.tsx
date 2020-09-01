@@ -22,7 +22,7 @@ const InputDrafting: React.FC<{
   return (
     <CKEditor
       editor={ClassicEditor}
-      data={newValue}
+      data={newValue || ""}
       onChange={(event, editor) => {
         console.log(event);
 

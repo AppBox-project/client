@@ -129,6 +129,8 @@ export interface AppContextType {
       mobile?: { displayAs?: "menu" | "bottom-navigation" | "tabs" };
     };
   };
+  setImage(image: any);
+
   actions:
     | React.FC<{ context: AppContextType }>
     | [
@@ -313,6 +315,8 @@ export interface UIType {
         popup?: true;
         defaults?: { [key: string]: string };
         baseUrl?: string;
+        onObjectDisappears?: (history) => void;
+        mode?: "view" | "edit";
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;
