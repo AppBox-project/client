@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.1-4",
-  "description": "Fix z-index for search (+ update test).",
+  "version": "0.2.1-5",
+  "description": "QS features",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import Loading from "../../Loading";
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import GridLayout, { WidthProvider } from "react-grid-layout";
+import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import styles from "./styles.module.scss";
@@ -12,16 +12,39 @@ import Card from "../../Design/Card";
 import WidgetList from "./WidgetList";
 import WidgetRenderer from "../Apps/WidgetRenderer";
 import { WidgetType } from "../../../Utils/Types";
+import { debounce } from "lodash";
 
 const StartPage: React.FC = () => {
   // Vars
   const [desktop, setDesktop] = useState<any>();
   const [isMobile] = useGlobal<any>("isMobile");
   const [widgetAnchor, setWidgetAnchor] = useState<any>();
-  const ResponsiveGridLayout = WidthProvider(GridLayout);
+  const ResponsiveGridLayout = WidthProvider(Responsive);
+  const [width, setWidth] = useState<string>(
+    window.innerWidth > 1200
+      ? "lg"
+      : window.innerWidth < 768
+      ? window.innerWidth < 480
+        ? "xs"
+        : "sm"
+      : "md"
+  );
 
   // Functions
+  const saveLayout = debounce((layout, currentWidth) => {
+    const hasChanged =
+      JSON.stringify(desktop.layouts[currentWidth]) !== JSON.stringify(layout);
+    if (hasChanged) {
+      console.log("Updating layout", currentWidth);
 
+      const newDesktop = desktop;
+      desktop.layouts[currentWidth] = layout;
+      Server.emit("setUserSetting", {
+        key: "desktop",
+        value: newDesktop,
+      });
+    }
+  }, 1500);
   // Lifecycle
   useEffect(() => {
     const requestId = uniqid();
@@ -85,7 +108,7 @@ const StartPage: React.FC = () => {
         <WidgetList
           onAdd={(widget: WidgetType) => {
             const newDesktop = {
-              layout: desktop?.layout || [],
+              layouts: desktop?.layouts || {},
               widgets: desktop?.widgets || {},
             };
             const newId = uniqid();
@@ -94,7 +117,7 @@ const StartPage: React.FC = () => {
               widgetId: widget.key,
               title: widget.name,
             };
-            newDesktop.layout.push({
+            const newItem = {
               i: newId,
               x: 1,
               y: 1,
@@ -104,6 +127,10 @@ const StartPage: React.FC = () => {
               minH: widget.grid?.minY,
               maxW: widget.grid?.maxX,
               maxH: widget.grid?.maxY,
+            };
+            ["xxs", "xs", "sm", "md", "lg"].map((size) => {
+              newDesktop.layouts[size] = newDesktop.layouts[size] || [];
+              newDesktop.layouts[size].push(newItem);
             });
             Server.emit("setUserSetting", {
               key: "desktop",
@@ -117,28 +144,18 @@ const StartPage: React.FC = () => {
         className={styles.layout}
         rowHeight={30}
         width={1200}
-        cols={12}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         draggableHandle=".draggable"
-        onLayoutChange={(layout) => {
-          let firstLoad = true; // React grid gives a false first callback. Seemingly identifiable by all 0's
-          layout.map((item) => {
-            if (item.w !== 1 || item.h !== 1) {
-              firstLoad = false;
-            }
-          });
-          if (!firstLoad) {
-            // Validate callback (library isn't reliable)
-            layout.map((li) => {
-              if (!li.w) li.w = 1;
-            });
-            Server.emit("setUserSetting", {
-              key: "desktop",
-              value: { layout, widgets: desktop.widgets },
-            });
-          }
+        onBreakpointChange={(breakpoint) => {
+          setWidth(breakpoint);
+          console.log(`Width is now ${breakpoint}`);
+        }}
+        onLayoutChange={(layout, allLayouts) => {
+          saveLayout(layout, width);
         }}
       >
-        {(desktop?.layout || []).map((item) => {
+        {((desktop?.layouts || {})[width] || []).map((item) => {
           const widget = desktop.widgets[item.i];
           return (
             <div
