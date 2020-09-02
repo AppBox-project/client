@@ -328,6 +328,7 @@ export interface UIType {
         onObjectDisappears?: (history) => void;
         mode?: "view" | "edit";
         provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+        style?: CSSProperties;
       }>;
       BoardLayout: React.FC<{
         context: AppContextType;

@@ -136,6 +136,7 @@ const ListDetailLayout: React.FC<{
                 addTitle={addTitle}
                 imageField={imageField}
                 objects={objects}
+                style={style}
               />
             )
           ) : (
@@ -178,6 +179,7 @@ const ListNav: React.FC<{
   addTitle?;
   imageField: string;
   objects?;
+  style?: CSSProperties;
 }> = ({
   addFunction,
   deleteFunction,
@@ -189,54 +191,63 @@ const ListNav: React.FC<{
   addTitle,
   imageField,
   objects,
+  style,
 }) => {
+  console.log("waeio", style);
+
   return (
-    <AnimationContainer>
-      <AnimationItem>
-        <div className={styles.root}>
-          <List>
-            {title && (
-              <>
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  style={{ textAlign: "center", margin: 13, cursor: "default" }}
-                  gutterBottom
-                >
-                  {title}
-                </Typography>
-                <Divider />
-              </>
-            )}
+    <div style={{ ...style }}>
+      <AnimationContainer>
+        <AnimationItem>
+          <div className={styles.root}>
+            <List>
+              {title && (
+                <>
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    style={{
+                      textAlign: "center",
+                      margin: 13,
+                      cursor: "default",
+                    }}
+                    gutterBottom
+                  >
+                    {title}
+                  </Typography>
+                  <Divider />
+                </>
+              )}
 
-            {addFunction && (
-              <ListItem divider button onClick={addFunction}>
-                <ListItemIcon style={{ minWidth: 25 }}>
-                  <GrAdd style={{ width: 15, height: 15 }} />
-                </ListItemIcon>
+              {addFunction && (
+                <ListItem divider button onClick={addFunction}>
+                  <ListItemIcon style={{ minWidth: 25 }}>
+                    <GrAdd style={{ width: 15, height: 15 }} />
+                  </ListItemIcon>
 
-                <ListItemText>{addTitle || "Add new"}</ListItemText>
-              </ListItem>
-            )}
-            {(list || []).map((listItem) => {
-              return (
-                <ListItemObject
-                  baseUrl={baseUrl}
-                  listItem={listItem}
-                  selectedItem={selectedItem}
-                  navFixedIcon={navFixedIcon}
-                  deleteFunction={deleteFunction}
-                  key={listItem.id}
-                  nestedLevel={0}
-                  imageField={imageField}
-                  objects={objects}
-                />
-              );
-            })}
-          </List>
-        </div>
-      </AnimationItem>
-    </AnimationContainer>
+                  <ListItemText>{addTitle || "Add new"}</ListItemText>
+                </ListItem>
+              )}
+              {(list || []).map((listItem) => {
+                return (
+                  <ListItemObject
+                    baseUrl={baseUrl}
+                    listItem={listItem}
+                    selectedItem={selectedItem}
+                    navFixedIcon={navFixedIcon}
+                    deleteFunction={deleteFunction}
+                    key={listItem.id}
+                    nestedLevel={0}
+                    imageField={imageField}
+                    objects={objects}
+                  />
+                );
+              })}
+            </List>
+          </div>
+        </AnimationItem>
+      </AnimationContainer>
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ import Loading from "../../../../Loading";
 import Server from "../../../../../Utils/Server";
 import uniqid from "uniqid";
 import ViewObject from "../../../../Object";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const UIObjectLayout: React.FC<{
   model?: ModelType;
@@ -21,6 +22,7 @@ const UIObjectLayout: React.FC<{
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+  style?: CSSProperties;
 }> = ({
   model,
   modelId,
@@ -33,6 +35,7 @@ const UIObjectLayout: React.FC<{
   onObjectDisappears,
   mode,
   provideCustomFields,
+  style,
 }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
@@ -64,19 +67,21 @@ const UIObjectLayout: React.FC<{
   // UI
   if (!appliedModel) return <Loading />;
   return (
-    <ViewObject
-      popup={popup}
-      modelId={appliedModel.key}
-      layoutId={layoutId}
-      appId={context.appId}
-      defaults={defaults}
-      objectId={objectId}
-      baseUrl={baseUrl}
-      context={context}
-      onObjectDisappears={onObjectDisappears}
-      mode={mode}
-      provideCustomFields={provideCustomFields}
-    />
+    <div style={style}>
+      <ViewObject
+        popup={popup}
+        modelId={appliedModel.key}
+        layoutId={layoutId}
+        appId={context.appId}
+        defaults={defaults}
+        objectId={objectId}
+        baseUrl={baseUrl}
+        context={context}
+        onObjectDisappears={onObjectDisappears}
+        mode={mode}
+        provideCustomFields={provideCustomFields}
+      />
+    </div>
   );
 };
 

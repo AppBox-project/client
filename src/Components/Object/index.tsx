@@ -34,6 +34,7 @@ import FieldDisplay from "./FieldDisplay";
 import styles from "./styles.module.scss";
 import { baseUrl as baseAppUrl } from "../../Utils/Utils";
 import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -48,6 +49,7 @@ const ViewObject: React.FC<{
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+  style?: CSSProperties;
 }> = ({
   modelId,
   layoutId,
@@ -61,6 +63,7 @@ const ViewObject: React.FC<{
   onObjectDisappears,
   mode,
   provideCustomFields,
+  style,
 }) => {
   const [model, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();

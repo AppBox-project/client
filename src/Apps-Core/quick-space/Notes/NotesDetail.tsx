@@ -64,6 +64,7 @@ const AppQSNotesDetail: React.FC<{
       }}
       imageField="image"
       objects={flatNotes}
+      style={{ marginBottom: 50 }}
     />
   );
 };

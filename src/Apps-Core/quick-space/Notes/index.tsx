@@ -48,6 +48,7 @@ const AppQSActionNotes: React.FC<{
         context: context,
         projects: flatProjects,
       }}
+      style={{ paddingBottom: 50 }}
     />
   );
 };
