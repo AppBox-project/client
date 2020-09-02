@@ -29,6 +29,11 @@ setGlobal({
       contrastThreshold: 3,
       tonalOffset: 0.2,
     },
+    props: {
+      MuiTooltip: {
+        arrow: true,
+      },
+    },
   },
   page: {
     image: undefined,

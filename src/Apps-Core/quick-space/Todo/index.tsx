@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, ListItemType } from "../../../Utils/Types";
 import AppQSActionTodoDetail from "./DetailComponent";
-import { filter } from "lodash";
-import { GoTasklist } from "react-icons/go";
+import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
+import { AppProjectType } from "../Types";
 
 const AppQSActionTodo: React.FC<{
   match: { isExact: boolean };
@@ -10,7 +10,10 @@ const AppQSActionTodo: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [projects, setProjects] = useState<any>();
+  const [projects, setProjects] = useState<ListItemType[]>();
+  const [flatProjects, setFlatProjects] = useState<{
+    [key: string]: AppProjectType;
+  }>();
 
   // Lifecycle
   useEffect(() => {
@@ -19,27 +22,12 @@ const AppQSActionTodo: React.FC<{
       { "data.owner": context.user._id, "data.show_in_todos": { $ne: false } },
       (response) => {
         if (response.success) {
-          const newProjects = [];
-          response.data.map((project) => {
-            if (!project.data.parent) {
-              const subprojects = [];
-              filter(response.data, (o) => {
-                return o.data.parent === project._id;
-              }).map((subProject) => {
-                subprojects.push({
-                  id: subProject._id,
-                  label: subProject.data.name,
-                });
-              });
-              newProjects.push({
-                id: project._id,
-                label: project.data.name,
-                subItems: subprojects,
-              });
-            }
-          });
-          //@ts-ignore
-          setProjects(newProjects);
+          setProjects(
+            array2dTo3d(response.data, "data.parent", true, "data.name")
+          );
+          const newFP = {};
+          response.data.map((o: AppProjectType) => (newFP[o._id] = o));
+          setFlatProjects(newFP);
         } else {
           console.log(response);
         }
@@ -58,9 +46,11 @@ const AppQSActionTodo: React.FC<{
       context={context}
       baseUrl="/quick-space/todo"
       list={projects}
-      navFixedIcon={<GoTasklist />}
-      navWidth={3}
+      navWidth={2}
       DetailComponent={AppQSActionTodoDetail}
+      detailComponentProps={{ projects: flatProjects }}
+      style={{ paddingBottom: 50 }}
+      title="Todos"
     />
   );
 };

@@ -118,15 +118,13 @@ const BoardLayout: React.FC<{
                         style={{ flex: 1, minWidth: 250 }}
                       >
                         <context.UI.Animations.AnimationItem>
-                          <div className={styles.column}>
-                            <Typography
-                              variant="h6"
-                              color="primary"
-                              style={{ textAlign: "center" }}
-                            >
-                              {option.label}
-                            </Typography>
-                            <Divider style={{ margin: "8px 0 8px 0" }} />
+                          <context.UI.Design.Card
+                            withBigMargin
+                            title={option.label}
+                            centerTitle
+                            titleDivider
+                            titleInPrimaryColor
+                          >
                             {map(
                               filter(newObjects, (o) => {
                                 return o.data[boardField] === option.key;
@@ -165,7 +163,7 @@ const BoardLayout: React.FC<{
                               }
                             )}
                             {droppableProvided.placeholder}
-                          </div>
+                          </context.UI.Design.Card>
                         </context.UI.Animations.AnimationItem>
                       </div>
                     );

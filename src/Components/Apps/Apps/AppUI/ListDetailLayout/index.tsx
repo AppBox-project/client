@@ -193,8 +193,6 @@ const ListNav: React.FC<{
   objects,
   style,
 }) => {
-  console.log("waeio", style);
-
   return (
     <div style={{ ...style }}>
       <AnimationContainer>
