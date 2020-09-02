@@ -9,6 +9,8 @@ import {
   Hidden,
   Checkbox,
   FormControlLabel,
+  Snackbar,
+  IconButton,
 } from "@material-ui/core";
 import Loading from "../../Loading";
 import { AppContextType, dialogType } from "../../../Utils/Types";
@@ -38,6 +40,12 @@ const App: React.FC<{
   const [gUser] = useGlobal<any>("user");
   const [actions, setActions] = useGlobal<any>("actions");
   const [appButtons, setAppButtons] = useState<any>({});
+  const [snackbar, setSnackbar] = useState<{
+    display?: boolean;
+    title?: string;
+    duration?: number;
+    action?: (close: () => void) => JSX.Element;
+  }>();
 
   //Lifecycle
   useEffect(() => {
@@ -50,6 +58,9 @@ const App: React.FC<{
       gUser,
       (key, value) => {
         setgPage({ ...gPage, [key]: value }); // session variables should do more than just edit page
+      },
+      (title, properties) => {
+        setSnackbar({ ...properties, display: true, title });
       }
     );
     context.isReady.then(() => {
@@ -275,6 +286,23 @@ const App: React.FC<{
           )}
         </Dialog>
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        color="primary"
+        open={snackbar?.display || false}
+        autoHideDuration={snackbar?.duration || 1000}
+        onClose={() => {
+          setSnackbar({ display: false });
+        }}
+        message={snackbar?.title || ""}
+        action={
+          snackbar?.action &&
+          snackbar.action(() => setSnackbar({ display: false }))
+        }
+      />
     </>
   );
 };

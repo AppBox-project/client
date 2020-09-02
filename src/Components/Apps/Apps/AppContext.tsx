@@ -35,6 +35,7 @@ export class AppContext {
   user;
   onNoAction;
   setSessionVariable: (key, value) => {};
+  setSnackbar: (title, properties?) => void;
 
   constructor(
     appId,
@@ -42,7 +43,8 @@ export class AppContext {
     appButtons,
     setAppButtons,
     user,
-    setSessionVariable
+    setSessionVariable,
+    setSnackbar
   ) {
     this.appId = appId;
     this.setDialog = setDialog;
@@ -50,6 +52,7 @@ export class AppContext {
     this.setAppButtons = setAppButtons;
     this.user = user;
     this.setSessionVariable = setSessionVariable;
+    this.setSnackbar = setSnackbar;
     this.UI = {
       Loading,
       Margin: Margin,
@@ -411,6 +414,10 @@ export class AppContext {
         }
       }
     });
+  };
+
+  showSnackbar = (title, properties?) => {
+    this.setSnackbar(title, properties);
   };
 
   deleteObjects = (type, filter) => {

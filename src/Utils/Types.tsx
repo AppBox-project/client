@@ -130,7 +130,13 @@ export interface AppContextType {
     };
   };
   setImage(image: any);
-
+  showSnackbar: (
+    text: string,
+    properties?: {
+      duration?: number;
+      action?: (close: () => void) => JSX.Element;
+    }
+  ) => void;
   actions:
     | React.FC<{ context: AppContextType }>
     | [

@@ -7,8 +7,9 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  IconButton,
 } from "@material-ui/core";
-import { FaPepperHot } from "react-icons/fa";
+import { FaPepperHot, FaTimes } from "react-icons/fa";
 import { AppProjectType } from "../Types";
 
 interface IngredientType {
@@ -103,7 +104,35 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
                               "qs-todo",
                               groceriesToAdd,
                               (response) => {
-                                console.log("now weset snackbar");
+                                console.log(response);
+                                context.showSnackbar(
+                                  `Added ${response.data.length} items.`,
+                                  {
+                                    action: (close) => (
+                                      <>
+                                        <Button
+                                          style={{ color: "white" }}
+                                          size="small"
+                                          onClick={() => {
+                                            close();
+                                          }}
+                                        >
+                                          UNDO
+                                        </Button>
+                                        <IconButton
+                                          size="small"
+                                          aria-label="close"
+                                          color="inherit"
+                                          onClick={() => {
+                                            close();
+                                          }}
+                                        >
+                                          <FaTimes fontSize="small" />
+                                        </IconButton>
+                                      </>
+                                    ),
+                                  }
+                                );
                               }
                             );
                           },
