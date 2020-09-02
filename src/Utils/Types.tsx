@@ -154,6 +154,11 @@ export interface AppContextType {
     then: (response: ServerResponse) => void
   ) => AppRequestController;
   addObject: (type: string, object: {}, then: (response: any) => void) => void;
+  addObjects: (
+    type: string,
+    objects: {}[],
+    then: (response: any) => void
+  ) => void;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
   updateObject: (type: string, newObject: {}, id) => Promise<boolean | string>;
@@ -490,4 +495,5 @@ export interface CustomFieldType {
   mode: "view" | "edit";
   value;
   context: AppContextType;
+  onChange?: (newValue) => void;
 }

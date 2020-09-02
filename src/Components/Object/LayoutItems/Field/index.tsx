@@ -241,15 +241,18 @@ const ObjectLayoutItemField: React.FC<{
           )}
           {modelField.type === "date" && (
             <FieldTypeDate
-              onChange={(value) => {
-                onChange(value);
-              }}
+              onChange={onChange}
               modelField={modelField}
               objectField={objectField}
             />
           )}
           {modelField.type === "custom" && (
-            <CustomField mode={mode} value={objectField} context={context} />
+            <CustomField
+              mode={mode}
+              value={objectField}
+              context={context}
+              onChange={onChange}
+            />
           )}
         </div>
       );

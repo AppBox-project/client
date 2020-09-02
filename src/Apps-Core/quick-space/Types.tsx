@@ -6,6 +6,8 @@ export interface AppProjectType {
     owner: string;
     display_in: string;
     notes_type: "Default" | "Recipes" | "Code";
+    todos_type: "Default" | "Groceries";
+    Groceries;
   };
 }
 

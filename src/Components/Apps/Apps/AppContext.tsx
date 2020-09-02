@@ -352,6 +352,67 @@ export class AppContext {
     });
   };
 
+  addObjects = (type, objects, then) => {
+    const requestId = uniqid();
+    Server.emit("appInsertsObjects", {
+      requestId,
+      type,
+      objects,
+      appId: this.appId,
+    });
+    Server.on(`receive-${requestId}`, (response) => {
+      if (response.success) {
+        then(response);
+      } else {
+        if (response.feedback) {
+          then(response);
+        } else {
+          if (response.reason === "no-create-permission-app") {
+            // Ask user for permission
+            this.setDialog({
+              display: true,
+              title: `${this.app.data.name} is trying to create in '${type}'`,
+              content: "Do you wish to allow this?",
+              size: "xs",
+              buttons: [
+                {
+                  label: "No",
+                  onClick: () => {
+                    then({
+                      success: false,
+                      reason: "permission-denied-by-user",
+                    });
+                  },
+                },
+                {
+                  label: "Yes",
+                  onClick: () => {
+                    const allowPermissionRequestId = uniqid();
+                    Server.emit("allowAppAccess", {
+                      requestId: allowPermissionRequestId,
+                      appId: this.appId,
+                      objectType: type,
+                      permissionType: "create",
+                    });
+                    Server.on(
+                      `receive-${allowPermissionRequestId}`,
+                      (response) => {
+                        // Retry
+                        this.addObjects(type, objects, then);
+                      }
+                    );
+                  },
+                },
+              ],
+            });
+          } else {
+            then(response);
+          }
+        }
+      }
+    });
+  };
+
   deleteObjects = (type, filter) => {
     return new Promise((resolve, reject) => {
       const requestId = uniqid();
