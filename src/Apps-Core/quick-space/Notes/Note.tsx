@@ -35,7 +35,6 @@ const AppQSNote: React.FC<{
           ? `app_${project.data.notes_type.toLowerCase()}`
           : "app_default"
       }
-      mode="edit"
       context={context}
       defaults={{ owner: context.user._id }}
       onObjectDisappears={(history) => {

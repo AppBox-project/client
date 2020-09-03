@@ -439,11 +439,18 @@ export interface UIType {
       multiline?: boolean;
       style?: {};
       autoFocus?: boolean;
+      noLabel?: boolean;
+      onEnter?: (value: string) => void;
+      onEscape?: (value: string) => void;
+      onKeyPress?: (value: string) => void;
     }>;
     CheckmarkInput: React.FC<{
-      label: string;
+      label?: string;
       value: boolean;
-      onChange?: (value: string) => void;
+      onChange?: (
+        value: boolean,
+        event: React.ChangeEvent<HTMLInputElement>
+      ) => void;
     }>;
     SelectInput: React.FC<{
       label?: string;

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Grid, Checkbox } from "@material-ui/core";
 
 const AppUICheckmark: React.FC<{
-  label: string;
+  label?: string;
   value: boolean;
-  onChange?: (value: boolean) => void;
+  onChange?: (value: boolean, event: React.ChangeEvent<any>) => void;
 }> = ({ label, value, onChange }) => {
   // Global
   // States & Hooks
@@ -15,13 +15,24 @@ const AppUICheckmark: React.FC<{
   }, [value]);
 
   // UI
+  if (!label)
+    return (
+      <Checkbox
+        color="primary"
+        checked={newValue}
+        onChange={(event) => {
+          setNewValue(event.target.checked);
+          onChange(event.target.checked, event);
+        }}
+      />
+    );
   return (
     <Grid
       style={{ cursor: "pointer", padding: 5 }}
       container
-      onClick={() => {
+      onClick={(event) => {
         setNewValue(!newValue);
-        if (onChange) onChange(!newValue);
+        if (onChange) onChange(!newValue, event);
       }}
     >
       <Grid item xs={11} className="input-container">
@@ -34,7 +45,7 @@ const AppUICheckmark: React.FC<{
             checked={newValue}
             onChange={(event) => {
               setNewValue(event.target.checked);
-              onChange(event.target.checked);
+              onChange(event.target.checked, event);
             }}
           />
         </div>

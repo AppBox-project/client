@@ -425,9 +425,11 @@ const ViewObject: React.FC<{
         onClick={buttonInfo.onClick}
         style={{
           margin: 5,
-          color: layout?.factsBar
-            ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
-            : "white",
+          color: !popup
+            ? layout?.factsBar
+              ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
+              : "white"
+            : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
         }}
       >
         {buttonInfo.label}

@@ -33,8 +33,15 @@ export interface AppTodoType {
     tags: string[];
     notes: string;
     priority: "Very low" | "Low" | "Medium" | "High" | "Very high" | "Urgent";
-    related_notes: string[];
+    relatedNotes: string[];
     parent: string;
+    status:
+      | "To-do"
+      | "Up Next"
+      | "Investigating"
+      | "Outsourced"
+      | "In Progress"
+      | "Won't do";
     related_todos: string[];
     difficulty:
       | "Very easy"

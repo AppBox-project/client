@@ -10,7 +10,23 @@ const AppUITextField: React.FC<{
   style?: {};
   autoFocus?: boolean;
   type?: "text" | "number";
-}> = ({ label, value, onChange, multiline, style, autoFocus, type }) => {
+  noLabel?: true | boolean;
+  onEnter?: (value: string) => void;
+  onEscape?: (value: string) => void;
+  onKeyPress?: (value: string) => void;
+}> = ({
+  label,
+  value,
+  onChange,
+  multiline,
+  style,
+  autoFocus,
+  type,
+  noLabel,
+  onEnter,
+  onEscape,
+  onKeyPress,
+}) => {
   // Global
   // States & Hooks
   const [newValue, setNewValue] = useState<any>("");
@@ -21,7 +37,7 @@ const AppUITextField: React.FC<{
   // UI
   return (
     <>
-      {label && <Typography variant="caption">{label}</Typography>}
+      {label && !noLabel && <Typography variant="caption">{label}</Typography>}
       <input
         type={type ? type : "text"}
         className={styles.input}
@@ -31,8 +47,17 @@ const AppUITextField: React.FC<{
           setNewValue(event.target.value);
           if (onChange) onChange(event.target.value);
         }}
+        onKeyDown={(e) => {
+          if (onKeyPress) onKeyPress(newValue);
+          if (e.key === "Enter") {
+            if (onEnter) onEnter(newValue);
+          }
+          if (e.key === "Escape") {
+            if (onEscape) onEscape(newValue);
+          }
+        }}
         style={style}
-        autoFocus={autoFocus}
+        autoFocus={autoFocus ? true : false}
       />
     </>
   );
