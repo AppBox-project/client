@@ -7,12 +7,14 @@ const AppQSSettingsProjectDetail: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
   projects: {};
+  isMobile: boolean;
 }> = ({
   context,
   match: {
     params: { detailId },
   },
   projects,
+  isMobile,
 }) => {
   // Vars
   const [project, setProject] = useState<AppProjectType>();
@@ -31,6 +33,7 @@ const AppQSSettingsProjectDetail: React.FC<{
       modelId="qs-project"
       context={context}
       baseUrl={`/quick-space/settings/projects/${detailId}`}
+      style={{ paddingBottom: isMobile && 60 }}
     />
   );
 };

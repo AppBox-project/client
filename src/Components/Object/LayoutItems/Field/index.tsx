@@ -5,6 +5,7 @@ import {
   ModelFieldType,
   CustomFieldType,
   AppContextType,
+  ValueListItemType,
 } from "../../../../Utils/Types";
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import InputInput from "../../../Inputs/Input";
@@ -80,6 +81,12 @@ const ObjectLayoutItemField: React.FC<{
   // UI
   if (!conditionsMet) return <></>;
 
+  let options: ValueListItemType[] = [];
+  if (modelField?.typeArgs?.options) {
+    modelField.typeArgs.options.map((o) =>
+      options.push({ value: o.key, label: o.label })
+    );
+  }
   // Map custom field
   let CustomField: React.FC<CustomFieldType> = FourOhFour;
   if (customFieldTypes && modelField?.typeArgs?.key)
@@ -191,7 +198,7 @@ const ObjectLayoutItemField: React.FC<{
               value={find(modelField.typeArgs.options, (o) => {
                 return o.key === objectField;
               })}
-              options={modelField.typeArgs.options}
+              options={options}
               onChange={(value) => {
                 onChange(value.key);
               }}

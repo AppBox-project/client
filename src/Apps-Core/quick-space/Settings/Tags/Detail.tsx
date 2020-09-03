@@ -7,12 +7,14 @@ const AppQSSettingsTagDetail: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
   tags: { [key: string]: AppTagType };
+  isMobile;
 }> = ({
   context,
   match: {
     params: { detailId },
   },
   tags,
+  isMobile,
 }) => {
   // Vars
   const [tag, setTag] = useState<AppTagType>();
@@ -31,6 +33,7 @@ const AppQSSettingsTagDetail: React.FC<{
       modelId="qs-tags"
       context={context}
       baseUrl={`/quick-space/settings/tags/${detailId}`}
+      style={{ paddingBottom: isMobile && 60 }}
     />
   );
 };

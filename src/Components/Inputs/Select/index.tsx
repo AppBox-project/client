@@ -8,7 +8,8 @@ const InputSelect: React.FC<{
   value?;
   isLoading?: boolean;
   onChange?: (value) => void;
-}> = ({ label, options, value, isLoading, onChange }) => {
+  multiple?: true | boolean;
+}> = ({ label, options, value, isLoading, onChange, multiple }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>();
 
@@ -29,11 +30,25 @@ const InputSelect: React.FC<{
       isClearable
       options={options}
       value={newValue}
+      isMulti={multiple}
+      placeholder={label}
       isLoading={isLoading}
       name={label}
       onChange={(chosen) => {
         setNewValue(chosen);
         if (onChange) onChange(chosen);
+      }}
+      styles={{
+        container: (styles) => ({
+          ...styles,
+          zIndex: 500,
+          position: "relative",
+        }),
+        control: (styles) => ({
+          ...styles,
+          position: "relative",
+          zIndex: 500,
+        }),
       }}
     />
   );

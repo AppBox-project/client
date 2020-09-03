@@ -19,6 +19,7 @@ import Card from "../../Design/Card";
 import InputRichText from "../../Inputs/RichText";
 import ConditionDesigner from "../../ConditionDesigner";
 import { baseUrl } from "../../../Utils/Utils";
+import InputSelect from "../../Inputs/Select";
 
 export class AppContext {
   appId: string;
@@ -60,7 +61,12 @@ export class AppContext {
         Card,
       },
       Animations: { AnimationContainer, AnimationItem },
-      Inputs: { ...Forms, Switch: InputSwitch, RichText: InputRichText },
+      Inputs: {
+        ...Forms,
+        Switch: InputSwitch,
+        RichText: InputRichText,
+        Select: InputSelect,
+      },
       Field: AppUiField,
       FieldDisplay,
       Layouts: {

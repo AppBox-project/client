@@ -7,9 +7,10 @@ import AppQSSettingsTagDetail from "./Detail";
 import { Avatar } from "@material-ui/core";
 import { FaTags } from "react-icons/fa";
 
-const AppSettingsTags: React.FC<{ context: AppContextType }> = ({
-  context,
-}) => {
+const AppSettingsTags: React.FC<{
+  context: AppContextType;
+  isMobile: boolean;
+}> = ({ context, isMobile }) => {
   // Vars
   const [tags, setTags] = useState<{ [key: string]: AppTagType }>({});
   const [tagsList, setTagsList] = useState<ListItemType[]>([]);
@@ -37,10 +38,10 @@ const AppSettingsTags: React.FC<{ context: AppContextType }> = ({
     <context.UI.Layouts.ListDetailLayout
       baseUrl="/quick-space/settings/tags"
       DetailComponent={AppQSSettingsTagDetail}
-      detailComponentProps={{ tags }}
+      detailComponentProps={{ tags, isMobile }}
       context={context}
       list={tagsList}
-      title="tags"
+      title="Tags"
       navDynamicIcon={(listItem) => {
         const tag = tags[listItem.id];
         return (
@@ -69,7 +70,7 @@ const AppSettingsTags: React.FC<{ context: AppContextType }> = ({
           ),
         });
       }}
-      style={{ height: "100%" }}
+      style={{ paddingBottom: isMobile && 60 }}
     />
   );
 };

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ModelType } from "../../../Utils/Types";
-import { AppTodoType, AppProjectType } from "../Types";
+import {
+  AppContextType,
+  ModelType,
+  ValueListItemType,
+} from "../../../Utils/Types";
+import { AppTodoType, AppProjectType, AppTagType } from "../Types";
 import {
   Grid,
   List,
@@ -8,6 +12,7 @@ import {
   Divider,
   Collapse,
   Button,
+  Typography,
 } from "@material-ui/core";
 import AppQSActionTodoDetailTodo from "./Todo";
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
@@ -25,8 +30,26 @@ const AppQSTodoListLayout: React.FC<{
   const [unfinishedTodos, setUnfinishedTodos] = useState<AppTodoType[]>();
   const [newTodo, setNewTodo] = useState<string>("");
   const [showDone, setShowDone] = useState<boolean>(false);
+  const [tagList, setTagList] = useState<ValueListItemType[]>([]);
+  const [statusses, setStatusses] = useState<ValueListItemType[]>([]);
+  const [activeTagFilters, setActiveTagFilters] = useState<ValueListItemType[]>(
+    []
+  );
+  const [activeStatusFilters, setActiveStatusFilters] = useState<
+    ValueListItemType[]
+  >([]);
+  const [filteredTodos, setFilteredTodos] = useState<AppTodoType[]>();
 
   // Lifecycle
+  // -> In case model changes
+  useEffect(() => {
+    const ns: ValueListItemType[] = [];
+    (model?.fields?.status?.typeArgs?.options || []).map((s) =>
+      ns.push({ label: s.label, value: s.key })
+    );
+    setStatusses(ns);
+  }, [model]);
+  // -> For todos
   useEffect(() => {
     const newDT = [];
     const newUT = [];
@@ -41,6 +64,68 @@ const AppQSTodoListLayout: React.FC<{
     setDoneTodos(newDT);
     setUnfinishedTodos(newUT);
   }, [todos]);
+
+  // -> Lifecycle of a filter
+  useEffect(() => {
+    let nt: AppTodoType[] = [];
+
+    // Tags
+    if ((activeTagFilters || []).length > 0) {
+      (unfinishedTodos || []).map((t: AppTodoType) => {
+        let show = false;
+        (activeTagFilters || []).map((tf) => {
+          if ((t.data.tags || []).includes(tf.value)) {
+            show = true;
+          }
+        });
+
+        if (show) {
+          nt.push(t);
+        }
+      });
+    } else {
+      nt = unfinishedTodos;
+    }
+
+    // Status
+    let nnt: AppTodoType[] = [];
+    if ((activeStatusFilters || []).length > 0) {
+      nt.map((t: AppTodoType) => {
+        let show = false;
+        activeStatusFilters.map((f) => {
+          if (t.data.status === f.value) show = true;
+        });
+        if (show) nnt.push(t);
+      });
+    } else {
+      nnt = nt;
+    }
+
+    setFilteredTodos(nnt);
+  }, [activeStatusFilters, activeTagFilters, unfinishedTodos]);
+
+  // -> For project
+  useEffect(() => {
+    const request = context.getObjects(
+      "qs-tags",
+      { "data.show_in_todos": { $ne: false } },
+      (response) => {
+        if (response.success) {
+          const tl: ValueListItemType[] = [];
+          response.data.map((r: AppTagType) =>
+            tl.push({ label: r.data.name, value: r._id })
+          );
+          setTagList(tl);
+        } else {
+          console.log(response);
+        }
+      }
+    );
+
+    return () => {
+      request.stop();
+    };
+  }, [project]);
 
   // UI
   return (
@@ -87,7 +172,33 @@ const AppQSTodoListLayout: React.FC<{
                     />
                   </ListSubheader>
                   <Divider />
-                  {(unfinishedTodos || []).map(
+                  <Grid
+                    container
+                    spacing={2}
+                    style={{ margin: "10px 15px 10px 10px", paddingRight: 15 }}
+                  >
+                    <Grid item xs={6}>
+                      <context.UI.Inputs.Select
+                        label="Filter tags..."
+                        options={tagList}
+                        multiple
+                        value={activeTagFilters}
+                        onChange={(value) => setActiveTagFilters(value)}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <context.UI.Inputs.Select
+                        label="Filter status..."
+                        options={statusses}
+                        value={activeStatusFilters}
+                        onChange={(value) => setActiveStatusFilters(value)}
+                        multiple
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Divider />
+                  {(filteredTodos || []).map(
                     (todo: AppTodoType) =>
                       !todo.data.belongs_to && (
                         <AppQSActionTodoDetailTodo

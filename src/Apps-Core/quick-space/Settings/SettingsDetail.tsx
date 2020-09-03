@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
 import AppSettingsProject from "./Projects";
 import AppSettingsTag from "./Tags";
@@ -13,11 +13,15 @@ const AppSettingsDetail: React.FC<{
     params: { detailId },
   },
 }) => {
+  // Vars
+  const [isMobile] = useGlobal<any>();
+
+  // UI
   switch (detailId) {
     case "projects":
-      return <AppSettingsProject context={context} />;
+      return <AppSettingsProject context={context} isMobile={isMobile} />;
     case "tags":
-      return <AppSettingsTag context={context} />;
+      return <AppSettingsTag context={context} isMobile={isMobile} />;
     default:
       return <>Unknown settings page</>;
   }

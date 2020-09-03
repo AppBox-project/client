@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { AppContextType } from "../../../../Utils/Types";
 import AppQSSettingsProjectDetail from "./Detail";
 import { useState } from "reactn";
-import { AppProjectType } from "../../Types";
 import { ListItemType } from "../../../../Utils/Types";
 import array2dTo3d from "../../../../Utils/Functions/array2dTo3d";
 
-const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
-  context,
-}) => {
+const AppSettingsProject: React.FC<{
+  context: AppContextType;
+  isMobile: boolean;
+}> = ({ context, isMobile }) => {
   // Vars
   const [projects, setProjects] = useState<{}>([]);
   const [projectsList, setProjectsList] = useState<ListItemType[]>([]);
@@ -42,7 +42,7 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
     <context.UI.Layouts.ListDetailLayout
       baseUrl="/quick-space/settings/projects"
       DetailComponent={AppQSSettingsProjectDetail}
-      detailComponentProps={{ projects }}
+      detailComponentProps={{ projects, isMobile }}
       context={context}
       list={projectsList}
       title="Projects"
@@ -61,7 +61,7 @@ const AppSettingsProject: React.FC<{ context: AppContextType }> = ({
           ),
         });
       }}
-      style={{ height: "100%" }}
+      style={{ paddingBottom: isMobile && 60 }}
     />
   );
 };

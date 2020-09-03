@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { ModelFieldType, ModelType } from "../../Utils/Types";
+import {
+  ModelFieldType,
+  ModelType,
+  ValueListItemType,
+} from "../../Utils/Types";
 import FieldTypeInput from "../Object/FieldTypes/Input";
 import FieldTypeBoolean from "../Object/FieldTypes/Boolean";
 import FieldTypeRelationship from "../Object/FieldTypes/Relationship";
@@ -50,6 +54,14 @@ const Field: React.FC<{
     if (directSave) debouncedDirectSave(value);
     if (onChange) onChange(value);
   };
+
+  let options;
+  if (field?.typeArgs?.options) {
+    const options: ValueListItemType[] = [];
+    field.typeArgs.options.map((o) =>
+      options.push({ label: o.label, value: o.key })
+    );
+  }
 
   return (
     <>
@@ -110,7 +122,7 @@ const Field: React.FC<{
           value={find(field.typeArgs.options, (o) => {
             return o.key === object.data[fieldId];
           })}
-          options={field.typeArgs.options}
+          options={options}
           onChange={(value) => {
             onChangeHandler(value?.key);
           }}

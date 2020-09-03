@@ -46,7 +46,7 @@ const AppQSNote: React.FC<{
         );
       }}
       provideCustomFields={{ recipe: CERecipeEditor }}
-      style={{ marginBottom: 60 }}
+      style={{ paddingBottom: 60 }}
     />
   );
 };

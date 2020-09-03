@@ -39,7 +39,7 @@ export interface ModelFieldType {
   typeArgs?: {
     type?: string;
     relationshipTo?: string;
-    options?: { label: string; value: string }[];
+    options?: { label: string; key: string }[];
     key?: string;
   };
 }
@@ -288,6 +288,12 @@ export interface TreeViewDataItem {
   icon: React.FC;
   subItems?: TreeViewDataItem[];
 }
+
+export interface ValueListItemType {
+  label: string;
+  value: string;
+}
+
 export interface ListItemType {
   label: string;
   id: string;
@@ -425,6 +431,14 @@ export interface UIType {
   }>;
 
   Inputs: {
+    Select: React.FC<{
+      label: string;
+      options: { value; label: string }[];
+      value?;
+      isLoading?: boolean;
+      onChange?: (value) => void;
+      multiple?: true | boolean;
+    }>;
     RichText: React.FC<{
       placeholder?: string;
       label?: string;

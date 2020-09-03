@@ -21,12 +21,6 @@ export default class App {
     return new Promise((resolve) => {
       resolve([
         {
-          key: "desktop",
-          label: "Desktop",
-          component: FourOhFour,
-          icon: FaTh,
-        },
-        {
           key: "todo",
           label: "Todo",
           component: AppActionTodo,
