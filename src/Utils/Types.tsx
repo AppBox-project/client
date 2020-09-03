@@ -389,6 +389,7 @@ export interface UIType {
       style?: CSSProperties;
       imageField?: string;
       objects?: ObjectType[];
+      navDynamicIcon?: (item) => JSX.Element;
     }>;
     SortableList: React.FC<{
       listItems: [];

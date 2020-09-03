@@ -12,7 +12,10 @@ const AppSettings: React.FC<{
       list={[
         { label: "Projects", id: "projects" },
         { label: "Tags", id: "tags" },
-        { label: "Preferences", id: "preferences" },
+        {
+          label: `${context.user.data.first_name}'s preferences`,
+          id: "preferences",
+        },
       ]}
       baseUrl={`/${context.appId}/settings`}
       context={context}

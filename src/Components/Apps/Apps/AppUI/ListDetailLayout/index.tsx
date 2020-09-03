@@ -56,6 +56,7 @@ const ListDetailLayout: React.FC<{
   isLoading?: true | boolean;
   style?: CSSProperties;
   imageField?: string;
+  navDynamicIcon?: (item) => JSX.Element;
 }> = ({
   list,
   customNavComponent,
@@ -75,6 +76,7 @@ const ListDetailLayout: React.FC<{
   style,
   imageField,
   objects,
+  navDynamicIcon,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -137,6 +139,7 @@ const ListDetailLayout: React.FC<{
                 imageField={imageField}
                 objects={objects}
                 style={style}
+                navDynamicIcon={navDynamicIcon}
               />
             )
           ) : (
@@ -180,6 +183,7 @@ const ListNav: React.FC<{
   imageField: string;
   objects?;
   style?: CSSProperties;
+  navDynamicIcon?: (item) => JSX.Element;
 }> = ({
   addFunction,
   deleteFunction,
@@ -192,6 +196,7 @@ const ListNav: React.FC<{
   imageField,
   objects,
   style,
+  navDynamicIcon,
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
@@ -238,6 +243,7 @@ const ListNav: React.FC<{
                     nestedLevel={0}
                     imageField={imageField}
                     objects={objects}
+                    navDynamicIcon={navDynamicIcon}
                   />
                 );
               })}
@@ -259,6 +265,7 @@ const ListItemObject: React.FC<{
   nestedLevel: number;
   imageField: string;
   objects;
+  navDynamicIcon?: (item) => JSX.Element;
 }> = ({
   baseUrl,
   listItem,
@@ -268,12 +275,16 @@ const ListItemObject: React.FC<{
   nestedLevel,
   imageField,
   objects,
+  navDynamicIcon,
 }) => {
   const object = objects ? find(objects, (o) => o._id === listItem.id) : false;
 
   return (
     <Link to={`${baseUrl}/${listItem.id}`}>
       <ListItem button selected={selectedItem === listItem.id}>
+        {navDynamicIcon && (
+          <ListItemIcon>{navDynamicIcon(listItem)}</ListItemIcon>
+        )}
         {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
         {listItem.icon && (
           <ListItemIcon>

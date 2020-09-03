@@ -31,7 +31,7 @@ const LayoutDesigner: React.FC<{
           item
           xs={expandTray ? 9 : 11}
           md={expandTray ? 10 : 11}
-          className={styles.designer}
+          className={`${styles.designer} scrollIndependently`}
         >
           <DropTarget
             Wrapper={EmptyWrapper}
@@ -70,11 +70,12 @@ const LayoutDesigner: React.FC<{
             })}
           </DropTarget>
         </Grid>
+
         <Grid
           item
           xs={expandTray ? 3 : 1}
           md={expandTray ? 2 : 1}
-          className={styles.tray}
+          className={`${styles.tray} scrollIndependently`}
         >
           <Tooltip
             placement="left"

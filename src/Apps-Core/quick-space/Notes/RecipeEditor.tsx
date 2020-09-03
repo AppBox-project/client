@@ -44,111 +44,112 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
           fullWidth
           color="primary"
           onClick={() => {
-            context
-              .getObjects(
-                "qs-project",
-                {
-                  "data.owner": context.user._id,
-                  "data.show_in_todos": { $ne: false },
-                  "data.todos_type": "Groceries",
-                },
-                (response) => {
-                  if (response.success) {
-                    const projects = [];
-                    const defaultList = response.data[0]._id;
-                    response.data.map((p: AppProjectType) => {
-                      projects.push({
-                        label: p.data.name,
-                        value: p._id,
-                      });
+            const request = context.getObjects(
+              "qs-project",
+              {
+                "data.owner": context.user._id,
+                "data.show_in_todos": { $ne: false },
+                "data.todos_type": "Groceries",
+              },
+              (response) => {
+                request.stop();
+                if (response.success) {
+                  const projects = [];
+                  const defaultList = response.data[0]._id;
+                  response.data.map((p: AppProjectType) => {
+                    projects.push({
+                      label: p.data.name,
+                      value: p._id,
                     });
-                    context.setDialog({
-                      display: true,
-                      title: "Add to shopping list",
-                      form: [
-                        {
-                          key: "people",
-                          type: "number",
-                          label: "How many people will eat?",
-                          value: (newValue || {}).people || 2,
+                  });
+                  context.setDialog({
+                    display: true,
+                    title: "Add to shopping list",
+                    form: [
+                      {
+                        key: "people",
+                        type: "number",
+                        label: "How many people will eat?",
+                        value: (newValue || {}).people || 2,
+                      },
+                      {
+                        key: "project",
+                        type: "dropdown",
+                        dropdownOptions: projects,
+                        label: "List to add to",
+                        value: defaultList,
+                      },
+                    ],
+                    buttons: [
+                      {
+                        label: "Add",
+                        onClick: (form) => {
+                          const groceriesToAdd = [];
+                          ((newValue || {}).ingredients || []).map(
+                            (ingredient) => {
+                              const amount =
+                                (ingredient.quantity /
+                                  (newValue?.people || 1)) *
+                                form.people;
+                              groceriesToAdd.push({
+                                action: `${amount > 0 ? amount : ""}${
+                                  ingredient.quantityDescriptor !== undefined
+                                    ? ingredient.quantityDescriptor
+                                    : ""
+                                } ${ingredient.name}`,
+                                owner: context.user._id,
+                                project: form.project,
+                              });
+                            }
+                          );
+                          context.addObjects(
+                            "qs-todo",
+                            groceriesToAdd,
+                            (response) => {
+                              context.setDialog({
+                                display: false,
+                              });
+                              context.showSnackbar(
+                                `Added ${response.data.length} items.`,
+                                {
+                                  action: (close) => (
+                                    <>
+                                      <Button
+                                        style={{ color: "white" }}
+                                        size="small"
+                                        onClick={() => {
+                                          history.replace(
+                                            `/quick-space/todo/${form.project}`
+                                          );
+                                        }}
+                                      >
+                                        View
+                                      </Button>
+                                      <IconButton
+                                        size="small"
+                                        aria-label="close"
+                                        color="inherit"
+                                        onClick={() => {
+                                          close();
+                                        }}
+                                      >
+                                        <FaTimes fontSize="small" />
+                                      </IconButton>
+                                    </>
+                                  ),
+                                }
+                              );
+                            }
+                          );
                         },
-                        {
-                          key: "project",
-                          type: "dropdown",
-                          dropdownOptions: projects,
-                          label: "List to add to",
-                          value: defaultList,
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: "Add",
-                          onClick: (form) => {
-                            const groceriesToAdd = [];
-                            ((newValue || {}).ingredients || []).map(
-                              (ingredient) => {
-                                const amount =
-                                  (ingredient.quantity /
-                                    (newValue?.people || 1)) *
-                                  form.people;
-                                groceriesToAdd.push({
-                                  action: `${amount > 0 ? amount : ""}${
-                                    ingredient.quantityDescriptor !== undefined
-                                      ? ingredient.quantityDescriptor
-                                      : ""
-                                  } ${ingredient.name}`,
-                                  owner: context.user._id,
-                                  project: form.project,
-                                });
-                              }
-                            );
-                            context.addObjects(
-                              "qs-todo",
-                              groceriesToAdd,
-                              (response) => {
-                                console.log(response);
-                                context.showSnackbar(
-                                  `Added ${response.data.length} items.`,
-                                  {
-                                    action: (close) => (
-                                      <>
-                                        <Button
-                                          style={{ color: "white" }}
-                                          size="small"
-                                          onClick={() => {
-                                            history.replace(
-                                              `/quick-space/todo/${form.project}`
-                                            );
-                                          }}
-                                        >
-                                          View
-                                        </Button>
-                                        <IconButton
-                                          size="small"
-                                          aria-label="close"
-                                          color="inherit"
-                                          onClick={() => {
-                                            close();
-                                          }}
-                                        >
-                                          <FaTimes fontSize="small" />
-                                        </IconButton>
-                                      </>
-                                    ),
-                                  }
-                                );
-                              }
-                            );
-                          },
-                        },
-                      ],
-                    });
-                  } else {
-                    console.log(response);
-                  }
+                      },
+                    ],
+                  });
+                } else {
+                  console.log(response);
                 }
-              )
-              .stop();
+              }
+            );
           }}
         >
           Add to shopping list

@@ -1,3 +1,5 @@
+import { ColorType } from "../../Utils/Types";
+
 export interface AppProjectType {
   _id;
   data: {
@@ -50,5 +52,13 @@ export interface AppTodoType {
       | "Slightly difficult"
       | "Difficult"
       | "Very difficult";
+  };
+}
+
+export interface AppTagType {
+  _id: string;
+  data: {
+    name: string;
+    color: ColorType;
   };
 }

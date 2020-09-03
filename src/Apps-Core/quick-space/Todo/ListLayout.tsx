@@ -117,7 +117,7 @@ const AppQSTodoListLayout: React.FC<{
               style={{ paddingBottom: isMobile && 60 }}
             >
               <context.UI.Design.Card
-                title="Todo"
+                title="Done!"
                 withBigMargin
                 centerTitle
                 titleDivider

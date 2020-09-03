@@ -321,6 +321,7 @@ const ViewObject: React.FC<{
   let factsBarPicture;
   let factsBarTitle;
   let factsBar;
+  if (!layout) return <>Layout {layoutId} not found</>;
   if (layout.factsBar && !popup) {
     if (
       model.fields[layout.factsBar[0]].type === "picture" ||

@@ -75,6 +75,8 @@ const AppUIDesktop: React.FC<{
             <Route
               path={`/${appContext.appId}/settings`}
               render={(props) => {
+                setCurrentPage("settings");
+
                 return (
                   <appContext.appConfig.settings
                     context={appContext}
@@ -291,11 +293,23 @@ const ActionMenu: React.FC<{
           <Divider />
           <List>
             <Link className="no-link" to={`/${context.app.data.id}/settings`}>
-              <ListItem button>
+              <ListItem button selected={currentPage === "settings"}>
                 <ListItemIcon>
-                  <FaWrench />
+                  <Icon
+                    color={currentPage === "settings" ? "primary" : "default"}
+                  >
+                    <FaWrench style={{ width: 18, height: 18 }} />
+                  </Icon>
                 </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
+                <ListItemText
+                  color={currentPage === "settings" ? "primary" : "default"}
+                >
+                  <Typography
+                    color={currentPage === "settings" ? "primary" : "inherit"}
+                  >
+                    Settings
+                  </Typography>
+                </ListItemText>
               </ListItem>
             </Link>
           </List>
