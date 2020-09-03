@@ -22,6 +22,7 @@ const AppQSTodoBoardLayout: React.FC<{
           context={context}
           model={model}
           isMobile={isMobile}
+          hideStatus
         />
       )}
     />

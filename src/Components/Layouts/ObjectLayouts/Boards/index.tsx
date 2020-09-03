@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../../Utils/Types";
-import { Typography, Divider } from "@material-ui/core";
+import { Typography, Divider, List } from "@material-ui/core";
 import {
   DragDropContext,
   Droppable,
@@ -119,7 +119,6 @@ const BoardLayout: React.FC<{
                       >
                         <context.UI.Animations.AnimationItem>
                           <div className="scrollIndependently">
-                            "
                             <context.UI.Design.Card
                               withBigMargin
                               title={option.label}
@@ -127,48 +126,50 @@ const BoardLayout: React.FC<{
                               titleDivider
                               titleInPrimaryColor
                             >
-                              {map(
-                                filter(newObjects, (o) => {
-                                  return o.data[boardField] === option.key;
-                                }),
-                                (todo, index) => {
-                                  return (
-                                    <Draggable
-                                      key={todo._id}
-                                      draggableId={todo._id}
-                                      index={index}
-                                    >
-                                      {(
-                                        draggableProvided,
-                                        draggableSnapshot
-                                      ) => (
-                                        <div
-                                          ref={draggableProvided.innerRef}
-                                          {...draggableProvided.draggableProps}
-                                          {...draggableProvided.dragHandleProps}
-                                        >
+                              <List>
+                                {map(
+                                  filter(newObjects, (o) => {
+                                    return o.data[boardField] === option.key;
+                                  }),
+                                  (todo, index) => {
+                                    return (
+                                      <Draggable
+                                        key={todo._id}
+                                        draggableId={todo._id}
+                                        index={index}
+                                      >
+                                        {(
+                                          draggableProvided,
+                                          draggableSnapshot
+                                        ) => (
                                           <div
-                                            className={styles.draggable}
-                                            onClick={() => {
-                                              if (onItemClick)
-                                                onItemClick(todo);
-                                            }}
+                                            ref={draggableProvided.innerRef}
+                                            {...draggableProvided.draggableProps}
+                                            {...draggableProvided.dragHandleProps}
                                           >
-                                            {customItem ? (
-                                              customItem(todo)
-                                            ) : (
-                                              <Typography variant="body1">
-                                                {todo.data[model.primary]}
-                                              </Typography>
-                                            )}
+                                            <div
+                                              className={styles.draggable}
+                                              onClick={() => {
+                                                if (onItemClick)
+                                                  onItemClick(todo);
+                                              }}
+                                            >
+                                              {customItem ? (
+                                                customItem(todo)
+                                              ) : (
+                                                <Typography variant="body1">
+                                                  {todo.data[model.primary]}
+                                                </Typography>
+                                              )}
+                                            </div>
                                           </div>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  );
-                                }
-                              )}
-                              {droppableProvided.placeholder}
+                                        )}
+                                      </Draggable>
+                                    );
+                                  }
+                                )}
+                                {droppableProvided.placeholder}
+                              </List>
                             </context.UI.Design.Card>
                           </div>
                         </context.UI.Animations.AnimationItem>
