@@ -14,7 +14,7 @@ const AppSettingsDetail: React.FC<{
   },
 }) => {
   // Vars
-  const [isMobile] = useGlobal<any>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // UI
   switch (detailId) {

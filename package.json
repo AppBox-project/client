@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.1-6",
-  "description": "QS: Tags",
+  "version": "0.2.1-7",
+  "description": "QS: Filter todos",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

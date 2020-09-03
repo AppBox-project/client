@@ -141,8 +141,8 @@ const AppQSTodoListLayout: React.FC<{
                 centerTitle
                 withBigMargin
               >
-                <List>
-                  <ListSubheader>
+                <List style={{ paddingTop: 0, marginTop: 0 }}>
+                  <ListSubheader style={{ padding: "15px 0" }}>
                     <context.UI.Inputs.TextInput
                       label="New todo"
                       autoFocus={!isMobile}
@@ -175,7 +175,7 @@ const AppQSTodoListLayout: React.FC<{
                   <Grid
                     container
                     spacing={2}
-                    style={{ margin: "10px 15px 10px 10px", paddingRight: 15 }}
+                    style={{ margin: "10px 0 10px -5px" }}
                   >
                     <Grid item xs={6}>
                       <context.UI.Inputs.Select
