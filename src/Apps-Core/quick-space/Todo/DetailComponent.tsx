@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType, ModelType } from "../../../Utils/Types";
-import { FaTrello, FaBars } from "react-icons/fa";
+import { FaTrello, FaList } from "react-icons/fa";
 import { AppProjectType, AppTodoType } from "../Types";
 import { Skeleton } from "@material-ui/lab";
 import AppQSTodoListLayout from "./ListLayout";
 import AppQSTodoBoardLayout from "./BoardLayout";
-import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
+
 const AppQSActionTodoDetail: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
@@ -65,7 +65,7 @@ const AppQSActionTodoDetail: React.FC<{
   // -> Change view
   useEffect(() => {
     context.setButton("toggleMode", {
-      icon: view === "List" ? <FaTrello /> : <FaBars />,
+      icon: view === "List" ? <FaTrello /> : <FaList />,
       function: () => {
         setView(view === "List" ? "Board" : "List");
       },

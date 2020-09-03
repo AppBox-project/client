@@ -118,52 +118,59 @@ const BoardLayout: React.FC<{
                         style={{ flex: 1, minWidth: 250 }}
                       >
                         <context.UI.Animations.AnimationItem>
-                          <context.UI.Design.Card
-                            withBigMargin
-                            title={option.label}
-                            centerTitle
-                            titleDivider
-                            titleInPrimaryColor
-                          >
-                            {map(
-                              filter(newObjects, (o) => {
-                                return o.data[boardField] === option.key;
-                              }),
-                              (todo, index) => {
-                                return (
-                                  <Draggable
-                                    key={todo._id}
-                                    draggableId={todo._id}
-                                    index={index}
-                                  >
-                                    {(draggableProvided, draggableSnapshot) => (
-                                      <div
-                                        ref={draggableProvided.innerRef}
-                                        {...draggableProvided.draggableProps}
-                                        {...draggableProvided.dragHandleProps}
-                                      >
+                          <div className="scrollIndependently">
+                            "
+                            <context.UI.Design.Card
+                              withBigMargin
+                              title={option.label}
+                              centerTitle
+                              titleDivider
+                              titleInPrimaryColor
+                            >
+                              {map(
+                                filter(newObjects, (o) => {
+                                  return o.data[boardField] === option.key;
+                                }),
+                                (todo, index) => {
+                                  return (
+                                    <Draggable
+                                      key={todo._id}
+                                      draggableId={todo._id}
+                                      index={index}
+                                    >
+                                      {(
+                                        draggableProvided,
+                                        draggableSnapshot
+                                      ) => (
                                         <div
-                                          className={styles.draggable}
-                                          onClick={() => {
-                                            if (onItemClick) onItemClick(todo);
-                                          }}
+                                          ref={draggableProvided.innerRef}
+                                          {...draggableProvided.draggableProps}
+                                          {...draggableProvided.dragHandleProps}
                                         >
-                                          {customItem ? (
-                                            customItem(todo)
-                                          ) : (
-                                            <Typography variant="body1">
-                                              {todo.data[model.primary]}
-                                            </Typography>
-                                          )}
+                                          <div
+                                            className={styles.draggable}
+                                            onClick={() => {
+                                              if (onItemClick)
+                                                onItemClick(todo);
+                                            }}
+                                          >
+                                            {customItem ? (
+                                              customItem(todo)
+                                            ) : (
+                                              <Typography variant="body1">
+                                                {todo.data[model.primary]}
+                                              </Typography>
+                                            )}
+                                          </div>
                                         </div>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                );
-                              }
-                            )}
-                            {droppableProvided.placeholder}
-                          </context.UI.Design.Card>
+                                      )}
+                                    </Draggable>
+                                  );
+                                }
+                              )}
+                              {droppableProvided.placeholder}
+                            </context.UI.Design.Card>
+                          </div>
                         </context.UI.Animations.AnimationItem>
                       </div>
                     );

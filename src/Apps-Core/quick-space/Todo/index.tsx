@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType, ListItemType } from "../../../Utils/Types";
 import AppQSActionTodoDetail from "./DetailComponent";
 import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
@@ -14,6 +14,7 @@ const AppQSActionTodo: React.FC<{
   const [flatProjects, setFlatProjects] = useState<{
     [key: string]: AppProjectType;
   }>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -49,7 +50,7 @@ const AppQSActionTodo: React.FC<{
       navWidth={2}
       DetailComponent={AppQSActionTodoDetail}
       detailComponentProps={{ projects: flatProjects }}
-      style={{ paddingBottom: 50 }}
+      style={{ paddingBottom: isMobile && 50 }}
       title="Todos"
     />
   );

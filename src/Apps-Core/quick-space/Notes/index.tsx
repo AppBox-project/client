@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "reactn";
+import React, { useState, useEffect, useGlobal } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
 import AppQSNotesDetail from "./NotesDetail";
 import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
@@ -12,6 +12,7 @@ const AppQSActionNotes: React.FC<{
   //Vars
   const [projects, setProjects] = useState<any>();
   const [flatProjects, setFlatProjects] = useState<{}>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -47,8 +48,9 @@ const AppQSActionNotes: React.FC<{
       detailComponentProps={{
         context: context,
         projects: flatProjects,
+        isMobile,
       }}
-      style={{ paddingBottom: 50 }}
+      style={{ paddingBottom: isMobile && 50 }}
     />
   );
 };

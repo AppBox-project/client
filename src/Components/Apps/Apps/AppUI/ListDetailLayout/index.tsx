@@ -194,7 +194,7 @@ const ListNav: React.FC<{
   style,
 }) => {
   return (
-    <div style={{ ...style }}>
+    <div style={{ ...style }} className={styles.listNav}>
       <AnimationContainer>
         <AnimationItem>
           <div className={styles.root}>

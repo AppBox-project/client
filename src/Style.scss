@@ -108,3 +108,14 @@ blockquote p {
     cursor: grabbing;
   }
 }
+.scrollIndependently {
+  height: calc(100vh - 64px);
+  overflow: auto;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

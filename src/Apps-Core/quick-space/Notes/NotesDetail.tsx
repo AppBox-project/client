@@ -7,12 +7,14 @@ const AppQSNotesDetail: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
   projects;
+  isMobile: boolean;
 }> = ({
   context,
   projects,
   match: {
     params: { detailId },
   },
+  isMobile,
 }) => {
   // Vars
   const [notes, setNotes] = useState<ListItemType[]>();
@@ -64,7 +66,7 @@ const AppQSNotesDetail: React.FC<{
       }}
       imageField="image"
       objects={flatNotes}
-      style={{ marginBottom: 50 }}
+      style={{ marginBottom: isMobile && 50 }}
     />
   );
 };

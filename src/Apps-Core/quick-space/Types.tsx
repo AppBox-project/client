@@ -34,7 +34,7 @@ export interface AppTodoType {
     notes: string;
     priority: "Very low" | "Low" | "Medium" | "High" | "Very high" | "Urgent";
     relatedNotes: string[];
-    parent: string;
+    belongs_to: string;
     status:
       | "To-do"
       | "Up Next"
