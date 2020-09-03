@@ -60,7 +60,7 @@ const AppQSTodoListLayout: React.FC<{
                   <ListSubheader>
                     <context.UI.Inputs.TextInput
                       label="New todo"
-                      autoFocus
+                      autoFocus={!isMobile}
                       noLabel
                       value={newTodo}
                       onChange={(value) => setNewTodo(value)}

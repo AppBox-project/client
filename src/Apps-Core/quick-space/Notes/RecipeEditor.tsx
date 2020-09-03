@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { FaPepperHot, FaTimes } from "react-icons/fa";
 import { AppProjectType } from "../Types";
+import { useHistory } from "react-router-dom";
 
 interface IngredientType {
   name: string;
@@ -26,6 +27,7 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
 }) => {
   // States
   const [newValue, setNewvalue] = useState<any>();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -114,10 +116,12 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
                                           style={{ color: "white" }}
                                           size="small"
                                           onClick={() => {
-                                            close();
+                                            history.replace(
+                                              `/quick-space/todo/${form.project}`
+                                            );
                                           }}
                                         >
-                                          UNDO
+                                          View
                                         </Button>
                                         <IconButton
                                           size="small"
