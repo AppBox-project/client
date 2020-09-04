@@ -95,26 +95,35 @@ const ObjectLayoutItemField: React.FC<{
   switch (mode) {
     case "view":
       return layoutItem.hideView !== true ? (
-        <div
-          className={`${styles.container} ${styles.containerView}`}
-          onDoubleClick={() => {
-            setMode("edit");
-          }}
-        >
-          <div style={{ width: "25%" }}>
-            <Typography variant="body1" style={{ fontWeight: "bold" }}>
-              {modelField.name}
-            </Typography>
+        layoutItem.noLabel ? (
+          <FieldDisplay
+            objectField={objectField}
+            modelField={modelField}
+            CustomField={CustomField}
+            context={context}
+          />
+        ) : (
+          <div
+            className={`${styles.container} ${styles.containerView}`}
+            onDoubleClick={() => {
+              setMode("edit");
+            }}
+          >
+            <div style={{ width: "25%" }}>
+              <Typography variant="body1" style={{ fontWeight: "bold" }}>
+                {modelField.name}
+              </Typography>
+            </div>
+            <div style={{ flex: 1 }}>
+              <FieldDisplay
+                objectField={objectField}
+                modelField={modelField}
+                CustomField={CustomField}
+                context={context}
+              />
+            </div>
           </div>
-          <div style={{ flex: 1 }}>
-            <FieldDisplay
-              objectField={objectField}
-              modelField={modelField}
-              CustomField={CustomField}
-              context={context}
-            />
-          </div>
-        </div>
+        )
       ) : (
         <></>
       );

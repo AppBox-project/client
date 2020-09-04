@@ -449,6 +449,11 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     key: "hideEdit",
                     type: "boolean",
                   },
+                  {
+                    label: "Remove label",
+                    key: "noLabel",
+                    type: "boolean",
+                  },
                 ],
                 buttons: [
                   {

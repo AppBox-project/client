@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../../../Design/Card";
+import { ObjectType } from "../../../../Utils/Types";
 
 const ObjectLayoutItemPaper: React.FC<{
   children;
@@ -8,6 +9,7 @@ const ObjectLayoutItemPaper: React.FC<{
   withBigMargin: boolean;
   withSmallMargin: boolean;
   sideMarginOnly: boolean;
+  object?: ObjectType;
 }> = ({
   children,
   title,
@@ -15,11 +17,24 @@ const ObjectLayoutItemPaper: React.FC<{
   withBigMargin,
   withSmallMargin,
   sideMarginOnly,
+  object,
 }) => {
+  let newTitle = title || "";
+  if (newTitle.match(/{([a-zA-Z_]+)}/)) {
+    var regex = new RegExp(/{([a-zA-Z_]+)}/g),
+      result;
+    while ((result = regex.exec(newTitle))) {
+      newTitle = newTitle.replace(
+        `{${result[1]}}`,
+        object?.data[result[1]] || "Error"
+      );
+    }
+  }
+
   return (
     <Card
       hoverable={hoverable}
-      title={title}
+      title={newTitle}
       withBigMargin={withBigMargin}
       withSmallMargin={withSmallMargin}
       sideMarginOnly={sideMarginOnly}

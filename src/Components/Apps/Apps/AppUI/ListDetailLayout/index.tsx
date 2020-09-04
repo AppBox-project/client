@@ -57,6 +57,7 @@ const ListDetailLayout: React.FC<{
   style?: CSSProperties;
   imageField?: string;
   navDynamicIcon?: (item) => JSX.Element;
+  itemSecondary?: (item) => JSX.Element;
 }> = ({
   list,
   customNavComponent,
@@ -77,6 +78,7 @@ const ListDetailLayout: React.FC<{
   imageField,
   objects,
   navDynamicIcon,
+  itemSecondary,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -140,6 +142,7 @@ const ListDetailLayout: React.FC<{
                 objects={objects}
                 style={style}
                 navDynamicIcon={navDynamicIcon}
+                itemSecondary={itemSecondary}
               />
             )
           ) : (
@@ -184,6 +187,7 @@ const ListNav: React.FC<{
   objects?;
   style?: CSSProperties;
   navDynamicIcon?: (item) => JSX.Element;
+  itemSecondary?: (item) => JSX.Element;
 }> = ({
   addFunction,
   deleteFunction,
@@ -197,6 +201,7 @@ const ListNav: React.FC<{
   objects,
   style,
   navDynamicIcon,
+  itemSecondary,
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
@@ -244,6 +249,7 @@ const ListNav: React.FC<{
                     imageField={imageField}
                     objects={objects}
                     navDynamicIcon={navDynamicIcon}
+                    itemSecondary={itemSecondary}
                   />
                 );
               })}
@@ -266,6 +272,7 @@ const ListItemObject: React.FC<{
   imageField: string;
   objects;
   navDynamicIcon?: (item) => JSX.Element;
+  itemSecondary?: (item) => JSX.Element;
 }> = ({
   baseUrl,
   listItem,
@@ -276,6 +283,7 @@ const ListItemObject: React.FC<{
   imageField,
   objects,
   navDynamicIcon,
+  itemSecondary,
 }) => {
   const object = objects ? find(objects, (o) => o._id === listItem.id) : false;
 
@@ -301,9 +309,10 @@ const ListItemObject: React.FC<{
             paddingLeft: 15 * nestedLevel,
           }}
           color={selectedItem === listItem.id ? "primary" : "inherit"}
-        >
-          {listItem.label}
-        </ListItemText>
+          primary={listItem.label}
+          secondary={itemSecondary && itemSecondary(object || listItem)}
+        />
+
         {deleteFunction && (
           <ListItemSecondaryAction>
             <IconButton

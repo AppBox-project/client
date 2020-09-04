@@ -38,6 +38,7 @@ import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const ViewObject: React.FC<{
   modelId: string;
+  model?: ModelType;
   layoutId?: string;
   appId: string;
   objectId?: string;
@@ -52,6 +53,7 @@ const ViewObject: React.FC<{
   style?: CSSProperties;
 }> = ({
   modelId,
+  model,
   layoutId,
   appId,
   objectId,
@@ -65,7 +67,7 @@ const ViewObject: React.FC<{
   provideCustomFields,
   style,
 }) => {
-  const [model, setmodel] = useState<ModelType>();
+  const [appliedModel, setmodel] = useState<ModelType>();
   const [object, setObject] = useState<any>();
   const [editMode, setMode] = useState<"view" | "edit">(
     objectId ? (mode ? mode : "view") : "edit"
@@ -88,22 +90,22 @@ const ViewObject: React.FC<{
           switch (fb.reason) {
             case "missing-required":
               reason = `<em>${
-                model.fields[fb.field].name
+                appliedModel.fields[fb.field].name
               }</em> can't be empty.`;
               break;
             case "not-unique":
               reason = `<em>${
-                model.fields[fb.field].name
+                appliedModel.fields[fb.field].name
               }</em> needs to be unique, but isn't.`;
               break;
             case "no-email":
               reason = `<em>${
-                model.fields[fb.field].name
+                appliedModel.fields[fb.field].name
               }</em> isn't a valid e-mailadress.`;
               break;
             case "too-short":
               reason = `<em>${
-                model.fields[fb.field].name
+                appliedModel.fields[fb.field].name
               }</em> should be over ${fb.minLength}  characters.`;
               break;
             default:
@@ -132,7 +134,7 @@ const ViewObject: React.FC<{
         Server.emit("updateObject", {
           requestId,
           objectId: object._id,
-          type: model.key,
+          type: appliedModel.key,
           toChange,
         });
         Server.on(`receive-${requestId}`, (response) => {
@@ -168,7 +170,7 @@ const ViewObject: React.FC<{
         const requestId = uniqid();
         Server.emit("insertObject", {
           requestId,
-          type: model.key,
+          type: appliedModel.key,
           object: toChange,
         });
         Server.on(`receive-${requestId}`, (response) => {
@@ -209,13 +211,17 @@ const ViewObject: React.FC<{
   useEffect(() => {
     // -> Object types
     const requestId = uniqid();
-    Server.emit("listenForObjectTypes", {
-      requestId,
-      filter: { key: modelId },
-    });
-    Server.on(`receive-${requestId}`, (response) => {
-      setmodel(response[0]);
-    });
+    if (model) {
+      setmodel(model);
+    } else {
+      Server.emit("listenForObjectTypes", {
+        requestId,
+        filter: { key: modelId },
+      });
+      Server.on(`receive-${requestId}`, (response) => {
+        setmodel(response[0]);
+      });
+    }
 
     // Objects
     const dataRequestId = uniqid();
@@ -308,14 +314,14 @@ const ViewObject: React.FC<{
   }, [modelId, appId, editMode, pageTitle, toChange]);
 
   useEffect(() => {
-    if (object && model) {
-      setPageTitle(object.data[model.primary]);
+    if (object && appliedModel) {
+      setPageTitle(object.data[appliedModel.primary]);
     }
-  }, [object, model]);
+  }, [object, appliedModel]);
 
   // UI
-  if (!model || (!object && objectId)) return <Loading />;
-  const layout: LayoutType = model.layouts[layoutId || "default"];
+  if (!appliedModel || (!object && objectId)) return <Loading />;
+  const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
 
   // Factsbar
   let factsBarPicture;
@@ -324,9 +330,9 @@ const ViewObject: React.FC<{
   if (!layout) return <>Layout {layoutId} not found</>;
   if (layout.factsBar && !popup) {
     if (
-      model.fields[layout.factsBar[0]].type === "picture" ||
-      (model.fields[layout.factsBar[0]].type === "formula" &&
-        model.fields[layout.factsBar[0]].typeArgs.type === "picture")
+      appliedModel.fields[layout.factsBar[0]].type === "picture" ||
+      (appliedModel.fields[layout.factsBar[0]].type === "formula" &&
+        appliedModel.fields[layout.factsBar[0]].typeArgs.type === "picture")
     ) {
       factsBarPicture = object.data[layout.factsBar[0]];
       factsBarTitle = object.data[layout.factsBar[1]];
@@ -335,7 +341,7 @@ const ViewObject: React.FC<{
       factsBarTitle = object.data[layout.factsBar[0]];
       factsBar = layout.factsBar.slice(1);
     } else {
-      factsBarTitle = object.data[model.primary] || "???";
+      factsBarTitle = object.data[appliedModel.primary] || "???";
     }
   }
 
@@ -394,7 +400,7 @@ const ViewObject: React.FC<{
           context.setDialog({
             display: true,
             title: "Are you sure?",
-            content: `When you archive this ${model.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+            content: `When you archive this ${appliedModel.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
             buttons: [
               {
                 label: "Cancel",
@@ -500,7 +506,7 @@ const ViewObject: React.FC<{
                   <Divider style={{ margin: "15px 0" }} />
                   <Grid container spacing={3}>
                     {factsBar.map((fact) => {
-                      const field = model.fields[fact];
+                      const field = appliedModel.fields[fact];
                       type ColType =
                         | 1
                         | 2
@@ -563,7 +569,7 @@ const ViewObject: React.FC<{
           </div>
         )}
 
-        {model.layouts[layoutId || "default"].layout ? (
+        {appliedModel.layouts[layoutId || "default"].layout ? (
           layout.layout.map((layoutItem, id) => {
             return (
               <LayoutItem
@@ -571,7 +577,7 @@ const ViewObject: React.FC<{
                 layoutItem={layoutItem}
                 setToUpload={setToUpload}
                 toUpload={toUpload}
-                model={model}
+                model={appliedModel}
                 mode={editMode}
                 setMode={setMode}
                 setToChange={setToChange}
@@ -760,6 +766,7 @@ const LayoutItem: React.FC<{
           withSmallMargin={layoutItem.withSmallMargin}
           sideMarginOnly={layoutItem.sideMarginOnly}
           title={layoutItem.title}
+          object={object}
         >
           {(layoutItem?.items || []).map((item) => {
             return (

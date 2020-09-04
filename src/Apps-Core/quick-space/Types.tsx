@@ -9,7 +9,7 @@ export interface AppProjectType {
     display_in: string;
     notes_type: "Default" | "Recipes" | "Code";
     todos_type: "Default" | "Groceries";
-    Groceries;
+    note_tags_enabled?: boolean;
   };
 }
 

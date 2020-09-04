@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { AppContextType, ListItemType, ObjectType } from "../../../Utils/Types";
+import {
+  AppContextType,
+  ListItemType,
+  ObjectType,
+  ModelType,
+} from "../../../Utils/Types";
 import { AppNoteType, AppProjectType } from "../Types";
 import AppQSNote from "./Note";
 
@@ -8,6 +13,7 @@ const AppQSNotesDetail: React.FC<{
   match: { params: { detailId } };
   projects;
   isMobile: boolean;
+  model: ModelType;
 }> = ({
   context,
   projects,
@@ -15,6 +21,7 @@ const AppQSNotesDetail: React.FC<{
     params: { detailId },
   },
   isMobile,
+  model,
 }) => {
   // Vars
   const [notes, setNotes] = useState<ListItemType[]>();
@@ -50,6 +57,17 @@ const AppQSNotesDetail: React.FC<{
       DetailComponent={AppQSNote}
       detailComponentProps={{ context, notes: mappedNotes, project }}
       title={project.data.name}
+      itemSecondary={
+        project.data.note_tags_enabled
+          ? (item) => (
+              <context.UI.FieldDisplay
+                objectField={item?.data?.tags}
+                modelField={model?.fields?.tags}
+                props={{ size: "small" }}
+              />
+            )
+          : undefined
+      }
       addFunction={() => {
         context.addObject(
           "qs-note",

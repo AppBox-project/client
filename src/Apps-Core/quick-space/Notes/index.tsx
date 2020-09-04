@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, ModelType } from "../../../Utils/Types";
 import AppQSNotesDetail from "./NotesDetail";
 import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
 import { AppProjectType } from "../Types";
@@ -13,10 +13,11 @@ const AppQSActionNotes: React.FC<{
   const [projects, setProjects] = useState<any>();
   const [flatProjects, setFlatProjects] = useState<{}>();
   const [isMobile] = useGlobal<any>("isMobile");
+  const [model, setModel] = useState<ModelType>();
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects(
+    const objectRequest = context.getObjects(
       "qs-project",
       { "data.owner": context.user._id, "data.show_in_notes": { $ne: false } },
       (response) => {
@@ -32,6 +33,19 @@ const AppQSActionNotes: React.FC<{
         }
       }
     );
+
+    const modelRequest = context.getModel("qs-note", (response) => {
+      if (response.success) {
+        setModel(response.data);
+      } else {
+        console.log(response);
+      }
+    });
+
+    return () => {
+      objectRequest.stop();
+      modelRequest.stop();
+    };
   }, []);
 
   // UI
@@ -49,6 +63,7 @@ const AppQSActionNotes: React.FC<{
         context: context,
         projects: flatProjects,
         isMobile,
+        model,
       }}
       style={{ paddingBottom: isMobile && 50 }}
     />

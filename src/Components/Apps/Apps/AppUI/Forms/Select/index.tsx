@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Checkbox,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 
 const AppUISelect: React.FC<{
   label: string;

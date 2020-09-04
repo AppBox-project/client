@@ -43,6 +43,7 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
         <Button
           fullWidth
           color="primary"
+          variant="contained"
           onClick={() => {
             const request = context.getObjects(
               "qs-project",
@@ -89,7 +90,7 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
                             (ingredient) => {
                               const amount =
                                 (ingredient.quantity /
-                                  (newValue?.people || 1)) *
+                                  (newValue?.people || 2)) *
                                 form.people;
                               groceriesToAdd.push({
                                 action: `${amount > 0 ? amount : ""}${

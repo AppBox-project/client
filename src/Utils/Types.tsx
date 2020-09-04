@@ -396,6 +396,7 @@ export interface UIType {
       imageField?: string;
       objects?: ObjectType[];
       navDynamicIcon?: (item) => JSX.Element;
+      itemSecondary?: (item) => JSX.Element;
     }>;
     SortableList: React.FC<{
       listItems: [];
@@ -414,6 +415,7 @@ export interface UIType {
   Field: React.FC<{
     style?: {};
     modelId?: string;
+    model?: ModelType;
     field?;
     fieldId: string;
     objectId?: string;

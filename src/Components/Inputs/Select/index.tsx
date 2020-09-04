@@ -41,13 +41,13 @@ const InputSelect: React.FC<{
       styles={{
         container: (styles) => ({
           ...styles,
-          zIndex: 500,
+          zIndex: 101,
           position: "relative",
         }),
         control: (styles) => ({
           ...styles,
           position: "relative",
-          zIndex: 500,
+          zIndex: 101,
         }),
       }}
     />
