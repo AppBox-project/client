@@ -14,7 +14,12 @@ import {
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { ModelType, LayoutType, CustomFieldType } from "../../Utils/Types";
+import {
+  ModelType,
+  LayoutType,
+  CustomFieldType,
+  ObjectType,
+} from "../../Utils/Types";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
 import ObjectLayoutItemPaper from "./LayoutItems/Paper";
@@ -42,6 +47,7 @@ const ViewObject: React.FC<{
   layoutId?: string;
   appId: string;
   objectId?: string;
+  object?: ObjectType;
   onSuccess?: () => void;
   popup?: true;
   defaults?: { [key: string]: string };
@@ -57,6 +63,7 @@ const ViewObject: React.FC<{
   layoutId,
   appId,
   objectId,
+  object,
   onSuccess,
   popup,
   defaults,
@@ -68,7 +75,7 @@ const ViewObject: React.FC<{
   style,
 }) => {
   const [appliedModel, setmodel] = useState<ModelType>();
-  const [object, setObject] = useState<any>();
+  const [appliedObject, setObject] = useState<any>();
   const [editMode, setMode] = useState<"view" | "edit">(
     objectId ? (mode ? mode : "view") : "edit"
   );
@@ -133,7 +140,7 @@ const ViewObject: React.FC<{
         const requestId = uniqid();
         Server.emit("updateObject", {
           requestId,
-          objectId: object._id,
+          objectId: appliedObject._id,
           type: appliedModel.key,
           toChange,
         });
@@ -225,19 +232,23 @@ const ViewObject: React.FC<{
 
     // Objects
     const dataRequestId = uniqid();
-    if (objectId) {
-      Server.emit("listenForObjects", {
-        requestId: dataRequestId,
-        type: modelId,
-        filter: { _id: objectId },
-      });
-      Server.on(`receive-${dataRequestId}`, (response) => {
-        if (response.success) {
-          setObject(response.data[0]);
-        } else {
-          console.log(response);
-        }
-      });
+    if (object) {
+      setObject(object);
+    } else {
+      if (objectId) {
+        Server.emit("listenForObjects", {
+          requestId: dataRequestId,
+          type: modelId,
+          filter: { _id: objectId },
+        });
+        Server.on(`receive-${dataRequestId}`, (response) => {
+          if (response.success) {
+            setObject(response.data[0]);
+          } else {
+            console.log(response);
+          }
+        });
+      }
     }
     return () => {
       Server.emit("unlistenFormodels", { requestId });
@@ -314,13 +325,13 @@ const ViewObject: React.FC<{
   }, [modelId, appId, editMode, pageTitle, toChange]);
 
   useEffect(() => {
-    if (object && appliedModel) {
-      setPageTitle(object.data[appliedModel.primary]);
+    if (appliedObject && appliedModel) {
+      setPageTitle(appliedObject.data[appliedModel.primary]);
     }
-  }, [object, appliedModel]);
+  }, [appliedObject, appliedModel]);
 
   // UI
-  if (!appliedModel || (!object && objectId)) return <Loading />;
+  if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
   const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
 
   // Factsbar
@@ -334,14 +345,14 @@ const ViewObject: React.FC<{
       (appliedModel.fields[layout.factsBar[0]].type === "formula" &&
         appliedModel.fields[layout.factsBar[0]].typeArgs.type === "picture")
     ) {
-      factsBarPicture = object.data[layout.factsBar[0]];
-      factsBarTitle = object.data[layout.factsBar[1]];
+      factsBarPicture = appliedObject.data[layout.factsBar[0]];
+      factsBarTitle = appliedObject.data[layout.factsBar[1]];
       factsBar = layout.factsBar.slice(2);
-    } else if (object.data[layout.factsBar[0]]) {
-      factsBarTitle = object.data[layout.factsBar[0]];
+    } else if (appliedObject.data[layout.factsBar[0]]) {
+      factsBarTitle = appliedObject.data[layout.factsBar[0]];
       factsBar = layout.factsBar.slice(1);
     } else {
-      factsBarTitle = object.data[appliedModel.primary] || "???";
+      factsBarTitle = appliedObject.data[appliedModel.primary] || "???";
     }
   }
 
@@ -430,6 +441,7 @@ const ViewObject: React.FC<{
         color="primary"
         variant={buttonInfo.variant}
         onClick={buttonInfo.onClick}
+        key={buttonInfo.label}
         style={{
           margin: 5,
           color: !popup
@@ -548,7 +560,7 @@ const ViewObject: React.FC<{
                           </Typography>
                           <Typography variant="body2" noWrap>
                             <FieldDisplay
-                              objectField={object.data[fact]}
+                              objectField={appliedObject.data[fact]}
                               modelField={field}
                             />
                           </Typography>
@@ -582,7 +594,7 @@ const ViewObject: React.FC<{
                 setMode={setMode}
                 setToChange={setToChange}
                 toChange={toChange}
-                object={object}
+                object={appliedObject}
                 baseUrl={baseUrl}
                 customFieldTypes={provideCustomFields}
                 context={context}

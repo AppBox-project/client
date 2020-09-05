@@ -1,16 +1,18 @@
 import React, { useEffect } from "reactn";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, ModelType } from "../../../Utils/Types";
 import { useState } from "react";
-import { baseUrl } from "../../../Utils/Utils";
+import { Skeleton } from "@material-ui/lab";
 
 const AppQSActionFileDetail: React.FC<{
   context: AppContextType;
   match: { params: { detailId } };
+  model: ModelType;
 }> = ({
   context,
   match: {
     params: { detailId },
   },
+  model,
 }) => {
   // Vars
   const [file, setFile] = useState<any>();
@@ -35,8 +37,19 @@ const AppQSActionFileDetail: React.FC<{
   }, [detailId]);
 
   // UI
-  if (!file) return <context.UI.Loading />;
-  return <>{baseUrl + file.data.file}</>;
+  if (!file) return <Skeleton />;
+  return (
+    <context.UI.Layouts.Object.ObjectLayout
+      model={model}
+      modelId="qs-file"
+      layoutId="default"
+      baseUrl={`/quick-space/files/${detailId}`}
+      context={context}
+      defaults={{ owner: context.user._id }}
+      objectId={file._id}
+      object={file}
+    />
+  );
 };
 
 export default AppQSActionFileDetail;

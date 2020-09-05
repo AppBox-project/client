@@ -180,7 +180,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
                 allTodos={allTodos}
                 subTodos={filter(
                   allTodos,
-                  (t: AppTodoType) => t.data.belongs_to === todo._id
+                  (t: AppTodoType) => t.data.belongs_to === subTodo._id
                 )}
               />
             ))}

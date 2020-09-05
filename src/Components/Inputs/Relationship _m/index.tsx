@@ -44,7 +44,6 @@ const InputRelationShipM: React.FC<{
   };
 
   // Lifecycle
-  // Lifecycle
   useEffect(() => {
     const modelRequest = uniqid();
     Server.emit("listenForObjectTypes", {
@@ -84,6 +83,12 @@ const InputRelationShipM: React.FC<{
         }
       });
     });
+
+    return () => {
+      Server.emit("unlistenForObjectTypes", {
+        requestId: modelRequest,
+      });
+    };
   }, [objectType]);
 
   // UI

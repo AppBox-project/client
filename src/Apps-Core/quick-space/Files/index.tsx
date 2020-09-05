@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, ListItemType } from "../../../Utils/Types";
 import AppQSActionFileLoadingSkeleton from "./LoadingSkeleton";
 import AppQSActionFileDetail from "./DetailComponent";
-import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { AppFileType } from "../Types";
+import { format } from "date-fns";
 
 const AppQSActionFile: React.FC<{
   match: { isExact: boolean };
@@ -11,9 +11,8 @@ const AppQSActionFile: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [files, setFiles] = useState<any>();
+  const [files, setFiles] = useState<ListItemType[]>([]);
   const [model, setModel] = useState<any>();
-  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -22,7 +21,11 @@ const AppQSActionFile: React.FC<{
       { "data.owner": context.user._id },
       (response) => {
         if (response.success) {
-          setFiles(response.data);
+          const nf: ListItemType[] = [];
+          response.data.map((file: AppFileType) =>
+            nf.push({ label: file.data.name, id: file._id })
+          );
+          setFiles(nf);
         } else {
           console.log(response);
         }
@@ -39,46 +42,35 @@ const AppQSActionFile: React.FC<{
     });
     return () => {
       fileRequest.stop();
+      modelRequest.stop();
     };
   }, []);
 
   // UI
   if (!files || !model) return <AppQSActionFileLoadingSkeleton />;
+
   return (
     <context.UI.Layouts.ListDetailLayout
       context={context}
       DetailComponent={AppQSActionFileDetail}
+      detailComponentProps={{ model }}
       list={files}
       baseUrl="/quick-space/files"
-      navWidth={2}
-      customNavComponent={
-        <>
-          <div style={{ marginBottom: 25 }}>
-            <context.UI.Layouts.Object.ObjectLayout
-              context={context}
-              layoutId="dropzone"
-              model={model}
-              defaults={{ owner: context.user._id }}
-            />
-          </div>
-          <Divider />
-          <List>
-            {files.map((file) => {
-              return (
-                <ListItem
-                  button
-                  key={file._id}
-                  onClick={() => {
-                    history.push(`/quick-space/files/${file._id}`);
-                  }}
-                >
-                  <ListItemText>{file._id}</ListItemText>
-                </ListItem>
-              );
-            })}
-          </List>
-        </>
-      }
+      title="Files"
+      customNavItems={[
+        <context.UI.Layouts.Object.ObjectLayout
+          model={model}
+          modelId="qs-file"
+          layoutId="create"
+          baseUrl={`/quick-space/files`}
+          context={context}
+          defaults={{
+            owner: context.user._id,
+            name: format(new Date(), "MMMM d y HH:mm"),
+          }}
+          style={{ width: "100%" }}
+        />,
+      ]}
     />
   );
 };

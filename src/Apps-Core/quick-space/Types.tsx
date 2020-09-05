@@ -63,3 +63,13 @@ export interface AppTagType {
     color: ColorType;
   };
 }
+
+export interface AppFileType {
+  _id;
+  data: {
+    name: string;
+    file: string;
+    owner: string;
+    project: string;
+  };
+}

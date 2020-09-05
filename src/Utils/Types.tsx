@@ -328,6 +328,7 @@ export interface UIType {
         layoutId: string;
         context: AppContextType;
         objectId?: string;
+        object?: ObjectType;
         popup?: true;
         defaults?: { [key: string]: string };
         baseUrl?: string;
