@@ -20,6 +20,7 @@ import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
 import Select from "./AppUI/Forms/Select";
 import { map, find } from "lodash";
+import Card from "../../Design/Card";
 
 const App: React.FC<{
   match: { params: { appId } };
@@ -137,6 +138,12 @@ const App: React.FC<{
       </Hidden>
       {dialog !== undefined && (
         <Dialog
+          PaperComponent={Card}
+          PaperProps={{
+            // @ts-ignore
+            title: dialog.title,
+            hoverable: true,
+          }}
           onClose={() => {
             setDialog({ ...dialog, display: false });
             if (dialog.onClose) dialog.onClose();
@@ -146,9 +153,6 @@ const App: React.FC<{
           maxWidth={dialog.size ? dialog.size : "sm"}
           fullWidth
         >
-          {dialog.title && (
-            <DialogTitle id="dialog-title">{dialog.title}</DialogTitle>
-          )}
           {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
           {dialog.form && (
             <Grid container style={{ width: "90%", marginLeft: 25 }}>

@@ -43,7 +43,6 @@ const FieldDisplay: React.FC<{
         />
       )}
       {(modelField.type === "input" ||
-        modelField.type === "formula" ||
         modelField.type === "options" ||
         modelField.type === "address" ||
         modelField.type === "data") && (
@@ -110,6 +109,33 @@ const FieldDisplay: React.FC<{
       {modelField.type === "custom" && (
         <CustomField mode="view" value={objectField} context={context} />
       )}
+      {modelField.type === "formula" &&
+        (!(modelField.typeArgs || {}).type ||
+          (modelField.typeArgs || {}).type === "text" ||
+          (modelField.typeArgs || {}).type === "number") && (
+          <ObjectFieldDisplayInput
+            modelField={modelField}
+            objectField={objectField}
+            {...props}
+          />
+        )}
+      {modelField.type === "formula" &&
+        (modelField.typeArgs || {}).type === "boolean" && (
+          <ObjectFieldDisplayBoolean
+            modelField={modelField}
+            objectField={objectField}
+            {...props}
+          />
+        )}
+      {modelField.type === "formula" &&
+        (modelField.typeArgs || {}).type === "picture" && (
+          <ObjectFieldDisplayPicture
+            modelField={modelField}
+            objectField={objectField}
+            small={small}
+            {...props}
+          />
+        )}
     </>
   );
 };

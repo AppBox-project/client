@@ -21,7 +21,7 @@ const AppActionManageObjectTabObject: React.FC<{
       <UI.Animations.AnimationContainer>
         <UI.Animations.AnimationItem>
           <context.UI.Design.Card hoverable title={model.name}>
-            <Grid container>
+            <Grid container spacing={3}>
               <Grid item xs={6}>
                 <UI.Inputs.TextInput
                   label="Name"
