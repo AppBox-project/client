@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const AppUISelect: React.FC<{
   label: string;
   value?: string;
   options: { value: string; label: string }[];
   onChange?: (value) => void;
-  style?;
+  style?: CSSProperties;
 }> = ({ label, value, onChange, options, style }) => {
   // Global
   // States & Hooks

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { find } from "lodash";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const InputSelect: React.FC<{
   label: string;
@@ -9,7 +10,8 @@ const InputSelect: React.FC<{
   isLoading?: boolean;
   onChange?: (value) => void;
   multiple?: true | boolean;
-}> = ({ label, options, value, isLoading, onChange, multiple }) => {
+  style?: CSSProperties;
+}> = ({ label, options, value, isLoading, onChange, multiple, style }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>();
 
@@ -41,11 +43,13 @@ const InputSelect: React.FC<{
       styles={{
         container: (styles) => ({
           ...styles,
+          ...style,
           zIndex: 101,
           position: "relative",
         }),
         control: (styles) => ({
           ...styles,
+          ...style,
           position: "relative",
           zIndex: 101,
         }),

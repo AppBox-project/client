@@ -34,7 +34,6 @@ const AppSettingsTags: React.FC<{
   }, []);
 
   // UI
-  console.log("wosa", isMobile);
 
   return (
     <context.UI.Layouts.ListDetailLayout

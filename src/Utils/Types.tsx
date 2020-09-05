@@ -397,6 +397,7 @@ export interface UIType {
       objects?: ObjectType[];
       navDynamicIcon?: (item) => JSX.Element;
       itemSecondary?: (item) => JSX.Element;
+      customNavItems?: [JSX.Element];
     }>;
     SortableList: React.FC<{
       listItems: [];
@@ -440,6 +441,7 @@ export interface UIType {
       isLoading?: boolean;
       onChange?: (value) => void;
       multiple?: true | boolean;
+      style?: CSSProperties;
     }>;
     RichText: React.FC<{
       placeholder?: string;

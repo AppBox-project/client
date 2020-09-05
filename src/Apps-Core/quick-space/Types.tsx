@@ -21,6 +21,7 @@ export interface AppNoteType {
     image: string;
     owner: string;
     project: string;
+    tags: string[];
   };
 }
 

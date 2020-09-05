@@ -4,9 +4,11 @@ import {
   ListItemType,
   ObjectType,
   ModelType,
+  ValueListItemType,
 } from "../../../Utils/Types";
-import { AppNoteType, AppProjectType } from "../Types";
+import { AppNoteType, AppProjectType, AppTagType } from "../Types";
 import AppQSNote from "./Note";
+import { Divider } from "@material-ui/core";
 
 const AppQSNotesDetail: React.FC<{
   context: AppContextType;
@@ -25,38 +27,100 @@ const AppQSNotesDetail: React.FC<{
 }) => {
   // Vars
   const [notes, setNotes] = useState<ListItemType[]>();
-  const [flatNotes, setFlatNotes] = useState<ObjectType[]>();
+  const [filteredNotes, setFilteredNotes] = useState<ListItemType[]>();
+  const [flatNotes, setFlatNotes] = useState<AppNoteType[]>();
   const [mappedNotes, setMappedNotes] = useState<{}>();
   const project: AppProjectType = projects[detailId];
+  const [tagFilter, setTagFilter] = useState<ValueListItemType[]>([]);
+  const [tagOptions, setTagOptions] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("qs-note", { "data.project": detailId }, (response) => {
-      if (response.success) {
-        setFlatNotes(response.data);
-        const mn = {};
-        const newNotes = [];
-        response.data.map((o: AppNoteType) => {
-          newNotes.push({ label: o.data.title, id: o._id });
-          mn[o._id] = o;
-        });
-        setMappedNotes(mn);
-        setNotes(newNotes);
-      } else {
-        console.log(response);
+    const noteRequest = context.getObjects(
+      "qs-note",
+      { "data.project": detailId },
+      (response) => {
+        if (response.success) {
+          setFlatNotes(response.data);
+          const mn = {};
+          const newNotes = [];
+          response.data.map((o: AppNoteType) => {
+            newNotes.push({ label: o.data.title, id: o._id });
+            mn[o._id] = o;
+          });
+          setMappedNotes(mn);
+          setNotes(newNotes);
+        } else {
+          console.log(response);
+        }
       }
-    });
+    );
+
+    const tagRequest = context.getObjects(
+      "qs-tags",
+      { "data.show_in_notes": { $ne: false } },
+      (response) => {
+        if (response.success) {
+          const to: ValueListItemType[] = [];
+          response.data.map((tag: AppTagType) =>
+            to.push({ label: tag.data.name, value: tag._id })
+          );
+          setTagOptions(to);
+        } else {
+          console.log();
+        }
+      }
+    );
+
+    return () => {
+      noteRequest.stop();
+      tagRequest.stop();
+    };
   }, [detailId]);
+
+  // Filter lifecycle
+  useEffect(() => {
+    if ((tagFilter || []).length > 0) {
+      const nn: ListItemType[] = [];
+      (flatNotes || []).map((note) => {
+        let show = false;
+        tagFilter.map((tf) => {
+          if (note.data.tags.includes(tf.value)) show = true;
+        });
+
+        if (show) nn.push({ label: note.data.title, id: note._id });
+      });
+
+      setFilteredNotes(nn);
+    } else {
+      setFilteredNotes(notes);
+    }
+  }, [tagFilter, notes, flatNotes]);
 
   // UI
   return (
     <context.UI.Layouts.ListDetailLayout
-      list={notes}
+      list={filteredNotes}
       context={context}
       baseUrl={`/quick-space/notes/${detailId}`}
       DetailComponent={AppQSNote}
       detailComponentProps={{ context, notes: mappedNotes, project }}
       title={project.data.name}
+      customNavItems={
+        project.data.note_tags_enabled && [
+          <>
+            <context.UI.Inputs.Select
+              multiple
+              label="Tags"
+              value={tagFilter}
+              onChange={(value) => setTagFilter(value)}
+              options={tagOptions}
+              style={{ width: "100%" }}
+            />
+            <Divider />
+          </>,
+        ]
+      }
       itemSecondary={
         project.data.note_tags_enabled
           ? (item) => (

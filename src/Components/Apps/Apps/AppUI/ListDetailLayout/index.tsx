@@ -58,6 +58,7 @@ const ListDetailLayout: React.FC<{
   imageField?: string;
   navDynamicIcon?: (item) => JSX.Element;
   itemSecondary?: (item) => JSX.Element;
+  customNavItems?: [JSX.Element];
 }> = ({
   list,
   customNavComponent,
@@ -79,6 +80,7 @@ const ListDetailLayout: React.FC<{
   objects,
   navDynamicIcon,
   itemSecondary,
+  customNavItems,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -143,6 +145,7 @@ const ListDetailLayout: React.FC<{
                 style={style}
                 navDynamicIcon={navDynamicIcon}
                 itemSecondary={itemSecondary}
+                customNavItems={customNavItems}
               />
             )
           ) : (
@@ -188,6 +191,7 @@ const ListNav: React.FC<{
   style?: CSSProperties;
   navDynamicIcon?: (item) => JSX.Element;
   itemSecondary?: (item) => JSX.Element;
+  customNavItems?: [JSX.Element];
 }> = ({
   addFunction,
   deleteFunction,
@@ -202,6 +206,7 @@ const ListNav: React.FC<{
   style,
   navDynamicIcon,
   itemSecondary,
+  customNavItems,
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
@@ -236,6 +241,9 @@ const ListNav: React.FC<{
                   <ListItemText>{addTitle || "Add new"}</ListItemText>
                 </ListItem>
               )}
+              {customNavItems &&
+                customNavItems.length > 0 &&
+                customNavItems.map((item) => <ListItem>{item}</ListItem>)}
               {(list || []).map((listItem) => {
                 return (
                   <ListItemObject
