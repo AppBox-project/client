@@ -243,9 +243,7 @@ const ListNav: React.FC<{
               )}
               {customNavItems &&
                 customNavItems.length > 0 &&
-                customNavItems.map((item, index) => (
-                  <ListItem key={index}>{item}</ListItem>
-                ))}
+                customNavItems.map((item, index) => item)}
               {(list || []).map((listItem) => {
                 return (
                   <ListItemObject

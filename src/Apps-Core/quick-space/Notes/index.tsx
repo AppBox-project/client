@@ -26,7 +26,9 @@ const AppQSActionNotes: React.FC<{
           response.data.map((o: AppProjectType) => (newFlat[o._id] = o));
           setFlatProjects(newFlat);
           setProjects(
-            array2dTo3d(response.data, "data.parent", true, "data.name")
+            array2dTo3d(response.data, "data.parent", true, "data.name", [
+              "data.order",
+            ])
           );
         } else {
           console.log(response);

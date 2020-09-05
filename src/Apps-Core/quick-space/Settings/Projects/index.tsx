@@ -4,6 +4,14 @@ import AppQSSettingsProjectDetail from "./Detail";
 import { useState } from "reactn";
 import { ListItemType } from "../../../../Utils/Types";
 import array2dTo3d from "../../../../Utils/Functions/array2dTo3d";
+import {
+  ListItem,
+  Divider,
+  ListItemText,
+  ListItemIcon,
+} from "@material-ui/core";
+import { FaProjectDiagram } from "react-icons/fa";
+import { useHistory } from "react-router-dom";
 
 const AppSettingsProject: React.FC<{
   context: AppContextType;
@@ -12,6 +20,7 @@ const AppSettingsProject: React.FC<{
   // Vars
   const [projects, setProjects] = useState<{}>([]);
   const [projectsList, setProjectsList] = useState<ListItemType[]>([]);
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -46,6 +55,22 @@ const AppSettingsProject: React.FC<{
       context={context}
       list={projectsList}
       title="Projects"
+      customNavItems={[
+        <>
+          <ListItem
+            button
+            onClick={() =>
+              history.push("/quick-space/settings/projects/settings")
+            }
+          >
+            <ListItemIcon>
+              <FaProjectDiagram />
+            </ListItemIcon>
+            <ListItemText>Project settings</ListItemText>
+          </ListItem>
+          <Divider />
+        </>,
+      ]}
       addFunction={() => {
         context.setDialog({
           display: true,

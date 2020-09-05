@@ -8,7 +8,7 @@ import {
 } from "../../../Utils/Types";
 import { AppNoteType, AppProjectType, AppTagType } from "../Types";
 import AppQSNote from "./Note";
-import { Divider } from "@material-ui/core";
+import { Divider, ListItem } from "@material-ui/core";
 
 const AppQSNotesDetail: React.FC<{
   context: AppContextType;
@@ -108,7 +108,7 @@ const AppQSNotesDetail: React.FC<{
       title={project.data.name}
       customNavItems={
         project.data.note_tags_enabled && [
-          <>
+          <ListItem>
             <context.UI.Inputs.Select
               multiple
               label="Tags"
@@ -118,7 +118,7 @@ const AppQSNotesDetail: React.FC<{
               style={{ width: "100%" }}
             />
             <Divider />
-          </>,
+          </ListItem>,
         ]
       }
       itemSecondary={

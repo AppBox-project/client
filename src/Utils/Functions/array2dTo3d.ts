@@ -1,13 +1,16 @@
-import { get, filter } from "lodash";
+import { get, filter, sortBy as sortByFunc } from "lodash";
 
 // This function transforms a 2d array with a property to indicate it's parent into a recursive array with limitless subItems
 const array2dTo3d = (
   array,
   property,
   transformToList: Boolean = false,
-  transformToListTitle: string = "unknown"
+  transformToListTitle: string = "unknown",
+  sortBy: string[] = []
 ) => {
-  const result = [];
+  let result = [];
+  if (sortBy.length > 0) array = sortByFunc(array, sortBy);
+
   array.map((obj) => {
     if (!get(obj, property)) {
       // Root level

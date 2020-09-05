@@ -1,7 +1,6 @@
 import React, { useGlobal, useEffect, useState } from "reactn";
 import {
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Button,
@@ -10,7 +9,6 @@ import {
   Checkbox,
   FormControlLabel,
   Snackbar,
-  IconButton,
 } from "@material-ui/core";
 import Loading from "../../Loading";
 import { AppContextType, dialogType } from "../../../Utils/Types";

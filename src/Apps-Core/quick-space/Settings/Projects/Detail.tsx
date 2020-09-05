@@ -2,6 +2,7 @@ import React from "react";
 import { AppContextType } from "../../../../Utils/Types";
 import { useState, useEffect } from "reactn";
 import { AppProjectType } from "../../Types";
+import AppQSSettingsProjectGlobal from "./Global";
 
 const AppQSSettingsProjectDetail: React.FC<{
   context: AppContextType;
@@ -25,6 +26,14 @@ const AppQSSettingsProjectDetail: React.FC<{
   }, [detailId, projects]);
 
   // UI
+  if (detailId === "settings")
+    return (
+      <AppQSSettingsProjectGlobal
+        context={context}
+        isMobile={isMobile}
+        projects={projects}
+      />
+    );
   if (!project) return <context.UI.Loading />;
   return (
     <context.UI.Layouts.Object.ObjectLayout

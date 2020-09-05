@@ -24,7 +24,9 @@ const AppQSActionTodo: React.FC<{
       (response) => {
         if (response.success) {
           setProjects(
-            array2dTo3d(response.data, "data.parent", true, "data.name")
+            array2dTo3d(response.data, "data.parent", true, "data.name", [
+              "data.order",
+            ])
           );
           const newFP = {};
           response.data.map((o: AppProjectType) => (newFP[o._id] = o));

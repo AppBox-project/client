@@ -4,6 +4,7 @@ import AppQSActionFileLoadingSkeleton from "./LoadingSkeleton";
 import AppQSActionFileDetail from "./DetailComponent";
 import { AppFileType } from "../Types";
 import { format } from "date-fns";
+import { ListItem, Divider } from "@material-ui/core";
 
 const AppQSActionFile: React.FC<{
   match: { isExact: boolean };
@@ -58,18 +59,24 @@ const AppQSActionFile: React.FC<{
       baseUrl="/quick-space/files"
       title="Files"
       customNavItems={[
-        <context.UI.Layouts.Object.ObjectLayout
-          model={model}
-          modelId="qs-file"
-          layoutId="create"
-          baseUrl={`/quick-space/files`}
-          context={context}
-          defaults={{
-            owner: context.user._id,
-            name: format(new Date(), "MMMM d y HH:mm"),
-          }}
-          style={{ width: "100%" }}
-        />,
+        <>
+          <ListItem>
+            <context.UI.Layouts.Object.ObjectLayout
+              model={model}
+              modelId="qs-file"
+              layoutId="create"
+              baseUrl={`/quick-space/files`}
+              popup
+              context={context}
+              defaults={{
+                owner: context.user._id,
+                name: format(new Date(), "MMMM d y HH:mm"),
+              }}
+              style={{ width: "100%" }}
+            />
+          </ListItem>
+          <Divider />
+        </>,
       ]}
     />
   );
