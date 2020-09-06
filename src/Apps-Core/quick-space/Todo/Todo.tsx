@@ -15,6 +15,7 @@ import { AppTodoType } from "../Types";
 import { useEffect } from "reactn";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import { filter } from "lodash";
+import AppQSAddSubTodo from "./AddSubTodo";
 
 const AppQSActionTodoDetailTodo: React.FC<{
   todo: AppTodoType;
@@ -77,6 +78,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
                   onObjectDisappears={() => {
                     context.setDialog({ display: false });
                   }}
+                  provideLayoutElements={{ AddSubTodo: AppQSAddSubTodo }}
                 />
               ),
             });

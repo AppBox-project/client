@@ -10,6 +10,8 @@ import uniqid from "uniqid";
 import ViewObject from "../../../../Object";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
+// TODO: remove this class? All it does is forward props
+
 const UIObjectLayout: React.FC<{
   model?: ModelType;
   modelId?: string;
@@ -22,6 +24,7 @@ const UIObjectLayout: React.FC<{
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+  provideLayoutElements?: { [key: string]: React.FC };
   style?: CSSProperties;
 }> = ({
   model,
@@ -35,6 +38,7 @@ const UIObjectLayout: React.FC<{
   onObjectDisappears,
   mode,
   provideCustomFields,
+  provideLayoutElements,
   style,
 }) => {
   // Vars
@@ -80,6 +84,7 @@ const UIObjectLayout: React.FC<{
         onObjectDisappears={onObjectDisappears}
         mode={mode}
         provideCustomFields={provideCustomFields}
+        provideLayoutElements={provideLayoutElements}
       />
     </div>
   );

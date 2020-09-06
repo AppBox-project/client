@@ -625,6 +625,39 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
+          AppProvided: {
+            label: "App provided",
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                form: [
+                  {
+                    label: "Identifier",
+                    key: "identifier",
+                    value: layoutItem.identifier,
+                    type: "text",
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
         }}
         layout={layout}
         onChange={(newLayout) => {

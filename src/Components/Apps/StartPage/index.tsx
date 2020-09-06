@@ -66,7 +66,7 @@ const StartPage: React.FC = () => {
   // UI
   if (!desktop) return <Loading />;
   return (
-    <div style={{ margin: 15, marginTop: isMobile ? 15 : 79 }}>
+    <div style={{ margin: 15, marginTop: isMobile ? 15 : 79, height: "100%" }}>
       <Tooltip placement="left" title="Add widget">
         <IconButton
           style={{
@@ -143,6 +143,7 @@ const StartPage: React.FC = () => {
       <ResponsiveGridLayout
         className={styles.layout}
         rowHeight={30}
+        style={{ height: "100%" }}
         width={1200}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
@@ -152,7 +153,8 @@ const StartPage: React.FC = () => {
           console.log(`Width is now ${breakpoint}`);
         }}
         onLayoutChange={(layout, allLayouts) => {
-          saveLayout(layout, width);
+          if (JSON.stringify(layout) !== JSON.stringify(desktop.layouts[width]))
+            saveLayout(layout, width);
         }}
       >
         {((desktop?.layouts || {})[width] || []).map((item) => {

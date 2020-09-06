@@ -19,6 +19,7 @@ import {
   LayoutType,
   CustomFieldType,
   ObjectType,
+  CustomLayoutElementType,
 } from "../../Utils/Types";
 import ObjectLayoutItemGridContainer from "./LayoutItems/GridContainer";
 import ObjectLayoutItemGridItem from "./LayoutItems/GridItem";
@@ -40,6 +41,7 @@ import styles from "./styles.module.scss";
 import { baseUrl as baseAppUrl } from "../../Utils/Utils";
 import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import ObjectLayoutItemAppProvided from "./LayoutItems/AppProvided";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -56,6 +58,7 @@ const ViewObject: React.FC<{
   onObjectDisappears?: (history) => void;
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+  provideLayoutElements?: { [key: string]: React.FC<CustomLayoutElementType> };
   style?: CSSProperties;
 }> = ({
   modelId,
@@ -72,6 +75,7 @@ const ViewObject: React.FC<{
   onObjectDisappears,
   mode,
   provideCustomFields,
+  provideLayoutElements,
   style,
 }) => {
   const [appliedModel, setmodel] = useState<ModelType>();
@@ -597,6 +601,7 @@ const ViewObject: React.FC<{
                 object={appliedObject}
                 baseUrl={baseUrl}
                 customFieldTypes={provideCustomFields}
+                customLayoutItems={provideLayoutElements}
                 context={context}
               />
             );
@@ -633,7 +638,8 @@ const LayoutItem: React.FC<{
   setToUpload;
   toUpload;
   baseUrl: string;
-  customFieldTypes: { [key: string]: React.FC };
+  customFieldTypes: { [key: string]: React.FC<CustomFieldType> };
+  customLayoutItems: { [key: string]: React.FC<CustomLayoutElementType> };
   context: AppContextType;
 }> = ({
   layoutItem,
@@ -647,6 +653,7 @@ const LayoutItem: React.FC<{
   toUpload,
   baseUrl,
   customFieldTypes,
+  customLayoutItems,
   context,
 }) => {
   switch (layoutItem.type) {
@@ -668,6 +675,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                customLayoutItems={customLayoutItems}
                 context={context}
               />
             );
@@ -699,6 +707,7 @@ const LayoutItem: React.FC<{
                   object={object}
                   baseUrl={baseUrl}
                   customFieldTypes={customFieldTypes}
+                  customLayoutItems={customLayoutItems}
                   context={context}
                 />
               );
@@ -724,6 +733,7 @@ const LayoutItem: React.FC<{
                   object={object}
                   baseUrl={baseUrl}
                   customFieldTypes={customFieldTypes}
+                  customLayoutItems={customLayoutItems}
                   context={context}
                 />
               );
@@ -748,6 +758,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                customLayoutItems={customLayoutItems}
                 context={context}
               />
             );
@@ -795,6 +806,7 @@ const LayoutItem: React.FC<{
                 object={object}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
+                customLayoutItems={customLayoutItems}
                 context={context}
               />
             );
@@ -844,6 +856,7 @@ const LayoutItem: React.FC<{
               object={object}
               baseUrl={baseUrl}
               customFieldTypes={customFieldTypes}
+              customLayoutItems={customLayoutItems}
               context={context}
             />
           );
@@ -857,6 +870,16 @@ const LayoutItem: React.FC<{
           tabs={layoutItem?.items}
           baseUrl={baseUrl}
           items={items}
+        />
+      );
+    case "AppProvided":
+      return (
+        <ObjectLayoutItemAppProvided
+          layoutItem={layoutItem}
+          customLayoutItems={customLayoutItems}
+          context={context}
+          mode={mode}
+          object={object}
         />
       );
     default:

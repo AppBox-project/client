@@ -335,6 +335,9 @@ export interface UIType {
         onObjectDisappears?: (history) => void;
         mode?: "view" | "edit";
         provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+        provideLayoutElements?: {
+          [key: string]: React.FC<CustomLayoutElementType>;
+        };
         style?: CSSProperties;
       }>;
       BoardLayout: React.FC<{
@@ -530,4 +533,11 @@ export interface CustomFieldType {
   value;
   context: AppContextType;
   onChange?: (newValue) => void;
+}
+
+export interface CustomLayoutElementType {
+  mode: "view" | "edit";
+  context: AppContextType;
+  layoutItem;
+  object: ObjectType;
 }
