@@ -10,6 +10,7 @@ import AppActionManageObjectTabAPI from "./Tabs/API";
 import AppActionManageObjectTabLayouts from "./Tabs/Layouts";
 import AppActionManageObjectTabActions from "./Tabs/Actions";
 import AppActionManageObjectTabPreview from "./Tabs/Preview";
+import AppActionManageObjectTabExtensions from "./Tabs/Extensions";
 
 const useStyles = makeStyles((theme) => ({
   customTabRoot: {
@@ -79,6 +80,7 @@ const AppActionManageObject: React.FC<{
         <Tab label="Lay-outs" value="layouts" />
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
+        <Tab label="Object extensions" value="extensions" />
       </Tabs>
       <div
         style={{
@@ -139,6 +141,13 @@ const AppActionManageObject: React.FC<{
         )}
         {currentTab === "api" && (
           <AppActionManageObjectTabAPI
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "extensions" && (
+          <AppActionManageObjectTabExtensions
             model={model}
             UI={UI}
             context={context}

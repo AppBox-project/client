@@ -76,6 +76,7 @@ export interface ModelType {
   handlers: {};
   layouts: any;
   actions: any;
+  extensions?: { [key: string]: {} };
   api?: {
     read?: ModelApiType;
     create?: ModelApiType;
