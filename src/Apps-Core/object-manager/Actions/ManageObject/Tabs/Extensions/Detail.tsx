@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import {
   AppContextType,
   ModelType,
@@ -6,6 +6,7 @@ import {
 } from "../../../../../../Utils/Types";
 import { find } from "lodash";
 import { Skeleton } from "@material-ui/lab";
+import { Button } from "@material-ui/core";
 
 const AppActionManageObjectTabExtensionIDetail: React.FC<{
   match: { params: { detailId } };
@@ -23,22 +24,62 @@ const AppActionManageObjectTabExtensionIDetail: React.FC<{
   // Vars
   const [extension, setExtension] = useState<ObjectType>();
   const [modelExtension, setModelExtension] = useState<any>();
+  const [ConfigureComponent, setConfigureComponent] = useState<
+    React.FC<{
+      onChange: (value) => void;
+      context: AppContextType;
+      modelExtension: {};
+      model: ModelType;
+    }>
+  >();
 
   // Lifecycle
   useEffect(() => {
     setExtension(find(availableExtensions, (o) => o.data.key === detailId));
     setModelExtension(model.extensions[detailId]);
+    // Todo: can this cause path traversal?
+    setConfigureComponent(
+      React.lazy(() =>
+        import(
+          `../../../../../../Components/Object/Extensions/${detailId}/configure`
+        )
+      )
+    );
   }, [detailId, model, availableExtensions]);
 
   // UI
-  console.log(extension, modelExtension);
 
   if (!extension && !modelExtension) return <Skeleton />;
   return (
     <context.UI.Animations.AnimationContainer>
       <context.UI.Animations.AnimationItem>
         <context.UI.Design.Card withBigMargin title={modelExtension.name}>
-          Test
+          <Suspense fallback={<context.UI.Loading />}>
+            <ConfigureComponent
+              onChange={(value) => setModelExtension(value)}
+              context={context}
+              modelExtension={modelExtension}
+              model={model}
+            />
+          </Suspense>
+          <Button
+            fullWidth
+            color="primary"
+            onClick={() => {
+              context.updateModel(
+                model.key,
+                {
+                  extensions: {
+                    ...model.extensions,
+                    [detailId]: modelExtension,
+                  },
+                },
+                model.key
+              );
+            }}
+          >
+            Save
+          </Button>
         </context.UI.Design.Card>
       </context.UI.Animations.AnimationItem>
     </context.UI.Animations.AnimationContainer>

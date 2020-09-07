@@ -91,6 +91,7 @@ const ViewObject: React.FC<{
   const [defaultButton] = useGlobal<any>("defaultButton");
   const [pageTitle, setPageTitle] = useState<any>(undefined);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+  const [customButtonInfo, setCustomButtonInfo] = useState<{}>({});
   const history = useHistory();
 
   const getFeedback = (feedback) => {
@@ -254,6 +255,7 @@ const ViewObject: React.FC<{
         });
       }
     }
+
     return () => {
       Server.emit("unlistenFormodels", { requestId });
       if (objectId) {
@@ -334,6 +336,31 @@ const ViewObject: React.FC<{
     }
   }, [appliedObject, appliedModel]);
 
+  // Custom button lifecycle
+  useEffect(() => {
+    if (appliedModel?.layouts) {
+      const layout = appliedModel?.layouts[layoutId || "default"];
+      layout.buttons.map((button) => {
+        if (!["clone", "archive", "delete"].includes(button)) {
+          import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
+            (component) => {
+              const getInfo = component.default;
+              const extension = getInfo(
+                appliedModel.extensions[button.split("-")[0]],
+                context,
+                appliedObject
+              );
+              setCustomButtonInfo({
+                ...customButtonInfo,
+                [button]: extension.provides.buttons[button.split("-")[1]],
+              });
+            }
+          );
+        }
+      });
+    }
+  }, [appliedModel, layoutId, appliedObject]);
+
   // UI
   if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
   const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
@@ -363,6 +390,7 @@ const ViewObject: React.FC<{
   // Buttons
   const buttons = (layout.buttons || []).map((button) => {
     const buttonInfo = {
+      ...customButtonInfo,
       clone: {
         variant: "text",
         label: "Clone",
@@ -443,9 +471,15 @@ const ViewObject: React.FC<{
     return (
       <Button
         color="primary"
-        variant={buttonInfo.variant}
-        onClick={buttonInfo.onClick}
-        key={buttonInfo.label}
+        variant={buttonInfo?.variant || "text"}
+        onClick={() => {
+          if (buttonInfo?.onClick) {
+            buttonInfo.onClick();
+          } else {
+            console.log("ey");
+          }
+        }}
+        key={buttonInfo?.label || "Test"}
         style={{
           margin: 5,
           color: !popup
@@ -455,7 +489,7 @@ const ViewObject: React.FC<{
             : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
         }}
       >
-        {buttonInfo.label}
+        {buttonInfo?.label || button}
       </Button>
     );
   });

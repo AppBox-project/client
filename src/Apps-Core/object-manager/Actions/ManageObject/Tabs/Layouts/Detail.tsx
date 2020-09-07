@@ -3,6 +3,7 @@ import {
   AppContextType,
   ModelType,
   LayoutType,
+  ValueListItemType,
 } from "../../../../../../Utils/Types";
 import { Fab, Grid, Divider, Typography } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
@@ -75,6 +76,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   const [fieldList, setFieldList] = useState<any>([]);
   const [layout, setLayout] = useState<LayoutType>();
   const history = useHistory();
+  const [customButtons, setCustomButtons] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
@@ -88,16 +90,37 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
     } else {
       history.replace(`/object-manager/${model.key}/layouts`); // Redirect back to overview if there is no such layout
     }
+
+    // Custom buttons
+    map(model?.extensions || {}, (value, key) => {
+      if (value.active) {
+        import(
+          `../../../../../../Components/Object/Extensions/${key}/index.tsx`
+        ).then((info) => {
+          const getInfo = info.default;
+          map(
+            (getInfo(model.extensions[key], context)?.provides || {}).buttons ||
+              [],
+            (button, buttonKey) => {
+              setCustomButtons([
+                ...customButtons,
+                { value: `${key}-${buttonKey}`, label: button.label },
+              ]);
+            }
+          );
+        });
+      }
+    });
   }, [model, detailId]);
 
   // UI
   if (!fieldList || !layout) return <context.UI.Loading />;
 
-  // Tell react-select what values are selected
   const buttonOptions = [
     { label: "Delete", value: "delete" },
     { label: "Clone", value: "clone" },
     { label: "Archive", value: "archive" },
+    ...customButtons,
   ];
   const selectedButtons = [];
   (layout.buttons || []).map((b) => {
