@@ -9,7 +9,17 @@ const InputInput: React.FC<{
   type?;
   style?;
   autoFocus?;
-}> = ({ placeholder, label, value, onChange, type, style, autoFocus }) => {
+  readOnly?: boolean;
+}> = ({
+  placeholder,
+  label,
+  value,
+  onChange,
+  type,
+  style,
+  autoFocus,
+  readOnly,
+}) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
 
@@ -29,10 +39,11 @@ const InputInput: React.FC<{
           type={type ? type : "text"}
           className={styles.input}
           placeholder={placeholder}
+          disabled={readOnly || false}
           value={newValue}
           onChange={(event) => {
             setNewValue(event.target.value);
-            if (onChange) onChange(event.target.value);
+            if (onChange && !readOnly) onChange(event.target.value);
           }}
         />
       </label>
@@ -44,10 +55,11 @@ const InputInput: React.FC<{
       type={type ? type : "text"}
       placeholder={placeholder}
       value={newValue}
+      disabled={readOnly || false}
       autoFocus={autoFocus}
       onChange={(event) => {
         setNewValue(event.target.value);
-        if (onChange) onChange(event.target.value);
+        if (onChange && !readOnly) onChange(event.target.value);
       }}
     />
   );

@@ -100,7 +100,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <UI.Inputs.CheckmarkInput
                     label="Required"
                     value={field.required}
@@ -109,12 +109,24 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <UI.Inputs.CheckmarkInput
                     label="Unique"
                     value={field.unique}
                     onChange={(value) => {
                       setField({ ...field, unique: value });
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <UI.Inputs.CheckmarkInput
+                    label="Read-only"
+                    value={field.typeArgs?.readonly || false}
+                    onChange={(value) => {
+                      setField({
+                        ...field,
+                        typeArgs: { ...field.typeArgs, readonly: value },
+                      });
                     }}
                   />
                 </Grid>

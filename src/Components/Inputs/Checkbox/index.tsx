@@ -6,7 +6,8 @@ const InputCheckbox: React.FC<{
   value?: string;
   onChange?: (value: boolean) => void;
   style?;
-}> = ({ label, value, onChange, style }) => {
+  disabled?: boolean;
+}> = ({ label, value, onChange, style, disabled }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>(value ? value : false);
 
@@ -19,6 +20,7 @@ const InputCheckbox: React.FC<{
           style={{ padding: 0 }}
           color="primary"
           checked={newValue}
+          disabled={disabled}
           onChange={(event) => {
             setNewValue(event.target.checked);
             if (onChange) onChange(event.target.checked);
@@ -32,6 +34,7 @@ const InputCheckbox: React.FC<{
       style={{ ...style, padding: 0 }}
       color="primary"
       checked={newValue}
+      disabled={disabled}
       onChange={(event) => {
         setNewValue(event.target.checked);
         if (onChange) onChange(event.target.checked);

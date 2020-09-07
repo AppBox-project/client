@@ -27,6 +27,7 @@ const FieldTypeBoolean: React.FC<{
     return (
       <Checkbox
         checked={newValue}
+        disabled={field.typeArgs.readonly || false}
         color="primary"
         onChange={(event) => {
           setNewValue(event.target.checked);
@@ -34,6 +35,7 @@ const FieldTypeBoolean: React.FC<{
         }}
       />
     );
+
   return (
     <div className={mode === "view" ? "view-container" : "input-container"}>
       <div
@@ -78,6 +80,7 @@ const FieldTypeBoolean: React.FC<{
                 <Checkbox
                   checked={newValue}
                   color="primary"
+                  disabled={field.typeArgs.readonly || false}
                   onChange={(event) => {
                     setNewValue(event.target.checked);
                     onChange(event.target.checked);

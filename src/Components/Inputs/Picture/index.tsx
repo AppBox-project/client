@@ -13,9 +13,19 @@ const InputPicture: React.FC<{
   value?: string;
   object;
   model: ModelType;
+  readOnly?: boolean;
   onChange?: (value: string) => void;
   fieldKey: string;
-}> = ({ placeholder, label, value, onChange, object, model, fieldKey }) => {
+}> = ({
+  placeholder,
+  label,
+  value,
+  onChange,
+  object,
+  model,
+  fieldKey,
+  readOnly,
+}) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
   const [isDragging, setIsDragging] = useState<any>(false);
@@ -40,6 +50,7 @@ const InputPicture: React.FC<{
     </Avatar>
   ) : (
     <Dropzone
+      disabled={readOnly}
       onDrop={(files) => {
         setIsDragging(false);
         //setToUpload([...toUpload, files[0]]);
@@ -74,7 +85,7 @@ const InputPicture: React.FC<{
         >
           <div {...getRootProps()}>
             <input {...getInputProps()} />
-            <p>Picture goes here</p>
+            <p>{readOnly ? "Read-only field." : "Picture goes here"}</p>
           </div>
         </section>
       )}

@@ -41,6 +41,7 @@ export interface ModelFieldType {
     relationshipTo?: string;
     options?: { label: string; key: string }[];
     key?: string;
+    readonly?: boolean;
   };
 }
 

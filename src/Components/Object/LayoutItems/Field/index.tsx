@@ -80,7 +80,6 @@ const ObjectLayoutItemField: React.FC<{
 
   // UI
   if (!conditionsMet) return <></>;
-
   let options: ValueListItemType[] = [];
   if (modelField?.typeArgs?.options) {
     modelField.typeArgs.options.map((o) =>
@@ -158,6 +157,7 @@ const ObjectLayoutItemField: React.FC<{
                   onChange(value);
                 }
               }}
+              readOnly={modelField.typeArgs?.readonly}
               placeholder={modelField.name}
               value={objectField}
               type={modelField.typeArgs && modelField.typeArgs.type}
@@ -178,6 +178,7 @@ const ObjectLayoutItemField: React.FC<{
               onChange={(value) => {
                 onChange(value);
               }}
+              disabled={modelField.typeArgs?.readonly || false}
               value={objectField}
             />
           )}
@@ -219,6 +220,7 @@ const ObjectLayoutItemField: React.FC<{
               value={objectField}
               model={model}
               fieldKey={objectField}
+              readOnly={modelField.typeArgs?.readonly}
               object={object}
               onChange={(value) => {
                 onChange(value);
