@@ -17,7 +17,6 @@ import {
   Tooltip,
   Fab,
 } from "@material-ui/core";
-import FormulaEditor from "../../../../../../Components/FormulaEditor";
 import { FaPlus, FaTrashAlt, FaSave } from "react-icons/fa";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
@@ -36,7 +35,6 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
 
   // States & Hooks
   const [field, setField] = useState<any>();
-  const [formulaDeps, setFormulaDeps] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -170,6 +168,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                       },
                       { value: "file", label: "File" },
                       { value: "picture", label: "Picture" },
+                      { value: "qr", label: "QR-code" },
                       { value: "data", label: "Free data" },
                       { value: "custom", label: "Custom" },
                     ]}
@@ -596,19 +595,6 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     },
                     model._id
                   );
-
-                  if (formulaDeps) {
-                    context
-                      .setFieldDependencies(model.key, formulaDeps, detailId)
-                      .then(
-                        (yes) => {
-                          console.log(yes);
-                        },
-                        (no) => {
-                          console.log(no);
-                        }
-                      );
-                  }
                 }}
               >
                 <FaSave style={{ width: 18, height: 18 }} />

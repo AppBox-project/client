@@ -9,6 +9,7 @@ import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 import ObjectFieldDisplayFile from "./FieldDisplay/File";
 import ObjectFieldDisplayDate from "./FieldDisplay/Date";
 import { CustomFieldType, AppContextType } from "../../Utils/Types";
+import QRCode from "qrcode.react";
 
 const FieldDisplay: React.FC<{
   objectField;
@@ -98,7 +99,7 @@ const FieldDisplay: React.FC<{
           objectField={objectField}
           {...props}
         />
-      )}{" "}
+      )}
       {modelField.type === "date" && (
         <ObjectFieldDisplayDate
           modelField={modelField}
@@ -106,6 +107,7 @@ const FieldDisplay: React.FC<{
           {...props}
         />
       )}
+      {modelField.type === "qr" && <QRCode value={objectField} />}
       {modelField.type === "custom" && (
         <CustomField mode="view" value={objectField} context={context} />
       )}

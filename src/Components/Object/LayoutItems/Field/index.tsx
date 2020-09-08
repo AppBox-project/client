@@ -128,151 +128,154 @@ const ObjectLayoutItemField: React.FC<{
       );
     case "edit":
       return (
-        <div
-          className={`${styles.container} ${styles.containerEdit}`}
-          style={{
-            backgroundColor: layoutItem.field in toChange ? "#efefef" : "white",
-          }}
-        >
-          <Typography variant="body1" className={styles.titleEdit}>
-            {modelField.name}
-          </Typography>
-          {modelField.type === "formula" && (
-            <div style={{ textAlign: "center" }}>
-              <ObjectFieldDisplayInput
+        !layoutItem.hideEdit && (
+          <div
+            className={`${styles.container} ${styles.containerEdit}`}
+            style={{
+              backgroundColor:
+                layoutItem.field in toChange ? "#efefef" : "white",
+            }}
+          >
+            <Typography variant="body1" className={styles.titleEdit}>
+              {modelField.name}
+            </Typography>
+            {modelField.type === "formula" && (
+              <div style={{ textAlign: "center" }}>
+                <ObjectFieldDisplayInput
+                  modelField={modelField}
+                  objectField={objectField}
+                />
+                <Typography style={{ fontSize: 12 }}>
+                  (automatically calculated)
+                </Typography>
+              </div>
+            )}
+            {modelField.type === "input" && (
+              <InputInput
+                onChange={(value) => {
+                  if (modelField?.typeArgs?.type === "number") {
+                    onChange(parseInt(value));
+                  } else {
+                    onChange(value);
+                  }
+                }}
+                readOnly={modelField.typeArgs?.readonly}
+                placeholder={modelField.name}
+                value={objectField}
+                type={modelField.typeArgs && modelField.typeArgs.type}
+              />
+            )}
+            {modelField.type === "address" && (
+              <InputAddress
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+                type={modelField.typeArgs && modelField.typeArgs.type}
+              />
+            )}
+            {modelField.type === "boolean" && (
+              <InputCheckbox
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                disabled={modelField.typeArgs?.readonly || false}
+                value={objectField}
+              />
+            )}
+            {modelField.type === "relationship" && (
+              <InputRelationShip
+                label={modelField.name}
+                value={objectField}
+                objectType={modelField.typeArgs.relationshipTo}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}{" "}
+            {modelField.type === "relationship_m" && (
+              <InputRelationShipM
+                label={modelField.name}
+                value={objectField}
+                objectType={modelField.typeArgs.relationshipTo}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}
+            {modelField.type === "options" && (
+              <InputSelect
+                label={modelField.name}
+                value={find(modelField.typeArgs.options, (o) => {
+                  return o.key === objectField;
+                })}
+                options={options}
+                onChange={(value) => {
+                  onChange(value.key);
+                }}
+              />
+            )}
+            {modelField.type === "picture" && (
+              <InputPicture
+                label={modelField.name}
+                value={objectField}
+                model={model}
+                fieldKey={objectField}
+                readOnly={modelField.typeArgs?.readonly}
+                object={object}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}
+            {modelField.type === "file" && (
+              <InputFile
+                label={modelField.name}
+                value={objectField}
+                model={model}
+                fieldKey={objectField}
+                object={object}
+                onChange={(value) => {
+                  onChange(value);
+                }}
+              />
+            )}
+            {modelField.type === "richtext" && (
+              <InputRichText
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+              />
+            )}
+            {modelField.type === "color" && (
+              <InputColor
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                placeholder={modelField.name}
+                value={objectField}
+              />
+            )}
+            {modelField.type === "date" && (
+              <FieldTypeDate
+                onChange={onChange}
                 modelField={modelField}
                 objectField={objectField}
               />
-              <Typography style={{ fontSize: 12 }}>
-                (automatically calculated)
-              </Typography>
-            </div>
-          )}
-          {modelField.type === "input" && (
-            <InputInput
-              onChange={(value) => {
-                if (modelField?.typeArgs?.type === "number") {
-                  onChange(parseInt(value));
-                } else {
-                  onChange(value);
-                }
-              }}
-              readOnly={modelField.typeArgs?.readonly}
-              placeholder={modelField.name}
-              value={objectField}
-              type={modelField.typeArgs && modelField.typeArgs.type}
-            />
-          )}
-          {modelField.type === "address" && (
-            <InputAddress
-              onChange={(value) => {
-                onChange(value);
-              }}
-              placeholder={modelField.name}
-              value={objectField}
-              type={modelField.typeArgs && modelField.typeArgs.type}
-            />
-          )}
-          {modelField.type === "boolean" && (
-            <InputCheckbox
-              onChange={(value) => {
-                onChange(value);
-              }}
-              disabled={modelField.typeArgs?.readonly || false}
-              value={objectField}
-            />
-          )}
-          {modelField.type === "relationship" && (
-            <InputRelationShip
-              label={modelField.name}
-              value={objectField}
-              objectType={modelField.typeArgs.relationshipTo}
-              onChange={(value) => {
-                onChange(value);
-              }}
-            />
-          )}{" "}
-          {modelField.type === "relationship_m" && (
-            <InputRelationShipM
-              label={modelField.name}
-              value={objectField}
-              objectType={modelField.typeArgs.relationshipTo}
-              onChange={(value) => {
-                onChange(value);
-              }}
-            />
-          )}
-          {modelField.type === "options" && (
-            <InputSelect
-              label={modelField.name}
-              value={find(modelField.typeArgs.options, (o) => {
-                return o.key === objectField;
-              })}
-              options={options}
-              onChange={(value) => {
-                onChange(value.key);
-              }}
-            />
-          )}
-          {modelField.type === "picture" && (
-            <InputPicture
-              label={modelField.name}
-              value={objectField}
-              model={model}
-              fieldKey={objectField}
-              readOnly={modelField.typeArgs?.readonly}
-              object={object}
-              onChange={(value) => {
-                onChange(value);
-              }}
-            />
-          )}
-          {modelField.type === "file" && (
-            <InputFile
-              label={modelField.name}
-              value={objectField}
-              model={model}
-              fieldKey={objectField}
-              object={object}
-              onChange={(value) => {
-                onChange(value);
-              }}
-            />
-          )}
-          {modelField.type === "richtext" && (
-            <InputRichText
-              onChange={(value) => {
-                onChange(value);
-              }}
-              placeholder={modelField.name}
-              value={objectField}
-            />
-          )}
-          {modelField.type === "color" && (
-            <InputColor
-              onChange={(value) => {
-                onChange(value);
-              }}
-              placeholder={modelField.name}
-              value={objectField}
-            />
-          )}
-          {modelField.type === "date" && (
-            <FieldTypeDate
-              onChange={onChange}
-              modelField={modelField}
-              objectField={objectField}
-            />
-          )}
-          {modelField.type === "custom" && (
-            <CustomField
-              mode={mode}
-              value={objectField}
-              context={context}
-              onChange={onChange}
-            />
-          )}
-        </div>
+            )}
+            {modelField.type === "custom" && (
+              <CustomField
+                mode={mode}
+                value={objectField}
+                context={context}
+                onChange={onChange}
+              />
+            )}
+          </div>
+        )
       );
     default:
       return <>Unknown mode</>;
