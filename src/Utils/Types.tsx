@@ -191,6 +191,7 @@ export interface AppContextType {
   ) => AppRequestController;
   callBackendAction: (action, args) => void;
   archiveObject: (modelId: string, objectId: string) => Promise<string | null>;
+  requestServerAction: (action: string, args) => Promise<any>;
 }
 
 export interface WidgetContextType {

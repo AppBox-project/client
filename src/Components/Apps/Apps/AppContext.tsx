@@ -604,6 +604,18 @@ export class AppContext {
     });
   };
 
+  requestServerAction = (action, args) =>
+    new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("requestAction", {
+        action,
+        args,
+        requestId,
+        appId: this.appId,
+      });
+      Server.on(`receive-${requestId}`, (response) => resolve(response));
+    });
+
   archiveObject = (modelId, objectId) => {
     return new Promise((resolve, reject) => {
       const requestId = uniqid();
