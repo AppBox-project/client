@@ -4,14 +4,16 @@ import { motion } from "framer-motion";
 import {
   Tabs,
   Tab,
-  CircularProgress,
   Grid,
   TextField,
   Button,
+  Typography,
 } from "@material-ui/core";
-import { useEffect } from "react";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
+import bg from "./bg.jpg";
+import Card from "../../Components/Design/Card";
+import InputInput from "../../Components/Inputs/Input";
 
 const LoginPage: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<any>(0);
@@ -38,14 +40,16 @@ const LoginPage: React.FC = () => {
     hidden: { opacity: 0, y: 10 },
   };
 
-  console.log(currentTab);
-
   return (
-    <Grid container>
-      <Grid item xs={12} md={5} className={`bg`}>
+    <Grid
+      container
+      style={{ backgroundImage: `url(${bg})` }}
+      className={styles.root}
+    >
+      <Grid item xs={12} md={5}>
         <motion.div initial="hidden" animate="visible" variants={list}>
-          <div className="center">
-            <motion.div variants={item}>
+          <motion.div variants={item}>
+            <Card className="center" title="Welcome to AppBox">
               <Tabs
                 value={currentTab}
                 onChange={(_, v) => {
@@ -58,12 +62,10 @@ const LoginPage: React.FC = () => {
                 <Tab label="Log in" value={0} />
                 <Tab label="Register" value={1} />
               </Tabs>
-            </motion.div>
-            <motion.div variants={item}>
-              <Login />
-            </motion.div>
-            <motion.div variants={item}>Register</motion.div>
-          </div>
+              {currentTab === 0 && <Login />}
+              {currentTab === 1 && "Register"}
+            </Card>
+          </motion.div>
         </motion.div>
       </Grid>
     </Grid>
@@ -73,69 +75,131 @@ const LoginPage: React.FC = () => {
 const Login: React.FC = () => {
   const [user, setUser] = useState<any>({ username: "", password: "" });
   const [_, setGlobalUser] = useGlobal<any>("user");
+  const [requireToken, setRequireToken] = useState<boolean>(false);
+  const [failReason, setFailReason] = useState<string>();
+  const [token, setToken] = useState<string>("");
 
   // UI
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <TextField
-          fullWidth
-          margin="normal"
-          variant="outlined"
-          label="Username"
-          value={user.username}
-          onChange={(e) => {
-            setUser({ ...user, username: e.target.value });
-          }}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          fullWidth
-          margin="normal"
-          variant="outlined"
-          label="Password"
-          type="password"
-          value={user.password}
-          onChange={(e) => {
-            setUser({ ...user, password: e.target.value });
-          }}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Button
-          fullWidth
-          onClick={() => {
-            const requestId = uniqid();
-            Server.emit("requestToken", { requestId, user });
-            Server.on(`receive-${requestId}`, (response) => {
-              if (response.success) {
-                localStorage.setItem("username", user.username);
-                localStorage.setItem("token", response.token);
-                const signInRequest = uniqid();
-                Server.emit("signIn", {
-                  requestId: signInRequest,
-                  username: user.username,
-                  token: response.token,
-                });
-                Server.on(`receive-${signInRequest}`, (response) => {
-                  if (response.success) {
-                    setGlobalUser(response.user);
-                    window.location.reload();
+    <>
+      {!requireToken ? (
+        <>
+          {failReason && (
+            <Typography variant="body1" style={{ color: "red" }}>
+              {failReason}
+            </Typography>
+          )}
+          <TextField
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            label="Username"
+            value={user.username}
+            onChange={(e) => {
+              setUser({ ...user, username: e.target.value });
+            }}
+          />
+
+          <TextField
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            label="Password"
+            type="password"
+            value={user.password}
+            onChange={(e) => {
+              setUser({ ...user, password: e.target.value });
+            }}
+          />
+          <Button
+            fullWidth
+            onClick={() => {
+              const requestId = uniqid();
+              Server.emit("requestToken", { requestId, user });
+              Server.on(`receive-${requestId}`, (response) => {
+                if (response.success) {
+                  localStorage.setItem("username", user.username);
+                  localStorage.setItem("token", response.token);
+                  const signInRequest = uniqid();
+                  Server.emit("signIn", {
+                    requestId: signInRequest,
+                    username: user.username,
+                    token: response.token,
+                  });
+                  Server.on(`receive-${signInRequest}`, (response) => {
+                    if (response.success) {
+                      setGlobalUser(response.user);
+                      window.location.reload();
+                    } else {
+                      setFailReason(response.reason);
+                    }
+                  });
+                } else {
+                  if (response.reason === "require-mfa") {
+                    setRequireToken(true);
                   } else {
-                    console.log(response.reason);
+                    setFailReason(response.reason);
                   }
-                });
-              } else {
-                console.log(response.reason);
-              }
-            });
-          }}
-        >
-          Sign in
-        </Button>
-      </Grid>
-    </Grid>
+                }
+              });
+            }}
+          >
+            Sign in
+          </Button>
+        </>
+      ) : (
+        <>
+          <Typography>
+            Because you're clearly awesome, you've set-up 2FA to make sure
+            no-one else can access this spot. Enter the code your app generated
+            for you!
+          </Typography>
+          <InputInput
+            value={token}
+            onChange={(value) => setToken(value)}
+            label="Token"
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => {
+              const requestId = uniqid();
+              Server.emit("requestToken", {
+                requestId,
+                user,
+                token,
+                mfaToken: token,
+              });
+              Server.on(`receive-${requestId}`, (response) => {
+                if (response.success) {
+                  localStorage.setItem("username", user.username);
+                  localStorage.setItem("token", response.token);
+                  const signInRequest = uniqid();
+                  Server.emit("signIn", {
+                    requestId: signInRequest,
+                    username: user.username,
+                    token: response.token,
+                  });
+                  Server.on(`receive-${signInRequest}`, (response) => {
+                    if (response.success) {
+                      setGlobalUser(response.user);
+                      window.location.reload();
+                    } else {
+                      setFailReason(response.reason);
+                      console.log(response);
+                    }
+                  });
+                } else {
+                  setFailReason(response.reason);
+                }
+              });
+            }}
+          >
+            Enter
+          </Button>
+        </>
+      )}
+    </>
   );
 };
 export default LoginPage;

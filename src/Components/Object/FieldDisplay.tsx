@@ -107,7 +107,9 @@ const FieldDisplay: React.FC<{
           {...props}
         />
       )}
-      {modelField.type === "qr" && <QRCode value={objectField} />}
+      {modelField.type === "qr" && objectField && (
+        <QRCode value={objectField} size={small && 50} />
+      )}
       {modelField.type === "custom" && (
         <CustomField mode="view" value={objectField} context={context} />
       )}
