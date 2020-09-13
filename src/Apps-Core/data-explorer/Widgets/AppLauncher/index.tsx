@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 import * as icons from "react-icons/fa";
 import { Avatar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { WidgetContextType, AppType } from "../../../../Utils/Types";
+import { AppType } from "../../../../Utils/Types";
 import WidgetContext from "../../../../Components/Apps/Apps/WidgetContext";
 
 const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
@@ -27,7 +27,7 @@ const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
     return () => {
       request.stop();
     };
-  }, []);
+  }, [context]);
 
   // UI
   if (!apps) return <LoadingSkeleton />;

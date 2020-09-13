@@ -24,6 +24,8 @@ import InputSelect from "../../Inputs/Select";
 export class AppContext {
   appId: string;
   app: AppType = {
+    _id: "system",
+    objectId: "app",
     data: {
       id: "system",
       name: "System",

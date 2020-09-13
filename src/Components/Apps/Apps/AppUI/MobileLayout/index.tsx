@@ -74,8 +74,9 @@ const AppUIMobile: React.FC<{
 
   return (
     <>
-      {appContext.appConfig?.actions?.mobile?.displayAs === "tabs" ||
-        (!appContext.appConfig?.actions?.mobile?.displayAs && (
+      {appContext.app.data.menu_type !== "hidden" &&
+        (appContext.appConfig?.actions?.mobile?.displayAs === "tabs" ||
+          !appContext.appConfig?.actions?.mobile?.displayAs) && (
           <Tabs
             variant="scrollable"
             aria-label="App actions"
@@ -99,7 +100,7 @@ const AppUIMobile: React.FC<{
                 );
               })}
           </Tabs>
-        ))}
+        )}
       <div
         style={{
           height: "100%",
