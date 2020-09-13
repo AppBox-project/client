@@ -6,6 +6,7 @@ import * as icons from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Server from "../../Utils/Server";
+import Card from "../../Components/Design/Card";
 
 const AppBarAppList: React.FC<{
   appList: AppType[];
@@ -19,7 +20,7 @@ const AppBarAppList: React.FC<{
   // Lifecycle
   // UI
   return (
-    <div style={{ display: "flex", height: "100%", flexDirection: "column" }}>
+    <Card style={{ display: "flex", height: "100%", flexDirection: "column" }}>
       <div style={{ height: 120 }}>
         <InputInput
           autoFocus
@@ -33,7 +34,7 @@ const AppBarAppList: React.FC<{
         <Divider style={{ margin: 15 }} />
       </div>
 
-      <Grid container spacing={1} style={{ overflowX: "hidden" }}>
+      <Grid container spacing={3} style={{ overflowX: "hidden" }}>
         {appList.map((app) => {
           const Icon = icons[app.data.icon];
 
@@ -89,7 +90,7 @@ const AppBarAppList: React.FC<{
           );
         })}
       </Grid>
-    </div>
+    </Card>
   );
 };
 

@@ -16,6 +16,8 @@ import LinkHandler from "../LinkHandler";
 import NavBarSkeleton from "./NavBarSkeleton";
 import AppBarAppList from "./AppList";
 import { AppType } from "../../Utils/Types";
+import Card from "../../Components/Design/Card";
+import AppContextMenu from "./AppContextMenu";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -86,6 +88,8 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   const [theme] = useGlobal<any>("theme");
   const history = useHistory();
   const [appListAnchor, setAppListAnchor] = useState<any>();
+  const [appContextMenuAnchor, setAppContextMenuAnchor] = useState<any>();
+  const [appContextMenuApp, setAppContextMenuApp] = useState<AppType>();
 
   // Lifecycle
   useEffect(() => {
@@ -180,7 +184,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           horizontal: "right",
         }}
         classes={{ paper: styles.appList }}
-        PaperProps={{ elevation: 5 }}
+        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
       >
         <AppBarAppList
           appList={appList}
@@ -189,6 +193,35 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           }}
           userAppList={userAppList}
         />
+      </Popover>
+      <Popover
+        id="appContextMenu"
+        open={Boolean(appContextMenuAnchor)}
+        anchorEl={appContextMenuAnchor}
+        onClose={() => {
+          setAppContextMenuAnchor(null);
+          setAppContextMenuApp(undefined);
+        }}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        style={{ marginLeft: 25 }}
+        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
+      >
+        {appContextMenuApp && (
+          <AppContextMenu
+            app={appContextMenuApp}
+            onClose={() => {
+              setAppContextMenuAnchor(null);
+              setAppContextMenuApp(undefined);
+            }}
+          />
+        )}
       </Popover>
       <div
         style={{
@@ -210,13 +243,23 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
             }}
           >
             {userAppList.map((appId) => {
-              const app = apps[appId];
+              const app: AppType = apps[appId];
               const Icon = icons[app.data.icon];
               return (
                 <div
                   className={`${styles.item} ${
                     currentApp === app.data.id && styles.active
                   }`}
+                  onContextMenu={(event) => {
+                    setAppContextMenuAnchor(event.currentTarget);
+                    setAppContextMenuApp(app);
+                    event.preventDefault();
+                  }}
+                  onDoubleClick={(event) => {
+                    setAppContextMenuAnchor(event.currentTarget);
+                    setAppContextMenuApp(app);
+                    event.preventDefault();
+                  }}
                   key={app._id}
                 >
                   <motion.div variants={item} style={{ width: 64 }}>

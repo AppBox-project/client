@@ -63,10 +63,10 @@
 .appList {
   transition: all 0.3s;
   padding: 15px;
-  margin-left: 60px;
-  margin-top: -12px;
-  width: 40vw;
-  min-width: 350px;
+  margin-left: 40px;
+  margin-top: -20px;
+  width: 30vw;
+  min-width: 400px;
   min-height: 350px;
   height: 35vh;
 }
@@ -74,5 +74,4 @@
 .appListApp {
   text-align: center;
   cursor: pointer;
-  height: 150px !important;
 }
