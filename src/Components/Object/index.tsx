@@ -340,7 +340,7 @@ const ViewObject: React.FC<{
   useEffect(() => {
     if (appliedModel?.layouts) {
       const layout = appliedModel?.layouts[layoutId || "default"];
-      layout.buttons.map((button) => {
+      (layout.buttons || []).map((button) => {
         if (!["clone", "archive", "delete"].includes(button)) {
           import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
             (component) => {
