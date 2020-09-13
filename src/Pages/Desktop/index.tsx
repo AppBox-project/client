@@ -1,7 +1,16 @@
 import React, { useGlobal } from "reactn";
 import styles from "./styles.module.scss";
 import { motion } from "framer-motion";
-import { IconButton, Avatar, Tooltip, Popover } from "@material-ui/core";
+import {
+  IconButton,
+  Avatar,
+  Tooltip,
+  Popover,
+  ListItemIcon,
+  ListItemText,
+  List,
+  ListItem,
+} from "@material-ui/core";
 import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
@@ -90,6 +99,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   const [appListAnchor, setAppListAnchor] = useState<any>();
   const [appContextMenuAnchor, setAppContextMenuAnchor] = useState<any>();
   const [appContextMenuApp, setAppContextMenuApp] = useState<AppType>();
+  const [userMenuAnchor, setUserMenuAnchor] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -223,6 +233,57 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           />
         )}
       </Popover>
+      <Popover
+        id="userMenu"
+        open={Boolean(userMenuAnchor)}
+        anchorEl={userMenuAnchor}
+        onClose={() => {
+          setUserMenuAnchor(null);
+        }}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        style={{ marginLeft: 25 }}
+        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
+      >
+        <Card
+          withBigMargin
+          title={user.data.first_name}
+          centerTitle
+          titleDivider
+          titleInPrimaryColor
+          style={{ padding: 2 }}
+        >
+          <List disablePadding>
+            <ListItem
+              button
+              onClick={() => {
+                history.push("/system/user");
+                setUserMenuAnchor(undefined);
+              }}
+            >
+              <ListItemIcon style={{ minWidth: 0, paddingRight: 10 }}>
+                {user.data.picture ? (
+                  <Avatar
+                    style={{ width: 20, height: 20 }}
+                    src={baseUrl + user.data.picture}
+                  />
+                ) : (
+                  <Avatar style={{ width: 20, height: 20 }}>
+                    {user.data.first_name}
+                  </Avatar>
+                )}
+              </ListItemIcon>
+              <ListItemText>{user.data.full_name}</ListItemText>
+            </ListItem>
+          </List>
+        </Card>
+      </Popover>
       <div
         style={{
           flex: 1,
@@ -290,17 +351,24 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         )}
       </div>
       <motion.div variants={item} style={{ height: 64, zIndex: 502 }}>
-        <Link to={`/o/${user._id}`}>
-          <Tooltip placement="right" title={`Hi ${user.data.first_name}`}>
-            <IconButton style={{ width: 64 }}>
-              {user.data.picture ? (
-                <Avatar src={baseUrl + user.data.picture} />
-              ) : (
-                <Avatar>{user.data.first_name}</Avatar>
-              )}
-            </IconButton>
-          </Tooltip>
-        </Link>
+        <Tooltip placement="right" title={`Hi ${user.data.first_name}`}>
+          <IconButton
+            style={{ width: 64 }}
+            onClick={(event) => {
+              setUserMenuAnchor(event.currentTarget);
+            }}
+            onContextMenu={(event) => {
+              setUserMenuAnchor(event.currentTarget);
+              event.preventDefault();
+            }}
+          >
+            {user.data.picture ? (
+              <Avatar src={baseUrl + user.data.picture} />
+            ) : (
+              <Avatar>{user.data.first_name}</Avatar>
+            )}
+          </IconButton>
+        </Tooltip>
       </motion.div>
     </motion.div>
   );

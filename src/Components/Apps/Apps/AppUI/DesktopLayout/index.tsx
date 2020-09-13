@@ -28,21 +28,27 @@ const AppUIDesktop: React.FC<{
 
   // Effects
   useEffect(() => {
-    if (typeof appContext.actions === "function") setNoActions(true);
+    if (
+      typeof appContext.actions === "function" ||
+      appContext.app.data.menu_type === "hidden"
+    )
+      setNoActions(true);
     return () => {
       setNoActions(false);
     };
-  }, []);
+  }, [appContext.app]);
   // UI
   return (
     <>
-      {typeof appContext.actions === "object" && (
-        <ActionMenu context={appContext} currentPage={currentPage} />
-      )}
+      {typeof appContext.actions === "object" &&
+        appContext.app.data.menu_type !== "hidden" && (
+          <ActionMenu context={appContext} currentPage={currentPage} />
+        )}
       <div
         className={styles.app}
         style={
-          typeof appContext.actions === "function"
+          typeof appContext.actions === "function" ||
+          appContext.app.data.menu_type === "hidden"
             ? { left: 0, width: "100%" }
             : {}
         }

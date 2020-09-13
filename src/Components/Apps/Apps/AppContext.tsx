@@ -23,7 +23,16 @@ import InputSelect from "../../Inputs/Select";
 
 export class AppContext {
   appId: string;
-  app: AppType;
+  app: AppType = {
+    data: {
+      id: "system",
+      name: "System",
+      color: { r: 2, g: 71, b: 161 },
+      core: true,
+      icon: "FaAdobe",
+      menu_type: "hidden",
+    },
+  };
   isReady: Promise<unknown>;
   appCode: any;
   actions: [{ label: string; key: string }];
@@ -99,7 +108,9 @@ export class AppContext {
       });
       Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
-          this.app = response.data[0];
+          if (response.data[0]) {
+            this.app = response.data[0];
+          }
           import(
             `../../../Apps-${this.app.data.core ? "Core" : "User"}/${
               this.appId

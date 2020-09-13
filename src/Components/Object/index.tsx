@@ -93,6 +93,7 @@ const ViewObject: React.FC<{
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
   const [customButtonInfo, setCustomButtonInfo] = useState<{}>({});
   const history = useHistory();
+  const [factsBarInLayout, setFactsBarInLayout] = useState<boolean>(false);
 
   const getFeedback = (feedback) => {
     return (
@@ -340,6 +341,8 @@ const ViewObject: React.FC<{
   useEffect(() => {
     if (appliedModel?.layouts) {
       const layout = appliedModel?.layouts[layoutId || "default"];
+      setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
+
       (layout.buttons || []).map((button) => {
         if (!["clone", "archive", "delete"].includes(button)) {
           import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
@@ -494,6 +497,89 @@ const ViewObject: React.FC<{
     );
   });
 
+  const FactsBar = (
+    <AnimationItem>
+      <Card withBigMargin hoverable className={styles.factsBar}>
+        <div style={{ display: "flex" }}>
+          {factsBarPicture && (
+            <Hidden xsDown>
+              <div
+                style={{
+                  backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
+                }}
+                className={styles.factsBarImage}
+              />
+            </Hidden>
+          )}
+          <div style={{ flex: 1, width: "100%" }}>
+            <Hidden xsDown>
+              <div style={{ float: "right", marginTop: -5 }}>{buttons}</div>
+              <Typography variant="h5" style={{ textAlign: "center" }}>
+                {factsBarTitle}
+              </Typography>
+            </Hidden>
+            <Hidden smUp>
+              <div style={{ display: "flex" }}>
+                {factsBarPicture && (
+                  <div
+                    style={{
+                      backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
+                    }}
+                    className={styles.factsBarImageSmall}
+                  />
+                )}
+                <div style={{ textAlign: "center", flex: 1 }}>
+                  <Typography variant="h6">{factsBarTitle}</Typography>
+                  {buttons}
+                </div>
+              </div>
+            </Hidden>
+            <Divider style={{ margin: "15px 0" }} />
+            <Grid container spacing={3}>
+              {factsBar.map((fact) => {
+                const field = appliedModel.fields[fact];
+                type ColType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+                //@ts-ignore
+                const colsSmall: ColType = (12 / factsBar.length) * 2;
+                //@ts-ignore
+                const colsExtraSmall: ColType = (12 / factsBar.length) * 3;
+                //@ts-ignore
+                const cols: ColType = 12 / factsBar.length;
+                return (
+                  <Grid
+                    item
+                    xs={colsSmall}
+                    md={cols}
+                    key={fact}
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      style={{
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {field.name}
+                    </Typography>
+                    <Typography variant="body2" noWrap>
+                      <FieldDisplay
+                        objectField={appliedObject.data[fact]}
+                        modelField={field}
+                      />
+                    </Typography>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </div>
+        </div>
+      </Card>
+    </AnimationItem>
+  );
+
   return (
     <div
       style={{ height: "100%" }}
@@ -512,105 +598,7 @@ const ViewObject: React.FC<{
       }}
     >
       <AnimationContainer>
-        {factsBar && !popup && (
-          <AnimationItem>
-            <Card withBigMargin hoverable className={styles.factsBar}>
-              <div style={{ display: "flex" }}>
-                {factsBarPicture && (
-                  <Hidden xsDown>
-                    <div
-                      style={{
-                        backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
-                      }}
-                      className={styles.factsBarImage}
-                    />
-                  </Hidden>
-                )}
-                <div style={{ flex: 1, width: "100%" }}>
-                  <Hidden xsDown>
-                    <div style={{ float: "right", marginTop: -5 }}>
-                      {buttons}
-                    </div>
-                    <Typography variant="h5" style={{ textAlign: "center" }}>
-                      {factsBarTitle}
-                    </Typography>
-                  </Hidden>
-                  <Hidden smUp>
-                    <div style={{ display: "flex" }}>
-                      {factsBarPicture && (
-                        <div
-                          style={{
-                            backgroundImage: `url(${
-                              baseAppUrl + factsBarPicture
-                            }`,
-                          }}
-                          className={styles.factsBarImageSmall}
-                        />
-                      )}
-                      <div style={{ textAlign: "center", flex: 1 }}>
-                        <Typography variant="h6">{factsBarTitle}</Typography>
-                        {buttons}
-                      </div>
-                    </div>
-                  </Hidden>
-                  <Divider style={{ margin: "15px 0" }} />
-                  <Grid container spacing={3}>
-                    {factsBar.map((fact) => {
-                      const field = appliedModel.fields[fact];
-                      type ColType =
-                        | 1
-                        | 2
-                        | 3
-                        | 4
-                        | 5
-                        | 6
-                        | 7
-                        | 8
-                        | 9
-                        | 10
-                        | 11
-                        | 12;
-
-                      //@ts-ignore
-                      const colsSmall: ColType = (12 / factsBar.length) * 2;
-                      //@ts-ignore
-                      const colsExtraSmall: ColType =
-                        (12 / factsBar.length) * 3;
-                      //@ts-ignore
-                      const cols: ColType = 12 / factsBar.length;
-                      return (
-                        <Grid
-                          item
-                          xs={colsSmall}
-                          md={cols}
-                          key={fact}
-                          style={{
-                            textAlign: "center",
-                          }}
-                        >
-                          <Typography
-                            variant="body1"
-                            style={{
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {field.name}
-                          </Typography>
-                          <Typography variant="body2" noWrap>
-                            <FieldDisplay
-                              objectField={appliedObject.data[fact]}
-                              modelField={field}
-                            />
-                          </Typography>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                </div>
-              </div>
-            </Card>
-          </AnimationItem>
-        )}
+        {factsBar && !popup && !factsBarInLayout && FactsBar}
         {layout.buttons && !layout.factsBar && (
           /* Button layout without factsbar*/ <div
             style={{ textAlign: "right", margin: "0 20px" }}
@@ -637,6 +625,7 @@ const ViewObject: React.FC<{
                 customFieldTypes={provideCustomFields}
                 customLayoutItems={provideLayoutElements}
                 context={context}
+                FactsBar={FactsBar}
               />
             );
           })
@@ -675,6 +664,7 @@ const LayoutItem: React.FC<{
   customFieldTypes: { [key: string]: React.FC<CustomFieldType> };
   customLayoutItems: { [key: string]: React.FC<CustomLayoutElementType> };
   context: AppContextType;
+  FactsBar;
 }> = ({
   layoutItem,
   model,
@@ -689,6 +679,7 @@ const LayoutItem: React.FC<{
   customFieldTypes,
   customLayoutItems,
   context,
+  FactsBar,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -711,6 +702,7 @@ const LayoutItem: React.FC<{
                 customFieldTypes={customFieldTypes}
                 customLayoutItems={customLayoutItems}
                 context={context}
+                FactsBar={FactsBar}
               />
             );
           })}
@@ -743,6 +735,7 @@ const LayoutItem: React.FC<{
                   customFieldTypes={customFieldTypes}
                   customLayoutItems={customLayoutItems}
                   context={context}
+                  FactsBar={FactsBar}
                 />
               );
             })}
@@ -769,6 +762,7 @@ const LayoutItem: React.FC<{
                   customFieldTypes={customFieldTypes}
                   customLayoutItems={customLayoutItems}
                   context={context}
+                  FactsBar={FactsBar}
                 />
               );
             })}
@@ -794,6 +788,7 @@ const LayoutItem: React.FC<{
                 customFieldTypes={customFieldTypes}
                 customLayoutItems={customLayoutItems}
                 context={context}
+                FactsBar={FactsBar}
               />
             );
           })}
@@ -842,6 +837,7 @@ const LayoutItem: React.FC<{
                 customFieldTypes={customFieldTypes}
                 customLayoutItems={customLayoutItems}
                 context={context}
+                FactsBar={FactsBar}
               />
             );
           })}
@@ -892,6 +888,7 @@ const LayoutItem: React.FC<{
               customFieldTypes={customFieldTypes}
               customLayoutItems={customLayoutItems}
               context={context}
+              FactsBar={FactsBar}
             />
           );
         });
@@ -916,6 +913,9 @@ const LayoutItem: React.FC<{
           object={object}
         />
       );
+    case "FactsBar":
+      return FactsBar;
+
     default:
       return <>Unknown layoutItem type:{layoutItem.type}</>;
   }

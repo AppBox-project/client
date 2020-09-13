@@ -166,7 +166,7 @@ const MobileLayout: React.FC = () => {
               button
               onClick={() => {
                 setDrawerOpen(false);
-                history.push(`/o/${gUser._id}`);
+                history.push("/system/user");
               }}
             >
               <ListItemIcon>

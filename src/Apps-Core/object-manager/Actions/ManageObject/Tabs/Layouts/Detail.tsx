@@ -445,7 +445,32 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
+          FactsBar: {
+            label: "Facts bar",
 
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
           Field: {
             label: "Field",
             dynamicLabel: "field",

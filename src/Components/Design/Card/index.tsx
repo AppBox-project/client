@@ -14,6 +14,7 @@ const Card: React.FC<{
   titleInPrimaryColor?: true | boolean;
   sideMarginOnly?: true | boolean;
   className?: string;
+  disablePadding?: boolean;
 }> = ({
   children,
   hoverable,
@@ -26,6 +27,7 @@ const Card: React.FC<{
   withSmallMargin,
   sideMarginOnly,
   titleInPrimaryColor,
+  disablePadding,
 }) => {
   const margins = {
     ...(withBigMargin
@@ -51,6 +53,7 @@ const Card: React.FC<{
       style={{
         ...margins,
         ...style,
+        padding: disablePadding && 0,
         marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
       }}
     >
@@ -59,7 +62,9 @@ const Card: React.FC<{
           <Typography
             variant="h6"
             color={titleInPrimaryColor ? "primary" : "initial"}
-            style={{ textAlign: centerTitle ? "center" : "left" }}
+            style={{
+              textAlign: centerTitle ? "center" : "left",
+            }}
           >
             {title}
           </Typography>
