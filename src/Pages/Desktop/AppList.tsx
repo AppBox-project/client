@@ -34,7 +34,7 @@ const AppBarAppList: React.FC<{
         <Divider style={{ margin: 15 }} />
       </div>
 
-      <Grid container spacing={3} style={{ overflowX: "hidden" }}>
+      <Grid container spacing={8} style={{ overflowX: "hidden" }}>
         {appList.map((app) => {
           const Icon = icons[app.data.icon];
 

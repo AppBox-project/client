@@ -36,6 +36,7 @@ const ConditionDesigner: React.FC<{
       )}
       {(value?.conditions || []).map((condition, index) => {
         const field = model.fields[condition.field];
+        console.log("buh", condition);
 
         return (
           <ListItem key={index}>

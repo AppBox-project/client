@@ -248,7 +248,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           vertical: "center",
           horizontal: "right",
         }}
-        style={{ marginLeft: 25 }}
+        style={{ marginLeft: 25, marginTop: 20 }}
         PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
       >
         <Card

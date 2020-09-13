@@ -536,7 +536,7 @@ const ViewObject: React.FC<{
             </Hidden>
             <Divider style={{ margin: "15px 0" }} />
             <Grid container spacing={3}>
-              {factsBar.map((fact) => {
+              {(factsBar || []).map((fact) => {
                 const field = appliedModel.fields[fact];
                 type ColType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
@@ -568,6 +568,7 @@ const ViewObject: React.FC<{
                       <FieldDisplay
                         objectField={appliedObject.data[fact]}
                         modelField={field}
+                        small
                       />
                     </Typography>
                   </Grid>
