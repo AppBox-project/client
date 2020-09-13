@@ -20,7 +20,11 @@ const AppQSActionTodo: React.FC<{
   useEffect(() => {
     const projectRequest = context.getObjects(
       "qs-project",
-      { "data.owner": context.user._id, "data.show_in_todos": true },
+      {
+        "data.owner": context.user._id,
+        "data.show_in_todos": true,
+        "data.active": { $ne: false },
+      },
       (response) => {
         if (response.success) {
           setProjects(

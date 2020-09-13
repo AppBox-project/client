@@ -19,7 +19,11 @@ const AppQSActionNotes: React.FC<{
   useEffect(() => {
     const objectRequest = context.getObjects(
       "qs-project",
-      { "data.owner": context.user._id, "data.show_in_notes": { $ne: false } },
+      {
+        "data.owner": context.user._id,
+        "data.show_in_notes": { $ne: false },
+        "data.active": { $ne: false },
+      },
       (response) => {
         if (response.success) {
           const newFlat = {};
