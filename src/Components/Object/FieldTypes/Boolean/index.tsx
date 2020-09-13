@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Grid, Typography, Checkbox } from "@material-ui/core";
+import { Grid, Typography, Checkbox } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
 
@@ -15,19 +15,20 @@ const FieldTypeBoolean: React.FC<{
   const [newValue, setNewValue] = useState<boolean>();
   // Lifecycle
   useEffect(() => {
-    setNewValue(
-      object ? (object.data[fieldKey] ? object.data[fieldKey] : false) : false
-    );
+    setNewValue(object?.data[fieldKey]);
   }, [fieldKey]);
 
   // UI
   if (newValue === undefined) return <Loading />;
+  const isIndeterminate = newValue !== true && newValue !== false;
+  console.log(isIndeterminate, newValue);
 
   if (mode === "free")
     return (
       <Checkbox
-        checked={newValue}
+        checked={newValue || false}
         disabled={field.typeArgs.readonly || false}
+        indeterminate={isIndeterminate}
         color="primary"
         onChange={(event) => {
           setNewValue(event.target.checked);
@@ -59,8 +60,9 @@ const FieldTypeBoolean: React.FC<{
               </Grid>
               <Grid item xs={6}>
                 <Checkbox
-                  checked={newValue}
+                  checked={newValue || false}
                   disabled
+                  indeterminate={isIndeterminate}
                   color="primary"
                   style={{ paddingLeft: 0, marginLeft: 0 }}
                 />
@@ -78,8 +80,9 @@ const FieldTypeBoolean: React.FC<{
             <Grid item xs={6}>
               <Typography variant="body2">
                 <Checkbox
-                  checked={newValue}
+                  checked={newValue || false}
                   color="primary"
+                  indeterminate={isIndeterminate}
                   disabled={field.typeArgs.readonly || false}
                   onChange={(event) => {
                     setNewValue(event.target.checked);

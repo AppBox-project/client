@@ -3,15 +3,18 @@ import { Checkbox, FormControlLabel } from "@material-ui/core";
 
 const InputCheckbox: React.FC<{
   label?: string;
-  value?: string;
+  value?: boolean;
   onChange?: (value: boolean) => void;
   style?;
   disabled?: boolean;
 }> = ({ label, value, onChange, style, disabled }) => {
   // Vars
-  const [newValue, setNewValue] = useState<any>(value ? value : false);
+  const [newValue, setNewValue] = useState<any>(value || false);
 
   // UI
+  const isIndeterminate = value !== true && value !== false;
+  console.log(isIndeterminate, value);
+
   return label ? (
     <FormControlLabel
       style={style}
@@ -20,6 +23,7 @@ const InputCheckbox: React.FC<{
           style={{ padding: 0 }}
           color="primary"
           checked={newValue}
+          indeterminate={isIndeterminate}
           disabled={disabled}
           onChange={(event) => {
             setNewValue(event.target.checked);
@@ -34,6 +38,7 @@ const InputCheckbox: React.FC<{
       style={{ ...style, padding: 0 }}
       color="primary"
       checked={newValue}
+      indeterminate={isIndeterminate}
       disabled={disabled}
       onChange={(event) => {
         setNewValue(event.target.checked);

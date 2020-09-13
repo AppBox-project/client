@@ -244,43 +244,45 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           >
             {userAppList.map((appId) => {
               const app: AppType = apps[appId];
-              const Icon = icons[app.data.icon];
-              return (
-                <div
-                  className={`${styles.item} ${
-                    currentApp === app.data.id && styles.active
-                  }`}
-                  onContextMenu={(event) => {
-                    setAppContextMenuAnchor(event.currentTarget);
-                    setAppContextMenuApp(app);
-                    event.preventDefault();
-                  }}
-                  onDoubleClick={(event) => {
-                    setAppContextMenuAnchor(event.currentTarget);
-                    setAppContextMenuApp(app);
-                    event.preventDefault();
-                  }}
-                  key={app._id}
-                >
-                  <motion.div variants={item} style={{ width: 64 }}>
-                    <Tooltip placement="right" title={app.data.name}>
-                      <Link to={`/${app.data.id}`} className="no-link">
-                        <IconButton>
-                          <Avatar
-                            variant="rounded"
-                            style={{
-                              transition: "all 1s",
-                              backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                            }}
-                          >
-                            <Icon />
-                          </Avatar>
-                        </IconButton>
-                      </Link>
-                    </Tooltip>
-                  </motion.div>
-                </div>
-              );
+              if (app) {
+                const Icon = icons[app.data.icon];
+                return (
+                  <div
+                    className={`${styles.item} ${
+                      currentApp === app.data.id && styles.active
+                    }`}
+                    onContextMenu={(event) => {
+                      setAppContextMenuAnchor(event.currentTarget);
+                      setAppContextMenuApp(app);
+                      event.preventDefault();
+                    }}
+                    onDoubleClick={(event) => {
+                      setAppContextMenuAnchor(event.currentTarget);
+                      setAppContextMenuApp(app);
+                      event.preventDefault();
+                    }}
+                    key={app._id}
+                  >
+                    <motion.div variants={item} style={{ width: 64 }}>
+                      <Tooltip placement="right" title={app.data.name}>
+                        <Link to={`/${app.data.id}`} className="no-link">
+                          <IconButton>
+                            <Avatar
+                              variant="rounded"
+                              style={{
+                                transition: "all 1s",
+                                backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                              }}
+                            >
+                              <Icon />
+                            </Avatar>
+                          </IconButton>
+                        </Link>
+                      </Tooltip>
+                    </motion.div>
+                  </div>
+                );
+              }
             })}
           </motion.div>
         ) : (

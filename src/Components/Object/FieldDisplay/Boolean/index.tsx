@@ -9,6 +9,7 @@ const ObjectFieldDisplayBoolean: React.FC<{ modelField; objectField }> = ({
     <Checkbox
       style={{ padding: 0 }}
       disabled
+      indeterminate={objectField !== true && objectField !== false}
       checked={objectField}
       color="primary"
     />
