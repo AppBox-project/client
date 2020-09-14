@@ -169,7 +169,56 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       </Grid>
       <Divider style={{ margin: 15 }} />
       <LayoutDesigner
-        componentList={{
+        componentList={{Field: {
+            label: "Field",
+            dynamicLabel: "field",
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                form: [
+                  {
+                    key: "field",
+                    label: "Field",
+                    value: layoutItem.field || "",
+                    type: "dropdown",
+                    dropdownOptions: fieldList,
+                  },
+                  {
+                    label: "Hide while viewing",
+                    key: "hideView",
+                    type: "boolean",
+                  },
+                  {
+                    label: "Hide while editing",
+                    key: "hideEdit",
+                    type: "boolean",
+                  },
+                  {
+                    label: "Remove label",
+                    key: "noLabel",
+                    type: "boolean",
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
           GridContainer: {
             label: "Grid container",
             droppable: true,
@@ -471,56 +520,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
-          Field: {
-            label: "Field",
-            dynamicLabel: "field",
-            popup: (component, layoutItem, respond, deleteItem) => {
-              // Show tweak UI
-              context.setDialog({
-                display: true,
-                title: component.label,
-                form: [
-                  {
-                    key: "field",
-                    label: "Field",
-                    value: layoutItem.field || "",
-                    type: "dropdown",
-                    dropdownOptions: fieldList,
-                  },
-                  {
-                    label: "Hide while viewing",
-                    key: "hideView",
-                    type: "boolean",
-                  },
-                  {
-                    label: "Hide while editing",
-                    key: "hideEdit",
-                    type: "boolean",
-                  },
-                  {
-                    label: "Remove label",
-                    key: "noLabel",
-                    type: "boolean",
-                  },
-                ],
-                buttons: [
-                  {
-                    label: <div style={{ color: "red" }}>Delete</div>,
-                    onClick: (response) => {
-                      deleteItem();
-                    },
-                  },
-                  {
-                    label: "Update",
-                    onClick: (response) => {
-                      respond(response);
-                      setHasChanged(true);
-                    },
-                  },
-                ],
-              });
-            },
-          },
+          
           FieldGrid: {
             label: "Field grid",
             dynamicLabel: "title",
