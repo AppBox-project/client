@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import { AppContextType } from "../../../../Utils/Types";
+import React, { useEffect, useState } from "react";
+import {
+  AppContextType,
+  ModelType,
+  ValueListItemType,
+} from "../../../../Utils/Types";
 import { Typography, Divider, Button, Grid } from "@material-ui/core";
 
 const AppActionAddObject: React.FC<{
@@ -14,7 +18,24 @@ const AppActionAddObject: React.FC<{
     name_plural: null,
     api: {},
   });
+  const [models, setModels] = useState<ValueListItemType[]>();
+
   // Lifecycle
+  useEffect(() => {
+    const request = context.getTypes({}, (response) => {
+      if (response.success) {
+        const nm: ValueListItemType[] = [];
+        response.data.map((o: ModelType) =>
+          nm.push({ label: o.name, value: o.key })
+        );
+        setModels(nm);
+      } else {
+        console.log(response);
+      }
+    });
+
+    return () => request.stop();
+  }, []);
   // UI
   return (
     <context.UI.Margin>
@@ -23,7 +44,7 @@ const AppActionAddObject: React.FC<{
           <context.UI.Design.Card hoverable>
             <Typography variant="h6">Create new model</Typography>
             <Divider style={{ marginTop: 5 }} />
-            <Grid container>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <context.UI.Inputs.TextInput
                   label="Key"
@@ -50,6 +71,27 @@ const AppActionAddObject: React.FC<{
                     setNewObject({ ...newObject, name_plural: value });
                   }}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <context.UI.Inputs.CheckmarkInput
+                  label="Linked model"
+                  value={newObject.linked}
+                  onChange={(value) => {
+                    setNewObject({ ...newObject, linked: value });
+                  }}
+                />
+                {newObject.linked && (
+                  <context.UI.Inputs.Select
+                    label="Objects"
+                    multiple
+                    options={models}
+                    isLoading={!Boolean(models)}
+                    value={newObject.linkedModels}
+                    onChange={(value) => {
+                      setNewObject({ ...newObject, linkedModels: value });
+                    }}
+                  />
+                )}
               </Grid>
             </Grid>
             <Button

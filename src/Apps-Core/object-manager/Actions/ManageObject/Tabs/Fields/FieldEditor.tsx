@@ -154,6 +154,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     value={field.type}
                     options={[
                       { value: "input", label: "Input" },
+                      { value: "auto_name", label: "Automatic name" },
                       { value: "boolean", label: "Boolean" },
                       { value: "color", label: "Color" },
                       { value: "date", label: "Date" },
@@ -166,6 +167,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         value: "relationship_m",
                         label: "Relationship (Many-To-Many)",
                       },
+
                       { value: "file", label: "File" },
                       { value: "picture", label: "Picture" },
                       { value: "qr", label: "QR-code" },
@@ -420,6 +422,34 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                             ...field.typeArgs,
                             relationshipTo: value,
                           },
+                        });
+                      }}
+                    />
+                  </Grid>
+                )}
+                {field.type === "auto_name" && (
+                  <Grid item xs={6}>
+                    <UI.Inputs.Select
+                      label="Mode"
+                      value={field?.typeArgs?.mode}
+                      options={[
+                        { label: "Automatic numbering", value: "increment" },
+                        { label: "Random", value: "random" },
+                      ]}
+                      onChange={(mode) => {
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, mode: mode.value },
+                        });
+                      }}
+                    />
+                    <UI.Inputs.TextInput
+                      label="Prefix"
+                      value={field?.typeArgs?.prefix}
+                      onChange={(prefix) => {
+                        setField({
+                          ...field,
+                          typeArgs: { ...field.typeArgs, prefix },
                         });
                       }}
                     />
