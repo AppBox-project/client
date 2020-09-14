@@ -151,7 +151,11 @@ const App: React.FC<{
           maxWidth={dialog.size ? dialog.size : "sm"}
           fullWidth
         >
-          {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
+          {dialog.content && (
+            <DialogContent style={{ padding: "8px 0" }}>
+              {dialog.content}
+            </DialogContent>
+          )}
           {dialog.form && (
             <Grid container style={{ width: "90%", marginLeft: 25 }}>
               {dialog.form.map((formItem) => {

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import DropTarget from "./DropTarget";
 import Component from "./Component";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
 import { map } from "lodash";
 import { LayoutType } from "../../Utils/Types";
@@ -14,6 +12,9 @@ import {
 import { BsBoxArrowRight, BsBoxArrowLeft } from "react-icons/bs";
 import styles from "./styles.module.scss";
 import { remove, updateById } from "../../Utils/Functions/General";
+import { DndProvider } from "react-dnd";
+import MultiBackend from "react-dnd-multi-backend";
+import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or any other pipeline
 
 const LayoutDesigner: React.FC<{
   layout: LayoutType;
@@ -25,7 +26,7 @@ const LayoutDesigner: React.FC<{
 
   // UI
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <Grid container style={{ overflow: "hidden", height: "100%" }}>
         <Grid
           item

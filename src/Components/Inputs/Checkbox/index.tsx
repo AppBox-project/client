@@ -12,8 +12,10 @@ const InputCheckbox: React.FC<{
   const [newValue, setNewValue] = useState<any>(value || false);
 
   // UI
-  const isIndeterminate = value !== true && value !== false;
-  console.log(isIndeterminate, value);
+  const isIndeterminate =
+    newValue === value
+      ? value !== true && value !== false
+      : newValue !== true && newValue !== false;
 
   return label ? (
     <FormControlLabel

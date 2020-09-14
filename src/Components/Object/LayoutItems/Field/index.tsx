@@ -108,7 +108,7 @@ const ObjectLayoutItemField: React.FC<{
               setMode("edit");
             }}
           >
-            <div style={{ width: "25%" }}>
+            <div style={{ flex: 1 }}>
               <Typography variant="body1" style={{ fontWeight: "bold" }}>
                 {modelField.name}
               </Typography>
