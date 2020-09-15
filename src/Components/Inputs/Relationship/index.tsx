@@ -32,11 +32,9 @@ const InputRelationShip: React.FC<{
         if (response.success) {
           const newOptions = [];
           response.data.map((item) => {
-            if (item._id === value)
-              setNewValue({
-                label: item.data[model.primary],
-                value: item._id,
-              });
+            if (item._id === value) {
+              setNewValue(item._id);
+            }
             newOptions.push({
               label: item.data[model.primary],
               value: item._id,

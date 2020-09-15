@@ -13,7 +13,6 @@ import styles from "./styles.module.scss";
 import InputCheckbox from "../../../Inputs/Checkbox";
 import InputSelect from "../../../Inputs/Select";
 import InputRelationShip from "../../../Inputs/Relationship";
-import { find } from "lodash";
 import InputPicture from "../../../Inputs/Picture";
 import InputRichText from "../../../Inputs/RichText";
 import InputColor from "../../../Inputs/Color";
@@ -50,7 +49,7 @@ const ObjectLayoutItemField: React.FC<{
     model.fields[layoutItem.field]
   );
   const [objectField, setObjectField] = useState<any>(
-    object ? object.data[layoutItem.field] : ""
+    object?.data[layoutItem.field] || ""
   );
   // Lifecycle
   useEffect(() => {
@@ -102,26 +101,27 @@ const ObjectLayoutItemField: React.FC<{
             context={context}
           />
         ) : (
-          <div
+          <Grid
+            container
             className={`${styles.container} ${styles.containerView}`}
             onDoubleClick={() => {
               setMode("edit");
             }}
           >
-            <div style={{ flex: 1 }}>
+            <Grid item xs={12} md={6}>
               <Typography variant="body1" style={{ fontWeight: "bold" }}>
                 {modelField.name}
               </Typography>
-            </div>
-            <div style={{ flex: 1 }}>
+            </Grid>
+            <Grid item xs={12} md={6}>
               <FieldDisplay
                 objectField={objectField}
                 modelField={modelField}
                 CustomField={CustomField}
                 context={context}
               />
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         )
       ) : (
         <></>
@@ -193,7 +193,7 @@ const ObjectLayoutItemField: React.FC<{
                   onChange(value);
                 }}
               />
-            )}{" "}
+            )}
             {modelField.type === "relationship_m" && (
               <InputRelationShipM
                 label={modelField.name}
@@ -207,12 +207,10 @@ const ObjectLayoutItemField: React.FC<{
             {modelField.type === "options" && (
               <InputSelect
                 label={modelField.name}
-                value={find(modelField.typeArgs.options, (o) => {
-                  return o.key === objectField;
-                })}
+                value={objectField}
                 options={options}
                 onChange={(value) => {
-                  onChange(value.key);
+                  onChange(value.value);
                 }}
               />
             )}

@@ -3,6 +3,7 @@ import Select, { components } from "react-select";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
+import { useGlobal } from "reactn";
 
 function arrayMove(array, from, to) {
   array = array.slice();
@@ -33,6 +34,7 @@ const InputRelationShipM: React.FC<{
   // Vars
   const [selected, setSelected] = useState<any>([]);
   const [options, setOptions] = useState<any>();
+  const [app] = useGlobal<any>("app");
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const newValue = arrayMove(selected, oldIndex, newIndex);
@@ -112,6 +114,26 @@ const InputRelationShipM: React.FC<{
         MultiValue: SortableMultiValue,
       }}
       closeMenuOnSelect={false}
+      styles={{
+        menu: (styles) => ({
+          ...styles,
+          zIndex: 101,
+        }),
+        control: (styles) => ({
+          ...styles,
+          position: "relative",
+          zIndex: 100,
+        }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+          return {
+            ...styles,
+            backgroundColor: isSelected
+              ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
+              : isFocused &&
+                `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},0.4)`,
+          };
+        },
+      }}
     />
   );
 };

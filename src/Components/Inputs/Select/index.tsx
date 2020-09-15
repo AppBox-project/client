@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGlobal } from "reactn";
 import Select from "react-select";
 import { find } from "lodash";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
@@ -14,6 +15,7 @@ const InputSelect: React.FC<{
 }> = ({ label, options, value, isLoading, onChange, multiple, style }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>();
+  const [app] = useGlobal<any>("app");
 
   // Lifecycle
   useEffect(() => {
@@ -41,18 +43,26 @@ const InputSelect: React.FC<{
         if (onChange) onChange(chosen);
       }}
       styles={{
-        container: (styles) => ({
+        menu: (styles) => ({
           ...styles,
           ...style,
           zIndex: 101,
-          position: "relative",
         }),
         control: (styles) => ({
           ...styles,
           ...style,
           position: "relative",
-          zIndex: 101,
+          zIndex: 100,
         }),
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+          return {
+            ...styles,
+            backgroundColor: isSelected
+              ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
+              : isFocused &&
+                `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},0.4)`,
+          };
+        },
       }}
     />
   );

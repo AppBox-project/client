@@ -56,7 +56,6 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   }, [detailId]);
 
   if (!overview) return <UI.Loading />;
-
   return (
     <div style={{ margin: 15 }}>
       <UI.Animations.AnimationContainer>
@@ -311,27 +310,27 @@ const AppActionManageObjectOverviewEditor: React.FC<{
           </Grid>
         </div>
       </UI.Animations.AnimationContainer>
-      {model.overviews[detailId] !== overview && (
-        <div style={{ position: "absolute", right: 15, bottom: 15 }}>
-          <UI.Animations.AnimationContainer>
-            <Fab
-              color="primary"
-              onClick={() => {
-                context.updateModel(
-                  model.key,
-                  {
-                    ...model,
-                    overviews: { ...model.overviews, [detailId]: overview },
-                  },
-                  model._id
-                );
-              }}
-            >
-              <FaSave />
-            </Fab>
-          </UI.Animations.AnimationContainer>
-        </div>
-      )}
+      <Fab
+        color="primary"
+        style={{
+          position: "absolute",
+          right: 15,
+          bottom: 75,
+          zIndex: 55,
+        }}
+        onClick={() => {
+          context.updateModel(
+            model.key,
+            {
+              ...model,
+              overviews: { ...model.overviews, [detailId]: overview },
+            },
+            model._id
+          );
+        }}
+      >
+        <FaSave />
+      </Fab>
     </div>
   );
 };

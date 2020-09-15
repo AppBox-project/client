@@ -169,7 +169,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       </Grid>
       <Divider style={{ margin: 15 }} />
       <LayoutDesigner
-        componentList={{Field: {
+        componentList={{
+          Field: {
             label: "Field",
             dynamicLabel: "field",
             popup: (component, layoutItem, respond, deleteItem) => {
@@ -520,7 +521,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
-          
+
           FieldGrid: {
             label: "Field grid",
             dynamicLabel: "title",
@@ -716,7 +717,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       {hasChanged && (
         <Fab
           color="primary"
-          style={{ position: "fixed", bottom: 15, right: 15 }}
+          style={{ position: "fixed", bottom: 15, right: 15, zIndex: 55 }}
           onClick={() => {
             context.updateModel(
               model.key,
