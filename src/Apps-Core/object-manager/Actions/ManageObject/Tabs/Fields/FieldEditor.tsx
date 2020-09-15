@@ -455,6 +455,18 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     />
                   </Grid>
                 )}
+                {field.type === "picture" && (
+                  <UI.Inputs.CheckmarkInput
+                    label="Set as banner"
+                    value={field?.typeArgs?.asBanner}
+                    onChange={(asBanner) => {
+                      setField({
+                        ...field,
+                        typeArgs: { ...field.typeArgs, asBanner },
+                      });
+                    }}
+                  />
+                )}
                 {field.type === "custom" && (
                   <Grid item xs={6}>
                     <UI.Inputs.TextInput

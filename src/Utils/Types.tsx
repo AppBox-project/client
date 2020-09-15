@@ -42,6 +42,7 @@ export interface ModelFieldType {
     options?: { label: string; key: string }[];
     key?: string;
     readonly?: boolean;
+    asBanner?: boolean;
   };
 }
 

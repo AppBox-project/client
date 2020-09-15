@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   AppContextType,
   ListItemType,
-  ObjectType,
   ModelType,
   ValueListItemType,
 } from "../../../Utils/Types";

@@ -54,6 +54,11 @@ const ObjectLayoutItemField: React.FC<{
   // Lifecycle
   useEffect(() => {
     setObjectField(object ? object.data[layoutItem.field] : "");
+    // Set as banner
+    if (modelField?.typeArgs?.asBanner && objectField) {
+      context.setImage(objectField);
+    }
+    return () => context.setImage(undefined);
   }, [object]);
   useEffect(() => {
     setModelField(model.fields[layoutItem.field]);
