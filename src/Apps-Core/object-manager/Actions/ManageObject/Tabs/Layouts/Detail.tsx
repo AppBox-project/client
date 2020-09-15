@@ -629,6 +629,12 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     value: layoutItem.sideMarginOnly,
                     type: "boolean",
                   },
+                  {
+                    label: "Include add button",
+                    key: "addButton",
+                    value: layoutItem.addButton,
+                    type: "boolean",
+                  },
                 ],
                 buttons: [
                   {

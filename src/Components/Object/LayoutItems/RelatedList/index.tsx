@@ -18,11 +18,14 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Card from "../../../Design/Card";
 import * as icons from "react-icons/fa";
 import ObjectPreview from "../../ObjectPreview";
+import FieldDisplay from "../../FieldDisplay";
+import { AppContextType } from "../../../../Utils/Types";
 
-const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
-  layoutItem,
-  objectId,
-}) => {
+const ObjectLayoutItemRelatedList: React.FC<{
+  layoutItem;
+  objectId;
+  context: AppContextType;
+}> = ({ layoutItem, objectId, context }) => {
   // Vars
   const [relatedItems, setRelatedItems] = useState<any>();
   const [relatedModel, setRelatedModel] = useState<any>();
@@ -74,6 +77,33 @@ const ObjectLayoutItemRelatedList: React.FC<{ layoutItem; objectId }> = ({
       sideMarginOnly={layoutItem.sideMarginOnly}
       card={layoutItem.displayCard}
       title={layoutItem.title}
+      buttons={
+        layoutItem.addButton && [
+          {
+            label: "Add",
+            icon: icons.FaPlus,
+            compact: true,
+            onClick: () => {
+              context.setDialog({
+                display: true,
+                content: (
+                  <context.UI.Layouts.Object.ObjectLayout
+                    layoutId="create"
+                    context={context}
+                    popup
+                    model={relatedModel}
+                    defaults={{ [layoutItem.field]: objectId }}
+                    hideFields={[layoutItem.field]}
+                    onSuccess={() => {
+                      context.setDialog({ display: false });
+                    }}
+                  />
+                ),
+              });
+            },
+          },
+        ]
+      }
     >
       {!layoutItem.displayCard && (
         <Typography variant="h6" style={{ textAlign: "center" }}>
@@ -172,6 +202,7 @@ const MaybeCard: React.FC<{
   withBigMargin: boolean;
   withSmallMargin: boolean;
   sideMarginOnly: boolean;
+  buttons?;
 }> = ({
   children,
   card,
@@ -179,6 +210,7 @@ const MaybeCard: React.FC<{
   withBigMargin,
   withSmallMargin,
   sideMarginOnly,
+  buttons,
 }) =>
   card ? (
     <Card
@@ -187,6 +219,7 @@ const MaybeCard: React.FC<{
       withBigMargin={withBigMargin}
       withSmallMargin={withSmallMargin}
       sideMarginOnly={sideMarginOnly}
+      buttons={buttons}
     >
       {children}
     </Card>
@@ -231,7 +264,10 @@ const ResultRow: React.FC<{ item; history; layoutItem; key; model }> = ({
         {layoutItem.displayfields.split(",").map((field) => {
           return (
             <TableCell key={field}>
-              {item.data[field] ? item.data[field] : " "}
+              <FieldDisplay
+                objectField={item.data[field]}
+                modelField={model.fields[field]}
+              />
             </TableCell>
           );
         })}

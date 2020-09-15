@@ -226,48 +226,50 @@ const AppQSTodoListLayout: React.FC<{
             </div>
           </context.UI.Animations.AnimationItem>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <context.UI.Animations.AnimationItem>
-            <div
-              className={!isMobile && "scrollIndependently"}
-              style={{ paddingBottom: isMobile && 60 }}
-            >
-              <context.UI.Design.Card
-                title="Done!"
-                withBigMargin
-                centerTitle
-                titleDivider
-                titleInPrimaryColor
+        {(doneTodos || []).length > 0 && (
+          <Grid item xs={12} md={4}>
+            <context.UI.Animations.AnimationItem>
+              <div
+                className={!isMobile && "scrollIndependently"}
+                style={{ paddingBottom: isMobile && 60 }}
               >
-                <Button
-                  onClick={() => {
-                    setShowDone(!showDone);
-                  }}
-                  fullWidth
-                  startIcon={showDone ? <FaToggleOn /> : <FaToggleOff />}
-                  variant={showDone ? "outlined" : "text"}
-                  color="primary"
+                <context.UI.Design.Card
+                  title="Done!"
+                  withBigMargin
+                  centerTitle
+                  titleDivider
+                  titleInPrimaryColor
                 >
-                  Show done
-                </Button>
-                <Collapse in={showDone} timeout="auto" unmountOnExit>
-                  <List>
-                    {(doneTodos || []).map((todo) => (
-                      <AppQSActionTodoDetailTodo
-                        todo={todo}
-                        context={context}
-                        model={model}
-                        isMobile={isMobile}
-                        key={todo._id}
-                        hideStatus
-                      />
-                    ))}
-                  </List>
-                </Collapse>
-              </context.UI.Design.Card>
-            </div>
-          </context.UI.Animations.AnimationItem>
-        </Grid>
+                  <Button
+                    onClick={() => {
+                      setShowDone(!showDone);
+                    }}
+                    fullWidth
+                    startIcon={showDone ? <FaToggleOn /> : <FaToggleOff />}
+                    variant={showDone ? "outlined" : "text"}
+                    color="primary"
+                  >
+                    Show done
+                  </Button>
+                  <Collapse in={showDone} timeout="auto" unmountOnExit>
+                    <List>
+                      {(doneTodos || []).map((todo) => (
+                        <AppQSActionTodoDetailTodo
+                          todo={todo}
+                          context={context}
+                          model={model}
+                          isMobile={isMobile}
+                          key={todo._id}
+                          hideStatus
+                        />
+                      ))}
+                    </List>
+                  </Collapse>
+                </context.UI.Design.Card>
+              </div>
+            </context.UI.Animations.AnimationItem>
+          </Grid>
+        )}
       </Grid>
     </context.UI.Animations.AnimationContainer>
   );

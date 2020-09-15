@@ -337,10 +337,13 @@ export interface UIType {
         baseUrl?: string;
         onObjectDisappears?: (history) => void;
         mode?: "view" | "edit";
+        onSuccess?: () => void;
+
         provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
         provideLayoutElements?: {
           [key: string]: React.FC<CustomLayoutElementType>;
         };
+        hideFields?: string[];
         style?: CSSProperties;
       }>;
       BoardLayout: React.FC<{

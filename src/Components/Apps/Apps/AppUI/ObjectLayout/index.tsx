@@ -25,7 +25,9 @@ const UIObjectLayout: React.FC<{
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
   provideLayoutElements?: { [key: string]: React.FC };
+  hideFields?: string[];
   style?: CSSProperties;
+  onSuccess?: () => void;
 }> = ({
   model,
   modelId,
@@ -40,6 +42,8 @@ const UIObjectLayout: React.FC<{
   provideCustomFields,
   provideLayoutElements,
   style,
+  hideFields,
+  onSuccess,
 }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
@@ -81,10 +85,12 @@ const UIObjectLayout: React.FC<{
         objectId={objectId}
         baseUrl={baseUrl}
         context={context}
+        onSuccess={onSuccess}
         onObjectDisappears={onObjectDisappears}
         mode={mode}
         provideCustomFields={provideCustomFields}
         provideLayoutElements={provideLayoutElements}
+        hideFields={hideFields}
       />
     </div>
   );

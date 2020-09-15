@@ -59,6 +59,7 @@ const ViewObject: React.FC<{
   mode?: "view" | "edit";
   provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
   provideLayoutElements?: { [key: string]: React.FC<CustomLayoutElementType> };
+  hideFields?: string[];
   style?: CSSProperties;
 }> = ({
   modelId,
@@ -76,6 +77,7 @@ const ViewObject: React.FC<{
   mode,
   provideCustomFields,
   provideLayoutElements,
+  hideFields,
   style,
 }) => {
   const [appliedModel, setmodel] = useState<ModelType>();
@@ -627,6 +629,7 @@ const ViewObject: React.FC<{
                 customLayoutItems={provideLayoutElements}
                 context={context}
                 FactsBar={FactsBar}
+                hideFields={hideFields}
               />
             );
           })
@@ -665,6 +668,7 @@ const LayoutItem: React.FC<{
   customFieldTypes: { [key: string]: React.FC<CustomFieldType> };
   customLayoutItems: { [key: string]: React.FC<CustomLayoutElementType> };
   context: AppContextType;
+  hideFields: string[];
   FactsBar;
 }> = ({
   layoutItem,
@@ -679,6 +683,7 @@ const LayoutItem: React.FC<{
   baseUrl,
   customFieldTypes,
   customLayoutItems,
+  hideFields,
   context,
   FactsBar,
 }) => {
@@ -704,6 +709,7 @@ const LayoutItem: React.FC<{
                 customLayoutItems={customLayoutItems}
                 context={context}
                 FactsBar={FactsBar}
+                hideFields={hideFields}
               />
             );
           })}
@@ -737,6 +743,7 @@ const LayoutItem: React.FC<{
                   customLayoutItems={customLayoutItems}
                   context={context}
                   FactsBar={FactsBar}
+                  hideFields={hideFields}
                 />
               );
             })}
@@ -764,6 +771,7 @@ const LayoutItem: React.FC<{
                   customLayoutItems={customLayoutItems}
                   context={context}
                   FactsBar={FactsBar}
+                  hideFields={hideFields}
                 />
               );
             })}
@@ -790,6 +798,7 @@ const LayoutItem: React.FC<{
                 customLayoutItems={customLayoutItems}
                 context={context}
                 FactsBar={FactsBar}
+                hideFields={hideFields}
               />
             );
           })}
@@ -839,6 +848,7 @@ const LayoutItem: React.FC<{
                 customLayoutItems={customLayoutItems}
                 context={context}
                 FactsBar={FactsBar}
+                hideFields={hideFields}
               />
             );
           })}
@@ -846,25 +856,28 @@ const LayoutItem: React.FC<{
       );
     case "Field":
       return (
-        <ObjectLayoutItemField
-          layoutItem={layoutItem}
-          object={object}
-          mode={mode}
-          setMode={setMode}
-          model={model}
-          toChange={toChange}
-          onChange={(value) => {
-            setToChange({ ...toChange, [layoutItem.field]: value });
-          }}
-          customFieldTypes={customFieldTypes}
-          context={context}
-        />
+        !(hideFields || []).includes(layoutItem.field) && (
+          <ObjectLayoutItemField
+            layoutItem={layoutItem}
+            object={object}
+            mode={mode}
+            setMode={setMode}
+            model={model}
+            toChange={toChange}
+            onChange={(value) => {
+              setToChange({ ...toChange, [layoutItem.field]: value });
+            }}
+            customFieldTypes={customFieldTypes}
+            context={context}
+          />
+        )
       );
     case "RelatedList":
       return (
         <ObjectLayoutItemRelatedList
           layoutItem={layoutItem}
           objectId={object._id}
+          context={context}
         />
       );
 
@@ -890,6 +903,7 @@ const LayoutItem: React.FC<{
               customLayoutItems={customLayoutItems}
               context={context}
               FactsBar={FactsBar}
+              hideFields={hideFields}
             />
           );
         });
