@@ -28,6 +28,7 @@ const Card: React.FC<{
   className?: string;
   disablePadding?: boolean;
   buttons?: button[];
+  onClick?: () => void;
 }> = ({
   children,
   hoverable,
@@ -42,6 +43,7 @@ const Card: React.FC<{
   titleInPrimaryColor,
   disablePadding,
   buttons,
+  onClick,
 }) => {
   const margins = {
     ...(withBigMargin
@@ -64,6 +66,7 @@ const Card: React.FC<{
       className={`test ${styles.root} ${
         hoverable && styles.hoverable
       } ${className} ${className}`}
+      onClick={onClick}
       style={{
         ...margins,
         ...style,

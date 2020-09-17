@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType } from "../../../Utils/Types";
+import { AppContextType, AppType } from "../../../Utils/Types";
 import styles from "./styles.module.scss";
 import {
   Paper,
@@ -8,6 +8,7 @@ import {
   Fab,
   Tooltip,
   CircularProgress,
+  Button,
 } from "@material-ui/core";
 import { FaDownload } from "react-icons/fa";
 import Server from "../../../Utils/Server";
@@ -26,6 +27,7 @@ const AppAHViewApp: React.FC<{
 }) => {
   // Vars
   const [app, setApp] = useState<any>();
+  const [localApp, setLocalApp] = useState<AppType>();
   const [requestId] = useState<any>(uniqid());
   const [currentTask, setCurrentTask] = useState<any>();
 
@@ -50,7 +52,21 @@ const AppAHViewApp: React.FC<{
         }
       });
     });
-  }, []);
+
+    const localAppRequest = context.getObjects(
+      "app",
+      { "data.id": appId },
+      (response) => {
+        if (response.success) {
+          setLocalApp(response.data[0]);
+        } else {
+          console.log(response);
+        }
+      }
+    );
+
+    return () => localAppRequest.stop();
+  }, [appId]);
 
   // UI
   if (!app) return <context.UI.Loading />;
@@ -62,19 +78,67 @@ const AppAHViewApp: React.FC<{
       />
       {!currentTask && (
         <Paper className={styles.container}>
-          <Grid container>
-            <Tooltip placement="right" title="Download and install">
-              <Grid item xs={1}>
-                <Fab
+          <Grid container spacing={3}>
+            <Grid item xs={1}>
+              {localApp ? (
+                <Button
+                  fullWidth
+                  variant="contained"
                   color="primary"
                   onClick={() => {
-                    Server.emit("installApp", { requestId, appId });
+                    context.setDialog({
+                      display: true,
+                      title: "Delete data from app?",
+                      content:
+                        "If any data belongs to this app, what do you want to do?",
+                      buttons: [
+                        {
+                          label: (
+                            <Typography style={{ color: "green" }}>
+                              Keep data
+                            </Typography>
+                          ),
+                          onClick: () => {
+                            Server.emit("uninstallApp", {
+                              requestId,
+                              appId,
+                              removeData: false,
+                            });
+                          },
+                        },
+                        {
+                          label: (
+                            <Typography style={{ color: "red" }}>
+                              Delete data
+                            </Typography>
+                          ),
+                          onClick: () => {
+                            Server.emit("uninstallApp", {
+                              requestId,
+                              appId,
+                              removeData: true,
+                            });
+                          },
+                        },
+                      ],
+                    });
                   }}
                 >
-                  <FaDownload />
-                </Fab>
-              </Grid>
-            </Tooltip>
+                  Uninstall
+                </Button>
+              ) : (
+                <Tooltip placement="right" title="Download and install">
+                  <Fab
+                    color="primary"
+                    onClick={() => {
+                      Server.emit("installApp", { requestId, appId });
+                    }}
+                  >
+                    <FaDownload />
+                  </Fab>
+                </Tooltip>
+              )}
+            </Grid>
             <Grid item xs={11}>
               <Typography variant="h4">{app.data.name}</Typography>
               <Typography variant="h6">By {app.data.author}</Typography>
