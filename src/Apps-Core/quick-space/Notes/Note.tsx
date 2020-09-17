@@ -20,9 +20,9 @@ const AppQSNote: React.FC<{
   // Lifecycle
   useEffect(() => {
     const img = (notes || {})[detailId]?.data?.image;
-    if (img) context.setImage(img);
+    if (img) context?.setImage(img);
     return () => {
-      context.setImage(undefined);
+      context?.setImage(undefined);
     };
   }, [detailId, notes]);
 

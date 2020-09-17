@@ -58,7 +58,7 @@ const ObjectLayoutItemField: React.FC<{
     if (modelField?.typeArgs?.asBanner && objectField) {
       context.setImage(objectField);
     }
-    return () => context.setImage(undefined);
+    return () => context?.setImage(undefined);
   }, [object]);
   useEffect(() => {
     setModelField(model.fields[layoutItem.field]);
