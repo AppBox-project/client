@@ -10,6 +10,9 @@ const InputInput: React.FC<{
   style?;
   autoFocus?;
   readOnly?: boolean;
+  onEnter?: (value: string) => void;
+  onEscape?: (value: string) => void;
+  onKeyPress?: (value: string) => void;
 }> = ({
   placeholder,
   label,
@@ -19,6 +22,9 @@ const InputInput: React.FC<{
   style,
   autoFocus,
   readOnly,
+  onEnter,
+  onEscape,
+  onKeyPress,
 }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
@@ -45,6 +51,15 @@ const InputInput: React.FC<{
             setNewValue(event.target.value);
             if (onChange && !readOnly) onChange(event.target.value);
           }}
+          onKeyDown={(e) => {
+            if (onKeyPress) onKeyPress(newValue);
+            if (e.key === "Enter") {
+              if (onEnter) onEnter(newValue);
+            }
+            if (e.key === "Escape") {
+              if (onEscape) onEscape(newValue);
+            }
+          }}
         />
       </label>
     );
@@ -60,6 +75,15 @@ const InputInput: React.FC<{
       onChange={(event) => {
         setNewValue(event.target.value);
         if (onChange && !readOnly) onChange(event.target.value);
+      }}
+      onKeyDown={(e) => {
+        if (onKeyPress) onKeyPress(newValue);
+        if (e.key === "Enter") {
+          if (onEnter) onEnter(newValue);
+        }
+        if (e.key === "Escape") {
+          if (onEscape) onEscape(newValue);
+        }
       }}
     />
   );

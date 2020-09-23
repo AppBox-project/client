@@ -80,6 +80,69 @@ const Login: React.FC = () => {
   const [token, setToken] = useState<string>("");
 
   // UI
+  const submit = () => {
+    const requestId = uniqid();
+    Server.emit("requestToken", { requestId, user });
+    Server.on(`receive-${requestId}`, (response) => {
+      if (response.success) {
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("token", response.token);
+        const signInRequest = uniqid();
+        Server.emit("signIn", {
+          requestId: signInRequest,
+          username: user.username,
+          token: response.token,
+        });
+        Server.on(`receive-${signInRequest}`, (response) => {
+          if (response.success) {
+            setGlobalUser(response.user);
+            window.location.reload();
+          } else {
+            setFailReason(response.reason);
+          }
+        });
+      } else {
+        if (response.reason === "require-mfa") {
+          setRequireToken(true);
+        } else {
+          setFailReason(response.reason);
+        }
+      }
+    });
+  };
+
+  const submitMfa = () => {
+    const requestId = uniqid();
+    Server.emit("requestToken", {
+      requestId,
+      user,
+      token,
+      mfaToken: token,
+    });
+    Server.on(`receive-${requestId}`, (response) => {
+      if (response.success) {
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("token", response.token);
+        const signInRequest = uniqid();
+        Server.emit("signIn", {
+          requestId: signInRequest,
+          username: user.username,
+          token: response.token,
+        });
+        Server.on(`receive-${signInRequest}`, (response) => {
+          if (response.success) {
+            setGlobalUser(response.user);
+            window.location.reload();
+          } else {
+            setFailReason(response.reason);
+            console.log(response);
+          }
+        });
+      } else {
+        setFailReason(response.reason);
+      }
+    });
+  };
   return (
     <>
       {!requireToken ? (
@@ -89,61 +152,25 @@ const Login: React.FC = () => {
               {failReason}
             </Typography>
           )}
-          <TextField
-            fullWidth
-            margin="normal"
-            variant="outlined"
+          <InputInput
             label="Username"
             value={user.username}
-            onChange={(e) => {
-              setUser({ ...user, username: e.target.value });
+            onChange={(value) => {
+              setUser({ ...user, username: value });
             }}
+            onEnter={submit}
           />
 
-          <TextField
-            fullWidth
-            margin="normal"
-            variant="outlined"
+          <InputInput
             label="Password"
             type="password"
             value={user.password}
-            onChange={(e) => {
-              setUser({ ...user, password: e.target.value });
+            onChange={(value) => {
+              setUser({ ...user, password: value });
             }}
+            onEnter={submit}
           />
-          <Button
-            fullWidth
-            onClick={() => {
-              const requestId = uniqid();
-              Server.emit("requestToken", { requestId, user });
-              Server.on(`receive-${requestId}`, (response) => {
-                if (response.success) {
-                  localStorage.setItem("username", user.username);
-                  localStorage.setItem("token", response.token);
-                  const signInRequest = uniqid();
-                  Server.emit("signIn", {
-                    requestId: signInRequest,
-                    username: user.username,
-                    token: response.token,
-                  });
-                  Server.on(`receive-${signInRequest}`, (response) => {
-                    if (response.success) {
-                      setGlobalUser(response.user);
-                      window.location.reload();
-                    } else {
-                      setFailReason(response.reason);
-                    }
-                  });
-                } else {
-                  if (response.reason === "require-mfa") {
-                    setRequireToken(true);
-                  } else {
-                    setFailReason(response.reason);
-                  }
-                }
-              });
-            }}
-          >
+          <Button fullWidth onClick={submit}>
             Sign in
           </Button>
         </>
@@ -158,43 +185,9 @@ const Login: React.FC = () => {
             value={token}
             onChange={(value) => setToken(value)}
             label="Token"
+            onEnter={submitMfa}
           />
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => {
-              const requestId = uniqid();
-              Server.emit("requestToken", {
-                requestId,
-                user,
-                token,
-                mfaToken: token,
-              });
-              Server.on(`receive-${requestId}`, (response) => {
-                if (response.success) {
-                  localStorage.setItem("username", user.username);
-                  localStorage.setItem("token", response.token);
-                  const signInRequest = uniqid();
-                  Server.emit("signIn", {
-                    requestId: signInRequest,
-                    username: user.username,
-                    token: response.token,
-                  });
-                  Server.on(`receive-${signInRequest}`, (response) => {
-                    if (response.success) {
-                      setGlobalUser(response.user);
-                      window.location.reload();
-                    } else {
-                      setFailReason(response.reason);
-                      console.log(response);
-                    }
-                  });
-                } else {
-                  setFailReason(response.reason);
-                }
-              });
-            }}
-          >
+          <Button fullWidth variant="contained" onClick={submitMfa}>
             Enter
           </Button>
         </>

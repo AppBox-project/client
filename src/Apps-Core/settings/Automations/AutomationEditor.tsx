@@ -112,6 +112,28 @@ const AppSettingsAutomationEditor: React.FC<{
                             value: trigger.trigger,
                             onlyDisplayWhen: { trigger: "custom" },
                           },
+                          {
+                            key: "triggerChange",
+                            label: "Trigger",
+                            type: "dropdown",
+                            value: trigger.trigger,
+                            dropdownOptions: [
+                              { value: "insert", label: "Insert" },
+                              { value: "update", label: "Update" },
+                              {
+                                value: "insertOrUpdate",
+                                label: "Insert or update",
+                              },
+                            ],
+                            onlyDisplayWhen: { type: "change" },
+                          },
+                          {
+                            key: "triggerChangeArguments",
+                            label: "Trigger arguments",
+                            type: "text",
+                            value: trigger.args,
+                            onlyDisplayWhen: { type: "change" },
+                          },
                         ],
                         buttons: [
                           {
@@ -122,10 +144,16 @@ const AppSettingsAutomationEditor: React.FC<{
                                   form.trigger = form.customTrigger;
                                 }
                               }
+                              if (form.type === "change") {
+                                form.trigger = form.triggerChange;
+                              }
                               const newTriggers = newAutomation.data.triggers;
                               newTriggers[index] = {
                                 type: form.type,
                                 trigger: form.trigger,
+                                args:
+                                  form.triggerChangeArguments &&
+                                  form.triggerChangeArguments,
                               };
                               setNewAutomation({
                                 ...newAutomation,
@@ -146,6 +174,11 @@ const AppSettingsAutomationEditor: React.FC<{
                     </ListItemIcon>
                     <ListItemText>
                       {trigger.type === "date" && `Every ${trigger.trigger}`}
+                      {trigger.type === "change" && trigger.trigger === "insert"
+                        ? "On insert"
+                        : trigger.trigger === "update"
+                        ? "On update"
+                        : "On insert or update"}
                     </ListItemText>
                   </ListItem>
                 ))
