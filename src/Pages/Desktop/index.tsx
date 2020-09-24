@@ -105,7 +105,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   useEffect(() => {
     // Get all apps
     const requestId = uniqid();
-    Server.emit("listenForObjects", { requestId, type: "app", filter: {} });
+    Server.emit("listenForObjects", { requestId, type: "apps", filter: {} });
     Server.on(`receive-${requestId}`, (response) => {
       if (response.success) {
         const al = {};

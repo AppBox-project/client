@@ -16,7 +16,7 @@ const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
 
   // Lifecycle
   useEffect(() => {
-    const request = context.getObjects("app", {}, (response) => {
+    const request = context.getObjects("apps", {}, (response) => {
       if (response.success) {
         setApps(response.data);
       } else {

@@ -80,7 +80,7 @@ export default class WidgetContext {
       ];
       Server.emit("listenForObjects", {
         requestId,
-        type: "app",
+        type: "apps",
         filter: { "data.id": appId },
       });
       Server.on(`receive-${requestId}`, (response) => {

@@ -25,7 +25,7 @@ export class AppContext {
   appId: string;
   app: AppType = {
     _id: "system",
-    objectId: "app",
+    objectId: "apps",
     data: {
       id: "system",
       name: "System",
@@ -105,7 +105,7 @@ export class AppContext {
       ];
       Server.emit("listenForObjects", {
         requestId,
-        type: "app",
+        type: "apps",
         filter: { "data.id": appId },
       });
       Server.on(`receive-${requestId}`, (response) => {

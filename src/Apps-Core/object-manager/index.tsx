@@ -18,7 +18,7 @@ export default class App {
   };
   getActions = () => {
     return new Promise((resolve) => {
-      this.context.getObjects("app", {}, (appResponse) => {
+      this.context.getObjects("apps", {}, (appResponse) => {
         if (appResponse.success) {
           // Make app-map
           const apps = {};

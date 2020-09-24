@@ -59,7 +59,7 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
     const appRequestId = uniqid();
     Server.emit("listenForObjects", {
       requestId: appRequestId,
-      type: "app",
+      type: "apps",
       filter: {},
     });
     Server.on(`receive-${appRequestId}`, (response) => {

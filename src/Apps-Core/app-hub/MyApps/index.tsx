@@ -21,7 +21,7 @@ const AppAHMyApps: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getObjects("app", { "data.core": { $ne: true } }, (response) => {
+    context.getObjects("apps", { "data.core": { $ne: true } }, (response) => {
       if (response.success) {
         setApps(response.data);
       } else {

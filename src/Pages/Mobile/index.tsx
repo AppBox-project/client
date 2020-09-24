@@ -39,7 +39,7 @@ const MobileLayout: React.FC = () => {
   // Lifecycle
   useEffect(() => {
     const requestId = uniqid();
-    Server.emit("listenForObjects", { requestId, type: "app", filter: {} });
+    Server.emit("listenForObjects", { requestId, type: "apps", filter: {} });
     Server.on(`receive-${requestId}`, (response) => {
       if (response.success) {
         setApps(response.data);

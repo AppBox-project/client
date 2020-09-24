@@ -54,7 +54,7 @@ const AppAHViewApp: React.FC<{
     });
 
     const localAppRequest = context.getObjects(
-      "app",
+      "apps",
       { "data.id": appId },
       (response) => {
         if (response.success) {

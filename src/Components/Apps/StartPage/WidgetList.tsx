@@ -17,7 +17,7 @@ const WidgetList: React.FC<{ onAdd: (widget: WidgetType) => void }> = ({
     const requestId = uniqid();
     Server.emit("listenForObjects", {
       requestId,
-      type: "app",
+      type: "apps",
       filter: { "data.widgets": true },
     });
     Server.on(`receive-${requestId}`, (response) => {
