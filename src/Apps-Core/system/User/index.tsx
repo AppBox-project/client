@@ -10,7 +10,7 @@ const AppSystemUser: React.FC<{
     <context.UI.Layouts.Object.ObjectLayout
       objectId={context.user._id}
       layoutId="system"
-      modelId="user"
+      modelId="users"
       context={context}
       baseUrl="/system/user"
     />

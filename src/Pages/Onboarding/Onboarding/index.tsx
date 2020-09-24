@@ -53,7 +53,11 @@ const PageOnboarding: React.FC = () => {
                   Tell us a little about the person who will be running this
                   place.
                 </Typography>
-                <Grid container>
+                <Grid
+                  container
+                  spacing={5}
+                  style={{ padding: 15, boxSizing: "border-box" }}
+                >
                   <Grid item xs={6}>
                     <InputInput
                       label="First name"
@@ -152,7 +156,6 @@ const PageOnboarding: React.FC = () => {
                         console.log(response);
                       }
                     });
-                    setStep(3);
                   }}
                 >
                   Click to get started

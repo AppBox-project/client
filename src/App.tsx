@@ -78,7 +78,7 @@ const App: React.FC = () => {
           setTimeout(() => {
             Server.emit("listenForObjects", {
               requestId: userRequest,
-              type: "user",
+              type: "users",
               filter: { "data.username": localStorage.getItem("username") },
             });
           }, 200); // Timeout exists to make sure we have an authenticated session. Todo: make better.
