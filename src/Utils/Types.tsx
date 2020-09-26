@@ -62,6 +62,22 @@ export interface ObjectType {
   data: any;
 }
 
+export interface TaskType {
+  _id: any;
+  data: {
+    name: string;
+    type: string;
+    description: string;
+    when: string;
+    action: string;
+    task: string;
+    done: boolean;
+    arguments: {};
+    progress: number;
+    state: string;
+  };
+}
+
 export interface ModelType {
   key: string;
   name: string;
