@@ -8,11 +8,13 @@ const InputInput: React.FC<{
   onChange?: (value: string) => void;
   type?;
   style?;
-  autoFocus?;
+  autoFocus?: true | boolean;
   readOnly?: boolean;
   onEnter?: (value: string) => void;
   onEscape?: (value: string) => void;
   onKeyPress?: (value: string) => void;
+  name?: string;
+  spacing?: number;
 }> = ({
   placeholder,
   label,
@@ -25,6 +27,8 @@ const InputInput: React.FC<{
   onEnter,
   onEscape,
   onKeyPress,
+  name,
+  spacing,
 }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
@@ -37,35 +41,48 @@ const InputInput: React.FC<{
   // UI
   if (label)
     return (
-      <label style={{ width: "100%" }}>
-        {label}
-        <input
-          autoFocus={autoFocus}
-          style={style}
-          type={type ? type : "text"}
-          className={styles.input}
-          placeholder={placeholder}
-          disabled={readOnly || false}
-          value={newValue}
-          onChange={(event) => {
-            setNewValue(event.target.value);
-            if (onChange && !readOnly) onChange(event.target.value);
-          }}
-          onKeyDown={(e) => {
-            if (onKeyPress) onKeyPress(newValue);
-            if (e.key === "Enter") {
-              if (onEnter) onEnter(newValue);
-            }
-            if (e.key === "Escape") {
-              if (onEscape) onEscape(newValue);
-            }
-          }}
-        />
-      </label>
+      <div
+        style={{
+          marginBottom: spacing && spacing * 5,
+          marginTop: spacing && spacing * 5,
+        }}
+      >
+        <label style={{ width: "100%" }}>
+          {label}
+          <input
+            name={name}
+            autoFocus={autoFocus}
+            style={style}
+            type={type ? type : "text"}
+            className={styles.input}
+            placeholder={placeholder}
+            disabled={readOnly || false}
+            value={newValue}
+            onChange={(event) => {
+              setNewValue(event.target.value);
+              if (onChange && !readOnly) onChange(event.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (onKeyPress) onKeyPress(newValue);
+              if (e.key === "Enter") {
+                if (onEnter) onEnter(newValue);
+              }
+              if (e.key === "Escape") {
+                if (onEscape) onEscape(newValue);
+              }
+            }}
+          />
+        </label>
+      </div>
     );
   return (
     <input
-      style={style}
+      style={{
+        ...style,
+        marginBottom: spacing && spacing * 5,
+        marginTop: spacing && spacing * 5,
+      }}
+      name={name}
       className={styles.input}
       type={type ? type : "text"}
       placeholder={placeholder}

@@ -1,14 +1,6 @@
 import React, { useState, useGlobal } from "reactn";
 import styles from "./styles.module.scss";
-import { motion } from "framer-motion";
-import {
-  Tabs,
-  Tab,
-  Grid,
-  TextField,
-  Button,
-  Typography,
-} from "@material-ui/core";
+import { Tabs, Tab, Grid, Button, Typography } from "@material-ui/core";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import bg from "./bg.jpg";
@@ -47,26 +39,22 @@ const LoginPage: React.FC = () => {
       className={styles.root}
     >
       <Grid item xs={12} md={5}>
-        <motion.div initial="hidden" animate="visible" variants={list}>
-          <motion.div variants={item}>
-            <Card className="center" title="Welcome to AppBox">
-              <Tabs
-                value={currentTab}
-                onChange={(_, v) => {
-                  setCurrentTab(v);
-                }}
-                indicatorColor="primary"
-                textColor="primary"
-                centered
-              >
-                <Tab label="Log in" value={0} />
-                <Tab label="Register" value={1} />
-              </Tabs>
-              {currentTab === 0 && <Login />}
-              {currentTab === 1 && "Register"}
-            </Card>
-          </motion.div>
-        </motion.div>
+        <Card className="center" title="Welcome to AppBox">
+          <Tabs
+            value={currentTab}
+            onChange={(_, v) => {
+              setCurrentTab(v);
+            }}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="Log in" value={0} />
+            <Tab label="Register" value={1} />
+          </Tabs>
+          {currentTab === 0 && <Login />}
+          {currentTab === 1 && "Register"}
+        </Card>
       </Grid>
     </Grid>
   );
@@ -144,7 +132,7 @@ const Login: React.FC = () => {
     });
   };
   return (
-    <>
+    <div style={{ marginTop: 10, marginBottom: 10 }}>
       {!requireToken ? (
         <>
           {failReason && (
@@ -153,6 +141,7 @@ const Login: React.FC = () => {
             </Typography>
           )}
           <InputInput
+            name="username"
             label="Username"
             value={user.username}
             onChange={(value) => {
@@ -162,6 +151,7 @@ const Login: React.FC = () => {
           />
 
           <InputInput
+            name="password"
             label="Password"
             type="password"
             value={user.password}
@@ -169,6 +159,7 @@ const Login: React.FC = () => {
               setUser({ ...user, password: value });
             }}
             onEnter={submit}
+            spacing={3}
           />
           <Button fullWidth onClick={submit}>
             Sign in
@@ -181,18 +172,23 @@ const Login: React.FC = () => {
             no-one else can access this spot. Enter the code your app generated
             for you!
           </Typography>
+          {failReason && (
+            <Typography style={{ color: "red" }}>{failReason}</Typography>
+          )}
           <InputInput
             value={token}
             onChange={(value) => setToken(value)}
             label="Token"
             onEnter={submitMfa}
+            autoFocus={true}
+            spacing={3}
           />
           <Button fullWidth variant="contained" onClick={submitMfa}>
             Enter
           </Button>
         </>
       )}
-    </>
+    </div>
   );
 };
 export default LoginPage;

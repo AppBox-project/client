@@ -18,8 +18,11 @@ const ObjectFieldDisplayPicture: React.FC<{
           }}
         />
       ) : (
-        <div className={styles.root}>
-          <Typography variant="caption">No {modelField.name}</Typography>
+        <div
+          className={small ? styles.picturePreviewSmall : styles.picturePreview}
+          style={{ backgroundColor: "#cc0000" }}
+        >
+          No {modelField.name}
         </div>
       )}
     </>
