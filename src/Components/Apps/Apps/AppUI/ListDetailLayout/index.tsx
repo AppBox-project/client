@@ -26,6 +26,7 @@ import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { find } from "lodash";
+import Card from "../../../../Design/Card";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -59,6 +60,7 @@ const ListDetailLayout: React.FC<{
   navDynamicIcon?: (item) => JSX.Element;
   itemSecondary?: (item) => JSX.Element;
   customNavItems?: [JSX.Element];
+  footerComponent?: JSX.Element;
 }> = ({
   list,
   customNavComponent,
@@ -81,6 +83,7 @@ const ListDetailLayout: React.FC<{
   navDynamicIcon,
   itemSecondary,
   customNavItems,
+  footerComponent,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -146,6 +149,7 @@ const ListDetailLayout: React.FC<{
                 navDynamicIcon={navDynamicIcon}
                 itemSecondary={itemSecondary}
                 customNavItems={customNavItems}
+                footerComponent={footerComponent}
               />
             )
           ) : (
@@ -192,6 +196,7 @@ const ListNav: React.FC<{
   navDynamicIcon?: (item) => JSX.Element;
   itemSecondary?: (item) => JSX.Element;
   customNavItems?: [JSX.Element];
+  footerComponent?: JSX.Element;
 }> = ({
   addFunction,
   deleteFunction,
@@ -207,12 +212,13 @@ const ListNav: React.FC<{
   navDynamicIcon,
   itemSecondary,
   customNavItems,
+  footerComponent,
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
       <AnimationContainer>
         <AnimationItem>
-          <div className={styles.root}>
+          <Card withBigMargin disablePadding>
             <List>
               {title && (
                 <>
@@ -262,8 +268,9 @@ const ListNav: React.FC<{
                 );
               })}
             </List>
-          </div>
+          </Card>
         </AnimationItem>
+        <AnimationItem>{footerComponent && footerComponent}</AnimationItem>
       </AnimationContainer>
     </div>
   );

@@ -337,6 +337,7 @@ export interface UIType {
       sideMarginOnly?: true | boolean;
       titleInPrimaryColor?: true | boolean;
       className?: string;
+      disablePadding?: boolean;
     }>;
   };
 
@@ -425,6 +426,7 @@ export interface UIType {
       navDynamicIcon?: (item) => JSX.Element;
       itemSecondary?: (item) => JSX.Element;
       customNavItems?: [JSX.Element];
+      footerComponent?: JSX.Element;
     }>;
     SortableList: React.FC<{
       listItems: [];

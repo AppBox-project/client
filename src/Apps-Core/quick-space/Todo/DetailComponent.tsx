@@ -49,7 +49,7 @@ const AppQSActionTodoDetail: React.FC<{
   useEffect(() => {
     const listener = context.getObjects(
       "qs-todo",
-      { "data.project": detailId, "data.owner": context.user._id },
+      { "data.project": detailId },
       (response) => {
         if (response.success) {
           setTodos(response.data);

@@ -3,6 +3,8 @@ import { AppContextType, ListItemType } from "../../../Utils/Types";
 import AppQSActionTodoDetail from "./DetailComponent";
 import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
 import { AppProjectType } from "../Types";
+import { List, ListItem, ListItemText } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const AppQSActionTodo: React.FC<{
   match: { isExact: boolean };
@@ -11,13 +13,16 @@ const AppQSActionTodo: React.FC<{
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
   const [projects, setProjects] = useState<ListItemType[]>();
+  const [sharedProjects, setSharedProjects] = useState<AppProjectType[]>();
   const [flatProjects, setFlatProjects] = useState<{
     [key: string]: AppProjectType;
   }>();
   const [isMobile] = useGlobal<any>("isMobile");
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
+    const newFP = {};
     const projectRequest = context.getObjects(
       "qs-project",
       {
@@ -32,7 +37,24 @@ const AppQSActionTodo: React.FC<{
               "data.order",
             ])
           );
-          const newFP = {};
+          response.data.map((o: AppProjectType) => (newFP[o._id] = o));
+          setFlatProjects(newFP);
+        } else {
+          console.log(response);
+        }
+      }
+    );
+    // Shared with me
+    const sharedProjectRequest = context.getObjects(
+      "qs-project",
+      {
+        "data.shared_with": { $all: [context.user._id] },
+        "data.show_in_todos": true,
+        "data.active": { $ne: false },
+      },
+      (response) => {
+        if (response.success) {
+          setSharedProjects(response.data);
           response.data.map((o: AppProjectType) => (newFP[o._id] = o));
           setFlatProjects(newFP);
         } else {
@@ -42,6 +64,7 @@ const AppQSActionTodo: React.FC<{
     );
     return () => {
       projectRequest.stop();
+      sharedProjectRequest.stop();
     };
   }, []);
 
@@ -58,6 +81,31 @@ const AppQSActionTodo: React.FC<{
       detailComponentProps={{ projects: flatProjects }}
       style={{ paddingBottom: isMobile && 50 }}
       title="Todos"
+      footerComponent={
+        (sharedProjects || []).length > 0 && (
+          <context.UI.Design.Card
+            withBigMargin
+            disablePadding
+            title="Shared with me"
+            titleDivider
+            titleInPrimaryColor
+            centerTitle
+          >
+            <List>
+              {sharedProjects.map((project: AppProjectType) => (
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push(`/quick-space/todo/${project._id}`);
+                  }}
+                >
+                  <ListItemText>{project.data.name}</ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </context.UI.Design.Card>
+        )
+      }
     />
   );
 };
