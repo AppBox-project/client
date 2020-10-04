@@ -48,7 +48,6 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
             const request = context.getObjects(
               "qs-project",
               {
-                "data.owner": context.user._id,
                 "data.show_in_todos": { $ne: false },
                 "data.todos_type": "Groceries",
               },
