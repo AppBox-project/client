@@ -81,7 +81,7 @@ const Card: React.FC<{
               {buttons.map((button, index) =>
                 button.compact ? (
                   <Tooltip title={button.label} placement="left">
-                    <IconButton onClick={button.onClick}>
+                    <IconButton onClick={button.onClick} color="primary">
                       <button.icon style={{ width: 18, height: 18 }} />
                     </IconButton>
                   </Tooltip>

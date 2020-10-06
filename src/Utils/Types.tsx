@@ -341,6 +341,12 @@ export interface UIType {
       titleInPrimaryColor?: true | boolean;
       className?: string;
       disablePadding?: boolean;
+      buttons?: {
+        label: string;
+        icon?;
+        compact?: boolean;
+        onClick: () => void;
+      }[];
     }>;
   };
 
@@ -577,7 +583,7 @@ export interface PersonType {
     last_name: string;
     full_name: string;
     birthday: Date;
-    image?: string;
+    picture?: string;
     email?: string;
     phone?: string;
   };

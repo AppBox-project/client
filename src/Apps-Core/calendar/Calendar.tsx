@@ -26,7 +26,7 @@ import { BsCalendar, BsCalendarFill } from "react-icons/bs";
 import { nl, enGB } from "date-fns/esm/locale";
 import balloons from "./balloons.png";
 import { useHistory, Link } from "react-router-dom";
-import { FaMailBulk, FaPhone } from "react-icons/fa";
+import { FaMailBulk, FaPhone, FaPlus } from "react-icons/fa";
 
 const locales = {
   nl,
@@ -302,7 +302,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                                 style={{ marginTop: 10 }}
                                 startIcon={
                                   <Avatar
-                                    src={event.person.data.image}
+                                    src={event.person.data.picture}
                                     style={{
                                       width: 18,
                                       height: 18,
@@ -387,7 +387,34 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
           </Grid>
           <Grid item xs={12} md={3}>
             <context.UI.Animations.AnimationItem>
-              <context.UI.Design.Card withBigMargin title="Calendars">
+              <context.UI.Design.Card
+                withBigMargin
+                title="Calendars"
+                buttons={[
+                  {
+                    icon: FaPlus,
+                    onClick: () =>
+                      context.setDialog({
+                        display: true,
+                        title: "New calendar",
+                        content: (
+                          <context.UI.Layouts.Object.ObjectLayout
+                            context={context}
+                            modelId="calendar-calendars"
+                            layoutId="create_app"
+                            popup
+                            defaults={{ owner: context.user._id }}
+                            onSuccess={() =>
+                              context.setDialog({ display: false })
+                            }
+                          />
+                        ),
+                      }),
+                    label: "New calendar",
+                    compact: true,
+                  },
+                ]}
+              >
                 <List>
                   {calendars.map((calendar) => (
                     <ListItem
