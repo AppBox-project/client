@@ -141,6 +141,11 @@ const App: React.FC<{
             // @ts-ignore
             title: dialog.title,
             hoverable: true,
+            style: {
+              backgroundImage: dialog.background && `url(${dialog.background})`,
+              backgroundSize: "cover",
+              ...(dialog.style || {}),
+            },
           }}
           onClose={() => {
             setDialog({ ...dialog, display: false });
@@ -152,7 +157,11 @@ const App: React.FC<{
           fullWidth
         >
           {dialog.content && (
-            <DialogContent style={{ padding: "8px 0" }}>
+            <DialogContent
+              style={{
+                padding: "8px 0",
+              }}
+            >
               {dialog.content}
             </DialogContent>
           )}

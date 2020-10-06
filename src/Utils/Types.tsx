@@ -209,6 +209,7 @@ export interface AppContextType {
   callBackendAction: (action, args) => void;
   archiveObject: (modelId: string, objectId: string) => Promise<string | null>;
   requestServerAction: (action: string, args) => Promise<any>;
+  formatString: (text: string, data: {}) => string;
 }
 
 export interface WidgetContextType {
@@ -279,6 +280,8 @@ export interface dialogType {
   display: boolean;
   title?: string | JSX.Element;
   content?: any;
+  background?: string;
+  style?: CSSProperties;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   onClose?: () => void;
   form?: {
@@ -565,4 +568,17 @@ export interface CustomLayoutElementType {
   context: AppContextType;
   layoutItem;
   object: ObjectType;
+}
+
+export interface PersonType {
+  _id: string;
+  data: {
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    birthday: Date;
+    image?: string;
+    email?: string;
+    phone?: string;
+  };
 }

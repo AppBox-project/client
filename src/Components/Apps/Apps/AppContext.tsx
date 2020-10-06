@@ -20,6 +20,7 @@ import InputRichText from "../../Inputs/RichText";
 import ConditionDesigner from "../../ConditionDesigner";
 import { baseUrl } from "../../../Utils/Utils";
 import InputSelect from "../../Inputs/Select";
+import nunjucks from "../../../Utils/Nunjucks";
 
 export class AppContext {
   appId: string;
@@ -682,6 +683,10 @@ export class AppContext {
       });
     });
   };
+
+  // Parse data
+  formatString = (string, data) =>
+    nunjucks.renderString(string, { ...data, TODAY: new Date() });
 }
 
 // Pass this back to the app to allow cancelling listeners

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ModelType } from "../../Utils/Types";
+import { AppContextType, ModelType, PersonType } from "../../Utils/Types";
 import {
   Grid,
   List,
@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemIcon,
   Avatar,
+  Button,
 } from "@material-ui/core";
 import styles from "./styles.module.scss";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
@@ -23,6 +24,9 @@ import parseISO from "date-fns/parseISO";
 import RRule from "rrule";
 import { BsCalendar, BsCalendarFill } from "react-icons/bs";
 import { nl, enGB } from "date-fns/esm/locale";
+import balloons from "./balloons.png";
+import { useHistory, Link } from "react-router-dom";
+import { FaMailBulk, FaPhone } from "react-icons/fa";
 
 const locales = {
   nl,
@@ -47,13 +51,16 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
       start: Date;
       end: Date;
       allday: boolean;
+      isBirthday?: boolean;
       event: AppCalEventType;
       calendar: AppCalCalendarType;
+      person: PersonType;
     }[]
   >([]);
   const [selectedCalendars, setSelectedCalendars] = useState<string[]>([]);
   const [eventModel, setEventModel] = useState<ModelType>();
   const [defaultCalendar, setDefaultCalendar] = useState<any>();
+  const history = useHistory();
 
   // Lifecycle
   // Main effect
@@ -94,6 +101,8 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
 
   // Events effect
   useEffect(() => {
+    const newEvents = [];
+    let birthdayRequest;
     const eventsRequest = context.getObjects(
       "calendar-events",
       {
@@ -101,7 +110,6 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
       },
       (response) => {
         if (response.success) {
-          const newEvents = [];
           response.data.map((event: AppCalEventType) => {
             if (event.data.recurring) {
               // Add all recurrant events
@@ -169,7 +177,51 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
               });
             }
           });
-          setEvents(newEvents);
+
+          birthdayRequest = context.getObjects("people", {}, (response) => {
+            if (response.success) {
+              response.data.map((person) => {
+                if (person.data.birthday) {
+                  const rule = new RRule({
+                    freq: RRule.YEARLY,
+                    interval: 1,
+                    count: 50,
+                    dtstart: parseISO(person.data.birthday),
+                  });
+
+                  rule.all().map((recEvent) => {
+                    newEvents.push({
+                      name: `Birthday of ${person.data.full_name}`,
+                      start: recEvent,
+                      end: recEvent,
+                      isBirthday: true,
+                      event: {
+                        data: {
+                          name: `Birthday of ${person.data.full_name}`,
+                          description: context.formatString(
+                            `${
+                              person.data.gender === "Male"
+                                ? "He turns"
+                                : person.data.gender === "Female"
+                                ? "She turns"
+                                : "They turn"
+                            } {{ differenceInYears("${recEvent}", birthday) }}!`,
+                            person.data
+                          ),
+                          color: { r: 49, g: 134, b: 160 },
+                        },
+                      },
+                      person,
+                      allday: true,
+                    });
+                  });
+                }
+              });
+              setEvents(newEvents);
+            } else {
+              console.log(response);
+            }
+          });
         } else {
           console.log(response);
         }
@@ -178,6 +230,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
 
     return () => {
       eventsRequest.stop();
+      birthdayRequest.stop();
     };
   }, [selectedCalendars]);
 
@@ -198,14 +251,14 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                     context.updateObject(
                       "calendar-events",
                       { from: data.start, until: data.end },
-                      data.event.event._id
+                      data.event?.event?._id
                     );
                   }}
                   onEventResize={(data) => {
                     context.updateObject(
                       "calendar-events",
                       { from: data.start, until: data.end },
-                      data.event.event._id
+                      data.event?.event?._id
                     );
                   }}
                   resizable
@@ -220,8 +273,8 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                       style: {
                         transition: "all 0.3s",
                         backgroundColor: event.event.data.color
-                          ? `rgb(${event.event.data.color.r},${event.event.data.color.g},${event.event.data.color.b})`
-                          : `rgb(${event.calendar.data.color.r},${event.calendar.data.color.g},${event.calendar.data.color.b})`,
+                          ? `rgb(${event.event.data.color?.r},${event.event.data.color?.g},${event.event.data.color?.b})`
+                          : `rgb(${event.calendar.data.color?.r},${event.calendar.data.color?.g},${event.calendar.data.color?.b})`,
                       },
                     };
                   }}
@@ -229,8 +282,68 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                     context.setDialog({
                       display: true,
                       title: event.name,
-                      size: "lg",
-                      content: (
+                      background: event.isBirthday && balloons,
+
+                      size: event.isBirthday ? "sm" : "lg",
+                      content: event.isBirthday ? (
+                        <>
+                          {context.formatString(
+                            `{{first_name}} turns {{ differenceInYears("${event.start}", birthday) }} today!`,
+                            event.person.data
+                          )}
+                          <Grid container spacing={2} style={{ width: "100%" }}>
+                            <Grid item xs={12}>
+                              <Button
+                                onClick={() =>
+                                  history.push(`/o/${event.person._id}`)
+                                }
+                                fullWidth
+                                variant="contained"
+                                style={{ marginTop: 10 }}
+                                startIcon={
+                                  <Avatar
+                                    src={event.person.data.image}
+                                    style={{
+                                      width: 18,
+                                      height: 18,
+                                    }}
+                                  />
+                                }
+                              >
+                                View {event.person.data.first_name}
+                              </Button>
+                            </Grid>
+                            {event.person.data.email && (
+                              <Grid item xs={6}>
+                                <a href={`mailto:${event.person.data.email}`}>
+                                  <Button
+                                    fullWidth
+                                    color="primary"
+                                    startIcon={<FaMailBulk />}
+                                    variant="contained"
+                                  >
+                                    Send mail
+                                  </Button>
+                                </a>
+                              </Grid>
+                            )}
+                            {event.person.data.phone && (
+                              <Grid item xs={6}>
+                                <a href={`tel:${event.person.data.phone}`}>
+                                  <Button
+                                    fullWidth
+                                    color="primary"
+                                    startIcon={<FaPhone />}
+                                    variant="contained"
+                                  >
+                                    Call
+                                  </Button>
+                                </a>
+                              </Grid>
+                            )}
+                          </Grid>
+                        </>
+                      ) : (
                         <context.UI.Layouts.Object.ObjectLayout
                           model={eventModel}
                           context={context}
@@ -250,8 +363,8 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                         content: (
                           <context.UI.Layouts.Object.ObjectLayout
                             model={eventModel}
-                            appId={context.appId}
                             popup
+                            context={context}
                             layoutId="popup"
                             defaults={{
                               //@ts-ignore
