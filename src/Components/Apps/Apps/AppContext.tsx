@@ -161,6 +161,12 @@ export class AppContext {
     this.setSessionVariable("image", img ? baseUrl + img : undefined);
   };
 
+  setColor = (color) => {
+    console.log(color);
+
+    this.setSessionVariable("color", color);
+  };
+
   createModel = (newModel, then: (response: ServerResponse) => void) => {
     const requestId = uniqid();
     Server.emit("appCreatesModel", {

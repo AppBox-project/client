@@ -42,6 +42,7 @@ import { baseUrl as baseAppUrl } from "../../Utils/Utils";
 import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import ObjectLayoutItemAppProvided from "./LayoutItems/AppProvided";
+import { map } from "lodash";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -97,6 +98,7 @@ const ViewObject: React.FC<{
   const history = useHistory();
   const [factsBarInLayout, setFactsBarInLayout] = useState<boolean>(false);
 
+  // Functions
   const getFeedback = (feedback) => {
     return (
       <List>
@@ -337,6 +339,19 @@ const ViewObject: React.FC<{
     if (appliedObject && appliedModel) {
       setPageTitle(appliedObject.data[appliedModel.primary]);
     }
+
+    map(appliedModel?.fields || {}, (field, key) => {
+      if (field.typeArgs?.asBanner) {
+        context.setImage(appliedObject?.data[key]);
+      }
+      if (field.typeArgs?.asColor) {
+        context.setColor(appliedObject?.data[key]);
+      }
+    });
+    return () => {
+      context.setImage(undefined);
+      context.setColor(undefined);
+    };
   }, [appliedObject, appliedModel]);
 
   // Custom button lifecycle
@@ -516,7 +531,11 @@ const ViewObject: React.FC<{
           <div style={{ flex: 1, width: "100%" }}>
             <Hidden xsDown>
               <div style={{ float: "right", marginTop: -5 }}>{buttons}</div>
-              <Typography variant="h5" style={{ textAlign: "center" }}>
+              <Typography
+                variant="h5"
+                style={{ textAlign: "center" }}
+                color="primary"
+              >
                 {factsBarTitle}
               </Typography>
             </Hidden>

@@ -481,6 +481,18 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     />
                   </Grid>
                 )}
+                {field.type === "color" && (
+                  <UI.Inputs.CheckmarkInput
+                    label="Set as object color"
+                    value={field?.typeArgs?.asColor}
+                    onChange={(asColor) => {
+                      setField({
+                        ...field,
+                        typeArgs: { ...field.typeArgs, asColor },
+                      });
+                    }}
+                  />
+                )}
               </Grid>
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>

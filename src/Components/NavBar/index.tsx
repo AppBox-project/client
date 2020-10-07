@@ -1,4 +1,4 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useGlobal, useState, useEffect } from "reactn";
 import styles from "./styles.module.scss";
 import {
   AppBar,
@@ -22,9 +22,36 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   const [isMobile] = useGlobal<any>("isMobile");
   const [noActions] = useGlobal<any>("noActions");
   const [searchExpanded, setSearchExpanded] = useState<any>(false);
+  const [gTheme, setgTheme] = useGlobal<any>("theme");
 
   // Lifecycle
+  useEffect(() => {
+    if (page.color) {
+      setgTheme({
+        ...gTheme,
+        palette: {
+          ...gTheme.palette,
+          primary: {
+            ...gTheme.palette.primary,
+            main: `rgb(${page?.color.r},${page?.color.g},${page?.color.b})`,
+          },
+        },
+      });
+    }
 
+    return () => {
+      setgTheme({
+        ...gTheme,
+        palette: {
+          ...gTheme.palette,
+          primary: {
+            ...gTheme.palette.primary,
+            main: `rgb(${app?.data.color.r},${app?.data.color.g},${app?.data.color.b})`,
+          },
+        },
+      });
+    };
+  }, [page]);
   // UI
   return (
     <div

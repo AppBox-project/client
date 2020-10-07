@@ -149,6 +149,7 @@ export interface AppContextType {
     };
   };
   setImage(image: any);
+  setColor(color: any);
   showSnackbar: (
     text: string,
     properties?: {
