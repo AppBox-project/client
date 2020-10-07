@@ -77,9 +77,11 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
             backgroundSize: "cover",
             height: "45vh",
             backgroundBlendMode: "overlay",
-            backgroundColor: `rgba(${app?.data?.color?.r || 2},${
-              app?.data?.color?.g || 71
-            },${app?.data?.color?.b || 161},0.5)`,
+            backgroundColor: `rgba(${
+              page?.color ? page?.color.r : app?.data?.color?.r || 2
+            },${page?.color ? page?.color.g : app?.data?.color?.g || 71},${
+              page?.color ? page?.color.b : app?.data?.color?.b || 161
+            },0.5)`,
           }),
         }}
       >
