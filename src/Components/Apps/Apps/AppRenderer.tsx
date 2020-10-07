@@ -55,9 +55,7 @@ const App: React.FC<{
       appButtons,
       setAppButtons,
       gUser,
-      (key, value) => {
-        setgPage({ ...gPage, [key]: value }); // session variables should do more than just edit page
-      },
+      setgPage,
       (title, properties) => {
         setSnackbar({ ...properties, display: true, title });
       }
@@ -115,6 +113,9 @@ const App: React.FC<{
   useEffect(() => {
     setActions({ ...actions, ...appButtons });
   }, [appButtons]);
+  useEffect(() => {
+    if (appContext) appContext.sessionVariables = gPage;
+  }, [gPage]);
 
   //UI
   if (!appContext) return <Loading />;

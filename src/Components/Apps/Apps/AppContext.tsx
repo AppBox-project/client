@@ -47,7 +47,8 @@ export class AppContext {
   appConfig;
   user;
   onNoAction;
-  setSessionVariable: (key, value) => {};
+  setSessionVariables;
+  sessionVariables: {};
   setSnackbar: (title, properties?) => void;
 
   constructor(
@@ -56,7 +57,7 @@ export class AppContext {
     appButtons,
     setAppButtons,
     user,
-    setSessionVariable,
+    setSessionVariables,
     setSnackbar
   ) {
     this.appId = appId;
@@ -64,8 +65,8 @@ export class AppContext {
     this.appButtons = appButtons;
     this.setAppButtons = setAppButtons;
     this.user = user;
-    this.setSessionVariable = setSessionVariable;
     this.setSnackbar = setSnackbar;
+    this.setSessionVariables = setSessionVariables;
     this.UI = {
       Loading,
       Margin: Margin,
@@ -158,13 +159,21 @@ export class AppContext {
   };
 
   setImage = (img) => {
-    this.setSessionVariable("image", img ? baseUrl + img : undefined);
+    const ns = {
+      ...this.sessionVariables,
+      image: img ? baseUrl + img : undefined,
+    };
+    this.sessionVariables = ns;
+    this.setSessionVariables(ns);
   };
 
   setColor = (color) => {
-    console.log(color);
-
-    this.setSessionVariable("color", color);
+    const ns = {
+      ...this.sessionVariables,
+      color,
+    };
+    this.sessionVariables = ns;
+    this.setSessionVariables(ns);
   };
 
   createModel = (newModel, then: (response: ServerResponse) => void) => {

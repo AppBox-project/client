@@ -27,26 +27,34 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Lifecycle
   useEffect(() => {
     if (page.color) {
+      const newColor = `rgb(${page?.color.r},${page?.color.g},${page?.color.b})`;
+      var metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", newColor);
+
       setgTheme({
         ...gTheme,
         palette: {
           ...gTheme.palette,
           primary: {
             ...gTheme.palette.primary,
-            main: `rgb(${page?.color.r},${page?.color.g},${page?.color.b})`,
+            main: newColor,
           },
         },
       });
     }
 
     return () => {
+      const newColor = `rgb(${app?.data.color.r},${app?.data.color.g},${app?.data.color.b})`;
+      var metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", newColor);
+
       setgTheme({
         ...gTheme,
         palette: {
           ...gTheme.palette,
           primary: {
             ...gTheme.palette.primary,
-            main: `rgb(${app?.data.color.r},${app?.data.color.g},${app?.data.color.b})`,
+            main: newColor,
           },
         },
       });

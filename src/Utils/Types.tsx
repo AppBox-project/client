@@ -134,6 +134,7 @@ export interface AppType {
 }
 
 export interface AppContextType {
+  sessionVariables: {};
   appId: string;
   app: AppType;
   isReady: Promise<unknown>;
