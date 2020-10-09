@@ -191,13 +191,13 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
 
                   rule.all().map((recEvent) => {
                     newEvents.push({
-                      name: `Birthday of ${person.data.full_name}`,
+                      name: `🎈 Birthday of ${person.data.full_name}`,
                       start: recEvent,
                       end: recEvent,
                       isBirthday: true,
                       event: {
                         data: {
-                          name: `Birthday of ${person.data.full_name}`,
+                          name: `🎈 Birthday of ${person.data.full_name}`,
                           description: context.formatString(
                             `${
                               person.data.gender === "Male"
