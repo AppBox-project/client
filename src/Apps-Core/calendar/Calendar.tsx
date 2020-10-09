@@ -185,7 +185,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                   const rule = new RRule({
                     freq: RRule.YEARLY,
                     interval: 1,
-                    count: 50,
+                    count: 100,
                     dtstart: parseISO(person.data.birthday),
                   });
 
