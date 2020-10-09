@@ -76,7 +76,7 @@ const AppSettingsProject: React.FC<{
           display: true,
           title: "New project",
           content: (
-            <context.UI.Layouts.Object.ObjectLayout
+            <context.UI.Object.Detail
               modelId="qs-project"
               layoutId="create"
               popup

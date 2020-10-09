@@ -22,7 +22,9 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
         <Route
           path={`/data-explorer/${action}`}
           render={(props) => {
-            return <OverviewModule {...props} object={action} />;
+            return (
+              <OverviewModule {...props} object={action} context={context} />
+            );
           }}
         />
       </Switch>
@@ -30,8 +32,11 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
   );
 };
 
-const OverviewModule: React.FC<{ object: string }> = ({ object }) => {
-  return <Overview objectTypeId={object} appId="data-explorer" />;
+const OverviewModule: React.FC<{ object: string; context: AppContextType }> = ({
+  object,
+  context,
+}) => {
+  return <Overview modelId={object} context={context} />;
 };
 
 const DetailModule: React.FC<{

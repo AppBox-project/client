@@ -87,7 +87,7 @@ const ObjectLayoutItemRelatedList: React.FC<{
               context.setDialog({
                 display: true,
                 content: (
-                  <context.UI.Layouts.Object.ObjectLayout
+                  <context.UI.Object.Detail
                     layoutId="create"
                     context={context}
                     popup

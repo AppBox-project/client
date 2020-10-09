@@ -36,7 +36,7 @@ const AppQSSettingsProjectDetail: React.FC<{
     );
   if (!project) return <context.UI.Loading />;
   return (
-    <context.UI.Layouts.Object.ObjectLayout
+    <context.UI.Object.Detail
       objectId={project._id}
       layoutId="settings"
       modelId="qs-project"

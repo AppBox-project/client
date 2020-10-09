@@ -344,7 +344,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                           </Grid>
                         </>
                       ) : (
-                        <context.UI.Layouts.Object.ObjectLayout
+                        <context.UI.Object.Detail
                           model={eventModel}
                           context={context}
                           objectId={event.event._id}
@@ -361,7 +361,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                         title: "New event",
                         size: "lg",
                         content: (
-                          <context.UI.Layouts.Object.ObjectLayout
+                          <context.UI.Object.Detail
                             model={eventModel}
                             popup
                             context={context}
@@ -398,7 +398,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
                         display: true,
                         title: "New calendar",
                         content: (
-                          <context.UI.Layouts.Object.ObjectLayout
+                          <context.UI.Object.Detail
                             context={context}
                             modelId="calendar-calendars"
                             layoutId="create_app"

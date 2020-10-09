@@ -27,7 +27,7 @@ const AppQSSettingsTagDetail: React.FC<{
   // UI
   if (!tag) return <context.UI.Loading />;
   return (
-    <context.UI.Layouts.Object.ObjectLayout
+    <context.UI.Object.Detail
       objectId={tag._id}
       layoutId="settings"
       modelId="qs-tags"

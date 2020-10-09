@@ -11,7 +11,7 @@ import {
   Typography,
   Tooltip,
 } from "@material-ui/core";
-import { ModelType } from "../../../Utils/Types";
+import { AppContextType, ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -30,9 +30,10 @@ import {
 
 const Overview: React.FC<{
   layoutId?: string;
-  objectTypeId: string;
-  appId: string;
-}> = ({ layoutId, objectTypeId, appId }) => {
+  modelId: string;
+  context: AppContextType;
+  baseUrl?: string;
+}> = ({ layoutId, modelId, context, baseUrl }) => {
   const [model, setModel] = useState<ModelType>();
   const [layout, setLayout] = useState<any>();
   const [objects, setObjects] = useState<any>();
@@ -50,7 +51,7 @@ const Overview: React.FC<{
     const requestId = uniqid();
     Server.emit("listenForObjectTypes", {
       requestId,
-      filter: { key: objectTypeId },
+      filter: { key: modelId },
     });
     Server.on(`receive-${requestId}`, (response) => {
       setModel(response[0]);
@@ -61,7 +62,7 @@ const Overview: React.FC<{
       Server.emit("unlistenForObjectTypes", { requestId });
       setLayout(false);
     };
-  }, [objectTypeId]);
+  }, [modelId]);
 
   // effect on filter change
   useEffect(() => {
@@ -74,7 +75,7 @@ const Overview: React.FC<{
     const dataRequestId = uniqid();
     Server.emit("listenForObjects", {
       requestId: dataRequestId,
-      type: objectTypeId,
+      type: modelId,
       filter: { ...objectFilter },
     });
     Server.on(`receive-${dataRequestId}`, (response) => {
@@ -183,7 +184,8 @@ const Overview: React.FC<{
                                   modelId={model.key}
                                   layoutId={button.layout}
                                   popup={true}
-                                  appId={appId}
+                                  context={context}
+                                  appId={context.appId}
                                   onSuccess={() => {
                                     setDialogContent(undefined);
                                   }}
@@ -215,7 +217,7 @@ const Overview: React.FC<{
                 data={objects}
                 columns={layout.fields}
                 model={model}
-                baseUrl={`/${appId}/${objectTypeId}`}
+                baseUrl={baseUrl || `/${context.appId}/${modelId}`}
                 history={history}
                 setSelected={setSelected}
                 selected={selected}
@@ -226,7 +228,7 @@ const Overview: React.FC<{
                 data={objects}
                 layout={layout}
                 model={model}
-                baseUrl={`/${appId}/${objectTypeId}`}
+                baseUrl={baseUrl || `/${context.appId}/${modelId}`}
                 history={history}
                 setSelected={setSelected}
                 selected={selected}

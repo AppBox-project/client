@@ -329,6 +329,35 @@ export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Margin: React.FC;
   Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
+  Object: {
+    Overview: React.FC<{
+      context: AppContextType;
+      modelId: string;
+      overviewId?: string;
+      baseUrl: string;
+    }>;
+    Detail: React.FC<{
+      model?: ModelType;
+      modelId?: string;
+      layoutId: string;
+      context: AppContextType;
+      objectId?: string;
+      object?: ObjectType;
+      popup?: true;
+      defaults?: { [key: string]: string };
+      baseUrl?: string;
+      onObjectDisappears?: (history) => void;
+      mode?: "view" | "edit";
+      onSuccess?: () => void;
+
+      provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
+      provideLayoutElements?: {
+        [key: string]: React.FC<CustomLayoutElementType>;
+      };
+      hideFields?: string[];
+      style?: CSSProperties;
+    }>;
+  };
   Design: {
     Card: React.FC<{
       children;
@@ -353,37 +382,14 @@ export interface UIType {
   };
 
   Layouts: {
-    Object: {
-      ObjectLayout: React.FC<{
-        model?: ModelType;
-        modelId?: string;
-        layoutId: string;
-        context: AppContextType;
-        objectId?: string;
-        object?: ObjectType;
-        popup?: true;
-        defaults?: { [key: string]: string };
-        baseUrl?: string;
-        onObjectDisappears?: (history) => void;
-        mode?: "view" | "edit";
-        onSuccess?: () => void;
-
-        provideCustomFields?: { [key: string]: React.FC<CustomFieldType> };
-        provideLayoutElements?: {
-          [key: string]: React.FC<CustomLayoutElementType>;
-        };
-        hideFields?: string[];
-        style?: CSSProperties;
-      }>;
-      BoardLayout: React.FC<{
-        context: AppContextType;
-        objects;
-        model: ModelType;
-        boardField: String;
-        onItemClick?: (item) => void;
-        customItem?: (listItem) => JSX.Element;
-      }>;
-    };
+    BoardLayout: React.FC<{
+      context: AppContextType;
+      objects;
+      model: ModelType;
+      boardField: String;
+      onItemClick?: (item) => void;
+      customItem?: (listItem) => JSX.Element;
+    }>;
     Specialized: {
       LayoutDesigner: React.FC<{
         layout: LayoutDesignerItem[];

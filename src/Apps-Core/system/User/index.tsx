@@ -7,7 +7,7 @@ const AppSystemUser: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   return (
-    <context.UI.Layouts.Object.ObjectLayout
+    <context.UI.Object.Detail
       objectId={context.user._id}
       layoutId="system"
       modelId="users"

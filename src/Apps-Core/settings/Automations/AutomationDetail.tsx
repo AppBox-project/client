@@ -15,7 +15,7 @@ const AppSettingsProcessDetail: React.FC<{
 }) => {
   return detailId === "create" ? (
     <context.UI.Design.Card withBigMargin title="New automation" titleDivider>
-      <context.UI.Layouts.Object.ObjectLayout
+      <context.UI.Object.Detail
         modelId="automations"
         layoutId="create"
         context={context}

@@ -61,7 +61,7 @@ const AppQSActionFile: React.FC<{
       customNavItems={[
         <>
           <ListItem>
-            <context.UI.Layouts.Object.ObjectLayout
+            <context.UI.Object.Detail
               model={model}
               modelId="qs-file"
               layoutId="create"

@@ -11,7 +11,7 @@ const AppQSTodoBoardLayout: React.FC<{
   isMobile: boolean;
 }> = ({ context, todos, model, isMobile }) => {
   return (
-    <context.UI.Layouts.Object.BoardLayout
+    <context.UI.Layouts.BoardLayout
       context={context}
       objects={todos}
       model={model}

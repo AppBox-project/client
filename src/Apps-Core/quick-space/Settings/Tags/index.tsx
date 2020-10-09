@@ -62,7 +62,7 @@ const AppSettingsTags: React.FC<{
           display: true,
           title: "New tag",
           content: (
-            <context.UI.Layouts.Object.ObjectLayout
+            <context.UI.Object.Detail
               modelId="qs-tags"
               layoutId="create"
               popup

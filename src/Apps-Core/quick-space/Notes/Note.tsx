@@ -27,7 +27,7 @@ const AppQSNote: React.FC<{
   }, [detailId, notes]);
 
   return (
-    <context.UI.Layouts.Object.ObjectLayout
+    <context.UI.Object.Detail
       modelId="qs-note"
       objectId={detailId}
       layoutId={

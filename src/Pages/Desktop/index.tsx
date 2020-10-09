@@ -151,7 +151,11 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       <motion.div variants={item} style={{ width: "100%", height: 64 }}>
         <Link to="/">
           <Tooltip
-            title={window.location.pathname === "/" ? "Open all apps" : "Home"}
+            title={
+              window.location.pathname === "/"
+                ? "Open all apps"
+                : "Home / (right) All apps"
+            }
             placement="right"
           >
             <IconButton

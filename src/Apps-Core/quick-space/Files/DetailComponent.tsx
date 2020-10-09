@@ -39,7 +39,7 @@ const AppQSActionFileDetail: React.FC<{
   // UI
   if (!file) return <Skeleton />;
   return (
-    <context.UI.Layouts.Object.ObjectLayout
+    <context.UI.Object.Detail
       model={model}
       modelId="qs-file"
       layoutId="default"

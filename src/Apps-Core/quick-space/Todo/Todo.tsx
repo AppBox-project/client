@@ -69,7 +69,7 @@ const AppQSActionTodoDetailTodo: React.FC<{
               size: "md",
               title: todo.data.action,
               content: (
-                <context.UI.Layouts.Object.ObjectLayout
+                <context.UI.Object.Detail
                   model={model}
                   layoutId="popup"
                   popup

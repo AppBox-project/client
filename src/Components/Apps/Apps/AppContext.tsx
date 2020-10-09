@@ -21,6 +21,7 @@ import ConditionDesigner from "../../ConditionDesigner";
 import { baseUrl } from "../../../Utils/Utils";
 import InputSelect from "../../Inputs/Select";
 import nunjucks from "../../../Utils/Nunjucks";
+import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
 
 export class AppContext {
   appId: string;
@@ -73,6 +74,10 @@ export class AppContext {
       Design: {
         Card,
       },
+      Object: {
+        Overview: AppComponentObjectOverviewLayout,
+        Detail: ObjectLayout,
+      },
       Animations: { AnimationContainer, AnimationItem },
       Inputs: {
         ...Forms,
@@ -87,10 +92,7 @@ export class AppContext {
         TreeView,
         GridItemLayout,
         SortableList,
-        Object: {
-          ObjectLayout,
-          BoardLayout,
-        },
+        BoardLayout,
         Specialized: {
           LayoutDesigner,
           ConditionDesigner,
@@ -173,7 +175,7 @@ export class AppContext {
       color,
     };
     this.sessionVariables = ns;
-    this.setSessionVariables(ns);
+    this.setSessionVariables(ns || "#0247a1");
   };
 
   createModel = (newModel, then: (response: ServerResponse) => void) => {

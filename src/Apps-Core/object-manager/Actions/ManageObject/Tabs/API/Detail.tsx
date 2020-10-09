@@ -48,7 +48,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
   // Vars
   const [newModel, setNewModel] = useState<any>(model);
   const [modelInfo, setModelInfo] = useState<any>();
-  const isActive = model?.api[detailId]?.active || false;
+  const isActive = (model?.api || {})[detailId]?.active || false;
   const [hasChanged, setHasChanged] = useState<any>(false);
 
   // Lifecycle
