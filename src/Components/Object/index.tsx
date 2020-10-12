@@ -43,6 +43,7 @@ import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import ObjectLayoutItemAppProvided from "./LayoutItems/AppProvided";
 import { map } from "lodash";
+import ObjectLayoutItemAttachments from "./LayoutItems/Attachments";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -947,6 +948,14 @@ const LayoutItem: React.FC<{
           tabs={layoutItem?.items}
           baseUrl={baseUrl}
           items={items}
+        />
+      );
+    case "Attachments":
+      return (
+        <ObjectLayoutItemAttachments
+          context={context}
+          layoutItem={layoutItem}
+          object={object}
         />
       );
     case "AppProvided":
