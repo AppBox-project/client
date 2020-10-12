@@ -61,6 +61,7 @@ interface ModelApiType {
 export interface ObjectType {
   _id: any;
   data: any;
+  objectId?: string;
 }
 
 export interface TaskType {

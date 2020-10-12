@@ -356,16 +356,16 @@ const ViewObject: React.FC<{
 
   // Custom button lifecycle
   useEffect(() => {
-    if (appliedModel?.layouts) {
+    if (appliedModel?.layouts && appliedObject) {
       const layout = appliedModel?.layouts[layoutId || "default"];
       setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
 
       (layout.buttons || []).map((button) => {
         if (!["clone", "archive", "delete"].includes(button)) {
           import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
-            (component) => {
+            async (component) => {
               const getInfo = component.default;
-              const extension = getInfo(
+              const extension = await getInfo(
                 appliedModel.extensions[button.split("-")[0]],
                 context,
                 appliedObject
