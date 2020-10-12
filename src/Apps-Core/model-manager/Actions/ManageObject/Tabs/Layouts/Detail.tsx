@@ -495,6 +495,46 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               });
             },
           },
+          Attachments: {
+            label: "Attachments",
+
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: component.label,
+                form: [
+                  {
+                    key: "key",
+                    label: "Key",
+                    value: layoutItem.key || "",
+                    type: "text",
+                  },
+                  {
+                    key: "allowUpload",
+                    label: "Allow uploading",
+                    value: layoutItem.allowUpload,
+                    type: "boolean",
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
           FactsBar: {
             label: "Facts bar",
 

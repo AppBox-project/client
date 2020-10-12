@@ -163,7 +163,7 @@ const ObjectLayoutItemField: React.FC<{
                 }}
                 readOnly={modelField.typeArgs?.readonly}
                 placeholder={modelField.name}
-                value={objectField || defaults[layoutItem.field]}
+                value={objectField || (defaults || {})[layoutItem.field]}
                 label={modelField.name}
                 type={modelField.typeArgs && modelField.typeArgs.type}
                 startAdornment={
