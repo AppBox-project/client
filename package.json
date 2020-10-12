@@ -57,6 +57,7 @@
     "react-virtualized": "^9.21.2",
     "reactn": "^2.2.5",
     "rrule": "^2.6.4",
+    "rsuite": "^4.8.3",
     "socket.io-client": "^2.3.0",
     "typescript": "~3.9.5",
     "uniqid": "^5.2.0"

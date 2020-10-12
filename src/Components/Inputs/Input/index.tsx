@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { InputNumber } from "rsuite";
 import styles from "./styles.module.scss";
 
 const InputInput: React.FC<{
@@ -15,6 +16,8 @@ const InputInput: React.FC<{
   onKeyPress?: (value: string) => void;
   name?: string;
   spacing?: number;
+  startAdornment?;
+  endAdornment?;
 }> = ({
   placeholder,
   label,
@@ -29,6 +32,8 @@ const InputInput: React.FC<{
   onKeyPress,
   name,
   spacing,
+  startAdornment,
+  endAdornment,
 }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
@@ -39,6 +44,33 @@ const InputInput: React.FC<{
   }, [value]);
 
   // UI
+  if (type === "number")
+    return (
+      <InputNumber
+        prefix={startAdornment && "€"}
+        autoFocus={autoFocus}
+        name={name}
+        style={style}
+        type={type ? type : "text"}
+        placeholder={placeholder}
+        disabled={readOnly || false}
+        value={newValue}
+        onChange={(value) => {
+          setNewValue(value.toString());
+          if (onChange && !readOnly) onChange(value.toString());
+        }}
+        onKeyDown={(e) => {
+          if (onKeyPress) onKeyPress(newValue);
+          if (e.key === "Enter") {
+            if (onEnter) onEnter(newValue);
+          }
+          if (e.key === "Escape") {
+            if (onEscape) onEscape(newValue);
+          }
+        }}
+      />
+    );
+
   if (label)
     return (
       <div

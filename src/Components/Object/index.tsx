@@ -649,6 +649,7 @@ const ViewObject: React.FC<{
                 context={context}
                 FactsBar={FactsBar}
                 hideFields={hideFields}
+                defaults={defaults}
               />
             );
           })
@@ -689,6 +690,7 @@ const LayoutItem: React.FC<{
   context: AppContextType;
   hideFields: string[];
   FactsBar;
+  defaults;
 }> = ({
   layoutItem,
   model,
@@ -705,6 +707,7 @@ const LayoutItem: React.FC<{
   hideFields,
   context,
   FactsBar,
+  defaults,
 }) => {
   switch (layoutItem.type) {
     case "GridContainer":
@@ -729,6 +732,7 @@ const LayoutItem: React.FC<{
                 context={context}
                 FactsBar={FactsBar}
                 hideFields={hideFields}
+                defaults={defaults}
               />
             );
           })}
@@ -763,6 +767,7 @@ const LayoutItem: React.FC<{
                   context={context}
                   FactsBar={FactsBar}
                   hideFields={hideFields}
+                  defaults={defaults}
                 />
               );
             })}
@@ -791,6 +796,7 @@ const LayoutItem: React.FC<{
                   context={context}
                   FactsBar={FactsBar}
                   hideFields={hideFields}
+                  defaults={defaults}
                 />
               );
             })}
@@ -818,6 +824,7 @@ const LayoutItem: React.FC<{
                 context={context}
                 FactsBar={FactsBar}
                 hideFields={hideFields}
+                defaults={defaults}
               />
             );
           })}
@@ -834,6 +841,7 @@ const LayoutItem: React.FC<{
           mode={mode}
           setMode={setMode}
           context={context}
+          defaults={defaults}
         />
       );
     case "Paper":
@@ -868,6 +876,7 @@ const LayoutItem: React.FC<{
                 context={context}
                 FactsBar={FactsBar}
                 hideFields={hideFields}
+                defaults={defaults}
               />
             );
           })}
@@ -888,6 +897,7 @@ const LayoutItem: React.FC<{
             }}
             customFieldTypes={customFieldTypes}
             context={context}
+            defaults={defaults}
           />
         )
       );
@@ -897,6 +907,7 @@ const LayoutItem: React.FC<{
           layoutItem={layoutItem}
           objectId={object._id}
           context={context}
+          object={object}
         />
       );
 
@@ -923,6 +934,7 @@ const LayoutItem: React.FC<{
               context={context}
               FactsBar={FactsBar}
               hideFields={hideFields}
+              defaults={defaults}
             />
           );
         });

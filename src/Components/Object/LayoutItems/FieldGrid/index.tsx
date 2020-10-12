@@ -29,6 +29,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
   setMode;
   mode;
   context: AppContextType;
+  defaults;
 }> = ({
   layoutItem,
   object,
@@ -38,6 +39,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
   setMode,
   mode,
   context,
+  defaults,
 }) => {
   // Vars
   // Lifecycle
@@ -75,6 +77,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
                       setToChange({ ...toChange, [item]: value });
                     }}
                     context={context}
+                    defaults={defaults}
                   />
                 </Grid>
               ))}

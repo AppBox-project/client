@@ -33,6 +33,7 @@ const ObjectLayoutItemField: React.FC<{
   toChange;
   customFieldTypes?: { [key: string]: React.FC<CustomFieldType> };
   context: AppContextType;
+  defaults;
 }> = ({
   layoutItem,
   object,
@@ -43,6 +44,7 @@ const ObjectLayoutItemField: React.FC<{
   toChange,
   customFieldTypes,
   context,
+  defaults,
 }) => {
   // Vars
   const [modelField, setModelField] = useState<ModelFieldType>(
@@ -161,8 +163,12 @@ const ObjectLayoutItemField: React.FC<{
                 }}
                 readOnly={modelField.typeArgs?.readonly}
                 placeholder={modelField.name}
-                value={objectField}
+                value={objectField || defaults[layoutItem.field]}
+                label={modelField.name}
                 type={modelField.typeArgs && modelField.typeArgs.type}
+                startAdornment={
+                  modelField.typeArgs?.numberType === "currency" && "€"
+                }
               />
             )}
             {modelField.type === "address" && (

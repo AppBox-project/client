@@ -129,149 +129,136 @@ const AppQSTodoListLayout: React.FC<{
 
   // UI
   return (
-    <context.UI.Animations.AnimationContainer>
-      <Grid container>
-        <Grid item xs={12} md={8}>
-          <context.UI.Animations.AnimationItem>
-            <div className={!isMobile && "scrollIndependently"}>
-              <context.UI.Design.Card
-                title={project.data.name}
-                titleDivider
-                titleInPrimaryColor
-                centerTitle
-                withBigMargin
-              >
-                <List style={{ paddingTop: 0, marginTop: 0 }}>
-                  <ListSubheader
-                    style={{
-                      padding: "15px 0",
-                      zIndex: 102,
-                    }}
-                  >
-                    <context.UI.Inputs.TextInput
-                      label="New todo"
-                      autoFocus={!isMobile}
-                      noLabel
-                      value={newTodo}
-                      onChange={(value) => setNewTodo(value)}
-                      onEnter={() => {
-                        context.addObject(
-                          "qs-todo",
-                          {
-                            action: newTodo,
-                            owner: context.user._id,
-                            project: project._id,
-                          },
-                          (response) => {
-                            if (response.success) {
-                            } else {
-                              console.log(response);
-                            }
-                          }
-                        );
-                        setNewTodo("");
-                      }}
-                      onEscape={() => {
-                        setNewTodo("");
-                      }}
-                    />
-                  </ListSubheader>
-                  <Divider />
-                  <Grid
-                    container
-                    spacing={2}
-                    style={{ margin: "10px 0 10px -8px" }}
-                  >
-                    <Grid item xs={6}>
-                      <context.UI.Inputs.Select
-                        label="Filter tags..."
-                        options={tagList}
-                        multiple
-                        value={activeTagFilters}
-                        onChange={(value) => setActiveTagFilters(value)}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <context.UI.Inputs.Select
-                        label="Filter status..."
-                        options={statusses}
-                        value={activeStatusFilters}
-                        onChange={(value) => setActiveStatusFilters(value)}
-                        multiple
-                      />
-                    </Grid>
-                  </Grid>
+    <Grid container>
+      <Grid item xs={12} md={8} className={!isMobile && "scrollIndependently"}>
+        <context.UI.Design.Card
+          title={`${project.data.name}${
+            filteredTodos && ` (${filteredTodos?.length})`
+          }`}
+          titleDivider
+          titleInPrimaryColor
+          centerTitle
+          withBigMargin
+        >
+          <List style={{ paddingTop: 0, marginTop: 0 }}>
+            <ListSubheader
+              style={{
+                padding: "15px 0",
+                zIndex: 102,
+              }}
+            >
+              <context.UI.Inputs.TextInput
+                label="New todo"
+                autoFocus={!isMobile}
+                noLabel
+                value={newTodo}
+                onChange={(value) => setNewTodo(value)}
+                onEnter={() => {
+                  context.addObject(
+                    "qs-todo",
+                    {
+                      action: newTodo,
+                      owner: context.user._id,
+                      project: project._id,
+                    },
+                    (response) => {
+                      if (response.success) {
+                      } else {
+                        console.log(response);
+                      }
+                    }
+                  );
+                  setNewTodo("");
+                }}
+                onEscape={() => {
+                  setNewTodo("");
+                }}
+              />
+            </ListSubheader>
+            <Divider />
+            <Grid container spacing={2} style={{ margin: "10px 0 10px -8px" }}>
+              <Grid item xs={6}>
+                <context.UI.Inputs.Select
+                  label="Filter tags..."
+                  options={tagList}
+                  multiple
+                  value={activeTagFilters}
+                  onChange={(value) => setActiveTagFilters(value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <context.UI.Inputs.Select
+                  label="Filter status..."
+                  options={statusses}
+                  value={activeStatusFilters}
+                  onChange={(value) => setActiveStatusFilters(value)}
+                  multiple
+                />
+              </Grid>
+            </Grid>
 
-                  <Divider />
-                  {(filteredTodos || []).map(
-                    (todo: AppTodoType) =>
-                      !todo.data.belongs_to && (
-                        <AppQSActionTodoDetailTodo
-                          todo={todo}
-                          context={context}
-                          model={model}
-                          isMobile={isMobile}
-                          key={todo._id}
-                          subTodos={filter(
-                            unfinishedTodos,
-                            (t: AppTodoType) => t.data.belongs_to === todo._id
-                          )}
-                          allTodos={unfinishedTodos}
-                          level={1}
-                        />
-                      )
-                  )}
-                </List>
-              </context.UI.Design.Card>
-            </div>
-          </context.UI.Animations.AnimationItem>
-        </Grid>
-        {(doneTodos || []).length > 0 && (
-          <Grid item xs={12} md={4}>
-            <context.UI.Animations.AnimationItem>
-              <div
-                className={!isMobile && "scrollIndependently"}
-                style={{ paddingBottom: isMobile && 60 }}
-              >
-                <context.UI.Design.Card
-                  title="Done!"
-                  withBigMargin
-                  centerTitle
-                  titleDivider
-                  titleInPrimaryColor
-                >
-                  <Button
-                    onClick={() => {
-                      setShowDone(!showDone);
-                    }}
-                    fullWidth
-                    startIcon={showDone ? <FaToggleOn /> : <FaToggleOff />}
-                    variant={showDone ? "outlined" : "text"}
-                    color="primary"
-                  >
-                    Show done
-                  </Button>
-                  <Collapse in={showDone} timeout="auto" unmountOnExit>
-                    <List>
-                      {(doneTodos || []).map((todo) => (
-                        <AppQSActionTodoDetailTodo
-                          todo={todo}
-                          context={context}
-                          model={model}
-                          isMobile={isMobile}
-                          key={todo._id}
-                          hideStatus
-                        />
-                      ))}
-                    </List>
-                  </Collapse>
-                </context.UI.Design.Card>
-              </div>
-            </context.UI.Animations.AnimationItem>
-          </Grid>
-        )}
+            <Divider />
+            {(filteredTodos || []).map(
+              (todo: AppTodoType) =>
+                !todo.data.belongs_to && (
+                  <AppQSActionTodoDetailTodo
+                    todo={todo}
+                    context={context}
+                    model={model}
+                    isMobile={isMobile}
+                    key={todo._id}
+                    subTodos={filter(
+                      unfinishedTodos,
+                      (t: AppTodoType) => t.data.belongs_to === todo._id
+                    )}
+                    allTodos={unfinishedTodos}
+                    level={1}
+                  />
+                )
+            )}
+          </List>
+        </context.UI.Design.Card>
       </Grid>
-    </context.UI.Animations.AnimationContainer>
+      {(doneTodos || []).length > 0 && (
+        <Grid item xs={12} md={4}>
+          <div style={{ paddingBottom: isMobile && 60 }}>
+            <context.UI.Design.Card
+              title="Done!"
+              withBigMargin
+              centerTitle
+              titleDivider
+              titleInPrimaryColor
+            >
+              <Button
+                onClick={() => {
+                  setShowDone(!showDone);
+                }}
+                fullWidth
+                startIcon={showDone ? <FaToggleOn /> : <FaToggleOff />}
+                variant={showDone ? "outlined" : "text"}
+                color="primary"
+              >
+                Show done
+              </Button>
+              <Collapse in={showDone} timeout="auto" unmountOnExit>
+                <List>
+                  {(doneTodos || []).map((todo) => (
+                    <AppQSActionTodoDetailTodo
+                      todo={todo}
+                      context={context}
+                      model={model}
+                      isMobile={isMobile}
+                      key={todo._id}
+                      hideStatus
+                    />
+                  ))}
+                </List>
+              </Collapse>
+            </context.UI.Design.Card>
+          </div>
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

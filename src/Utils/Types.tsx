@@ -43,6 +43,7 @@ export interface ModelFieldType {
     key?: string;
     readonly?: boolean;
     asBanner?: boolean;
+    numberType?: "regular" | "currency";
   };
 }
 

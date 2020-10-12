@@ -20,6 +20,7 @@ import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
 import PageOnboarding from "./Pages/Onboarding/Onboarding";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import "rsuite/dist/styles/rsuite-default.css";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");

@@ -600,6 +600,12 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     type: "text",
                   },
                   {
+                    key: "valueCopyFields",
+                    label: "Linkedfields (target=source, comma seperated)",
+                    value: layoutItem.valueCopyFields || "",
+                    type: "text",
+                  },
+                  {
                     key: "onlyVisibleWithResults",
                     label: "Only visible with results",
                     value: layoutItem.onlyVisibleWithResults || false,

@@ -125,57 +125,75 @@ const ListDetailLayout: React.FC<{
   // UI
 
   return (
-    <Grid container style={{ ...style, height: "100%" }}>
-      {(!selectedItem || !isMobile) && (
-        <Grid item xs={12} md={navigationWidth} style={{ height: "100%" }}>
-          {!isLoading ? (
-            customNavComponent ? (
-              customNavComponent
-            ) : mode === "tree" ? (
-              <TreeViewUI items={treeList} linkTo={baseUrl} />
-            ) : (
-              <ListNav
-                addFunction={addFunction}
-                deleteFunction={deleteFunction}
-                baseUrl={baseUrl}
-                selectedItem={selectedItem}
-                list={list}
-                navFixedIcon={navFixedIcon}
-                title={title}
-                addTitle={addTitle}
-                imageField={imageField}
-                objects={objects}
-                style={style}
-                navDynamicIcon={navDynamicIcon}
-                itemSecondary={itemSecondary}
-                customNavItems={customNavItems}
-                footerComponent={footerComponent}
-              />
-            )
-          ) : (
-            <ListDetailLayoutSkeleton title={title} />
-          )}
-        </Grid>
-      )}
-      {selectedItem && (
-        <Grid item xs={12} md={detailWidth} style={{ height: "100%" }}>
-          <Route
-            path={`${baseUrl}/:detailId`}
-            render={(props) => {
-              return (
-                <div style={{ overflowX: "auto", height: "100%" }}>
-                  <DetailComponent
-                    {...props}
-                    {...detailComponentProps}
-                    context={context}
+    <AnimationContainer>
+      <Grid container style={{ ...style, height: "100%" }} className="ldl">
+        {(!selectedItem || !isMobile) && (
+          <Grid
+            item
+            xs={12}
+            md={navigationWidth}
+            className={!isMobile && "scrollIndependently"}
+          >
+            {" "}
+            <AnimationItem>
+              {!isLoading ? (
+                customNavComponent ? (
+                  customNavComponent
+                ) : mode === "tree" ? (
+                  <TreeViewUI items={treeList} linkTo={baseUrl} />
+                ) : (
+                  <ListNav
+                    addFunction={addFunction}
+                    deleteFunction={deleteFunction}
+                    baseUrl={baseUrl}
+                    selectedItem={selectedItem}
+                    list={list}
+                    navFixedIcon={navFixedIcon}
+                    title={title}
+                    addTitle={addTitle}
+                    imageField={imageField}
+                    objects={objects}
+                    style={style}
+                    navDynamicIcon={navDynamicIcon}
+                    itemSecondary={itemSecondary}
+                    customNavItems={customNavItems}
+                    footerComponent={footerComponent}
                   />
-                </div>
-              );
-            }}
-          />
-        </Grid>
-      )}
-    </Grid>
+                )
+              ) : (
+                <ListDetailLayoutSkeleton title={title} />
+              )}
+            </AnimationItem>
+          </Grid>
+        )}
+        {selectedItem && (
+          <Grid item xs={12} md={detailWidth} style={{ height: "100%" }}>
+            <AnimationItem>
+              <Route
+                path={`${baseUrl}/:detailId`}
+                render={(props) => {
+                  return (
+                    <div
+                      style={{
+                        overflowX: "auto",
+                        height: "100%",
+                        marginBottom: isMobile && 64,
+                      }}
+                    >
+                      <DetailComponent
+                        {...props}
+                        {...detailComponentProps}
+                        context={context}
+                      />
+                    </div>
+                  );
+                }}
+              />
+            </AnimationItem>
+          </Grid>
+        )}
+      </Grid>
+    </AnimationContainer>
   );
 };
 
@@ -216,62 +234,58 @@ const ListNav: React.FC<{
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
-      <AnimationContainer>
-        <AnimationItem>
-          <Card withBigMargin disablePadding>
-            <List>
-              {title && (
-                <>
-                  <Typography
-                    variant="h6"
-                    color="primary"
-                    style={{
-                      textAlign: "center",
-                      margin: 13,
-                      cursor: "default",
-                    }}
-                    gutterBottom
-                  >
-                    {title}
-                  </Typography>
-                  <Divider />
-                </>
-              )}
+      <Card withBigMargin disablePadding>
+        <List>
+          {title && (
+            <>
+              <Typography
+                variant="h6"
+                color="primary"
+                style={{
+                  textAlign: "center",
+                  margin: 13,
+                  cursor: "default",
+                }}
+                gutterBottom
+              >
+                {title}
+              </Typography>
+              <Divider />
+            </>
+          )}
 
-              {addFunction && (
-                <ListItem divider button onClick={addFunction}>
-                  <ListItemIcon style={{ minWidth: 25 }}>
-                    <GrAdd style={{ width: 15, height: 15 }} />
-                  </ListItemIcon>
+          {addFunction && (
+            <ListItem divider button onClick={addFunction}>
+              <ListItemIcon style={{ minWidth: 25 }}>
+                <GrAdd style={{ width: 15, height: 15 }} />
+              </ListItemIcon>
 
-                  <ListItemText>{addTitle || "Add new"}</ListItemText>
-                </ListItem>
-              )}
-              {customNavItems &&
-                customNavItems.length > 0 &&
-                customNavItems.map((item, index) => item)}
-              {(list || []).map((listItem) => {
-                return (
-                  <ListItemObject
-                    baseUrl={baseUrl}
-                    listItem={listItem}
-                    selectedItem={selectedItem}
-                    navFixedIcon={navFixedIcon}
-                    deleteFunction={deleteFunction}
-                    key={listItem.id}
-                    nestedLevel={0}
-                    imageField={imageField}
-                    objects={objects}
-                    navDynamicIcon={navDynamicIcon}
-                    itemSecondary={itemSecondary}
-                  />
-                );
-              })}
-            </List>
-          </Card>
-        </AnimationItem>
-        <AnimationItem>{footerComponent && footerComponent}</AnimationItem>
-      </AnimationContainer>
+              <ListItemText>{addTitle || "Add new"}</ListItemText>
+            </ListItem>
+          )}
+          {customNavItems &&
+            customNavItems.length > 0 &&
+            customNavItems.map((item, index) => item)}
+          {(list || []).map((listItem) => {
+            return (
+              <ListItemObject
+                baseUrl={baseUrl}
+                listItem={listItem}
+                selectedItem={selectedItem}
+                navFixedIcon={navFixedIcon}
+                deleteFunction={deleteFunction}
+                key={listItem.id}
+                nestedLevel={0}
+                imageField={imageField}
+                objects={objects}
+                navDynamicIcon={navDynamicIcon}
+                itemSecondary={itemSecondary}
+              />
+            );
+          })}
+        </List>
+      </Card>
+      {footerComponent && footerComponent}
     </div>
   );
 };

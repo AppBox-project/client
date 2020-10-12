@@ -19,18 +19,20 @@ import Card from "../../../Design/Card";
 import * as icons from "react-icons/fa";
 import ObjectPreview from "../../ObjectPreview";
 import FieldDisplay from "../../FieldDisplay";
-import { AppContextType } from "../../../../Utils/Types";
+import { AppContextType, ObjectType } from "../../../../Utils/Types";
 
 const ObjectLayoutItemRelatedList: React.FC<{
   layoutItem;
   objectId;
   context: AppContextType;
-}> = ({ layoutItem, objectId, context }) => {
+  object: ObjectType;
+}> = ({ layoutItem, objectId, context, object }) => {
   // Vars
   const [relatedItems, setRelatedItems] = useState<any>();
   const [relatedModel, setRelatedModel] = useState<any>();
   const history = useHistory();
   const [showMore, setShowMore] = useState<any>(false);
+  const [defaultValues, setDefaultValues] = useState<{}>({});
 
   // Lifecycle
   useEffect(() => {
@@ -67,6 +69,15 @@ const ObjectLayoutItemRelatedList: React.FC<{
   const hideElement =
     layoutItem.onlyVisibleWithResults && (relatedItems || [1]).length === 0; // It needs to be hidden when both these things are true
 
+  useEffect(() => {
+    const ndv = {};
+    layoutItem?.valueCopyFields?.split(",")?.map((defValue) => {
+      const vls = defValue.split("=");
+      ndv[vls[0]] = object.data[vls[1]];
+    });
+    setDefaultValues(ndv);
+  }, [layoutItem]);
+
   // UI
   return hideElement ? (
     <></>
@@ -92,7 +103,10 @@ const ObjectLayoutItemRelatedList: React.FC<{
                     context={context}
                     popup
                     model={relatedModel}
-                    defaults={{ [layoutItem.field]: objectId }}
+                    defaults={{
+                      ...defaultValues,
+                      [layoutItem.field]: objectId,
+                    }}
                     hideFields={[layoutItem.field]}
                     onSuccess={() => {
                       context.setDialog({ display: false });

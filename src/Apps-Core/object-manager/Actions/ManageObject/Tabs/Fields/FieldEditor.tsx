@@ -180,26 +180,49 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   />
                 </Grid>
                 {field.type === "input" && (
-                  <Grid item xs={6}>
-                    <UI.Inputs.SelectInput
-                      label="Input type"
-                      value={field.typeArgs ? field.typeArgs.type : "text"}
-                      options={[
-                        { value: "text", label: "Text" },
-                        { value: "password", label: "Password" },
-                        { value: "number", label: "Number" },
-                        { value: "phone", label: "Phone" },
-                        { value: "email", label: "E-mail" },
-                        { value: "url", label: "URL" },
-                      ]}
-                      onChange={(value) => {
-                        setField({
-                          ...field,
-                          typeArgs: { ...field.typeArgs, type: value },
-                        });
-                      }}
-                    />
-                  </Grid>
+                  <>
+                    <Grid item xs={6}>
+                      <UI.Inputs.SelectInput
+                        label="Input type"
+                        value={field.typeArgs ? field.typeArgs.type : "text"}
+                        options={[
+                          { value: "text", label: "Text" },
+                          { value: "password", label: "Password" },
+                          { value: "number", label: "Number" },
+                          { value: "phone", label: "Phone" },
+                          { value: "email", label: "E-mail" },
+                          { value: "url", label: "URL" },
+                        ]}
+                        onChange={(value) => {
+                          setField({
+                            ...field,
+                            typeArgs: { ...field.typeArgs, type: value },
+                          });
+                        }}
+                      />
+                    </Grid>
+                    {field.typeArgs?.type === "number" && (
+                      <Grid item xs={6}>
+                        <UI.Inputs.SelectInput
+                          label="Number type"
+                          value={field.typeArgs?.numberType || "regular"}
+                          options={[
+                            { value: "regular", label: "Regular" },
+                            { value: "currency", label: "Currency" },
+                          ]}
+                          onChange={(value) => {
+                            setField({
+                              ...field,
+                              typeArgs: {
+                                ...field.typeArgs,
+                                numberType: value,
+                              },
+                            });
+                          }}
+                        />
+                      </Grid>
+                    )}
+                  </>
                 )}
                 {field.type === "options" && (
                   <>
