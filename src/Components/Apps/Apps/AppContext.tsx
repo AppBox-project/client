@@ -603,7 +603,7 @@ export class AppContext {
   // Only for core apps
   setFieldDependencies = (context, dependencies, fieldId) => {
     return new Promise((resolve, reject) => {
-      if (this.appId === "object-manager") {
+      if (this.appId === "model-manager") {
         const requestId = uniqid();
         Server.emit("setFormulaDependencies", {
           requestId,
