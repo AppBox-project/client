@@ -10,7 +10,7 @@ export default (
   new Promise((resolve, reject) => {
     context.getObjects(
       "document-template",
-      { "data.model": object.objectId },
+      { "data.model": object?.objectId },
       (response) => {
         resolve({
           provides: {
