@@ -330,7 +330,10 @@ export interface ListItemType {
 export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Margin: React.FC;
-  Animations: { AnimationContainer: React.FC; AnimationItem: React.FC };
+  Animations: {
+    AnimationContainer: React.FC<{ style?: CSSProperties }>;
+    AnimationItem: React.FC<{ style?: CSSProperties }>;
+  };
   Object: {
     Overview: React.FC<{
       context: AppContextType;
@@ -428,9 +431,10 @@ export interface UIType {
       list?: ListItemType[];
       treeList?: TreeViewDataItem[];
       baseUrl: string;
-      customNavComponent?;
+      CustomNavComponent?: React.FC<any>;
       DetailComponent: React.FC;
       detailComponentProps?: {};
+      navComponentProps?: {};
       context: AppContextType;
       addFunction?: () => void;
       addTitle?: string;

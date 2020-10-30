@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const list = {
   visible: {
@@ -26,22 +27,33 @@ const item = {
   hidden: { opacity: 0, y: 10 },
 };
 
-const AnimationContainer: React.FC<{ children: any }> = ({ children }) => {
+const AnimationContainer: React.FC<{
+  children: any;
+  style?: CSSProperties;
+}> = ({ children, style }) => {
   return (
     <motion.div
       initial="hidden"
       animate="visible"
       variants={list}
-      style={{ height: "100%" }}
+      style={{ height: "100%", ...style }}
+      className="AnimationContainer"
     >
       {children}
     </motion.div>
   );
 };
 
-const AnimationItem: React.FC<{ children: any }> = ({ children }) => {
+const AnimationItem: React.FC<{ children: any; style?: CSSProperties }> = ({
+  children,
+  style,
+}) => {
   return (
-    <motion.div variants={item} style={{ width: "100%" }}>
+    <motion.div
+      variants={item}
+      style={{ width: "100%", ...style }}
+      className="AnimationItem"
+    >
       {children}
     </motion.div>
   );

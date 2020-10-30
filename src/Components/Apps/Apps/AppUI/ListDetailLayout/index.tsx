@@ -44,9 +44,10 @@ const ListDetailLayout: React.FC<{
   objects?: ObjectType[];
   treeList?: TreeViewDataItem[];
   baseUrl: string;
-  customNavComponent?;
+  CustomNavComponent?: React.FC<any>;
   DetailComponent: React.FC;
   detailComponentProps?: {};
+  navComponentProps?: {};
   context: AppContextType;
   addFunction?: () => void;
   addTitle?: string;
@@ -63,10 +64,11 @@ const ListDetailLayout: React.FC<{
   footerComponent?: JSX.Element;
 }> = ({
   list,
-  customNavComponent,
+  CustomNavComponent,
   baseUrl,
   DetailComponent,
   detailComponentProps,
+  navComponentProps,
   context,
   addFunction,
   deleteFunction,
@@ -125,7 +127,7 @@ const ListDetailLayout: React.FC<{
   // UI
 
   return (
-    <AnimationContainer>
+    <AnimationContainer style={{ height: "100%" }}>
       <Grid container style={{ ...style, height: "100%" }} className="ldl">
         {(!selectedItem || !isMobile) && (
           <Grid
@@ -134,12 +136,14 @@ const ListDetailLayout: React.FC<{
             md={navigationWidth}
             className={!isMobile && "scrollIndependently"}
           >
-            {" "}
-            <AnimationItem>
-              {!isLoading ? (
-                customNavComponent ? (
-                  customNavComponent
-                ) : mode === "tree" ? (
+            <AnimationItem style={{ height: "100%" }}>
+              {CustomNavComponent ? (
+                <CustomNavComponent
+                  context={context}
+                  {...(navComponentProps || {})}
+                />
+              ) : !isLoading ? (
+                mode === "tree" ? (
                   <TreeViewUI items={treeList} linkTo={baseUrl} />
                 ) : (
                   <ListNav
@@ -168,7 +172,7 @@ const ListDetailLayout: React.FC<{
         )}
         {selectedItem && (
           <Grid item xs={12} md={detailWidth} style={{ height: "100%" }}>
-            <AnimationItem>
+            <AnimationItem style={{ height: "100%" }}>
               <Route
                 path={`${baseUrl}/:detailId`}
                 render={(props) => {

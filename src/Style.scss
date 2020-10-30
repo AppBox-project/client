@@ -120,6 +120,15 @@ blockquote p {
   }
 }
 
+.scrollHorizontal {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 a:hover {
   text-decoration: none;
 }
