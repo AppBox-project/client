@@ -697,7 +697,7 @@ const ListObjectTypes: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getTypes({}, (response) => {
+    context.getModels({}, (response) => {
       if (response.success) {
         const t = [];
         response.data.map((rd) => {

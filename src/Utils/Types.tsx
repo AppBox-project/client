@@ -4,6 +4,11 @@ import { CSSProperties } from "@material-ui/core/styles/withStyles";
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
 
+export interface OptionType {
+  label: string;
+  value: string;
+}
+
 export interface UserType {
   _id: any;
   data: {
@@ -202,7 +207,7 @@ export interface AppContextType {
     then: (response: ServerResponse) => void
   ) => AppRequestController;
 
-  getTypes: (
+  getModels: (
     filter: {},
     then: (response: {
       success: boolean;
@@ -601,4 +606,9 @@ export interface PersonType {
     email?: string;
     phone?: string;
   };
+}
+export interface CustomFormInputType {
+  onChange: (value: string) => void;
+  context: AppContextType;
+  value;
 }

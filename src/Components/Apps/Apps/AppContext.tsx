@@ -246,7 +246,7 @@ export class AppContext {
   };
 
   // Todo: legacy function: delete this
-  getTypes = (filter, then) => {
+  getModels = (filter, then: (response: ServerResponse) => void) => {
     if (typeof filter === "object") {
       const requestId = uniqid();
       this.dataListeners.push({

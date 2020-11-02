@@ -28,7 +28,7 @@ export default class App {
             apps[app.data.id] = app.data;
           });
 
-          this.context.getTypes({}, (response) => {
+          this.context.getModels({}, (response) => {
             if (response.success) {
               const actions = [];
               response.data.map((result) => {

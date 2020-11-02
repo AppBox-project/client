@@ -2,6 +2,8 @@ import { ObjectType } from "../../Utils/Types";
 
 export interface ProcessTrigger {
   type: "cron";
+  args?: {};
+  name: string;
 }
 
 export interface ProcessStep {
@@ -10,6 +12,7 @@ export interface ProcessStep {
 }
 
 export interface ProcessStepAction {
+  name: string;
   type: "InsertObject";
   args: {};
 }

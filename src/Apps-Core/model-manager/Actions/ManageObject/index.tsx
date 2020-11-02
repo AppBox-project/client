@@ -41,7 +41,7 @@ const AppActionManageObject: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    context.getTypes({ key: action }, (response) => {
+    context.getModels({ key: action }, (response) => {
       if (response.success) {
         setModel(response.data[0]);
       } else {

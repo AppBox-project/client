@@ -22,7 +22,7 @@ const AppActionAddObject: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const request = context.getTypes({}, (response) => {
+    const request = context.getModels({}, (response) => {
       if (response.success) {
         const nm: ValueListItemType[] = [];
         response.data.map((o: ModelType) =>

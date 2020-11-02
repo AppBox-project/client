@@ -174,7 +174,7 @@ const App: React.FC<{
                   map(formItem.onlyDisplayWhen, (v, k) => {
                     const depItem = find(dialog.form, (o) => o.key === k);
 
-                    if ((dialogFormContent[k] || depItem.value) === v)
+                    if ((dialogFormContent[k] || depItem?.value || "") === v)
                       display = true;
                   });
                 }
