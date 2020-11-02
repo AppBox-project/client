@@ -27,7 +27,7 @@ const AppBarAppList: React.FC<{
           style={{ float: "right", width: "30%" }}
           placeholder="Filter"
           value={filter}
-          onChange={(value) => setFilter(value)}
+          onChange={(value) => setFilter(value.toString())}
         />
         <Typography variant="h6">All apps</Typography>
         <Typography variant="body2">Right-click to pin.</Typography>

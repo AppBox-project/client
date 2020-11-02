@@ -6,7 +6,7 @@ const InputInput: React.FC<{
   placeholder?: string;
   label?: string;
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | number) => void;
   type?;
   style?;
   autoFocus?: true | boolean;
@@ -55,9 +55,9 @@ const InputInput: React.FC<{
         placeholder={placeholder}
         disabled={readOnly || false}
         value={newValue}
-        onChange={(value) => {
-          setNewValue(value.toString());
-          if (onChange && !readOnly) onChange(value.toString());
+        onChange={(value: string) => {
+          setNewValue(parseInt(value));
+          if (onChange && !readOnly) onChange(parseInt(value));
         }}
         onKeyDown={(e) => {
           if (onKeyPress) onKeyPress(newValue);

@@ -177,7 +177,7 @@ const Login: React.FC = () => {
           )}
           <InputInput
             value={token}
-            onChange={(value) => setToken(value)}
+            onChange={(value) => setToken(value.toString())}
             label="Token"
             onEnter={submitMfa}
             autoFocus={true}

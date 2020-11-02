@@ -155,11 +155,7 @@ const ObjectLayoutItemField: React.FC<{
             {modelField.type === "input" && (
               <InputInput
                 onChange={(value) => {
-                  if (modelField?.typeArgs?.type === "number") {
-                    onChange(parseInt(value));
-                  } else {
-                    onChange(value);
-                  }
+                  onChange(value);
                 }}
                 readOnly={modelField.typeArgs?.readonly}
                 placeholder={modelField.name}
