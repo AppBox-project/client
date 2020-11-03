@@ -48,7 +48,7 @@ const AppUiField: React.FC<{
       });
     }
 
-    if (!object) {
+    if (!object && objectId) {
       // No object provided, load it ourselves
       const requestObjectId = uniqid();
       Server.emit("listenForObjects", {
@@ -67,8 +67,8 @@ const AppUiField: React.FC<{
   }, [objectId]);
 
   // UI
-  if (!field && !loadedField) return <Loading />;
 
+  if (!field && !loadedField) return <Loading />;
   return (
     <div style={style}>
       <Field

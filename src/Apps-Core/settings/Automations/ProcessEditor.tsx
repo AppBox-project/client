@@ -138,6 +138,10 @@ const ProcessEditor: React.FC<{
                               key: "preset",
                               type: "dropdown",
                               dropdownOptions: cronOptions,
+                              value: find(
+                                cronOptions,
+                                (o) => o.label === trigger.name
+                              ).value,
                             },
                           ],
                           buttons: [
@@ -259,8 +263,12 @@ const ProcessEditor: React.FC<{
                             type: "dropdown",
                             dropdownOptions: [
                               { label: "Add object", value: "AddObject" },
-                              { label: "Delete object", value: "DeleteObject" },
+                              {
+                                label: "Delete objects",
+                                value: "DeleteObjects",
+                              },
                               { label: "Update object", value: "UpdateObject" },
+                              { label: "Wait for a bit", value: "wait" },
                             ],
                             value: action.type,
                           },
@@ -271,6 +279,21 @@ const ProcessEditor: React.FC<{
                             label: "Insert objects",
                             onlyDisplayWhen: { type: "AddObject" },
                             value: (action.args || {})["newObject"],
+                          },
+                          {
+                            key: "DeleteObjects",
+                            type: "custom",
+                            customInput: Actions.DeleteObject,
+                            label: "Delete objects",
+                            onlyDisplayWhen: { type: "DeleteObjects" },
+                            value: (action.args || {})["DeleteObjects"],
+                          },
+                          {
+                            key: "timeout",
+                            type: "number",
+                            onlyDisplayWhen: { type: "wait" },
+                            label: "Wait for how long (milliseconds)",
+                            value: (action.args || {})["timeout"],
                           },
                         ],
                         buttons: [
@@ -291,7 +314,13 @@ const ProcessEditor: React.FC<{
                               const newAction: ProcessStepAction = {
                                 name: form.name,
                                 type: form.type,
-                                args: { newObject: form.InsertObject },
+                                args: {
+                                  newObject:
+                                    form.InsertObject && form.InsertObject,
+                                  DeleteObjects:
+                                    form.DeleteObjects && form.DeleteObjects,
+                                  timeout: form.timeout && form.timeout,
+                                },
                               };
                               const newSteps = newAutomation.data.data.steps;
                               newSteps[stepIndex].actions[
@@ -316,7 +345,9 @@ const ProcessEditor: React.FC<{
                       });
                     }}
                   >
-                    <div className={styles.triggerTitle}>Do</div>
+                    <div className={styles.triggerTitle}>
+                      {action.type === "wait" ? "Wait" : "Do"}
+                    </div>
                     {action.name}
                   </div>
                 </div>

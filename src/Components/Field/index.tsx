@@ -84,6 +84,7 @@ const Field: React.FC<{
           fieldKey={fieldId}
           setMode={setMode}
           onChange={onChangeHandler}
+          value={value}
         />
       )}
       {field.type === "relationship" && (

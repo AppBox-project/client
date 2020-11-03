@@ -13,7 +13,7 @@ export interface ProcessStep {
 
 export interface ProcessStepAction {
   name: string;
-  type: "InsertObject";
+  type: "InsertObject" | "DeleteObjects" | "wait";
   args: {};
 }
 
