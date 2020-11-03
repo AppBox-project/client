@@ -18,6 +18,8 @@ import Card from "../Design/Card";
 import Loading from "../Loading";
 import { map } from "lodash";
 import InputSelect from "../Inputs/Select";
+import InputCheckbox from "../Inputs/Checkbox";
+import InputInput from "../Inputs/Input";
 
 const ObjectDesigner: React.FC<{
   model?: ModelType;
@@ -87,7 +89,7 @@ const ObjectDesigner: React.FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {value.map((val, index) => (
+          {(value || []).map((val, index) => (
             <TableRow key={index}>
               <TableCell style={{ width: "33%" }}>
                 {appliedModel.fields[val.key].name}
@@ -100,26 +102,54 @@ const ObjectDesigner: React.FC<{
                 />
               </TableCell>
               <TableCell style={{ width: "34%" }}>
-                <context.UI.Field
-                  model={appliedModel}
-                  field={appliedModel.fields[val.key]}
-                  fieldId={val.key}
-                  value={
-                    val.value
-                      ? val.value
-                      : appliedModel?.fields[val.key].type === "boolean"
-                      ? false
-                      : appliedModel?.fields[val.key].typeArgs?.type ===
-                        "number"
-                      ? 0
-                      : ""
-                  }
-                  onChange={(newVal) => {
-                    const newValue = value;
-                    newValue[index] = { ...val, value: newVal };
-                    onChange(newValue);
-                  }}
-                />
+                {appliedModel?.fields[val.key].type === "formula" ? (
+                  appliedModel?.fields[val.key].typeArgs?.type === "boolean" ? (
+                    <InputCheckbox
+                      value={val.value === true || val.value === "true"}
+                      onChange={(newVal) => {
+                        const newValue = value;
+                        newValue[index] = {
+                          ...val,
+                          value: newVal,
+                        };
+                        onChange(newValue);
+                      }}
+                    />
+                  ) : (
+                    <InputInput
+                      value={val.value.toString()}
+                      type={
+                        appliedModel?.fields[val.key].typeArgs?.type || "text"
+                      }
+                      onChange={(newVal) => {
+                        const newValue = value;
+                        newValue[index] = { ...val, value: newVal };
+                        onChange(newValue);
+                      }}
+                    />
+                  )
+                ) : (
+                  <context.UI.Field
+                    model={appliedModel}
+                    field={appliedModel.fields[val.key]}
+                    fieldId={val.key}
+                    value={
+                      val.value
+                        ? val.value
+                        : appliedModel?.fields[val.key].type === "boolean"
+                        ? false
+                        : appliedModel?.fields[val.key].typeArgs?.type ===
+                          "number"
+                        ? 0
+                        : ""
+                    }
+                    onChange={(newVal) => {
+                      const newValue = value;
+                      newValue[index] = { ...val, value: newVal };
+                      onChange(newValue);
+                    }}
+                  />
+                )}
               </TableCell>
             </TableRow>
           ))}
@@ -130,7 +160,7 @@ const ObjectDesigner: React.FC<{
                 label="Add field"
                 onChange={(newVal) => {
                   onChange([
-                    ...value,
+                    ...(value || []),
                     { key: newVal?.value, operator: "equals", value: "" },
                   ]);
                 }}
