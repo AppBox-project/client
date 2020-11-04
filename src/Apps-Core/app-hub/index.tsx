@@ -1,8 +1,6 @@
 import React from "react";
-import FourOhFour from "../../Components/FourOhFour";
 import { FaStream, FaStore } from "react-icons/fa";
-import AppAHBrowse from "./Browse";
-import AppAHMyApps from "./MyApps";
+import AppHubBrowse from "./Browse";
 
 export default class App {
   context: any;
@@ -21,13 +19,13 @@ export default class App {
         {
           key: "browse",
           label: "Browse",
-          component: AppAHBrowse,
+          component: AppHubBrowse,
           icon: FaStore,
         },
         {
           key: "my-apps",
           label: "My apps",
-          component: AppAHMyApps,
+          component: AppHubBrowse,
           icon: FaStream,
         },
       ]);

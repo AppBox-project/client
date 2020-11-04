@@ -206,7 +206,7 @@ export interface AppContextType {
     modelId: string,
     then: (response: ServerResponse) => void
   ) => AppRequestController;
-
+  getDataFromExternalApi: (url: string) => Promise<{}>;
   getModels: (
     filter: {},
     then: (response: {
@@ -413,19 +413,13 @@ export interface UIType {
       }>;
     };
     GridItemLayout: React.FC<{
-      list?: {}[];
-      remoteList?: string;
+      data: ObjectType[];
+      cols?: 1 | 2 | 3 | 4 | 5 | 6;
       title?: string;
+      text?: string;
+      link?: string;
       baseUrl?: string;
-      dataMap: {
-        title: string;
-        description?: string;
-        image?: string;
-        url?: string;
-        id: string;
-      };
-      onClick?: (item) => void;
-      descriptionIsHtml?: true;
+      image?: string;
     }>;
     TreeView: React.FC<{
       items: TreeViewDataItem[];
@@ -611,4 +605,18 @@ export interface CustomFormInputType {
   onChange: (value: string) => void;
   context: AppContextType;
   value;
+}
+
+export interface SystemTaskType extends ObjectType {
+  data: {
+    name: string;
+    type: string;
+    description: string;
+    when: "asap";
+    action: string;
+    done: boolean;
+    arguments: {};
+    progress: number;
+    state: string;
+  };
 }

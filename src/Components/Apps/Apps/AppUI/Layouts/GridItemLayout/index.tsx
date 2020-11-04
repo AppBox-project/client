@@ -1,131 +1,55 @@
+import { Grid } from "@material-ui/core";
 import React from "react";
-import { useState, useEffect } from "reactn";
-import Axios from "axios";
-import GridItemLayoutSkeleton from "./Skeleton";
-import { Typography, Grid } from "@material-ui/core";
+import { ObjectType } from "../../../../../../Utils/Types";
+import Card from "../../../../../Design/Card";
+import { AnimationContainer, AnimationItem } from "../../Animations";
 import { get } from "lodash";
-import styles from "./styles.module.scss";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const GridItemLayout: React.FC<{
-  list?: {}[];
-  remoteList?: string;
+  data: ObjectType[];
+  cols?: 1 | 2 | 3 | 4 | 5 | 6;
   title?: string;
-  dataMap: {
-    title: string;
-    description?: string;
-    image?: string;
-    url?: string;
-    id: string;
-  };
-  onClick?: (item) => void;
-  descriptionIsHtml?: true;
+  text?: string;
+  link?: string;
+  image?: string;
   baseUrl?: string;
-}> = ({
-  list,
-  remoteList,
-  title,
-  dataMap,
-  descriptionIsHtml,
-  onClick,
-  baseUrl,
-}) => {
+}> = ({ data, cols, title, text, link, image, baseUrl }) => {
   // Vars
-  const [data, setData] = useState<{}[]>(list ? list : undefined);
-  const history = useHistory();
 
   // Lifecycle
-  useEffect(() => {
-    Axios.get(remoteList).then((response) => {
-      if (response.status === 200) {
-        setData(response.data);
-      } else {
-        console.log(response);
-      }
-    });
-  }, [remoteList]);
 
   // UI
-  if (!list && !remoteList)
-    return (
-      <>
-        <b>Error: </b>Either <em>list</em> or <em>remoteList</em> needs to be
-        provided.
-      </>
-    );
-  if (!data)
-    return (
-      <>
-        {title && (
-          <Typography variant="h6" className={styles.title}>
-            {title}
-          </Typography>
-        )}
-        <GridItemLayoutSkeleton />
-      </>
-    );
   return (
-    <>
-      {title && (
-        <Typography variant="h6" className={styles.title}>
-          {title}
-        </Typography>
-      )}
+    <AnimationContainer>
       <Grid container>
-        {(data || []).map((item) => {
-          const title = get(item, dataMap?.title || "title") || (
-            <>
-              <b>Error: </b>please provide a dataMap
-            </>
-          );
-          const id = get(item, dataMap?.id || "id") || "Error";
-          const image = dataMap?.image ? get(item, dataMap.image) : false;
-          const description = dataMap?.description
-            ? get(item, dataMap.description)
-            : false;
-          const url = dataMap?.url ? get(item, dataMap.url) : false;
-
-          return (
-            <Grid item xs={12} md={6} lg={3}>
-              <div
-                className={styles.item}
-                style={{ cursor: (url || onClick) && "pointer" }}
-                onClick={() => {
-                  if (onClick) onClick(item);
-                  if (url)
-                    baseUrl
-                      ? history.push(`${baseUrl}/${url}`)
-                      : history.push(url);
-                }}
-              >
-                {image && (
-                  <div className={styles.imageWrapper}>
-                    <img src={image} alt="Design preview" />
-                  </div>
-                )}
-                <div className={styles.infoWrapper}>
-                  <Typography variant="h6" style={{ fontSize: 20 }}>
-                    {title}
-                  </Typography>
-                  {description && (
-                    <Typography variant="subtitle2">
-                      {descriptionIsHtml ? (
-                        <div
-                          dangerouslySetInnerHTML={{ __html: description }}
-                        />
-                      ) : (
-                        description
-                      )}
-                    </Typography>
-                  )}
-                </div>
-              </div>
-            </Grid>
-          );
-        })}
+        {data.map((item) => (
+          //@ts-ignore
+          <Grid item xs={Math.floor(12 / (cols || 6))} key={item._id}>
+            <AnimationItem>
+              <MaybeLink link={link && baseUrl + get(item, link)}>
+                <Card
+                  hoverable={link !== undefined}
+                  withBigMargin
+                  title={title && get(item, title)}
+                  style={{ cursor: link && "pointer" }}
+                  image={image && get(item, image)}
+                >
+                  {text && get(item, text)}
+                </Card>
+              </MaybeLink>
+            </AnimationItem>
+          </Grid>
+        ))}
       </Grid>
-    </>
+    </AnimationContainer>
   );
 };
 
 export default GridItemLayout;
+
+const MaybeLink: React.FC<{
+  children;
+  link: string;
+}> = ({ children, link }) =>
+  link ? <Link to={link}>{children}</Link> : children;

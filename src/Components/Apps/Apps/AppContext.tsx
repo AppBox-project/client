@@ -22,6 +22,7 @@ import { baseUrl } from "../../../Utils/Utils";
 import InputSelect from "../../Inputs/Select";
 import nunjucks from "../../../Utils/Nunjucks";
 import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
+import Axios from "axios";
 
 export class AppContext {
   appId: string;
@@ -163,7 +164,11 @@ export class AppContext {
   setImage = (img) => {
     const ns = {
       ...this.sessionVariables,
-      image: img ? baseUrl + img : undefined,
+      image: img
+        ? img.substring(0, 4) === "http"
+          ? img
+          : baseUrl + img
+        : undefined,
     };
     this.sessionVariables = ns;
     this.setSessionVariables(ns);
@@ -634,6 +639,17 @@ export class AppContext {
       appId: this.appId,
     });
   };
+
+  getDataFromExternalApi = (url: string) =>
+    new Promise((resolve, reject) => {
+      Axios.get(url).then((response) => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject(response.statusText);
+        }
+      });
+    });
 
   requestServerAction = (action, args) =>
     new Promise((resolve, reject) => {

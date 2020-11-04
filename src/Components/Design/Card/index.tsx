@@ -28,6 +28,7 @@ const Card: React.FC<{
   className?: string;
   disablePadding?: boolean;
   buttons?: button[];
+  image?: string;
   onClick?: () => void;
 }> = ({
   children,
@@ -44,6 +45,7 @@ const Card: React.FC<{
   disablePadding,
   buttons,
   onClick,
+  image,
 }) => {
   const margins = {
     ...(withBigMargin
@@ -60,56 +62,64 @@ const Card: React.FC<{
         }
       : {}),
   };
-
   return (
     <div
-      className={`test ${styles.root} ${
+      className={`Card ${styles.root} ${
         hoverable && styles.hoverable
-      } ${className} ${className}`}
+      } ${className} `}
       onClick={onClick}
       style={{
         ...margins,
         ...style,
+        overflow: image && "hidden",
         padding: disablePadding && 0,
         marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
       }}
     >
-      {title ? (
-        <>
-          {buttons && (
-            <div style={{ float: "right" }}>
-              {buttons.map((button, index) =>
-                button.compact ? (
-                  <Tooltip title={button.label} placement="left">
-                    <IconButton onClick={button.onClick} color="primary">
-                      <button.icon style={{ width: 18, height: 18 }} />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <Button onClick={button.onClick} key={index}>
-                    {button.label}
-                  </Button>
-                )
-              )}
-            </div>
-          )}
-          <Typography
-            variant="h6"
-            color={titleInPrimaryColor ? "primary" : "initial"}
-            style={{
-              textAlign: centerTitle ? "center" : "left",
-            }}
-          >
-            {title}
-          </Typography>
-          {titleDivider && (
-            <Divider style={{ marginBottom: 10, marginTop: 5 }} />
-          )}
-        </>
-      ) : (
-        buttons && <>Buttons</>
+      {image && (
+        <div
+          className={styles.image}
+          style={{ backgroundImage: `url(${image})` }}
+        />
       )}
-      {children}
+      <div style={{ padding: 15 }}>
+        {title ? (
+          <>
+            {buttons && (
+              <div style={{ float: "right" }}>
+                {buttons.map((button, index) =>
+                  button.compact ? (
+                    <Tooltip title={button.label} placement="left">
+                      <IconButton onClick={button.onClick} color="primary">
+                        <button.icon style={{ width: 18, height: 18 }} />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Button onClick={button.onClick} key={index}>
+                      {button.label}
+                    </Button>
+                  )
+                )}
+              </div>
+            )}
+            <Typography
+              variant="h6"
+              color={titleInPrimaryColor ? "primary" : "initial"}
+              style={{
+                textAlign: centerTitle ? "center" : "left",
+              }}
+            >
+              {title}
+            </Typography>
+            {titleDivider && (
+              <Divider style={{ marginBottom: 10, marginTop: 5 }} />
+            )}
+          </>
+        ) : (
+          buttons && <>Buttons</>
+        )}
+        {children}
+      </div>
     </div>
   );
 };

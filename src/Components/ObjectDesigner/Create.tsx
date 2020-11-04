@@ -1,11 +1,14 @@
 import {
   Button,
+  Grid,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,6 +23,7 @@ import { map } from "lodash";
 import InputSelect from "../Inputs/Select";
 import InputInput from "../Inputs/Input";
 import InputCheckbox from "../Inputs/Checkbox";
+import { FaFlask, FaUndo } from "react-icons/fa";
 
 const ObjectDesigner: React.FC<{
   model?: ModelType;
@@ -90,19 +94,122 @@ const ObjectDesigner: React.FC<{
                 {appliedModel.fields[key].name}
               </TableCell>
               <TableCell style={{ width: "50%" }}>
-                {appliedModel.fields[key].type === "boolean" ? (
-                  <InputCheckbox
-                    value={val}
-                    onChange={(val) => onChange({ ...value, [key]: val })}
-                  />
+                {typeof val === "object" ? (
+                  <Grid container>
+                    <Grid item xs={10}>
+                      <InputInput
+                        label="Formula"
+                        value={val.formula}
+                        onChange={(newVal) => {
+                          onChange({
+                            ...value,
+                            [key]: { formula: newVal },
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Tooltip
+                        placement="left"
+                        title="Switch back to static input"
+                      >
+                        <IconButton
+                          onClick={() => {
+                            onChange({
+                              ...value,
+                              [key]: val.formula,
+                            });
+                          }}
+                        >
+                          <FaUndo style={{ width: 18, height: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                ) : appliedModel?.fields[key].type === "formula" ? (
+                  appliedModel?.fields[key].typeArgs?.type === "boolean" ? (
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <InputCheckbox
+                          value={val === true || val === "true"}
+                          onChange={(newVal) => {
+                            onChange({
+                              ...value,
+                              [key]: newVal,
+                            });
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Tooltip placement="left" title="Switch to formula">
+                          <IconButton>
+                            <FaFlask style={{ width: 18, height: 18 }} />
+                          </IconButton>
+                        </Tooltip>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <InputInput
+                          value={val.toString()}
+                          type={
+                            appliedModel?.fields[key].typeArgs?.type || "text"
+                          }
+                          onChange={(newVal) => {
+                            onChange({
+                              ...value,
+                              [key]: newVal,
+                            });
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Tooltip placement="left" title="Switch to formula">
+                          <IconButton>
+                            <FaFlask style={{ width: 18, height: 18 }} />
+                          </IconButton>
+                        </Tooltip>
+                      </Grid>
+                    </Grid>
+                  )
                 ) : (
-                  <InputInput
-                    value={val}
-                    type={appliedModel?.fields[key].typeArgs?.type || "text"}
-                    onChange={(val) => {
-                      onChange({ ...value, [key]: val });
-                    }}
-                  />
+                  <Grid container>
+                    <Grid item xs={10}>
+                      <context.UI.Field
+                        model={appliedModel}
+                        field={appliedModel.fields[key]}
+                        fieldId={key}
+                        value={
+                          val
+                            ? val
+                            : appliedModel?.fields[key].type === "boolean"
+                            ? false
+                            : appliedModel?.fields[key].typeArgs?.type ===
+                              "number"
+                            ? 0
+                            : ""
+                        }
+                        onChange={(newVal) => {
+                          onChange({ ...value, [key]: newVal });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Tooltip placement="left" title="Switch to formula">
+                        <IconButton
+                          onClick={() => {
+                            onChange({
+                              ...value,
+                              [key]: { formula: val },
+                            });
+                          }}
+                        >
+                          <FaFlask style={{ width: 18, height: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
                 )}
               </TableCell>
             </TableRow>

@@ -22,6 +22,8 @@ import InputFile from "../../../Inputs/File";
 import InputAddress from "../../../Inputs/Address";
 import FieldTypeDate from "../../FieldTypes/Date";
 import FourOhFour from "../../../FourOhFour";
+import FieldTypeFreeData from "../../FieldTypes/FreeData";
+import FieldTypeData from "../../FieldTypes/FreeData";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -261,6 +263,13 @@ const ObjectLayoutItemField: React.FC<{
             )}
             {modelField.type === "date" && (
               <FieldTypeDate
+                onChange={onChange}
+                modelField={modelField}
+                objectField={objectField}
+              />
+            )}
+            {modelField.type === "data" && (
+              <FieldTypeData
                 onChange={onChange}
                 modelField={modelField}
                 objectField={objectField}
