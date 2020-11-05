@@ -10,6 +10,7 @@ export interface StoreAppType extends ObjectType {
     author: string;
     backend_repository: string;
     wizard: {
+      intro: string;
       fields: {
         key: string;
         label: string;

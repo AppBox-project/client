@@ -24,8 +24,12 @@ const GridItemLayout: React.FC<{
     <AnimationContainer>
       <Grid container>
         {data.map((item) => (
-          //@ts-ignore
-          <Grid item xs={Math.floor(12 / (cols || 6))} key={item._id}>
+          <Grid
+            item
+            xs={(cols || 6) < 4 ? 12 : 6} //@ts-ignore
+            md={Math.floor(12 / (cols || 6))}
+            key={item._id}
+          >
             <AnimationItem>
               <MaybeLink link={link && baseUrl + get(item, link)}>
                 <Card

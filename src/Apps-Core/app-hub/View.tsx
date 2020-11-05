@@ -2,6 +2,7 @@ import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { FaShoppingBag } from "react-icons/fa";
 import { AppContextType, SystemTaskType } from "../../Utils/Types";
+import Install from "./Install";
 import { StoreAppType } from "./Types";
 import AppHubWizard from "./Wizard";
 
@@ -16,7 +17,7 @@ const AppHubApp: React.FC<{
   const [app, setApp] = useState<StoreAppType>();
   const [state, setState] = useState<"view" | "wizard" | "installing">("view");
   const [task, setTask] = useState<SystemTaskType>();
-
+  const [choices, setChoices] = useState<{}>({});
   // Functions
   const onInstall = () => {
     setState(app.data.wizard ? "wizard" : "installing");
@@ -63,31 +64,44 @@ const AppHubApp: React.FC<{
             </Grid>
           </Grid>
           <Divider style={{ margin: "10px 0" }} />
-          <Grid container>
-            {[1, 2, 3, 4, 5].map((item) => (
-              <Grid item xs={2} key={item}>
-                <context.UI.Design.Card
-                  style={{ height: 150 }}
-                  withBigMargin
-                  title={`Screenshot #${item}`}
-                  centerTitle
-                  titleDivider
-                  titleInPrimaryColor
-                >
-                  {" "}
-                </context.UI.Design.Card>
-              </Grid>
-            ))}
-          </Grid>
+          <context.UI.Animations.AnimationContainer>
+            <Grid container>
+              {[1, 2, 3, 4, 5].map((item) => (
+                <Grid item xs={2} key={item}>
+                  <context.UI.Animations.AnimationItem>
+                    <context.UI.Design.Card
+                      style={{ height: 150 }}
+                      withBigMargin
+                      title={`Screenshot #${item}`}
+                      centerTitle
+                      titleDivider
+                      titleInPrimaryColor
+                    >
+                      {" "}
+                    </context.UI.Design.Card>
+                  </context.UI.Animations.AnimationItem>
+                </Grid>
+              ))}
+            </Grid>
+          </context.UI.Animations.AnimationContainer>
           <Divider style={{ margin: "10px 0" }} />
           <div dangerouslySetInnerHTML={{ __html: app.data.description }} />
         </context.UI.Design.Card>
       </context.UI.Animations.AnimationItem>
     </context.UI.Animations.AnimationContainer>
   ) : state === "wizard" ? (
-    <AppHubWizard context={context} />
+    <AppHubWizard
+      context={context}
+      app={app}
+      onProgress={(choices) => {
+        console.log(choices);
+
+        setChoices(choices);
+        setState("installing");
+      }}
+    />
   ) : (
-    <>Installing</>
+    <Install context={context} choices={choices} />
   );
 };
 
