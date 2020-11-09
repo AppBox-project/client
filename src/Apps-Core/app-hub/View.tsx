@@ -101,7 +101,7 @@ const AppHubApp: React.FC<{
       }}
     />
   ) : (
-    <Install context={context} choices={choices} />
+    <Install context={context} choices={choices} app={app} />
   );
 };
 
