@@ -25,6 +25,7 @@ const Install: React.FC<{
           done: false,
           arguments: { app, choices },
           progress: 0,
+          target: "Supervisor",
         },
         (response) => {
           context.getObjects(

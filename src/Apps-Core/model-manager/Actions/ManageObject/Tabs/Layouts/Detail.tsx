@@ -96,18 +96,15 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       if (value.active) {
         import(
           `../../../../../../Components/Object/Extensions/${key}/index.tsx`
-        ).then((info) => {
+        ).then(async (info) => {
           const getInfo = info.default;
-          map(
-            (getInfo(model.extensions[key], context)?.provides || {}).buttons ||
-              [],
-            (button, buttonKey) => {
-              setCustomButtons([
-                ...customButtons,
-                { value: `${key}-${buttonKey}`, label: button.label },
-              ]);
-            }
-          );
+          const extension = await getInfo(model.extensions[key], context);
+          map(extension.provides?.buttons, (button, buttonKey) => {
+            setCustomButtons([
+              ...customButtons,
+              { value: `${key}-${buttonKey}`, label: button.label },
+            ]);
+          });
         });
       }
     });

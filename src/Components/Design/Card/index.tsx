@@ -71,7 +71,7 @@ const Card: React.FC<{
       style={{
         ...margins,
         ...style,
-        overflow: image && "hidden",
+        overflow: !image && "auto",
         padding: disablePadding && 0,
         marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
       }}

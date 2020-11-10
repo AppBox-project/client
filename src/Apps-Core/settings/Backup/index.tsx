@@ -43,6 +43,7 @@ const AppSettingsBackup: React.FC<{
                   arguments: undefined,
                   progress: 0,
                   state: "Starting",
+                  target: "Supervisor",
                 },
                 (response) => {
                   context.getObjects(

@@ -32,6 +32,7 @@ const AppSettingsAbout: React.FC<{
         action: `restart-${type}`,
         progress: 0,
         state: "Queued",
+        target: "Supervisor",
       },
       (response) => {
         if (response.success) {

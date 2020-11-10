@@ -47,6 +47,7 @@ const AppSettingsUpdate: React.FC<{
               arguments: undefined,
               progress: 0,
               state: "Looking for client updates",
+              target: "Supervisor",
             },
             (response) => {
               context.getObjects(
