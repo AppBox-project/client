@@ -234,6 +234,10 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                         }
                         options={[
                           { value: "dropdown", label: "Dropdown" },
+                          {
+                            value: "multi-dropdown",
+                            label: "Dropdown (multi-select)",
+                          },
                           { value: "radio", label: "Radio buttons" },
                           { value: "checkmarks", label: "Checkmarks" },
                         ]}

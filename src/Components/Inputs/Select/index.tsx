@@ -14,7 +14,7 @@ const InputSelect: React.FC<{
   style?: CSSProperties;
 }> = ({ label, options, value, isLoading, onChange, multiple, style }) => {
   // Vars
-  const [newValue, setNewValue] = useState<any>();
+  const [newValue, setNewValue] = useState<string | any[]>();
   const [app] = useGlobal<any>("app");
 
   // Lifecycle
@@ -24,7 +24,16 @@ const InputSelect: React.FC<{
       setNewValue(value);
     } else {
       // We were only sent a value, map it!
-      setNewValue(find(options, (o) => o.value === value));
+      if (Array.isArray(value)) {
+        // Multiple
+        const nv = [];
+        value.map((v) => nv.push(find(options, (o) => o.value === v)));
+        console.log(nv);
+        setNewValue(nv);
+      } else {
+        // Single
+        setNewValue(find(options, (o) => o.value === value));
+      }
     }
   }, [value, options]);
 

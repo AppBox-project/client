@@ -105,7 +105,11 @@ const ObjectLayoutItemRelatedList: React.FC<{
                     model={relatedModel}
                     defaults={{
                       ...defaultValues,
-                      [layoutItem.field]: objectId,
+                      [layoutItem.field]:
+                        relatedModel.fields[layoutItem.field].type ===
+                        "relationship_m"
+                          ? [objectId]
+                          : objectId,
                     }}
                     hideFields={[layoutItem.field]}
                     onSuccess={() => {

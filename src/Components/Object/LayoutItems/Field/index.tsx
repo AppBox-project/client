@@ -10,7 +10,6 @@ import {
 import ObjectFieldDisplayInput from "../../FieldDisplay/Input";
 import InputInput from "../../../Inputs/Input";
 import styles from "./styles.module.scss";
-import InputCheckbox from "../../../Inputs/Checkbox";
 import InputSelect from "../../../Inputs/Select";
 import InputRelationShip from "../../../Inputs/Relationship";
 import InputPicture from "../../../Inputs/Picture";
@@ -22,8 +21,8 @@ import InputFile from "../../../Inputs/File";
 import InputAddress from "../../../Inputs/Address";
 import FieldTypeDate from "../../FieldTypes/Date";
 import FourOhFour from "../../../FourOhFour";
-import FieldTypeFreeData from "../../FieldTypes/FreeData";
 import FieldTypeData from "../../FieldTypes/FreeData";
+import FieldTypeBoolean from "../../FieldTypes/Boolean";
 
 const ObjectLayoutItemField: React.FC<{
   layoutItem;
@@ -31,7 +30,7 @@ const ObjectLayoutItemField: React.FC<{
   mode;
   setMode;
   model: ModelType;
-  onChange?: (value: string | boolean | Date | number) => void;
+  onChange?: (value: string | boolean | Date | number | object) => void;
   toChange;
   customFieldTypes?: { [key: string]: React.FC<CustomFieldType> };
   context: AppContextType;
@@ -53,7 +52,7 @@ const ObjectLayoutItemField: React.FC<{
     model.fields[layoutItem.field]
   );
   const [objectField, setObjectField] = useState<any>(
-    object?.data[layoutItem.field] || ""
+    object?.data[layoutItem.field]
   );
   // Lifecycle
   useEffect(() => {
@@ -180,12 +179,16 @@ const ObjectLayoutItemField: React.FC<{
               />
             )}
             {modelField.type === "boolean" && (
-              <InputCheckbox
+              <FieldTypeBoolean
                 onChange={(value) => {
                   onChange(value);
                 }}
                 disabled={modelField.typeArgs?.readonly || false}
                 value={objectField}
+                mode="free"
+                field={modelField}
+                object={object}
+                fieldKey={layoutItem.field}
               />
             )}
             {modelField.type === "relationship" && (
@@ -211,10 +214,20 @@ const ObjectLayoutItemField: React.FC<{
             {modelField.type === "options" && (
               <InputSelect
                 label={modelField.name}
-                value={objectField}
+                value={toChange[layoutItem.field] || objectField}
                 options={options}
+                multiple={modelField.typeArgs.display === "multi-dropdown"}
                 onChange={(value) => {
-                  onChange(value.value);
+                  if (Array.isArray(value)) {
+                    // This is a multi-dropdown. Save array.
+                    const newValue = [];
+                    value.map((sel) => {
+                      newValue.push(sel.value);
+                    });
+                    onChange(newValue);
+                  } else {
+                    onChange(value?.value || []);
+                  }
                 }}
               />
             )}

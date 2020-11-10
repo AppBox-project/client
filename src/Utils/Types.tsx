@@ -40,10 +40,12 @@ export interface ModelFieldType {
   validations: [string];
   transformations: [string];
   conditions: ConditionsType;
+  default?: string;
   type?: string;
   typeArgs?: {
     type?: string;
     relationshipTo?: string;
+    display?: "multi-dropdown";
     options?: { label: string; key: string }[];
     key?: string;
     readonly?: boolean;

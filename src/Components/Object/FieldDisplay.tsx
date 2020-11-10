@@ -10,6 +10,7 @@ import ObjectFieldDisplayFile from "./FieldDisplay/File";
 import ObjectFieldDisplayDate from "./FieldDisplay/Date";
 import { CustomFieldType, AppContextType } from "../../Utils/Types";
 import QRCode from "qrcode.react";
+import ObjectFieldDisplayOptions from "./FieldDisplay/Options";
 
 const FieldDisplay: React.FC<{
   objectField;
@@ -44,7 +45,6 @@ const FieldDisplay: React.FC<{
         />
       )}
       {(modelField.type === "input" ||
-        modelField.type === "options" ||
         modelField.type === "address" ||
         modelField.type === "data" ||
         modelField.type === "auto_name") && (
@@ -96,6 +96,13 @@ const FieldDisplay: React.FC<{
       )}
       {modelField.type === "color" && (
         <ObjectFieldDisplayColor
+          modelField={modelField}
+          objectField={objectField}
+          {...props}
+        />
+      )}
+      {modelField.type === "options" && (
+        <ObjectFieldDisplayOptions
           modelField={modelField}
           objectField={objectField}
           {...props}

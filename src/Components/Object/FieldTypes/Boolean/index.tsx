@@ -11,14 +11,30 @@ const FieldTypeBoolean: React.FC<{
   setMode?: (mode: "view" | "edit" | "free") => void;
   onChange: (value: boolean) => void;
   value?: boolean;
-}> = ({ mode, field, object, fieldKey, setMode, onChange, value }) => {
+  disabled?: boolean;
+}> = ({
+  mode,
+  field,
+  object,
+  fieldKey,
+  setMode,
+  onChange,
+  value,
+  disabled,
+}) => {
   // Hooks
   const [newValue, setNewValue] = useState<boolean>(
     value !== undefined ? value : object?.data[fieldKey]
   );
   // Lifecycle
   useEffect(() => {
-    setNewValue(value !== undefined ? value : object?.data[fieldKey]);
+    const defaultValue =
+      field.default && typeof field.default === "boolean"
+        ? (field.default as boolean)
+        : field.default === "true"
+        ? true
+        : false;
+    setNewValue(value ? value : object?.data[fieldKey] || defaultValue);
   }, [fieldKey]);
 
   // UI
@@ -28,7 +44,7 @@ const FieldTypeBoolean: React.FC<{
     return (
       <Checkbox
         checked={newValue || false}
-        disabled={field.typeArgs.readonly || false}
+        disabled={disabled}
         indeterminate={isIndeterminate}
         color="primary"
         onChange={(event) => {
@@ -84,7 +100,7 @@ const FieldTypeBoolean: React.FC<{
                   checked={newValue || false}
                   color="primary"
                   indeterminate={isIndeterminate}
-                  disabled={field.typeArgs?.readonly || false}
+                  disabled={disabled}
                   onChange={(event) => {
                     setNewValue(event.target.checked);
                     onChange(event.target.checked);
