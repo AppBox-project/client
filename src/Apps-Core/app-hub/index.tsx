@@ -1,6 +1,7 @@
 import React from "react";
-import { FaStream, FaStore } from "react-icons/fa";
+import { FaStream, FaStore, FaShapes } from "react-icons/fa";
 import AppHubBrowse from "./Browse";
+import AppHubMyApps from "./MyApps";
 
 export default class App {
   context: any;
@@ -25,8 +26,8 @@ export default class App {
         {
           key: "my-apps",
           label: "My apps",
-          component: AppHubBrowse,
-          icon: FaStream,
+          component: AppHubMyApps,
+          icon: FaShapes,
         },
       ]);
     });

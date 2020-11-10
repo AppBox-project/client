@@ -55,9 +55,8 @@ const Field: React.FC<{
     if (onChange) onChange(value);
   };
 
-  let options;
+  let options: ValueListItemType[] = [];
   if (field?.typeArgs?.options) {
-    const options: ValueListItemType[] = [];
     field.typeArgs.options.map((o) =>
       options.push({ label: o.label, value: o.key })
     );
@@ -121,7 +120,7 @@ const Field: React.FC<{
         <InputSelect
           label={field.name}
           value={find(field.typeArgs.options, (o) => {
-            return o.key === object.data[fieldId];
+            return o.key === object?.data[fieldId] || "";
           })}
           options={options}
           onChange={(value) => {
