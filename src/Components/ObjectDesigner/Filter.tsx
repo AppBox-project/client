@@ -134,7 +134,7 @@ const ObjectDesigner: React.FC<{
                 onChange={(newVal) => {
                   onChange([
                     ...(value || []),
-                    { key: newVal?.value, operator: "equals", value: "" },
+                    { key: newVal, operator: "equals", value: "" },
                   ]);
                 }}
               />
