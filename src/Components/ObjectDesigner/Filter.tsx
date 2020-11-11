@@ -1,5 +1,6 @@
 import {
   Button,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -14,24 +15,25 @@ import {
   OptionType,
   ModelFieldType,
 } from "../../Utils/Types";
-import Card from "../Design/Card";
 import Loading from "../Loading";
 import { map } from "lodash";
 import InputSelect from "../Inputs/Select";
-import InputCheckbox from "../Inputs/Checkbox";
-import InputInput from "../Inputs/Input";
+import MaybeCard from "../Design/MaybeCard";
+
+interface Filter {
+  key: string;
+  operator: "equals" | "not_equals";
+  value: string | number | boolean;
+}
 
 const ObjectDesigner: React.FC<{
   model?: ModelType;
   modelId?: string;
   context: AppContextType;
-  value: {
-    key: string;
-    operator: "equals";
-    value: string | number | boolean;
-  }[];
-  onChange: (value: {}) => void;
-}> = ({ model, modelId, context, value, onChange }) => {
+  value: Filter[];
+  onChange: (value: Filter[]) => void;
+  withCard?: boolean;
+}> = ({ model, modelId, context, value, onChange, withCard }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
   const [error, setError] = useState<string>();
@@ -76,7 +78,8 @@ const ObjectDesigner: React.FC<{
   if (!appliedModel) return <Loading />;
   return (
     <TableContainer
-      component={Card}
+      component={MaybeCard}
+      showCard={withCard}
       title={`Filter ${model.name_plural}`}
       style={{ marginTop: 25 }}
     >
@@ -89,72 +92,42 @@ const ObjectDesigner: React.FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {(value || []).map((val, index) => (
-            <TableRow key={index}>
-              <TableCell style={{ width: "33%" }}>
+          {(value || []).map((val, rowIndex) => (
+            <TableRow key={rowIndex}>
+              <TableCell style={{ width: "30%" }}>
                 {appliedModel.fields[val.key].name}
               </TableCell>
-              <TableCell style={{ width: "33%" }}>
+              <TableCell style={{ width: "32%" }}>
                 <InputSelect
                   label="Operator"
-                  options={[{ label: "Equals", value: "equals" }]}
+                  options={[
+                    { label: "Equals", value: "equals" },
+                    { label: "Does not equal", value: "not_equals" },
+                  ]}
                   value={val.operator}
+                  onChange={(nv) => {
+                    const newVal = value;
+                    newVal[rowIndex].operator = nv.value;
+                    onChange(newVal);
+                  }}
                 />
               </TableCell>
-              <TableCell style={{ width: "34%" }}>
-                {appliedModel?.fields[val.key].type === "formula" ? (
-                  appliedModel?.fields[val.key].typeArgs?.type === "boolean" ? (
-                    <InputCheckbox
-                      value={val.value === true || val.value === "true"}
-                      onChange={(newVal) => {
-                        const newValue = value;
-                        newValue[index] = {
-                          ...val,
-                          value: newVal,
-                        };
-                        onChange(newValue);
-                      }}
-                    />
-                  ) : (
-                    <InputInput
-                      value={val.value.toString()}
-                      type={
-                        appliedModel?.fields[val.key].typeArgs?.type || "text"
-                      }
-                      onChange={(newVal) => {
-                        const newValue = value;
-                        newValue[index] = { ...val, value: newVal };
-                        onChange(newValue);
-                      }}
-                    />
-                  )
-                ) : (
-                  <context.UI.Field
-                    model={appliedModel}
-                    field={appliedModel.fields[val.key]}
-                    fieldId={val.key}
-                    value={
-                      val.value
-                        ? val.value
-                        : appliedModel?.fields[val.key].type === "boolean"
-                        ? false
-                        : appliedModel?.fields[val.key].typeArgs?.type ===
-                          "number"
-                        ? 0
-                        : ""
-                    }
-                    onChange={(newVal) => {
-                      const newValue = value;
-                      newValue[index] = { ...val, value: newVal };
-                      onChange(newValue);
-                    }}
-                  />
-                )}
+              <TableCell style={{ width: "40%" }}>
+                <context.UI.Field
+                  fieldId={val.key}
+                  field={appliedModel.fields[val.key]}
+                  model={appliedModel}
+                  onChange={(nv) => {
+                    const newVal = value;
+                    newVal[rowIndex].value = nv;
+                    onChange(newVal);
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}
           <TableRow>
-            <TableCell colSpan={3}>
+            <TableCell colSpan={4}>
               <InputSelect
                 options={fieldList || []}
                 label="Add field"
@@ -166,7 +139,6 @@ const ObjectDesigner: React.FC<{
                 }}
               />
             </TableCell>
-            <TableCell />
           </TableRow>
         </TableBody>
       </Table>

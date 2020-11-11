@@ -7,14 +7,7 @@ import {
   Tooltip,
   IconButton,
 } from "@material-ui/core";
-
-interface button {
-  label: string;
-  icon?;
-  compact?: boolean;
-  onClick: () => void;
-}
-const Card: React.FC<{
+export interface CardProps {
   children;
   hoverable?: true | boolean;
   title?: string;
@@ -30,7 +23,14 @@ const Card: React.FC<{
   buttons?: button[];
   image?: string;
   onClick?: () => void;
-}> = ({
+}
+interface button {
+  label: string;
+  icon?;
+  compact?: boolean;
+  onClick: () => void;
+}
+const Card: React.FC<CardProps> = ({
   children,
   hoverable,
   title,

@@ -17,8 +17,7 @@ import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
-import { FaBomb, FaPencilRuler, FaEdit } from "react-icons/fa";
-import OverviewFilter from "./Filter";
+import { FaBomb, FaFilter, FaEdit } from "react-icons/fa";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
@@ -27,6 +26,7 @@ import {
   AnimationContainer,
   AnimationItem,
 } from "../../Apps/Apps/AppUI/Animations";
+import ObjectOverviewFilter from "./Filter";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -42,7 +42,7 @@ const Overview: React.FC<{
   const [selected, setSelected] = useState<any>([]);
   const history = useHistory();
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
-  const [overviewFilter, setOverviewFilter] = useState<any>([]);
+  const [filter, setFilter] = useState<any>([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
 
   // Lifecycle
@@ -67,8 +67,19 @@ const Overview: React.FC<{
   // effect on filter change
   useEffect(() => {
     const objectFilter = {};
-    overviewFilter.map((f) => {
-      objectFilter[`data.${f.field.value}`] = f.value;
+
+    filter.map((f) => {
+      switch (f.operator) {
+        case "equals":
+          objectFilter[`data.${f.key}`] = f.value;
+          break;
+        case "not_equals":
+          objectFilter[`data.${f.key}`] = { $ne: f.value };
+          break;
+        default:
+          console.log(`Unknown operator ${f.operator}`);
+          break;
+      }
     });
 
     // Objects
@@ -88,7 +99,7 @@ const Overview: React.FC<{
     return () => {
       Server.emit("unlistenForObjects", { requestId: dataRequestId });
     };
-  }, [overviewFilter]);
+  }, [filter]);
 
   // UI
   if (!objects || !model || !layout)
@@ -206,7 +217,7 @@ const Overview: React.FC<{
                         setDrawerOpen(true);
                       }}
                     >
-                      <FaPencilRuler style={{ width: 18, height: 18 }} />
+                      <FaFilter style={{ width: 18, height: 18 }} />
                     </IconButton>
                   </Tooltip>
                 </>
@@ -277,11 +288,14 @@ const Overview: React.FC<{
         onClose={() => {
           setDrawerOpen(false);
         }}
+        style={{ overflow: "auto" }}
       >
-        <OverviewFilter
+        <ObjectOverviewFilter
+          context={context}
           model={model}
-          onSave={(response) => {
-            setOverviewFilter(response);
+          modelId={modelId}
+          onChange={(filter) => {
+            setFilter([...filter]);
             setDrawerOpen(false);
           }}
         />
