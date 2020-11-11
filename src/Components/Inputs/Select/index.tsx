@@ -49,13 +49,13 @@ const InputSelect: React.FC<{
       name={label}
       onChange={(chosen) => {
         setNewValue(chosen);
-        if (onChange) onChange(chosen);
+        if (onChange) onChange(chosen?.value);
       }}
       styles={{
         menu: (styles) => ({
           ...styles,
           ...style,
-          zIndex: 101,
+          zIndex: 500,
         }),
         control: (styles) => ({
           ...styles,
@@ -63,9 +63,17 @@ const InputSelect: React.FC<{
           position: "relative",
           zIndex: 100,
         }),
+        container: (styles) => ({
+          ...styles,
+          zIndex: 100,
+          margin: "10px 0",
+        }),
+
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
           return {
             ...styles,
+            zIndex: 500,
+
             backgroundColor: isSelected
               ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
               : isFocused &&

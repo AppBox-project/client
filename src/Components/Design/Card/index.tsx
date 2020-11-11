@@ -19,10 +19,11 @@ export interface CardProps {
   titleInPrimaryColor?: true | boolean;
   sideMarginOnly?: true | boolean;
   className?: string;
-  disablePadding?: boolean;
+  withoutPadding?: boolean;
   buttons?: button[];
   image?: string;
   onClick?: () => void;
+  overflow?: "none" | "auto" | "visible";
 }
 interface button {
   label: string;
@@ -42,10 +43,11 @@ const Card: React.FC<CardProps> = ({
   withSmallMargin,
   sideMarginOnly,
   titleInPrimaryColor,
-  disablePadding,
+  withoutPadding,
   buttons,
   onClick,
   image,
+  overflow,
 }) => {
   const margins = {
     ...(withBigMargin
@@ -71,8 +73,8 @@ const Card: React.FC<CardProps> = ({
       style={{
         ...margins,
         ...style,
-        overflow: !image && "auto",
-        padding: disablePadding && 0,
+        overflow: overflow ? overflow : !image && "auto",
+        padding: withoutPadding && 0,
         marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
       }}
     >
@@ -82,7 +84,7 @@ const Card: React.FC<CardProps> = ({
           style={{ backgroundImage: `url(${image})` }}
         />
       )}
-      <div style={{ padding: 15 }}>
+      <div style={{ padding: !withoutPadding && 15 }}>
         {title ? (
           <>
             {buttons && (

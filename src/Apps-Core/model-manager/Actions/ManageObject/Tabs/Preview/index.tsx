@@ -63,7 +63,7 @@ const AppActionManageObjectTabPreview: React.FC<{
                     <Grid container>
                       <Grid item xs={12}>
                         <context.UI.Animations.AnimationItem>
-                          <context.UI.Inputs.SelectInput
+                          <context.UI.Inputs.Select
                             label="Picture"
                             value={newModel?.preview?.picture || "modelicon"}
                             onChange={(value) => {

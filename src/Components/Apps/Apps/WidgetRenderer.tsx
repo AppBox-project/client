@@ -13,10 +13,10 @@ import {
 } from "@material-ui/core";
 import { dialogType, WidgetContextType } from "../../../Utils/Types";
 import { TextInput } from "./AppUI/Forms";
-import Select from "./AppUI/Forms/Select";
 import WidgetContext from "./WidgetContext";
 import { Skeleton } from "@material-ui/lab";
 import { FaCogs } from "react-icons/fa";
+import InputSelect from "../../Inputs/Select";
 
 const WidgetRenderer: React.FC<{
   appId: string;
@@ -140,7 +140,7 @@ const WidgetRenderer: React.FC<{
                       />
                     )}
                     {formItem.type === "dropdown" && (
-                      <Select
+                      <InputSelect
                         options={formItem.dropdownOptions}
                         label={formItem.label}
                         value={

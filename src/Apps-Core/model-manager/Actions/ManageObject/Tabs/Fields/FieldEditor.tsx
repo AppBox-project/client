@@ -82,7 +82,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </Grid>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card title="About this field" withBigMargin>
+            <context.UI.Design.Card
+              title="About this field"
+              withBigMargin
+              overflow="visible"
+            >
               <Grid container>
                 <Grid
                   item
@@ -141,7 +145,11 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
             </context.UI.Design.Card>
           </UI.Animations.AnimationItem>
           <UI.Animations.AnimationItem>
-            <context.UI.Design.Card withBigMargin title="Data type">
+            <context.UI.Design.Card
+              withBigMargin
+              title="Data type"
+              overflow="visible"
+            >
               <Grid container>
                 <Grid
                   item
@@ -149,7 +157,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   className="form-row"
                   style={{ display: "table-cell" }}
                 >
-                  <UI.Inputs.SelectInput
+                  <UI.Inputs.Select
                     label="Field type"
                     value={field.type}
                     options={[
@@ -182,7 +190,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 {field.type === "input" && (
                   <>
                     <Grid item xs={6}>
-                      <UI.Inputs.SelectInput
+                      <UI.Inputs.Select
                         label="Input type"
                         value={field.typeArgs ? field.typeArgs.type : "text"}
                         options={[
@@ -203,7 +211,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     </Grid>
                     {field.typeArgs?.type === "number" && (
                       <Grid item xs={6}>
-                        <UI.Inputs.SelectInput
+                        <UI.Inputs.Select
                           label="Number type"
                           value={field.typeArgs?.numberType || "regular"}
                           options={[
@@ -227,7 +235,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 {field.type === "options" && (
                   <>
                     <Grid item xs={12}>
-                      <UI.Inputs.SelectInput
+                      <UI.Inputs.Select
                         label="Display as"
                         value={
                           field.typeArgs ? field.typeArgs.display : "dropdown"
@@ -368,7 +376,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "richtext" && (
                   <Grid item xs={6}>
-                    <UI.Inputs.SelectInput
+                    <UI.Inputs.Select
                       label="Type"
                       value={field.typeArgs ? field.typeArgs.type : "regular"}
                       options={[
@@ -386,7 +394,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "formula" && (
                   <Grid item xs={12}>
-                    <UI.Inputs.SelectInput
+                    <UI.Inputs.Select
                       label="Output type"
                       value={field.typeArgs ? field.typeArgs.type : "text"}
                       options={[
@@ -416,7 +424,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 )}
                 {field.type === "date" && (
                   <Grid item xs={6}>
-                    <UI.Inputs.SelectInput
+                    <UI.Inputs.Select
                       label="Type"
                       value={field.typeArgs ? field.typeArgs.type : "date"}
                       options={[
@@ -718,7 +726,7 @@ const ListObjectTypes: React.FC<{
   if (!objectTypes) return <UI.Loading />;
 
   return (
-    <UI.Inputs.SelectInput
+    <UI.Inputs.Select
       label="Relationship to"
       value={value}
       options={objectTypes}

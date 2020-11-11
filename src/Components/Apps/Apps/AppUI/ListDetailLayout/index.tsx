@@ -238,7 +238,7 @@ const ListNav: React.FC<{
 }) => {
   return (
     <div style={{ ...style }} className={styles.listNav}>
-      <Card withBigMargin disablePadding>
+      <Card withBigMargin withoutPadding>
         <List>
           {title && (
             <>

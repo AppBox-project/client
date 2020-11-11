@@ -11,6 +11,7 @@ import AppActionManageObjectTabLayouts from "./Tabs/Layouts";
 import AppActionManageObjectTabActions from "./Tabs/Actions";
 import AppActionManageObjectTabPreview from "./Tabs/Preview";
 import AppActionManageObjectTabExtensions from "./Tabs/Extensions";
+import AppActionManageObjectTabLists from "./Tabs/Lists";
 
 const useStyles = makeStyles((theme) => ({
   customTabRoot: {
@@ -76,11 +77,12 @@ const AppActionManageObject: React.FC<{
         <Tab label="Fields" value="fields" />
         <Tab label="Actions" value="actions" />
         <Tab label="Overviews" value="overviews" />
-        <Tab label="Popup preview" value="preview" />
+        <Tab label="Lists" value="lists" />
         <Tab label="Lay-outs" value="layouts" />
+        <Tab label="Popup preview" value="preview" />
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
-        <Tab label="Object extensions" value="extensions" />
+        <Tab label="Extensions" value="extensions" />
       </Tabs>
       <div
         style={{
@@ -113,6 +115,13 @@ const AppActionManageObject: React.FC<{
         )}
         {currentTab === "overviews" && (
           <AppActionManageObjectTabOverviews
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "lists" && (
+          <AppActionManageObjectTabLists
             model={model}
             UI={UI}
             context={context}

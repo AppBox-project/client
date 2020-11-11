@@ -33,7 +33,7 @@ const ExtensionConfigure: React.FC<{
         value={modelExtension.app_name}
         onChange={(value) => onChange({ ...modelExtension, app_name: value })}
       />
-      <context.UI.Inputs.SelectInput
+      <context.UI.Inputs.Select
         label="2FA enabled field"
         options={fieldList}
         value={modelExtension["2fa_enabled_field"]}
@@ -41,7 +41,7 @@ const ExtensionConfigure: React.FC<{
           onChange({ ...modelExtension, "2fa_enabled_field": value })
         }
       />
-      <context.UI.Inputs.SelectInput
+      <context.UI.Inputs.Select
         label="2FA secret field"
         options={fieldList}
         value={modelExtension["2fa_secret_field"]}
@@ -49,7 +49,7 @@ const ExtensionConfigure: React.FC<{
           onChange({ ...modelExtension, "2fa_secret_field": value })
         }
       />
-      <context.UI.Inputs.SelectInput
+      <context.UI.Inputs.Select
         label="2FA QR field"
         options={fieldList}
         value={modelExtension["2fa_qr_field"]}
@@ -57,7 +57,7 @@ const ExtensionConfigure: React.FC<{
           onChange({ ...modelExtension, "2fa_qr_field": value })
         }
       />
-      <context.UI.Inputs.SelectInput
+      <context.UI.Inputs.Select
         label="Username field"
         options={fieldList}
         value={modelExtension["username_field"]}

@@ -187,7 +187,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 <ListItemIcon>
                   <FaPlus />
                 </ListItemIcon>
-                <context.UI.Inputs.SelectInput
+                <context.UI.Inputs.Select
                   label="Add field"
                   options={itemList}
                   onChange={(selected) => {

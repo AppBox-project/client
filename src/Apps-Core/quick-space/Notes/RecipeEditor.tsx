@@ -191,7 +191,7 @@ const CERecipeEditor: React.FC<CustomFieldType> = ({
                       onChange(updatedValue);
                     }}
                   />
-                  <context.UI.Inputs.SelectInput
+                  <context.UI.Inputs.Select
                     value={ingredient.quantityDescriptor}
                     onChange={(quantityDescriptor) => {
                       const updatedValue = newValue;

@@ -16,9 +16,9 @@ import { AppContext } from "./AppContext";
 import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
-import Select from "./AppUI/Forms/Select";
 import { map, find } from "lodash";
 import Card from "../../Design/Card";
+import InputSelect from "../../Inputs/Select";
 
 const App: React.FC<{
   match: { params: { appId } };
@@ -212,7 +212,7 @@ const App: React.FC<{
                       />
                     )}
                     {formItem.type === "dropdown" && (
-                      <Select
+                      <InputSelect
                         options={formItem.dropdownOptions}
                         label={formItem.label}
                         value={

@@ -100,7 +100,7 @@ const AppQSActionNotes: React.FC<{
         (sharedProjects || []).length > 0 && (
           <context.UI.Design.Card
             withBigMargin
-            disablePadding
+            withoutPadding
             title="Shared with me"
             titleDivider
             titleInPrimaryColor

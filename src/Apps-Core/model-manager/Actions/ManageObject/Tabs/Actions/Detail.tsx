@@ -40,7 +40,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
                   setAction({ ...action, layout: value });
                 }}
               />{" "}
-              <context.UI.Inputs.SelectInput
+              <context.UI.Inputs.Select
                 label="Type"
                 options={[{ value: "create", label: "create" }]}
                 value={action.type}

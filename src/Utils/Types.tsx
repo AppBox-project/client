@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { CardProps } from "../Components/Design/Card";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
@@ -87,6 +88,12 @@ export interface TaskType {
   };
 }
 
+export interface ModelListType {
+  name: string;
+  filter: { key: string; operator: "equals" | "not_equals"; value: any }[];
+  visibleFor?: string[];
+}
+
 export interface ModelType {
   key: string;
   name: string;
@@ -98,7 +105,13 @@ export interface ModelType {
   indexed_fields: string;
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
-  preview?: { enabled: boolean; picture: string; fields: string[] };
+  lists?: { [key: string]: ModelListType };
+  preview?: {
+    enabled: boolean;
+    ModelListTypepicture: string;
+    fields: string[];
+    picture?: string;
+  };
   handlers: {};
   layouts: any;
   actions: any;
@@ -371,26 +384,7 @@ export interface UIType {
     }>;
   };
   Design: {
-    Card: React.FC<{
-      children;
-      hoverable?: true;
-      title?: string;
-      style?;
-      centerTitle?: true;
-      titleDivider?: true;
-      withBigMargin?: true | boolean;
-      withSmallMargin?: true | boolean;
-      sideMarginOnly?: true | boolean;
-      titleInPrimaryColor?: true | boolean;
-      className?: string;
-      disablePadding?: boolean;
-      buttons?: {
-        label: string;
-        icon?;
-        compact?: boolean;
-        onClick: () => void;
-      }[];
-    }>;
+    Card: React.FC<CardProps>;
   };
 
   Layouts: {
@@ -488,7 +482,7 @@ export interface UIType {
 
   Inputs: {
     Select: React.FC<{
-      label: string;
+      label?: string;
       options: { value; label: string }[];
       value?;
       isLoading?: boolean;
@@ -523,13 +517,6 @@ export interface UIType {
         value: boolean,
         event: React.ChangeEvent<HTMLInputElement>
       ) => void;
-    }>;
-    SelectInput: React.FC<{
-      label?: string;
-      value?: string;
-      options: { value: string; label: string }[];
-      onChange?: (value) => void;
-      style?;
     }>;
     Switch: React.FC<{
       label?: string;

@@ -105,7 +105,7 @@ const AppActionManageObjectTabAPIDetail: React.FC<{
               <context.UI.Design.Card withBigMargin title="Settings">
                 <Grid container>
                   <Grid item xs={6}>
-                    <context.UI.Inputs.SelectInput
+                    <context.UI.Inputs.Select
                       label="Access type"
                       options={[
                         { label: "Public access", value: "none" },

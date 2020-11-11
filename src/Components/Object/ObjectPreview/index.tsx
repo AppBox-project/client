@@ -52,7 +52,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
     );
 
   return (
-    <Card withBigMargin className={styles.root}>
+    <Card withBigMargin withoutPadding className={styles.root}>
       <Link to={`/o/${object._id}`}>
         <Grid
           container

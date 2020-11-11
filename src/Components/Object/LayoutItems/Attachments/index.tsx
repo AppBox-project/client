@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Server from "../../../../Utils/Server";
 import { AppContextType, ObjectType } from "../../../../Utils/Types";
 import uniqid from "uniqid";
-import { Link } from "react-router-dom";
 
 const ObjectLayoutItemAttachments: React.FC<{
   layoutItem;
