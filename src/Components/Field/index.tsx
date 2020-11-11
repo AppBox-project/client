@@ -124,7 +124,7 @@ const Field: React.FC<{
           })}
           options={options}
           onChange={(value) => {
-            onChangeHandler(value?.value);
+            onChangeHandler(value);
           }}
         />
       )}
