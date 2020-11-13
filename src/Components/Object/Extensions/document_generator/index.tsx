@@ -34,6 +34,7 @@ export default (
                                 objectId: object._id,
                                 template: template._id,
                               });
+                              context.setDialog({ display: false })
                             }}
                           >
                             {template.data.name}
