@@ -28,7 +28,6 @@ const InputSelect: React.FC<{
         // Multiple
         const nv = [];
         value.map((v) => nv.push(find(options, (o) => o.value === v)));
-        console.log(nv);
         setNewValue(nv);
       } else {
         // Single
@@ -38,6 +37,7 @@ const InputSelect: React.FC<{
   }, [value, options]);
 
   // UI
+
   return (
     <Select
       isClearable
@@ -49,9 +49,19 @@ const InputSelect: React.FC<{
       name={label}
       onChange={(chosen) => {
         setNewValue(chosen);
-        if (onChange) onChange(chosen?.value);
+        if (onChange) {
+          if (Array.isArray(chosen)) {
+            const val = [];
+            chosen.map((v) => val.push(v.value));
+            onChange(val);
+          } else {
+            onChange(chosen?.value);
+          }
+        }
       }}
+      menuPortalTarget={document.body}
       styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
         menu: (styles) => ({
           ...styles,
           ...style,

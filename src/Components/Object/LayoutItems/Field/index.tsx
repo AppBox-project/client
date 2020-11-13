@@ -214,20 +214,11 @@ const ObjectLayoutItemField: React.FC<{
             {modelField.type === "options" && (
               <InputSelect
                 label={modelField.name}
-                value={toChange[layoutItem.field] || objectField}
+                value={toChange[layoutItem.field] || objectField || ""}
                 options={options}
                 multiple={modelField.typeArgs.display === "multi-dropdown"}
                 onChange={(value) => {
-                  if (Array.isArray(value)) {
-                    // This is a multi-dropdown. Save array.
-                    const newValue = [];
-                    value.map((sel) => {
-                      newValue.push(sel.value);
-                    });
-                    onChange(newValue);
-                  } else {
-                    onChange(value?.value || []);
-                  }
+                  onChange(value);
                 }}
               />
             )}

@@ -10,6 +10,10 @@ import {
   Toolbar,
   Typography,
   Tooltip,
+  Popover,
+  List,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 import { AppContextType, ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -17,7 +21,7 @@ import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
-import { FaBomb, FaFilter, FaEdit } from "react-icons/fa";
+import { FaBomb, FaFilter, FaEdit, FaCaretDown } from "react-icons/fa";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
@@ -27,6 +31,7 @@ import {
   AnimationItem,
 } from "../../Apps/Apps/AppUI/Animations";
 import ObjectOverviewFilter from "./Filter";
+import { map } from "lodash";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -44,6 +49,8 @@ const Overview: React.FC<{
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [filter, setFilter] = useState<any>([]);
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+  const [selectedList, setSelectedList] = useState<string>();
+  const [listPopupElement, setListPopupElement] = useState<any>();
 
   // Lifecycle
   useEffect(() => {
@@ -81,13 +88,28 @@ const Overview: React.FC<{
           break;
       }
     });
+    (model?.lists[selectedList]?.filter || []).map((f) => {
+      switch (f.operator) {
+        case "equals":
+          objectFilter[`data.${f.key}`] = f.value;
+          break;
+        case "not_equals":
+          objectFilter[`data.${f.key}`] = { $ne: f.value };
+          break;
+        default:
+          console.log(`Unknown operator ${f.operator}`);
+          break;
+      }
+    });
 
     // Objects
     const dataRequestId = uniqid();
     Server.emit("listenForObjects", {
       requestId: dataRequestId,
       type: modelId,
-      filter: { ...objectFilter },
+      filter: {
+        ...objectFilter,
+      },
     });
     Server.on(`receive-${dataRequestId}`, (response) => {
       if (response.success) {
@@ -99,7 +121,12 @@ const Overview: React.FC<{
     return () => {
       Server.emit("unlistenForObjects", { requestId: dataRequestId });
     };
-  }, [filter]);
+  }, [filter, selectedList, model]);
+
+  // When the hash changes
+  useEffect(() => {
+    setSelectedList(window.location.hash.substr(1));
+  }, [window.location.hash]);
 
   // UI
   if (!objects || !model || !layout)
@@ -155,14 +182,75 @@ const Overview: React.FC<{
                   selected
                 </Typography>
               ) : (
-                <Typography
-                  variant="h6"
-                  id="tableTitle"
-                  component="div"
-                  style={{ flex: 1 }}
-                >
-                  {model.name_plural}
-                </Typography>
+                <div style={{ flex: 1 }}>
+                  <Typography variant="h6" id="tableTitle" component="div">
+                    {model.name_plural}
+                  </Typography>
+                  {model.lists && (
+                    <>
+                      <Typography
+                        variant="subtitle2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(event) => {
+                          setListPopupElement(event.currentTarget);
+                        }}
+                      >
+                        {selectedList
+                          ? model.lists[selectedList].name
+                          : `All ${model.name_plural}`}{" "}
+                        <FaCaretDown />
+                      </Typography>
+                      <Popover
+                        id="list-popover"
+                        open={Boolean(listPopupElement)}
+                        anchorEl={listPopupElement}
+                        onClose={() => {
+                          setListPopupElement(null);
+                        }}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                      >
+                        <List>
+                          <ListItem
+                            selected={!selectedList}
+                            button
+                            onClick={() => {
+                              history.push(
+                                `${baseUrl || `/data-explorer/${model.key}`}`
+                              );
+                              setListPopupElement(null);
+                            }}
+                          >
+                            <ListItemText>All {model.name_plural}</ListItemText>
+                          </ListItem>
+                          {map(model.lists, (list, key) => (
+                            <ListItem
+                              selected={selectedList === key}
+                              key={key}
+                              button
+                              onClick={() => {
+                                history.push(
+                                  `${
+                                    baseUrl || `/data-explorer/${model.key}`
+                                  }#${key}`
+                                );
+                                setListPopupElement(null);
+                              }}
+                            >
+                              <ListItemText primary={list.name} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Popover>
+                    </>
+                  )}
+                </div>
               )}
 
               {selected.length > 0 ? (

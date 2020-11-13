@@ -220,7 +220,7 @@ const ObjectDesigner: React.FC<{
                 options={fieldList || []}
                 label="Add field"
                 onChange={(newVal) => {
-                  onChange({ ...value, [newVal?.value || "error"]: "" });
+                  onChange({ ...value, [newVal || "error"]: "" });
                 }}
               />
             </TableCell>

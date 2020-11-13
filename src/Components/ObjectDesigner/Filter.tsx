@@ -1,6 +1,4 @@
 import {
-  Button,
-  Grid,
   Table,
   TableBody,
   TableCell,
@@ -117,6 +115,7 @@ const ObjectDesigner: React.FC<{
                   fieldId={val.key}
                   field={appliedModel.fields[val.key]}
                   model={appliedModel}
+                  value={val.value}
                   onChange={(nv) => {
                     const newVal = value;
                     newVal[rowIndex].value = nv;

@@ -119,9 +119,7 @@ const Field: React.FC<{
       {field.type === "options" && (
         <InputSelect
           label={field.name}
-          value={find(field.typeArgs.options, (o) => {
-            return o.key === object?.data[fieldId] || "";
-          })}
+          value={value || object?.data[fieldId] || ""}
           options={options}
           onChange={(value) => {
             onChangeHandler(value);
