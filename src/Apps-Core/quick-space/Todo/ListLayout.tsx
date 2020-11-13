@@ -132,9 +132,8 @@ const AppQSTodoListLayout: React.FC<{
     <Grid container>
       <Grid item xs={12} md={8} className={!isMobile && "scrollIndependently"}>
         <context.UI.Design.Card
-          title={`${project.data.name}${
-            filteredTodos && ` (${filteredTodos?.length})`
-          }`}
+          title={`${project.data.name}${filteredTodos && ` (${filteredTodos?.length})`
+            }`}
           titleDivider
           titleInPrimaryColor
           centerTitle
