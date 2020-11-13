@@ -8,7 +8,9 @@ const AppComponentObjectOverviewLayout: React.FC<{
   modelId: string;
   overviewId?: string;
   baseUrl: string;
-}> = ({ context, modelId, overviewId, baseUrl }) => {
+  disableLists?: boolean;
+  applyList?: string;
+}> = ({ context, modelId, overviewId, baseUrl, disableLists, applyList }) => {
   return (
     <Switch>
       <Route
@@ -30,6 +32,7 @@ const AppComponentObjectOverviewLayout: React.FC<{
           modelId={modelId}
           context={context}
           baseUrl={baseUrl}
+          applyList={applyList} disableLists={disableLists}
         />
       </Route>
     </Switch>

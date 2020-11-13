@@ -82,598 +82,593 @@ const ViewObject: React.FC<{
   hideFields,
   style,
 }) => {
-  const [appliedModel, setmodel] = useState<ModelType>();
-  const [appliedObject, setObject] = useState<any>();
-  const [editMode, setMode] = useState<"view" | "edit">(
-    objectId ? (mode ? mode : "view") : "edit"
-  );
-  const [toChange, setToChange] = useState<any>({ ...defaults });
-  const [feedback, setFeedback] = useState<any>();
-  const [toUpload, setToUpload] = useState<any>([]);
-  const [navBar, setNavBar] = useGlobal<any>("navBar");
-  const [actions, setActions] = useGlobal<any>("actions");
-  const [defaultButton] = useGlobal<any>("defaultButton");
-  const [pageTitle, setPageTitle] = useState<any>(undefined);
-  const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
-  const [customButtonInfo, setCustomButtonInfo] = useState<{}>({});
-  const history = useHistory();
-  const [factsBarInLayout, setFactsBarInLayout] = useState<boolean>(false);
-
-  // Functions
-  const getFeedback = (feedback) => {
-    return (
-      <List>
-        {feedback.map((fb, index) => {
-          let reason = "Unknown error";
-          switch (fb.reason) {
-            case "missing-required":
-              reason = `<em>${
-                appliedModel.fields[fb.field].name
-              }</em> can't be empty.`;
-              break;
-            case "not-unique":
-              reason = `<em>${
-                appliedModel.fields[fb.field].name
-              }</em> needs to be unique, but isn't.`;
-              break;
-            case "no-email":
-              reason = `<em>${
-                appliedModel.fields[fb.field].name
-              }</em> isn't a valid e-mailadress.`;
-              break;
-            case "too-short":
-              reason = `<em>${
-                appliedModel.fields[fb.field].name
-              }</em> should be over ${fb.minLength}  characters.`;
-              break;
-            default:
-              reason = "huh";
-              break;
-          }
-          return (
-            <ListItem
-              style={{ cursor: "default" }}
-              key={`${fb.reason}-${fb.field}`}
-            >
-              <ListItemText>
-                <div dangerouslySetInnerHTML={{ __html: reason }} />
-              </ListItemText>
-            </ListItem>
-          );
-        })}
-      </List>
+    const [appliedModel, setmodel] = useState<ModelType>();
+    const [appliedObject, setObject] = useState<any>();
+    const [editMode, setMode] = useState<"view" | "edit">(
+      objectId ? (mode ? mode : "view") : "edit"
     );
-  };
+    const [toChange, setToChange] = useState<any>({ ...defaults });
+    const [feedback, setFeedback] = useState<any>();
+    const [toUpload, setToUpload] = useState<any>([]);
+    const [navBar, setNavBar] = useGlobal<any>("navBar");
+    const [actions, setActions] = useGlobal<any>("actions");
+    const [defaultButton] = useGlobal<any>("defaultButton");
+    const [pageTitle, setPageTitle] = useState<any>(undefined);
+    const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
+    const [customButtonInfo, setCustomButtonInfo] = useState<{}>({});
+    const history = useHistory();
+    const [factsBarInLayout, setFactsBarInLayout] = useState<boolean>(false);
 
-  const save = () => {
-    if (toChange !== {}) {
-      if (objectId) {
-        const requestId = uniqid();
-        Server.emit("updateObject", {
-          requestId,
-          objectId: appliedObject._id,
-          type: appliedModel.key,
-          toChange,
-        });
-        Server.on(`receive-${requestId}`, (response) => {
-          if (response.success) {
-            setMode("view");
-            setToChange({});
-            setFeedback(null);
-            if (onSuccess) onSuccess();
-          } else {
-            if (response.feedback) {
-              setFeedback(response.feedback);
-              setSnackbar({
-                display: true,
-                type: "error",
-                icon: <FaBomb />,
-                duration: 2500,
-                position: { horizontal: "right" },
-                message: getFeedback(response.feedback),
-              });
-            } else {
-              setSnackbar({
-                display: true,
-                message: response.reason,
-                type: "error",
-                icon: <FaBomb />,
-                duration: 2500,
-                position: { horizontal: "right" },
-              });
+    // Functions
+    const getFeedback = (feedback) => {
+      return (
+        <List>
+          {feedback.map((fb, index) => {
+            let reason = "Unknown error";
+            switch (fb.reason) {
+              case "missing-required":
+                reason = `<em>${appliedModel.fields[fb.field].name
+                  }</em> can't be empty.`;
+                break;
+              case "not-unique":
+                reason = `<em>${appliedModel.fields[fb.field].name
+                  }</em> needs to be unique, but isn't.`;
+                break;
+              case "no-email":
+                reason = `<em>${appliedModel.fields[fb.field].name
+                  }</em> isn't a valid e-mailadress.`;
+                break;
+              case "too-short":
+                reason = `<em>${appliedModel.fields[fb.field].name
+                  }</em> should be over ${fb.minLength}  characters.`;
+                break;
+              default:
+                reason = "huh";
+                break;
             }
-          }
-        });
-      } else {
-        const requestId = uniqid();
-        Server.emit("insertObject", {
-          requestId,
-          type: appliedModel.key,
-          object: toChange,
-        });
-        Server.on(`receive-${requestId}`, (response) => {
-          console.log(response);
-          if (response.success) {
-            if (onSuccess) onSuccess();
-          } else {
-            if (response.feedback) {
-              setFeedback(response.feedback);
-              setSnackbar({
-                display: true,
-                type: "error",
-                icon: <FaBomb />,
-                duration: 2500,
-                position: { horizontal: "right" },
-
-                message: getFeedback(response.feedback),
-              });
-            } else {
-              setSnackbar({
-                display: true,
-                message: response.reason,
-                type: "error",
-                icon: <FaBomb />,
-                duration: 2500,
-                position: { horizontal: "right" },
-              });
-            }
-          }
-        });
-      }
-    } else {
-      console.log("Nothing to save");
-    }
-  };
-
-  // Lifecycle
-  useEffect(() => {
-    // -> Object types
-    const requestId = uniqid();
-    if (model) {
-      setmodel(model);
-    } else {
-      Server.emit("listenForObjectTypes", {
-        requestId,
-        filter: { key: modelId },
-      });
-      Server.on(`receive-${requestId}`, (response) => {
-        setmodel(response[0]);
-      });
-    }
-
-    // Objects
-    const dataRequestId = uniqid();
-    if (object) {
-      setObject(object);
-    } else {
-      if (objectId) {
-        Server.emit("listenForObjects", {
-          requestId: dataRequestId,
-          type: modelId,
-          filter: { _id: objectId },
-        });
-        Server.on(`receive-${dataRequestId}`, (response) => {
-          if (response.success) {
-            setObject(response.data[0]);
-          } else {
-            console.log(response);
-          }
-        });
-      }
-    }
-
-    return () => {
-      Server.emit("unlistenFormodels", { requestId });
-      if (objectId) {
-        Server.emit("unlistenForObjects", { requestId: dataRequestId });
-      }
+            return (
+              <ListItem
+                style={{ cursor: "default" }}
+                key={`${fb.reason}-${fb.field}`}
+              >
+                <ListItemText>
+                  <div dangerouslySetInnerHTML={{ __html: reason }} />
+                </ListItemText>
+              </ListItem>
+            );
+          })}
+        </List>
+      );
     };
-  }, [modelId, objectId]);
-  useEffect(() => {
-    if (editMode === "view") {
-      if (!popup) {
-        setActions({
-          ...actions,
-          objectFilter: undefined,
-          objectToggle: {
-            label: "Edit",
-            icon: <FaEdit />,
-            function: () => {
-              setMode("edit");
-            },
-          },
-        });
-        setNavBar({
-          ...navBar,
-          backButton: {
-            ...navBar.backButton,
-            icon: <FaAngleLeft />,
-            url: baseUrl || `/${appId}/${modelId}`,
-            function: undefined,
-          },
-          title: pageTitle ? pageTitle : undefined,
-        });
-      }
-    } else {
-      if (!popup) {
-        setActions({
-          ...actions,
-          objectToggle: {
-            label: "Save",
-            variant: "contained",
-            icon: <FaSave />,
-            function: () => {
-              save();
-            },
-          },
-        });
-        setNavBar({
-          ...navBar,
-          backButton: {
-            ...navBar.backButton,
-            icon: <IoMdClose />,
-            url: undefined,
-            function: () => {
+
+    const save = () => {
+      if (toChange !== {}) {
+        if (objectId) {
+          const requestId = uniqid();
+          Server.emit("updateObject", {
+            requestId,
+            objectId: appliedObject._id,
+            type: appliedModel.key,
+            toChange,
+          });
+          Server.on(`receive-${requestId}`, (response) => {
+            if (response.success) {
               setMode("view");
-            },
-          },
-          title: pageTitle ? pageTitle : undefined,
-        });
-      }
-    }
-
-    return () => {
-      if (!popup) {
-        setActions({ ...actions, objectToggle: undefined });
-        setNavBar({
-          ...navBar,
-          backButton: {
-            ...defaultButton,
-          },
-          title: undefined,
-        });
-      }
-    };
-  }, [modelId, appId, editMode, pageTitle, toChange]);
-
-  useEffect(() => {
-    if (appliedObject && appliedModel) {
-      setPageTitle(appliedObject.data[appliedModel.primary]);
-    }
-
-    map(appliedModel?.fields || {}, (field, key) => {
-      if (field.typeArgs?.asBanner) {
-        context.setImage(appliedObject?.data[key]);
-      }
-      if (field.typeArgs?.asColor) {
-        context.setColor(appliedObject?.data[key]);
-      }
-    });
-    return () => {
-      context.setImage(undefined);
-      context.setColor(undefined);
-    };
-  }, [appliedObject, appliedModel]);
-
-  // Custom button lifecycle
-  useEffect(() => {
-    if (appliedModel?.layouts && appliedObject) {
-      const layout = appliedModel?.layouts[layoutId || "default"];
-      setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
-
-      (layout.buttons || []).map((button) => {
-        if (!["clone", "archive", "delete"].includes(button)) {
-          import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
-            async (component) => {
-              const getInfo = component.default;
-              const extension = await getInfo(
-                appliedModel.extensions[button.split("-")[0]],
-                context,
-                appliedObject
-              );
-              setCustomButtonInfo({
-                ...customButtonInfo,
-                [button]: extension.provides.buttons[button.split("-")[1]],
-              });
+              setToChange({});
+              setFeedback(null);
+              if (onSuccess) onSuccess();
+            } else {
+              if (response.feedback) {
+                setFeedback(response.feedback);
+                setSnackbar({
+                  display: true,
+                  type: "error",
+                  icon: <FaBomb />,
+                  duration: 2500,
+                  position: { horizontal: "right" },
+                  message: getFeedback(response.feedback),
+                });
+              } else {
+                setSnackbar({
+                  display: true,
+                  message: response.reason,
+                  type: "error",
+                  icon: <FaBomb />,
+                  duration: 2500,
+                  position: { horizontal: "right" },
+                });
+              }
             }
-          );
+          });
+        } else {
+          const requestId = uniqid();
+          Server.emit("insertObject", {
+            requestId,
+            type: appliedModel.key,
+            object: toChange,
+          });
+          Server.on(`receive-${requestId}`, (response) => {
+            if (response.success) {
+              if (onSuccess) onSuccess();
+            } else {
+              if (response.feedback) {
+                setFeedback(response.feedback);
+                setSnackbar({
+                  display: true,
+                  type: "error",
+                  icon: <FaBomb />,
+                  duration: 2500,
+                  position: { horizontal: "right" },
+
+                  message: getFeedback(response.feedback),
+                });
+              } else {
+                setSnackbar({
+                  display: true,
+                  message: response.reason,
+                  type: "error",
+                  icon: <FaBomb />,
+                  duration: 2500,
+                  position: { horizontal: "right" },
+                });
+              }
+            }
+          });
+        }
+      } else {
+        console.log("Nothing to save");
+      }
+    };
+
+    // Lifecycle
+    useEffect(() => {
+      // -> Object types
+      const requestId = uniqid();
+      if (model) {
+        setmodel(model);
+      } else {
+        Server.emit("listenForObjectTypes", {
+          requestId,
+          filter: { key: modelId },
+        });
+        Server.on(`receive-${requestId}`, (response) => {
+          setmodel(response[0]);
+        });
+      }
+
+      // Objects
+      const dataRequestId = uniqid();
+      if (object) {
+        setObject(object);
+      } else {
+        if (objectId) {
+          Server.emit("listenForObjects", {
+            requestId: dataRequestId,
+            type: modelId,
+            filter: { _id: objectId },
+          });
+          Server.on(`receive-${dataRequestId}`, (response) => {
+            if (response.success) {
+              setObject(response.data[0]);
+            } else {
+              console.log(response);
+            }
+          });
+        }
+      }
+
+      return () => {
+        Server.emit("unlistenFormodels", { requestId });
+        if (objectId) {
+          Server.emit("unlistenForObjects", { requestId: dataRequestId });
+        }
+      };
+    }, [modelId, objectId]);
+    useEffect(() => {
+      if (editMode === "view") {
+        if (!popup) {
+          setActions({
+            ...actions,
+            objectFilter: undefined,
+            objectToggle: {
+              label: "Edit",
+              icon: <FaEdit />,
+              function: () => {
+                setMode("edit");
+              },
+            },
+          });
+          setNavBar({
+            ...navBar,
+            backButton: {
+              ...navBar.backButton,
+              icon: <FaAngleLeft />,
+              url: baseUrl || `/${appId}/${modelId}`,
+              function: undefined,
+            },
+            title: pageTitle ? pageTitle : undefined,
+          });
+        }
+      } else {
+        if (!popup) {
+          setActions({
+            ...actions,
+            objectToggle: {
+              label: "Save",
+              variant: "contained",
+              icon: <FaSave />,
+              function: () => {
+                save();
+              },
+            },
+          });
+          setNavBar({
+            ...navBar,
+            backButton: {
+              ...navBar.backButton,
+              icon: <IoMdClose />,
+              url: undefined,
+              function: () => {
+                setMode("view");
+              },
+            },
+            title: pageTitle ? pageTitle : undefined,
+          });
+        }
+      }
+
+      return () => {
+        if (!popup) {
+          setActions({ ...actions, objectToggle: undefined });
+          setNavBar({
+            ...navBar,
+            backButton: {
+              ...defaultButton,
+            },
+            title: undefined,
+          });
+        }
+      };
+    }, [modelId, appId, editMode, pageTitle, toChange]);
+
+    useEffect(() => {
+      if (appliedObject && appliedModel) {
+        setPageTitle(appliedObject.data[appliedModel.primary]);
+      }
+
+      map(appliedModel?.fields || {}, (field, key) => {
+        if (field.typeArgs?.asBanner) {
+          context.setImage(appliedObject?.data[key]);
+        }
+        if (field.typeArgs?.asColor) {
+          context.setColor(appliedObject?.data[key]);
         }
       });
-    }
-  }, [appliedModel, layoutId, appliedObject]);
+      return () => {
+        context.setImage(undefined);
+        context.setColor(undefined);
+      };
+    }, [appliedObject, appliedModel]);
 
-  // UI
-  if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
-  const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
+    // Custom button lifecycle
+    useEffect(() => {
+      if (appliedModel?.layouts && appliedObject) {
+        const layout = appliedModel?.layouts[layoutId || "default"];
+        setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
 
-  // Factsbar
-  let factsBarPicture;
-  let factsBarTitle;
-  let factsBar;
-  if (!layout) return <>Layout {layoutId} not found</>;
-  if (layout.factsBar && !popup) {
-    if (
-      appliedModel.fields[layout.factsBar[0]].type === "picture" ||
-      (appliedModel.fields[layout.factsBar[0]].type === "formula" &&
-        appliedModel.fields[layout.factsBar[0]].typeArgs.type === "picture")
-    ) {
-      factsBarPicture = appliedObject.data[layout.factsBar[0]];
-      factsBarTitle = appliedObject.data[layout.factsBar[1]];
-      factsBar = layout.factsBar.slice(2);
-    } else if (appliedObject.data[layout.factsBar[0]]) {
-      factsBarTitle = appliedObject.data[layout.factsBar[0]];
-      factsBar = layout.factsBar.slice(1);
-    } else {
-      factsBarTitle = appliedObject.data[appliedModel.primary] || "???";
-    }
-  }
-
-  // Buttons
-  const buttons = (layout.buttons || []).map((button) => {
-    const buttonInfo = {
-      ...customButtonInfo,
-      clone: {
-        variant: "text",
-        label: "Clone",
-        onClick: () => {
-          context.setDialog({
-            display: true,
-            title: "Feature in progress",
-            content: "Sadly, I did not build this yet.",
-          });
-        },
-      },
-      delete: {
-        variant: "outlined",
-        label: "Delete",
-        onClick: () => {
-          context.setDialog({
-            display: true,
-            title: "Delete?",
-            content: "Are you sure? For now, this can't be reverted!",
-            buttons: [
-              {
-                label: "No",
-                onClick: () => {
-                  context.setDialog({ display: false });
-                },
-              },
-              {
-                label: <span style={{ color: "red" }}>Yes, delete</span>,
-                onClick: () => {
-                  const requestId = uniqid();
-                  Server.emit("deleteObject", {
-                    requestId,
-                    objectId,
-                  });
-                  Server.on(`receive-${requestId}`, () => {
-                    onObjectDisappears
-                      ? onObjectDisappears(history)
-                      : history.replace(`/${appId}/${modelId}`);
-                  });
-                },
-              },
-            ],
-          });
-        },
-      },
-      archive: {
-        varian: "text",
-        label: "Archive",
-        onClick: () => {
-          context.setDialog({
-            display: true,
-            title: "Are you sure?",
-            content: `When you archive this ${appliedModel.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
-            buttons: [
-              {
-                label: "Cancel",
-                onClick: () => {
-                  context.setDialog({ display: false });
-                },
-              },
-              {
-                label: (
-                  <Typography style={{ color: "red" }}>Archive</Typography>
-                ),
-                onClick: () => {
-                  context.archiveObject(modelId, objectId).then(() => {
-                    onObjectDisappears
-                      ? onObjectDisappears(history)
-                      : history.replace(`/${appId}/${modelId}`);
-                  });
-                },
-              },
-            ],
-          });
-        },
-      },
-    }[button];
-    return (
-      <Button
-        color="primary"
-        variant={buttonInfo?.variant || "text"}
-        onClick={() => {
-          if (buttonInfo?.onClick) {
-            buttonInfo.onClick();
-          } else {
-            console.log("ey");
+        (layout.buttons || []).map((button) => {
+          if (!["clone", "archive", "delete"].includes(button)) {
+            import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
+              async (component) => {
+                const getInfo = component.default;
+                const extension = await getInfo(
+                  appliedModel.extensions[button.split("-")[0]],
+                  context,
+                  appliedObject
+                );
+                setCustomButtonInfo({
+                  ...customButtonInfo,
+                  [button]: extension.provides.buttons[button.split("-")[1]],
+                });
+              }
+            );
           }
-        }}
-        key={buttonInfo?.label || "Test"}
-        style={{
-          margin: 5,
-          color: !popup
-            ? layout?.factsBar
-              ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
-              : "white"
-            : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
-        }}
-      >
-        {buttonInfo?.label || button}
-      </Button>
-    );
-  });
+        });
+      }
+    }, [appliedModel, layoutId, appliedObject]);
 
-  const FactsBar = (
-    <AnimationItem>
-      <Card withBigMargin hoverable className={styles.factsBar}>
-        <div style={{ display: "flex" }}>
-          {factsBarPicture && (
-            <Hidden xsDown>
-              <div
-                style={{
-                  backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
-                }}
-                className={styles.factsBarImage}
-              />
-            </Hidden>
-          )}
-          <div style={{ flex: 1, width: "100%" }}>
-            <Hidden xsDown>
-              <div style={{ float: "right", marginTop: -5 }}>{buttons}</div>
-              <Typography
-                variant="h5"
-                style={{ textAlign: "center" }}
-                color="primary"
-              >
-                {factsBarTitle}
-              </Typography>
-            </Hidden>
-            <Hidden smUp>
-              <div style={{ display: "flex" }}>
-                {factsBarPicture && (
-                  <div
-                    style={{
-                      backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
-                    }}
-                    className={styles.factsBarImageSmall}
-                  />
-                )}
-                <div style={{ textAlign: "center", flex: 1 }}>
-                  <Typography variant="h6">{factsBarTitle}</Typography>
-                  {buttons}
-                </div>
-              </div>
-            </Hidden>
-            <Divider style={{ margin: "15px 0" }} />
-            <Grid container spacing={3}>
-              {(factsBar || []).map((fact) => {
-                const field = appliedModel.fields[fact];
-                type ColType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    // UI
+    if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
+    const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
 
-                //@ts-ignore
-                const colsSmall: ColType = (12 / factsBar.length) * 2;
-                //@ts-ignore
-                const colsExtraSmall: ColType = (12 / factsBar.length) * 3;
-                //@ts-ignore
-                const cols: ColType = 12 / factsBar.length;
-                return (
-                  <Grid
-                    item
-                    xs={colsSmall}
-                    md={cols}
-                    key={fact}
-                    style={{
-                      textAlign: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
+    // Factsbar
+    let factsBarPicture;
+    let factsBarTitle;
+    let factsBar;
+    if (!layout) return <>Layout {layoutId} not found</>;
+    if (layout.factsBar && !popup) {
+      if (
+        appliedModel.fields[layout.factsBar[0]].type === "picture" ||
+        (appliedModel.fields[layout.factsBar[0]].type === "formula" &&
+          appliedModel.fields[layout.factsBar[0]].typeArgs.type === "picture")
+      ) {
+        factsBarPicture = appliedObject.data[layout.factsBar[0]];
+        factsBarTitle = appliedObject.data[layout.factsBar[1]];
+        factsBar = layout.factsBar.slice(2);
+      } else if (appliedObject.data[layout.factsBar[0]]) {
+        factsBarTitle = appliedObject.data[layout.factsBar[0]];
+        factsBar = layout.factsBar.slice(1);
+      } else {
+        factsBarTitle = appliedObject.data[appliedModel.primary] || "???";
+      }
+    }
+
+    // Buttons
+    const buttons = (layout.buttons || []).map((button) => {
+      const buttonInfo = {
+        ...customButtonInfo,
+        clone: {
+          variant: "text",
+          label: "Clone",
+          onClick: () => {
+            context.setDialog({
+              display: true,
+              title: "Feature in progress",
+              content: "Sadly, I did not build this yet.",
+            });
+          },
+        },
+        delete: {
+          variant: "outlined",
+          label: "Delete",
+          onClick: () => {
+            context.setDialog({
+              display: true,
+              title: "Delete?",
+              content: "Are you sure? For now, this can't be reverted!",
+              buttons: [
+                {
+                  label: "No",
+                  onClick: () => {
+                    context.setDialog({ display: false });
+                  },
+                },
+                {
+                  label: <span style={{ color: "red" }}>Yes, delete</span>,
+                  onClick: () => {
+                    const requestId = uniqid();
+                    Server.emit("deleteObject", {
+                      requestId,
+                      objectId,
+                    });
+                    Server.on(`receive-${requestId}`, () => {
+                      onObjectDisappears
+                        ? onObjectDisappears(history)
+                        : history.replace(`/${appId}/${modelId}`);
+                    });
+                  },
+                },
+              ],
+            });
+          },
+        },
+        archive: {
+          varian: "text",
+          label: "Archive",
+          onClick: () => {
+            context.setDialog({
+              display: true,
+              title: "Are you sure?",
+              content: `When you archive this ${appliedModel.name.toLocaleLowerCase()} it will be removed, but can be restored if need be. `,
+              buttons: [
+                {
+                  label: "Cancel",
+                  onClick: () => {
+                    context.setDialog({ display: false });
+                  },
+                },
+                {
+                  label: (
+                    <Typography style={{ color: "red" }}>Archive</Typography>
+                  ),
+                  onClick: () => {
+                    context.archiveObject(modelId, objectId).then(() => {
+                      onObjectDisappears
+                        ? onObjectDisappears(history)
+                        : history.replace(`/${appId}/${modelId}`);
+                    });
+                  },
+                },
+              ],
+            });
+          },
+        },
+      }[button];
+      return (
+        <Button
+          color="primary"
+          variant={buttonInfo?.variant || "text"}
+          onClick={() => {
+            if (buttonInfo?.onClick) {
+              buttonInfo.onClick();
+            } else {
+              console.log("ey");
+            }
+          }}
+          key={buttonInfo?.label || "Test"}
+          style={{
+            margin: 5,
+            color: !popup
+              ? layout?.factsBar
+                ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
+                : "white"
+              : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
+          }}
+        >
+          {buttonInfo?.label || button}
+        </Button>
+      );
+    });
+
+    const FactsBar = (
+      <AnimationItem>
+        <Card withBigMargin hoverable className={styles.factsBar}>
+          <div style={{ display: "flex" }}>
+            {factsBarPicture && (
+              <Hidden xsDown>
+                <div
+                  style={{
+                    backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
+                  }}
+                  className={styles.factsBarImage}
+                />
+              </Hidden>
+            )}
+            <div style={{ flex: 1, width: "100%" }}>
+              <Hidden xsDown>
+                <div style={{ float: "right", marginTop: -5 }}>{buttons}</div>
+                <Typography
+                  variant="h5"
+                  style={{ textAlign: "center" }}
+                  color="primary"
+                >
+                  {factsBarTitle}
+                </Typography>
+              </Hidden>
+              <Hidden smUp>
+                <div style={{ display: "flex" }}>
+                  {factsBarPicture && (
+                    <div
                       style={{
-                        fontWeight: "bold",
+                        backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
+                      }}
+                      className={styles.factsBarImageSmall}
+                    />
+                  )}
+                  <div style={{ textAlign: "center", flex: 1 }}>
+                    <Typography variant="h6">{factsBarTitle}</Typography>
+                    {buttons}
+                  </div>
+                </div>
+              </Hidden>
+              <Divider style={{ margin: "15px 0" }} />
+              <Grid container spacing={3}>
+                {(factsBar || []).map((fact) => {
+                  const field = appliedModel.fields[fact];
+                  type ColType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+                  //@ts-ignore
+                  const colsSmall: ColType = (12 / factsBar.length) * 2;
+                  //@ts-ignore
+                  const colsExtraSmall: ColType = (12 / factsBar.length) * 3;
+                  //@ts-ignore
+                  const cols: ColType = 12 / factsBar.length;
+                  return (
+                    <Grid
+                      item
+                      xs={colsSmall}
+                      md={cols}
+                      key={fact}
+                      style={{
+                        textAlign: "center",
                       }}
                     >
-                      {field.name}
-                    </Typography>
-                    <Typography variant="body2" noWrap>
-                      <FieldDisplay
-                        objectField={appliedObject.data[fact]}
-                        modelField={field}
-                        small
-                      />
-                    </Typography>
-                  </Grid>
-                );
-              })}
-            </Grid>
+                      <Typography
+                        variant="body1"
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {field.name}
+                      </Typography>
+                      <Typography variant="body2" noWrap>
+                        <FieldDisplay
+                          objectField={appliedObject.data[fact]}
+                          modelField={field}
+                          small
+                        />
+                      </Typography>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </div>
           </div>
-        </div>
-      </Card>
-    </AnimationItem>
-  );
+        </Card>
+      </AnimationItem>
+    );
 
-  return (
-    <div
-      style={{ height: "100%" }}
-      onKeyDown={(event) => {
-        if (
-          editMode === "edit" &&
-          event.ctrlKey &&
-          String.fromCharCode(event.which).toLowerCase() === "s"
-        ) {
-          event.preventDefault();
-          save();
-        } else if (event.which === 27) {
-          setMode("view");
-          setToChange({});
-        }
-      }}
-    >
-      <AnimationContainer>
-        {factsBar && !popup && !factsBarInLayout && FactsBar}
-        {layout.buttons && !layout.factsBar && (
+    return (
+      <div
+        style={{ height: "100%" }}
+        onKeyDown={(event) => {
+          if (
+            editMode === "edit" &&
+            event.ctrlKey &&
+            String.fromCharCode(event.which).toLowerCase() === "s"
+          ) {
+            event.preventDefault();
+            save();
+          } else if (event.which === 27) {
+            setMode("view");
+            setToChange({});
+          }
+        }}
+      >
+        <AnimationContainer>
+          {factsBar && !popup && !factsBarInLayout && FactsBar}
+          {layout.buttons && !layout.factsBar && (
           /* Button layout without factsbar*/ <div
-            style={{ textAlign: "right", margin: "0 20px" }}
-          >
-            {buttons}
-          </div>
-        )}
-
-        {appliedModel.layouts[layoutId || "default"].layout ? (
-          layout.layout.map((layoutItem, id) => {
-            return (
-              <LayoutItem
-                key={id}
-                layoutItem={layoutItem}
-                setToUpload={setToUpload}
-                toUpload={toUpload}
-                model={appliedModel}
-                mode={editMode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={appliedObject}
-                baseUrl={baseUrl}
-                customFieldTypes={provideCustomFields}
-                customLayoutItems={provideLayoutElements}
-                context={context}
-                FactsBar={FactsBar}
-                hideFields={hideFields}
-                defaults={defaults}
-              />
-            );
-          })
-        ) : (
-          <>Layout {layoutId} not found </>
-        )}
-
-        {(!objectId || popup) && (
-          <div style={{ float: "right" }}>
-            <Button
-              color="primary"
-              onClick={() => {
-                save();
-              }}
+              style={{ textAlign: "right", margin: "0 20px" }}
             >
-              Save
+              {buttons}
+            </div>
+          )}
+
+          {appliedModel.layouts[layoutId || "default"].layout ? (
+            layout.layout.map((layoutItem, id) => {
+              return (
+                <LayoutItem
+                  key={id}
+                  layoutItem={layoutItem}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
+                  model={appliedModel}
+                  mode={editMode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={appliedObject}
+                  baseUrl={baseUrl}
+                  customFieldTypes={provideCustomFields}
+                  customLayoutItems={provideLayoutElements}
+                  context={context}
+                  FactsBar={FactsBar}
+                  hideFields={hideFields}
+                  defaults={defaults}
+                />
+              );
+            })
+          ) : (
+              <>Layout {layoutId} not found </>
+            )}
+
+          {(!objectId || popup) && (
+            <div style={{ float: "right" }}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  save();
+                }}
+              >
+                Save
             </Button>
-          </div>
-        )}
-      </AnimationContainer>
-    </div>
-  );
-};
+            </div>
+          )}
+        </AnimationContainer>
+      </div>
+    );
+  };
 
 const LayoutItem: React.FC<{
   layoutItem: any;
@@ -710,75 +705,11 @@ const LayoutItem: React.FC<{
   FactsBar,
   defaults,
 }) => {
-  switch (layoutItem.type) {
-    case "GridContainer":
-      return (
-        <ObjectLayoutItemGridContainer>
-          {(layoutItem.items || []).map((item) => {
-            return (
-              <LayoutItem
-                key={item.id}
-                layoutItem={item}
-                setToUpload={setToUpload}
-                toUpload={toUpload}
-                model={model}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-                baseUrl={baseUrl}
-                customFieldTypes={customFieldTypes}
-                customLayoutItems={customLayoutItems}
-                context={context}
-                FactsBar={FactsBar}
-                hideFields={hideFields}
-                defaults={defaults}
-              />
-            );
-          })}
-        </ObjectLayoutItemGridContainer>
-      );
-    case "GridItem":
-      return (
-        <ObjectLayoutItemGridItem
-          xs={layoutItem.xs}
-          sm={layoutItem.sm}
-          md={layoutItem.md}
-          lg={layoutItem.lg}
-          xl={layoutItem.xl}
-        >
-          {layoutItem.items &&
-            layoutItem.items.map((item) => {
-              return (
-                <LayoutItem
-                  key={item.id}
-                  layoutItem={item}
-                  model={model}
-                  setToUpload={setToUpload}
-                  toUpload={toUpload}
-                  mode={mode}
-                  setMode={setMode}
-                  setToChange={setToChange}
-                  toChange={toChange}
-                  object={object}
-                  baseUrl={baseUrl}
-                  customFieldTypes={customFieldTypes}
-                  customLayoutItems={customLayoutItems}
-                  context={context}
-                  FactsBar={FactsBar}
-                  hideFields={hideFields}
-                  defaults={defaults}
-                />
-              );
-            })}
-        </ObjectLayoutItemGridItem>
-      );
-    case "AnimationContainer":
-      return (
-        <ObjectLayoutItemAnimationContainer>
-          {layoutItem.items &&
-            layoutItem.items.map((item) => {
+    switch (layoutItem.type) {
+      case "GridContainer":
+        return (
+          <ObjectLayoutItemGridContainer>
+            {(layoutItem.items || []).map((item) => {
               return (
                 <LayoutItem
                   key={item.id}
@@ -801,179 +732,243 @@ const LayoutItem: React.FC<{
                 />
               );
             })}
-        </ObjectLayoutItemAnimationContainer>
-      );
-    case "AnimationItem":
-      return (
-        <ObjectLayoutItemAnimationItem>
-          {(layoutItem?.items || []).map((item) => {
-            return (
-              <LayoutItem
-                key={item.id}
-                layoutItem={item}
-                setToUpload={setToUpload}
-                toUpload={toUpload}
-                model={model}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-                baseUrl={baseUrl}
-                customFieldTypes={customFieldTypes}
-                customLayoutItems={customLayoutItems}
-                context={context}
-                FactsBar={FactsBar}
-                hideFields={hideFields}
-                defaults={defaults}
-              />
-            );
-          })}
-        </ObjectLayoutItemAnimationItem>
-      );
-    case "FieldGrid":
-      return (
-        <ObjectLayoutItemFieldGrid
-          layoutItem={layoutItem}
-          model={model}
-          object={object}
-          setToChange={setToChange}
-          toChange={toChange}
-          mode={mode}
-          setMode={setMode}
-          context={context}
-          defaults={defaults}
-        />
-      );
-    case "Paper":
-      return (layoutItem.hideEdit && mode === "edit") ||
-        (layoutItem.hideView && mode === "view") ? (
-        <></>
-      ) : (
-        <ObjectLayoutItemPaper
-          hoverable={layoutItem.hoverable}
-          withBigMargin={layoutItem.withBigMargin}
-          withSmallMargin={layoutItem.withSmallMargin}
-          sideMarginOnly={layoutItem.sideMarginOnly}
-          title={layoutItem.title}
-          object={object}
-        >
-          {(layoutItem?.items || []).map((item) => {
-            return (
-              <LayoutItem
-                key={item.id}
-                setToUpload={setToUpload}
-                toUpload={toUpload}
-                layoutItem={item}
-                model={model}
-                mode={mode}
-                setMode={setMode}
-                setToChange={setToChange}
-                toChange={toChange}
-                object={object}
-                baseUrl={baseUrl}
-                customFieldTypes={customFieldTypes}
-                customLayoutItems={customLayoutItems}
-                context={context}
-                FactsBar={FactsBar}
-                hideFields={hideFields}
-                defaults={defaults}
-              />
-            );
-          })}
-        </ObjectLayoutItemPaper>
-      );
-    case "Field":
-      return (
-        !(hideFields || []).includes(layoutItem.field) && (
-          <ObjectLayoutItemField
+          </ObjectLayoutItemGridContainer>
+        );
+      case "GridItem":
+        return (
+          <ObjectLayoutItemGridItem
+            xs={layoutItem.xs}
+            sm={layoutItem.sm}
+            md={layoutItem.md}
+            lg={layoutItem.lg}
+            xl={layoutItem.xl}
+          >
+            {layoutItem.items &&
+              layoutItem.items.map((item) => {
+                return (
+                  <LayoutItem
+                    key={item.id}
+                    layoutItem={item}
+                    model={model}
+                    setToUpload={setToUpload}
+                    toUpload={toUpload}
+                    mode={mode}
+                    setMode={setMode}
+                    setToChange={setToChange}
+                    toChange={toChange}
+                    object={object}
+                    baseUrl={baseUrl}
+                    customFieldTypes={customFieldTypes}
+                    customLayoutItems={customLayoutItems}
+                    context={context}
+                    FactsBar={FactsBar}
+                    hideFields={hideFields}
+                    defaults={defaults}
+                  />
+                );
+              })}
+          </ObjectLayoutItemGridItem>
+        );
+      case "AnimationContainer":
+        return (
+          <ObjectLayoutItemAnimationContainer>
+            {layoutItem.items &&
+              layoutItem.items.map((item) => {
+                return (
+                  <LayoutItem
+                    key={item.id}
+                    layoutItem={item}
+                    setToUpload={setToUpload}
+                    toUpload={toUpload}
+                    model={model}
+                    mode={mode}
+                    setMode={setMode}
+                    setToChange={setToChange}
+                    toChange={toChange}
+                    object={object}
+                    baseUrl={baseUrl}
+                    customFieldTypes={customFieldTypes}
+                    customLayoutItems={customLayoutItems}
+                    context={context}
+                    FactsBar={FactsBar}
+                    hideFields={hideFields}
+                    defaults={defaults}
+                  />
+                );
+              })}
+          </ObjectLayoutItemAnimationContainer>
+        );
+      case "AnimationItem":
+        return (
+          <ObjectLayoutItemAnimationItem>
+            {(layoutItem?.items || []).map((item) => {
+              return (
+                <LayoutItem
+                  key={item.id}
+                  layoutItem={item}
+                  setToUpload={setToUpload}
+                  toUpload={toUpload}
+                  model={model}
+                  mode={mode}
+                  setMode={setMode}
+                  setToChange={setToChange}
+                  toChange={toChange}
+                  object={object}
+                  baseUrl={baseUrl}
+                  customFieldTypes={customFieldTypes}
+                  customLayoutItems={customLayoutItems}
+                  context={context}
+                  FactsBar={FactsBar}
+                  hideFields={hideFields}
+                  defaults={defaults}
+                />
+              );
+            })}
+          </ObjectLayoutItemAnimationItem>
+        );
+      case "FieldGrid":
+        return (
+          <ObjectLayoutItemFieldGrid
             layoutItem={layoutItem}
+            model={model}
             object={object}
+            setToChange={setToChange}
+            toChange={toChange}
             mode={mode}
             setMode={setMode}
-            model={model}
-            toChange={toChange}
-            onChange={(value) => {
-              setToChange({ ...toChange, [layoutItem.field]: value });
-            }}
-            customFieldTypes={customFieldTypes}
             context={context}
             defaults={defaults}
           />
-        )
-      );
-    case "RelatedList":
-      return (
-        <ObjectLayoutItemRelatedList
-          layoutItem={layoutItem}
-          objectId={object._id}
-          context={context}
-          object={object}
-        />
-      );
-
-    case "TabContainer":
-      const items = {};
-      (layoutItem.items || []).map((TabItem) => {
-        const subItems = [];
-        (TabItem.items || []).map((subItem) => {
-          subItems.push(
-            <LayoutItem
-              key={subItem.id}
-              setToUpload={setToUpload}
-              toUpload={toUpload}
-              layoutItem={subItem}
-              model={model}
+        );
+      case "Paper":
+        return (layoutItem.hideEdit && mode === "edit") ||
+          (layoutItem.hideView && mode === "view") ? (
+            <></>
+          ) : (
+            <ObjectLayoutItemPaper
+              hoverable={layoutItem.hoverable}
+              withBigMargin={layoutItem.withBigMargin}
+              withSmallMargin={layoutItem.withSmallMargin}
+              sideMarginOnly={layoutItem.sideMarginOnly}
+              title={layoutItem.title}
+              object={object}
+            >
+              {(layoutItem?.items || []).map((item) => {
+                return (
+                  <LayoutItem
+                    key={item.id}
+                    setToUpload={setToUpload}
+                    toUpload={toUpload}
+                    layoutItem={item}
+                    model={model}
+                    mode={mode}
+                    setMode={setMode}
+                    setToChange={setToChange}
+                    toChange={toChange}
+                    object={object}
+                    baseUrl={baseUrl}
+                    customFieldTypes={customFieldTypes}
+                    customLayoutItems={customLayoutItems}
+                    context={context}
+                    FactsBar={FactsBar}
+                    hideFields={hideFields}
+                    defaults={defaults}
+                  />
+                );
+              })}
+            </ObjectLayoutItemPaper>
+          );
+      case "Field":
+        return (
+          !(hideFields || []).includes(layoutItem.field) && (
+            <ObjectLayoutItemField
+              layoutItem={layoutItem}
+              object={object}
               mode={mode}
               setMode={setMode}
-              setToChange={setToChange}
+              model={model}
               toChange={toChange}
-              object={object}
-              baseUrl={baseUrl}
+              onChange={(value) => {
+                setToChange({ ...toChange, [layoutItem.field]: value });
+              }}
               customFieldTypes={customFieldTypes}
-              customLayoutItems={customLayoutItems}
               context={context}
-              FactsBar={FactsBar}
-              hideFields={hideFields}
               defaults={defaults}
             />
-          );
+          )
+        );
+      case "RelatedList":
+        return (
+          <ObjectLayoutItemRelatedList
+            layoutItem={layoutItem}
+            objectId={object._id}
+            context={context}
+            object={object}
+          />
+        );
+
+      case "TabContainer":
+        const items = {};
+        (layoutItem.items || []).map((TabItem) => {
+          const subItems = [];
+          (TabItem.items || []).map((subItem) => {
+            subItems.push(
+              <LayoutItem
+                key={subItem.id}
+                setToUpload={setToUpload}
+                toUpload={toUpload}
+                layoutItem={subItem}
+                model={model}
+                mode={mode}
+                setMode={setMode}
+                setToChange={setToChange}
+                toChange={toChange}
+                object={object}
+                baseUrl={baseUrl}
+                customFieldTypes={customFieldTypes}
+                customLayoutItems={customLayoutItems}
+                context={context}
+                FactsBar={FactsBar}
+                hideFields={hideFields}
+                defaults={defaults}
+              />
+            );
+          });
+          items[TabItem.identifier] = subItems;
         });
-        items[TabItem.identifier] = subItems;
-      });
 
-      return (
-        <ObjectLayoutItemTabContainer
-          layoutItem={layoutItem}
-          tabs={layoutItem?.items}
-          baseUrl={baseUrl}
-          items={items}
-        />
-      );
-    case "Attachments":
-      return (
-        <ObjectLayoutItemAttachments
-          context={context}
-          layoutItem={layoutItem}
-          object={object}
-        />
-      );
-    case "AppProvided":
-      return (
-        <ObjectLayoutItemAppProvided
-          layoutItem={layoutItem}
-          customLayoutItems={customLayoutItems}
-          context={context}
-          mode={mode}
-          object={object}
-        />
-      );
-    case "FactsBar":
-      return FactsBar;
+        return (
+          <ObjectLayoutItemTabContainer
+            layoutItem={layoutItem}
+            tabs={layoutItem?.items}
+            baseUrl={baseUrl}
+            items={items}
+          />
+        );
+      case "Attachments":
+        return (
+          <ObjectLayoutItemAttachments
+            context={context}
+            layoutItem={layoutItem}
+            object={object}
+          />
+        );
+      case "AppProvided":
+        return (
+          <ObjectLayoutItemAppProvided
+            layoutItem={layoutItem}
+            customLayoutItems={customLayoutItems}
+            context={context}
+            mode={mode}
+            object={object}
+          />
+        );
+      case "FactsBar":
+        return FactsBar;
 
-    default:
-      return <>Unknown layoutItem type:{layoutItem.type}</>;
-  }
-};
+      default:
+        return <>Unknown layoutItem type:{layoutItem.type}</>;
+    }
+  };
 
 export default ViewObject;
