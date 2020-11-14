@@ -117,20 +117,20 @@ const App: React.FC = () => {
             noInit ? (
               <PageOnboarding />
             ) : (
-              <PageOnboardingNoDb />
-            )
+                <PageOnboardingNoDb />
+              )
           ) : user === "error" || user === "none" ? (
             <LoginPage />
           ) : (
-            <>
-              <Hidden xsDown>
-                <Desktop />
-              </Hidden>
-              <Hidden smUp>
-                <MobileLayout />
-              </Hidden>
-            </>
-          )}
+                <>
+                  <Hidden xsDown>
+                    <Desktop />
+                  </Hidden>
+                  <Hidden smUp>
+                    <MobileLayout />
+                  </Hidden>
+                </>
+              )}
         </BrowserRouter>
         {snackbar && (
           <Snackbar
