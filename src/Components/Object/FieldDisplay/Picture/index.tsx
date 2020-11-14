@@ -12,19 +12,19 @@ const ObjectFieldDisplayPicture: React.FC<{
     <>
       {objectField ? (
         <div
-          className={small ? styles.picturePreviewSmall : styles.picturePreview}
+          className={`${small ? styles.picturePreviewSmall : styles.picturePreview} colorful-shadow`}
           style={{
             backgroundImage: `url(${baseUrl}${objectField})`,
           }}
         />
       ) : (
-        <div
-          className={small ? styles.picturePreviewSmall : styles.picturePreview}
-          style={{ backgroundColor: "#cc0000" }}
-        >
-          No {modelField.name}
-        </div>
-      )}
+          <div
+            className={small ? styles.picturePreviewSmall : styles.picturePreview}
+            style={{ backgroundColor: "#cc0000" }}
+          >
+            No {modelField.name}
+          </div>
+        )}
     </>
   );
 };

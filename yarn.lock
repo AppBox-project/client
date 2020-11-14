@@ -3739,6 +3739,11 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
+cosha@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cosha/-/cosha-1.0.0.tgz#a90c54f6dcd0bf79bdc0e053eec900dbd84ea8a7"
+  integrity sha512-Vhy0k1Up3fkRP2ho0cs71plb/h/hIJGsVv5hdjI4/jkyK9Npo48C2+oYy5ISTh9Hi9olIFkf+cHdtg8EEMrCLA==
+
 cosmiconfig@^5.0.0, cosmiconfig@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-5.2.1.tgz#040f726809c591e77a17c0a3626ca45b4f168b1a"
