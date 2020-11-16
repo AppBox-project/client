@@ -3,7 +3,7 @@ import {
   ModelType,
   UIType,
   AppContextType,
-  ListItemType,
+  ListDetailItemType,
   ObjectType,
 } from "../../../../../../Utils/Types";
 import { useState, useEffect } from "reactn";
@@ -17,14 +17,14 @@ const AppActionManageObjectTabExtensions: React.FC<{
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // Vars
-  const [extensionList, setExtensionList] = useState<ListItemType[]>([]);
+  const [extensionList, setExtensionList] = useState<ListDetailItemType[]>([]);
   const [availableExtensions, setAvailableExtensions] = useState<ObjectType[]>(
     []
   );
 
   // Lifecycle
   useEffect(() => {
-    const nl: ListItemType[] = [];
+    const nl: ListDetailItemType[] = [];
     map(model.extensions || {}, (extension, extensionId) =>
       nl.push({ label: extension.name, id: extensionId })
     );

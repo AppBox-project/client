@@ -94,6 +94,13 @@ export interface ModelListType {
   visibleFor?: string[];
 }
 
+export interface ModelRuleType {
+  name: string;
+  rule: string;
+  message: string;
+  checkedOn: "All" | "Insert" | "Update" | "Delete" | "InsertAndUpdate" | "InsertAndDelete" | "UpdateAndDelete" | "Never"
+}
+
 export interface ModelType {
   key: string;
   name: string;
@@ -106,6 +113,7 @@ export interface ModelType {
   fields: { [name: string]: ModelFieldType };
   overviews: [ModelOverviewType];
   lists?: { [key: string]: ModelListType };
+  rules?: { [key: string]: ModelRuleType };
   preview?: {
     enabled: boolean;
     ModelListTypepicture: string;
@@ -181,16 +189,16 @@ export interface AppContextType {
     }
   ) => void;
   actions:
-    | React.FC<{ context: AppContextType }>
-    | [
-        {
-          label: string;
-          key: string;
-          component: FC;
-          icon?: React.FC;
-          group?: string;
-        }
-      ];
+  | React.FC<{ context: AppContextType }>
+  | [
+    {
+      label: string;
+      key: string;
+      component: FC;
+      icon?: React.FC;
+      group?: string;
+    }
+  ];
   UI: UIType;
   setButton: (
     buttonId,
@@ -252,16 +260,16 @@ export interface WidgetContextType {
     };
   };
   actions:
-    | React.FC<{ context: AppContextType }>
-    | [
-        {
-          label: string;
-          key: string;
-          component: FC;
-          icon?: React.FC;
-          group?: string;
-        }
-      ];
+  | React.FC<{ context: AppContextType }>
+  | [
+    {
+      label: string;
+      key: string;
+      component: FC;
+      icon?: React.FC;
+      group?: string;
+    }
+  ];
   UI: UIType;
   setButton: (
     buttonId,
@@ -341,10 +349,11 @@ export interface ValueListItemType {
   value: string;
 }
 
-export interface ListItemType {
+export interface ListDetailItemType {
   label: string;
   id: string;
-  subItems?: ListItemType[];
+  subtitle?: string;
+  subItems?: ListDetailItemType[];
 }
 
 export interface UIType {
@@ -423,7 +432,7 @@ export interface UIType {
     }>;
     ListDetailLayout: React.FC<{
       mode?: "normal" | "tree";
-      list?: ListItemType[];
+      list?: ListDetailItemType[];
       treeList?: TreeViewDataItem[];
       baseUrl: string;
       CustomNavComponent?: React.FC<any>;

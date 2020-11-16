@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
-import { AppContextType, ListItemType } from "../../../Utils/Types";
+import { AppContextType, ListDetailItemType } from "../../../Utils/Types";
 import AppQSActionTodoDetail from "./DetailComponent";
 import array2dTo3d from "../../../Utils/Functions/array2dTo3d";
 import { AppProjectType } from "../Types";
@@ -12,7 +12,7 @@ const AppQSActionTodo: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [projects, setProjects] = useState<ListItemType[]>();
+  const [projects, setProjects] = useState<ListDetailItemType[]>();
   const [sharedProjects, setSharedProjects] = useState<AppProjectType[]>();
   const [flatProjects, setFlatProjects] = useState<{
     [key: string]: AppProjectType;

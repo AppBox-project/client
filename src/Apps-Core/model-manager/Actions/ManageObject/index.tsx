@@ -12,6 +12,7 @@ import AppActionManageObjectTabActions from "./Tabs/Actions";
 import AppActionManageObjectTabPreview from "./Tabs/Preview";
 import AppActionManageObjectTabExtensions from "./Tabs/Extensions";
 import AppActionManageObjectTabLists from "./Tabs/Lists";
+import AppActionManageObjectTabRules from "./Tabs/Rules";
 
 const useStyles = makeStyles((theme) => ({
   customTabRoot: {
@@ -32,8 +33,8 @@ const AppActionManageObject: React.FC<{
   const currentTab = isExact
     ? "object"
     : window.location.href.split(`model-manager/${action}/`)[1].match("/")
-    ? window.location.href.split(`model-manager/${action}/`)[1].split("/")[0]
-    : window.location.href.split(`model-manager/${action}/`)[1];
+      ? window.location.href.split(`model-manager/${action}/`)[1].split("/")[0]
+      : window.location.href.split(`model-manager/${action}/`)[1];
 
   // States & hooks
   const [model, setModel] = useState<ModelType | void>();
@@ -79,9 +80,10 @@ const AppActionManageObject: React.FC<{
         <Tab label="Overviews" value="overviews" />
         <Tab label="Lists" value="lists" />
         <Tab label="Lay-outs" value="layouts" />
-        <Tab label="Popup preview" value="preview" />
+        <Tab label="Preview" value="preview" />
         <Tab label="API access" value="api" />
         <Tab label="Permissions" value="permissions" />
+        <Tab label="Rules" value="rules" />
         <Tab label="Extensions" value="extensions" />
       </Tabs>
       <div
@@ -115,6 +117,13 @@ const AppActionManageObject: React.FC<{
         )}
         {currentTab === "overviews" && (
           <AppActionManageObjectTabOverviews
+            model={model}
+            UI={UI}
+            context={context}
+          />
+        )}
+        {currentTab === "rules" && (
+          <AppActionManageObjectTabRules
             model={model}
             UI={UI}
             context={context}

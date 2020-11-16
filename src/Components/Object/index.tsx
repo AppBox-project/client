@@ -124,7 +124,7 @@ const ViewObject: React.FC<{
                   }</em> should be over ${fb.minLength}  characters.`;
                 break;
               default:
-                reason = "huh";
+                reason = fb.reason;
                 break;
             }
             return (
@@ -535,11 +535,7 @@ const ViewObject: React.FC<{
               <Hidden smUp>
                 <div style={{ display: "flex" }}>
                   {factsBarPicture && (
-                    <div
-                      style={{
-                        backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
-                      }}
-                      className={styles.factsBarImageSmall}
+                    <Picture image={baseAppUrl.match('localhost') ? `https://picsum.photos/200` : baseAppUrl + factsBarPicture} className={styles.factsBarImage} withShadow size="small"
                     />
                   )}
                   <div style={{ textAlign: "center", flex: 1 }}>

@@ -3,10 +3,9 @@ import {
   ModelType,
   UIType,
   AppContextType,
-  ListItemType,
+  ListDetailItemType,
 } from "../../../../../../Utils/Types";
 import { map } from "lodash";
-import FourOhFour from "../../../../../../Components/FourOhFour";
 import Detail from "./Detail";
 
 const AppActionManageObjectTabLists: React.FC<{
@@ -15,11 +14,11 @@ const AppActionManageObjectTabLists: React.FC<{
   context: AppContextType;
 }> = ({ model, UI, context }) => {
   // Vars
-  const [lists, setLists] = useState<ListItemType[]>();
+  const [lists, setLists] = useState<ListDetailItemType[]>();
 
   // Lifecycle
   useEffect(() => {
-    const nl: ListItemType[] = [];
+    const nl: ListDetailItemType[] = [];
     map(model.lists, (list, key) => nl.push({ label: list.name, id: key }));
     setLists(nl);
   }, []);

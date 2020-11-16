@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ListItemType } from "../../../Utils/Types";
+import { AppContextType, ListDetailItemType } from "../../../Utils/Types";
 import AppQSActionFileLoadingSkeleton from "./LoadingSkeleton";
 import AppQSActionFileDetail from "./DetailComponent";
 import { AppFileType } from "../Types";
@@ -12,7 +12,7 @@ const AppQSActionFile: React.FC<{
   action: string;
 }> = ({ context, action, match: { isExact } }) => {
   // Vars
-  const [files, setFiles] = useState<ListItemType[]>([]);
+  const [files, setFiles] = useState<ListDetailItemType[]>([]);
   const [model, setModel] = useState<any>();
 
   // Lifecycle
@@ -22,7 +22,7 @@ const AppQSActionFile: React.FC<{
       { "data.owner": context.user._id },
       (response) => {
         if (response.success) {
-          const nf: ListItemType[] = [];
+          const nf: ListDetailItemType[] = [];
           response.data.map((file: AppFileType) =>
             nf.push({ label: file.data.name, id: file._id })
           );

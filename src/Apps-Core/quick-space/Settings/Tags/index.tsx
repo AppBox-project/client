@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { AppContextType } from "../../../../Utils/Types";
 import { useState } from "reactn";
-import { ListItemType } from "../../../../Utils/Types";
+import { ListDetailItemType } from "../../../../Utils/Types";
 import { AppTagType } from "../../Types";
 import AppQSSettingsTagDetail from "./Detail";
 import { Avatar } from "@material-ui/core";
@@ -13,13 +13,13 @@ const AppSettingsTags: React.FC<{
 }> = ({ context, isMobile }) => {
   // Vars
   const [tags, setTags] = useState<{ [key: string]: AppTagType }>({});
-  const [tagsList, setTagsList] = useState<ListItemType[]>([]);
+  const [tagsList, setTagsList] = useState<ListDetailItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
     context.getObjects("qs-tags", {}, (response) => {
       if (response.success) {
-        const tl: ListItemType[] = [];
+        const tl: ListDetailItemType[] = [];
         const to = {};
         response.data.map((t: AppTagType) => {
           tl.push({ label: t.data.name, id: t._id });
