@@ -105,7 +105,7 @@ const ObjectDesigner: React.FC<{
                   value={val.operator}
                   onChange={(nv) => {
                     const newVal = value;
-                    newVal[rowIndex].operator = nv.value;
+                    newVal[rowIndex].operator = nv;
                     onChange(newVal);
                   }}
                 />

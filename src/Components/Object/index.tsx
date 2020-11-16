@@ -44,6 +44,7 @@ import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import ObjectLayoutItemAppProvided from "./LayoutItems/AppProvided";
 import { map } from "lodash";
 import ObjectLayoutItemAttachments from "./LayoutItems/Attachments";
+import Picture from "../Picture";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -516,11 +517,7 @@ const ViewObject: React.FC<{
           <div style={{ display: "flex" }}>
             {factsBarPicture && (
               <Hidden xsDown>
-                <div
-                  style={{
-                    backgroundImage: `url(${baseAppUrl + factsBarPicture}`,
-                  }}
-                  className={styles.factsBarImage}
+                <Picture image={baseAppUrl.match('localhost') ? `https://picsum.photos/200` : baseAppUrl + factsBarPicture} className={styles.factsBarImage} withShadow
                 />
               </Hidden>
             )}

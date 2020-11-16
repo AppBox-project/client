@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.2-10",
-  "description": "Change header backdrop size",
+  "version": "0.2.2-11",
+  "description": "Add ambilight shadow",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
@@ -17,7 +17,6 @@
     "@material-ui/lab": "^4.0.0-alpha.40",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.19.2",
-    "cosha": "^1.0.0",
     "date-fns": "^2.16.1",
     "debounce-promise": "^3.1.2",
     "framer-motion": "^1.8.3",

@@ -50,7 +50,7 @@ const ConditionDesigner: React.FC<{
                     value={condition.field}
                     onChange={(val) => {
                       const newValue = value;
-                      newValue.conditions[index].field = val.value;
+                      newValue.conditions[index].field = val;
                       onChange(newValue);
                     }}
                   />

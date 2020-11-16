@@ -1,31 +1,14 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import styles from "./styles.module.scss";
 import { baseUrl } from "../../../../Utils/Utils";
+import Picture from "../../../Picture";
 
 const ObjectFieldDisplayPicture: React.FC<{
   modelField;
-  objectField;
+  objectField: string;
   small?: true;
 }> = ({ objectField, modelField, small }) => {
   return (
-    <>
-      {objectField ? (
-        <div
-          className={`${small ? styles.picturePreviewSmall : styles.picturePreview} colorful-shadow`}
-          style={{
-            backgroundImage: `url(${baseUrl}${objectField})`,
-          }}
-        />
-      ) : (
-          <div
-            className={small ? styles.picturePreviewSmall : styles.picturePreview}
-            style={{ backgroundColor: "#cc0000" }}
-          >
-            No {modelField.name}
-          </div>
-        )}
-    </>
+    <Picture size={small ? "small" : "medium"} withShadow image={baseUrl.match('localhost') ? `https://picsum.photos/200` : `${baseUrl}${objectField}`} />
   );
 };
 

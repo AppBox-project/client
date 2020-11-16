@@ -52,7 +52,7 @@ const InsertObject: React.FC<CustomFormInputType> = ({
         label="New object's model"
         value={newVal.model || ""}
         onChange={(val) => {
-          callback({ ...newVal, model: val.value });
+          callback({ ...newVal, model: val });
         }}
       />
       {newVal.model && (

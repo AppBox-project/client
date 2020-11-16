@@ -32,13 +32,13 @@ const AppHubWizard: React.FC<{
                 options={field.options}
                 value={choices[field.key] || field.options[0].value}
                 onChange={(value) =>
-                  setChoices({ ...choices, [field.key]: value.value })
+                  setChoices({ ...choices, [field.key]: value })
                 }
                 style={{ margin: "15px 0" }}
               />
             ) : (
-              `Unknown type ${field.type}`
-            );
+                `Unknown type ${field.type}`
+              );
           })}
           <Button
             variant="contained"
