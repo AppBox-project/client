@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.2-12",
-  "description": "Add model rules.",
+  "version": "0.2.2-13",
+  "description": "Automatically fix spacing (mobile)",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
