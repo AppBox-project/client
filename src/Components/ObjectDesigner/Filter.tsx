@@ -17,6 +17,7 @@ import Loading from "../Loading";
 import { map } from "lodash";
 import InputSelect from "../Inputs/Select";
 import MaybeCard from "../Design/MaybeCard";
+import InputCheckbox from "../Inputs/Checkbox";
 
 interface Filter {
   key: string;
@@ -111,17 +112,22 @@ const ObjectDesigner: React.FC<{
                 />
               </TableCell>
               <TableCell style={{ width: "40%" }}>
-                <context.UI.Field
-                  fieldId={val.key}
-                  field={appliedModel.fields[val.key]}
-                  model={appliedModel}
-                  value={val.value}
-                  onChange={(nv) => {
-                    const newVal = value;
-                    newVal[rowIndex].value = nv;
-                    onChange(newVal);
-                  }}
-                />
+                {appliedModel.fields[val.key].type === "formula" ? appliedModel.fields[val.key].typeArgs.type === "boolean" ? <InputCheckbox label={appliedModel.fields[val.key].name} value={val.value as boolean} onChange={nv => {
+                  const newVal = value;
+                  newVal[rowIndex].value = nv;
+                  onChange(newVal);
+                }} /> : "still have to make this formula filter" : <context.UI.Field
+                    fieldId={val.key}
+                    field={appliedModel.fields[val.key]}
+                    model={appliedModel}
+                    value={val.value}
+                    onChange={(nv) => {
+                      const newVal = value;
+                      newVal[rowIndex].value = nv;
+                      onChange(newVal);
+                    }}
+                  />}
+
               </TableCell>
             </TableRow>
           ))}
