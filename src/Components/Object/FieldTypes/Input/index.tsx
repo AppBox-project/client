@@ -55,17 +55,15 @@ const FieldTypeInput: React.FC<{
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body2">
-                  {field.typeArgs
-                    ? field.typeArgs.type === "password"
-                      ? "········"
-                      : newValue
+                  {field?.typeArgs?.type === "password"
+                    ? "········"
                     : newValue}
                 </Typography>
               </Grid>
             </Grid>
           </div>
         )}
-        {mode === "edit" && (
+        {mode === "edit" && field?.typeArgs?.type === "textarea" ? "Test" : (
           <TextField
             fullWidth
             label={field.name}
