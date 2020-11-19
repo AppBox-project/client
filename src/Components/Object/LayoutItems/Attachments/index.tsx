@@ -1,9 +1,10 @@
-import { List, ListItem } from "@material-ui/core";
+import { Icon, List, ListItem, ListItemIcon } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import React, { useState, useEffect } from "react";
 import Server from "../../../../Utils/Server";
 import { AppContextType, ObjectType } from "../../../../Utils/Types";
 import uniqid from "uniqid";
+import { FaFilePdf } from "react-icons/fa";
 
 const ObjectLayoutItemAttachments: React.FC<{
   layoutItem;
@@ -41,23 +42,31 @@ const ObjectLayoutItemAttachments: React.FC<{
             target="_blank"
             href={`/object-storage/${object.objectId}/${object._id}/${attachment.name}`}
             key={attachment._id}
+            style={{ textDecoration: 'none' }}
           >
-            <ListItem>{attachment.name}</ListItem>
+            <ListItem>
+              <ListItemIcon color="primary" style={{ minWidth: 25 }}>
+                {attachment.type === "pdf" && (
+                  <FaFilePdf />
+                )}
+              </ListItemIcon>
+              {attachment.name}
+            </ListItem>
           </a>
         ))
       ) : (
-        <ListItem>No attachments</ListItem>
-      )}
+          <ListItem>No attachments</ListItem>
+        )}
     </List>
   ) : (
-    <List>
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <ListItem key={i}>
-          <Skeleton style={{ width: "100%" }} />
-        </ListItem>
-      ))}
-    </List>
-  );
+      <List>
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <ListItem key={i}>
+            <Skeleton style={{ width: "100%" }} />
+          </ListItem>
+        ))}
+      </List>
+    );
 };
 
 export default ObjectLayoutItemAttachments;

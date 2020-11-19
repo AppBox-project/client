@@ -180,7 +180,7 @@ const ProcessEditor: React.FC<{
                                   );
                                   const newTrigger =
                                     newAutomation.data.data.triggers[
-                                      triggerIndex
+                                    triggerIndex
                                     ];
                                   newTrigger.type = "cron";
                                   newTrigger.args["cron"] = cron.cron;
@@ -217,15 +217,15 @@ const ProcessEditor: React.FC<{
                 </div>
               </>
             ) : (
-              <div
-                className={styles.trigger}
-                onClick={addTrigger}
-                style={{ marginTop: 15 }}
-              >
-                <div className={styles.triggerTitle}>No triggers</div>
+                <div
+                  className={styles.trigger}
+                  onClick={addTrigger}
+                  style={{ marginTop: 15 }}
+                >
+                  <div className={styles.triggerTitle}>No triggers</div>
                 Click to add one
-              </div>
-            )}
+                </div>
+              )}
           </div>
         </context.UI.Animations.AnimationItem>
         {(newAutomation.data.data?.steps || []).map((step, stepIndex) => (
@@ -306,7 +306,7 @@ const ProcessEditor: React.FC<{
                                 Delete
                               </Typography>
                             ),
-                            onClick: () => {},
+                            onClick: () => { },
                           },
                           {
                             label: "Update",

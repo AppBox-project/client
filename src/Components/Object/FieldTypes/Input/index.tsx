@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import AppUITextField from "../../../Apps/Apps/AppUI/Forms/TextInput";
+import InputInput from "../../../Inputs/Input";
 
 const FieldTypeInput: React.FC<{
   mode: "view" | "edit" | "free";
@@ -17,10 +18,11 @@ const FieldTypeInput: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setNewValue(value || object?.data[fieldKey] || "");
+    setNewValue(value || object?.data[fieldKey]);
   }, [fieldKey, object, value]);
 
   // UI
+
   if (mode === "free")
     return (
       <AppUITextField
@@ -63,16 +65,14 @@ const FieldTypeInput: React.FC<{
             </Grid>
           </div>
         )}
-        {mode === "edit" && field?.typeArgs?.type === "textarea" ? "Test" : (
-          <TextField
-            fullWidth
+        {mode === "edit" && (
+          <InputInput
             label={field.name}
-            margin="normal"
             type={field.typeArgs ? field.typeArgs.type : "text"}
             value={newValue}
-            onChange={(event) => {
-              setNewValue(event.target.value);
-              onChange(event.target.value);
+            onChange={(value) => {
+              setNewValue(value);
+              onChange(value);
             }}
           />
         )}
