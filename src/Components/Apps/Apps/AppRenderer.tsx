@@ -143,6 +143,7 @@ const App: React.FC<{
             title: dialog.title,
             hoverable: true,
             style: {
+              margin: 0,
               backgroundImage: dialog.background && `url(${dialog.background})`,
               backgroundSize: "cover",
               ...(dialog.style || {}),

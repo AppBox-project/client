@@ -129,7 +129,9 @@ const Overview: React.FC<{
   useEffect(() => {
     console.log(applyList);
 
-    if (applyList) { setSelectedList(applyList) } else {
+    if (applyList) {
+      setSelectedList(applyList);
+    } else {
       setSelectedList(window.location.hash.substr(1));
     }
   }, [window.location.hash, applyList]);
@@ -161,6 +163,13 @@ const Overview: React.FC<{
         open={dialogContent !== undefined}
         maxWidth="lg"
         fullWidth
+        PaperComponent={Card}
+        PaperProps={{
+          title: `New ${model.name}`,
+          style: {
+            margin: 0,
+          },
+        }}
         onClose={() => {
           setDialogContent(undefined);
         }}
@@ -188,75 +197,76 @@ const Overview: React.FC<{
                   selected
                 </Typography>
               ) : (
-                  <div style={{ flex: 1 }}>
-                    <Typography variant="h6" id="tableTitle" component="div">
-                      {model.name_plural}
-                    </Typography>
-                    {model.lists && !disableLists && (
-                      <>
-                        <Typography
-                          variant="subtitle2"
-                          style={{ cursor: "pointer" }}
-                          onClick={(event) => {
-                            setListPopupElement(event.currentTarget);
-                          }}
-                        >
-                          {selectedList
-                            ? model.lists[selectedList].name
-                            : `All ${model.name_plural}`}{" "}
-                          <FaCaretDown />
-                        </Typography>
-                        <Popover
-                          id="list-popover"
-                          open={Boolean(listPopupElement)}
-                          anchorEl={listPopupElement}
-                          onClose={() => {
-                            setListPopupElement(null);
-                          }}
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "left",
-                          }}
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "left",
-                          }}
-                        >
-                          <List>
+                <div style={{ flex: 1 }}>
+                  <Typography variant="h6" id="tableTitle" component="div">
+                    {model.name_plural}
+                  </Typography>
+                  {model.lists && !disableLists && (
+                    <>
+                      <Typography
+                        variant="subtitle2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(event) => {
+                          setListPopupElement(event.currentTarget);
+                        }}
+                      >
+                        {selectedList
+                          ? model.lists[selectedList].name
+                          : `All ${model.name_plural}`}{" "}
+                        <FaCaretDown />
+                      </Typography>
+                      <Popover
+                        id="list-popover"
+                        open={Boolean(listPopupElement)}
+                        anchorEl={listPopupElement}
+                        onClose={() => {
+                          setListPopupElement(null);
+                        }}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                      >
+                        <List>
+                          <ListItem
+                            selected={!selectedList}
+                            button
+                            onClick={() => {
+                              history.push(
+                                `${baseUrl || `/data-explorer/${model.key}`}`
+                              );
+                              setListPopupElement(null);
+                            }}
+                          >
+                            <ListItemText>All {model.name_plural}</ListItemText>
+                          </ListItem>
+                          {map(model.lists, (list, key) => (
                             <ListItem
-                              selected={!selectedList}
+                              selected={selectedList === key}
+                              key={key}
                               button
                               onClick={() => {
                                 history.push(
-                                  `${baseUrl || `/data-explorer/${model.key}`}`
+                                  `${
+                                    baseUrl || `/data-explorer/${model.key}`
+                                  }#${key}`
                                 );
                                 setListPopupElement(null);
                               }}
                             >
-                              <ListItemText>All {model.name_plural}</ListItemText>
+                              <ListItemText primary={list.name} />
                             </ListItem>
-                            {map(model.lists, (list, key) => (
-                              <ListItem
-                                selected={selectedList === key}
-                                key={key}
-                                button
-                                onClick={() => {
-                                  history.push(
-                                    `${baseUrl || `/data-explorer/${model.key}`
-                                    }#${key}`
-                                  );
-                                  setListPopupElement(null);
-                                }}
-                              >
-                                <ListItemText primary={list.name} />
-                              </ListItem>
-                            ))}
-                          </List>
-                        </Popover>
-                      </>
-                    )}
-                  </div>
-                )}
+                          ))}
+                        </List>
+                      </Popover>
+                    </>
+                  )}
+                </div>
+              )}
 
               {selected.length > 0 ? (
                 <Tooltip title="Apply to selection" placement="left">
@@ -270,51 +280,51 @@ const Overview: React.FC<{
                   </IconButton>
                 </Tooltip>
               ) : (
-                  <>
-                    {layout.buttons.map((buttonInfo) => {
-                      if (model.actions[buttonInfo]) {
-                        const button = model.actions[buttonInfo];
-                        return (
-                          <Tooltip
-                            title={
-                              button.label ? button.label : `New ${model.name}`
-                            }
-                            placement="left"
+                <>
+                  {layout.buttons.map((buttonInfo) => {
+                    if (model.actions[buttonInfo]) {
+                      const button = model.actions[buttonInfo];
+                      return (
+                        <Tooltip
+                          title={
+                            button.label ? button.label : `New ${model.name}`
+                          }
+                          placement="left"
+                        >
+                          <IconButton
+                            onClick={() => {
+                              setDialogContent(
+                                <ViewObject
+                                  modelId={model.key}
+                                  layoutId={button.layout}
+                                  popup={true}
+                                  context={context}
+                                  appId={context.appId}
+                                  onSuccess={() => {
+                                    setDialogContent(undefined);
+                                  }}
+                                />
+                              );
+                            }}
                           >
-                            <IconButton
-                              onClick={() => {
-                                setDialogContent(
-                                  <ViewObject
-                                    modelId={model.key}
-                                    layoutId={button.layout}
-                                    popup={true}
-                                    context={context}
-                                    appId={context.appId}
-                                    onSuccess={() => {
-                                      setDialogContent(undefined);
-                                    }}
-                                  />
-                                );
-                              }}
-                            >
-                              <IoIosAddCircleOutline />
-                            </IconButton>
-                          </Tooltip>
-                        );
-                      }
-                    })}
-                    <Tooltip title="Filter and tweak list" placement="left">
-                      <IconButton
-                        aria-label="filter list"
-                        onClick={() => {
-                          setDrawerOpen(true);
-                        }}
-                      >
-                        <FaFilter style={{ width: 18, height: 18 }} />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                )}
+                            <IoIosAddCircleOutline />
+                          </IconButton>
+                        </Tooltip>
+                      );
+                    }
+                  })}
+                  <Tooltip title="Filter and tweak list" placement="left">
+                    <IconButton
+                      aria-label="filter list"
+                      onClick={() => {
+                        setDrawerOpen(true);
+                      }}
+                    >
+                      <FaFilter style={{ width: 18, height: 18 }} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
             </Toolbar>
             {heavynessScore > 500 ? (
               <ReactVirtualizedTable
@@ -328,17 +338,17 @@ const Overview: React.FC<{
                 setAnchorEl={setAnchorEl}
               />
             ) : (
-                <RegularTable
-                  data={objects}
-                  layout={layout}
-                  model={model}
-                  baseUrl={baseUrl || `/${context.appId}/${modelId}`}
-                  history={history}
-                  setSelected={setSelected}
-                  selected={selected}
-                  setAnchorEl={setAnchorEl}
-                />
-              )}
+              <RegularTable
+                data={objects}
+                layout={layout}
+                model={model}
+                baseUrl={baseUrl || `/${context.appId}/${modelId}`}
+                history={history}
+                setSelected={setSelected}
+                selected={selected}
+                setAnchorEl={setAnchorEl}
+              />
+            )}
           </TableContainer>
         </AnimationItem>
       </AnimationContainer>

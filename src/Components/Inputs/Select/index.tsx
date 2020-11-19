@@ -16,6 +16,7 @@ const InputSelect: React.FC<{
   // Vars
   const [newValue, setNewValue] = useState<string | any[]>();
   const [app] = useGlobal<any>("app");
+  const [gTheme] = useGlobal<any>("theme");
 
   // Lifecycle
   useEffect(() => {
@@ -67,9 +68,16 @@ const InputSelect: React.FC<{
           ...style,
           zIndex: 500,
         }),
+        singleValue: (styles) => ({
+          ...styles,
+          ...style,
+          color: gTheme.palette.type === "dark" && "white",
+        }),
         control: (styles) => ({
           ...styles,
           ...style,
+          backgroundColor: gTheme.palette.type === "dark" && "#323232",
+          color: gTheme.palette.type === "dark" && "white",
           position: "relative",
           zIndex: 100,
         }),

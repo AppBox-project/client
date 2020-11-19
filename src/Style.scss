@@ -37,7 +37,7 @@ body {
 a {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.75);
-  transition: all 0.1s;
+  transition: all 0.3s;
   &:hover {
     color: black;
   }
@@ -140,4 +140,16 @@ blockquote p {
 
 a:hover {
   text-decoration: none;
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .no-link,
+  a {
+    color: rgba(255, 255, 255, 0.75);
+    transition: all 0.3s;
+    &:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
 }

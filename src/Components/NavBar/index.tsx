@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { map } from "lodash";
 import Search from "../Search";
 import { FaSearch, FaSearchMinus } from "react-icons/fa";
+import { baseUrl } from "../../Utils/Utils";
 
 const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
@@ -75,7 +76,11 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         elevation={0}
         style={{
           ...(page.image && {
-            backgroundImage: `url(${page.image})`,
+            backgroundImage: `url(${
+              baseUrl.match("localhost")
+                ? `https://picsum.photos/200`
+                : page.image
+            })`,
             backgroundSize: "cover",
             height: "45vh",
             backgroundBlendMode: "overlay",

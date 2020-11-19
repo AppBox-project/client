@@ -1,0 +1,33 @@
+.menu {
+  background-color: rgb(244, 245, 247);
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.subheader {
+  background-color: #f4f5f7;
+  cursor: default;
+}
+
+.actionLink {
+  color: rgb(66, 82, 110);
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background-color: #323232;
+  }
+
+  .subheader {
+    background-color: #323232;
+  }
+
+  .actionLink {
+    cursor: default;
+    color: #dcdddf;
+    &:hover {
+      color: white;
+    }
+  }
+}
