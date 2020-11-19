@@ -1,7 +1,7 @@
 import FourOhFour from "../../Components/FourOhFour";
 import { GrUpdate } from "react-icons/gr";
 import AppSettingsUpdate from "./Updates";
-import { FaServer, FaInfoCircle, FaRobot } from "react-icons/fa";
+import { FaServer, FaInfoCircle, FaRobot, FaDownload } from "react-icons/fa";
 import AppSettingsBackup from "./Backup";
 import AppSettingsProcesses from "./Automations";
 import AppSettingsAbout from "./About";
@@ -24,7 +24,7 @@ export default class App {
           key: "update",
           label: "Update software",
           component: AppSettingsUpdate,
-          icon: GrUpdate,
+          icon: FaDownload,
         },
         {
           key: "backup",

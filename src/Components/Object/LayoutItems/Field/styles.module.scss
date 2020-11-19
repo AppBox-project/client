@@ -24,3 +24,14 @@
   position: relative;
   left: 10px;
 }
+
+.toChange {
+  background-color: #efefef;
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .toChange {
+    background-color: #555555;
+  }
+}

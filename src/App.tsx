@@ -24,7 +24,7 @@ import "rsuite/dist/styles/rsuite-default.css";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
-  const [gTheme] = useGlobal<any>("theme");
+  const [gTheme, setgTheme] = useGlobal<any>("theme");
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
   const [noDb, setNoDb] = useState<any>(false);
   const [noInit, setNoInit] = useState<any>(false);
@@ -64,6 +64,11 @@ const App: React.FC = () => {
     });
     Server.on("noInit", () => {
       setNoInit(true);
+    });
+
+    // Auto toggle dark / light mode
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      setgTheme({ ...gTheme, palette: { ...gTheme.palette, type: e.matches ? "dark" : "light" } });
     });
 
     if (localStorage.getItem("username") && localStorage.getItem("token")) {

@@ -4,7 +4,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "./Style.scss";
 
-setGlobal({
+const global = {
   user: undefined,
   isMobile: undefined,
   app: undefined,
@@ -18,6 +18,7 @@ setGlobal({
   actions: {},
   theme: {
     palette: {
+      type: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
       primary: {
         main: "#0247a1",
       },
@@ -39,9 +40,12 @@ setGlobal({
     image: undefined,
   },
   noActions: false,
-});
+}
+
+setGlobal(global);
 
 ReactDOM.render(<App />, document.getElementById("root"));
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

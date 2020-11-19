@@ -1,5 +1,4 @@
 .input {
-  background-color: red;
   box-sizing: border-box;
   width: 100%;
   transition: all 0.3s;
@@ -14,5 +13,13 @@
   &:focus {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(100, 100, 100, 0.4);
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .input {
+    background-color: #323232;
+    color: white;
   }
 }

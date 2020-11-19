@@ -133,11 +133,9 @@ const ObjectLayoutItemField: React.FC<{
       return (
         !layoutItem.hideEdit && (
           <div
-            className={`${styles.container} ${styles.containerEdit}`}
-            style={{
-              backgroundColor:
-                layoutItem.field in toChange ? "#efefef" : "white",
-            }}
+            className={`${styles.container} ${styles.containerEdit}${
+              layoutItem.field in toChange && ` ${styles.toChange}`
+            }`}
           >
             <Typography variant="body1" className={styles.titleEdit}>
               {modelField.name}

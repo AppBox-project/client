@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.2-13",
-  "description": "Automatically fix spacing (mobile)",
+  "version": "0.2.3-1",
+  "description": "Basic dark mode",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

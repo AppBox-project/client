@@ -27,3 +27,13 @@
     display: none;
   }
 }
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .listItemText {
+    color: #dcdddf;
+    &:hover {
+      color: white;
+    }
+  }
+}

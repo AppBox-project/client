@@ -13,7 +13,7 @@ import { map } from "lodash";
 import Search from "../Search";
 import { FaSearch, FaSearchMinus } from "react-icons/fa";
 
-const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
+const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
   const [app] = useGlobal<any>("app");
   const [page] = useGlobal<any>("page");
@@ -44,7 +44,9 @@ const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
     }
 
     return () => {
-      const newColor = `rgb(${app?.data.color.r || 2},${app?.data.color.g || 71},${app?.data.color.b || 161})`;
+      const newColor = `rgb(${app?.data.color.r || 2},${
+        app?.data.color.g || 71
+      },${app?.data.color.b || 161})`;
       var metaThemeColor = document.querySelector("meta[name=theme-color]");
       metaThemeColor.setAttribute("content", newColor);
 
@@ -63,8 +65,9 @@ const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
   // UI
   return (
     <div
-      className={`${styles.root}${currentApp && !noActions ? ` ${styles.withApp}` : ""
-        }${isMobile ? ` ${styles.isMobile}` : ""}`}
+      className={`${styles.root}${
+        currentApp && !noActions ? ` ${styles.withApp}` : ""
+      }${isMobile ? ` ${styles.isMobile}` : ""}`}
     >
       <AppBar
         position="static"
@@ -76,9 +79,11 @@ const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
             backgroundSize: "cover",
             height: "45vh",
             backgroundBlendMode: "overlay",
-            backgroundColor: `rgba(${page?.color ? page?.color.r : app?.data?.color?.r || 2
-              },${page?.color ? page?.color.g : app?.data?.color?.g || 71},${page?.color ? page?.color.b : app?.data?.color?.b || 161
-              },0.5)`,
+            backgroundColor: `rgba(${
+              page?.color ? page?.color.r : app?.data?.color?.r || 2
+            },${page?.color ? page?.color.g : app?.data?.color?.g || 71},${
+              page?.color ? page?.color.b : app?.data?.color?.b || 161
+            },0.5)`,
           }),
         }}
       >
@@ -89,71 +94,71 @@ const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
               setSearchExpanded={setSearchExpanded}
             />
           ) : (
-              <>
-                {navBar.backButton &&
-                  navBar.backButton.icon &&
-                  navBar.backButton.url ? (
-                    <Link to={navBar.backButton.url} style={{ color: "white" }}>
-                      <IconButton edge="start" color="inherit" aria-label="menu">
-                        {navBar.backButton.icon}
-                      </IconButton>
-                    </Link>
-                  ) : navBar.backButton.function ? (
-                    <IconButton
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      onClick={navBar.backButton.function}
-                    >
-                      {navBar.backButton.icon}
-                    </IconButton>
-                  ) : (
-                      <Icon>{navBar.backButton.icon}</Icon>
-                    )}
-                <Typography
-                  variant="h6"
-                  style={{ color: "white", flex: 1, cursor: "default" }}
-                  noWrap
+            <>
+              {navBar.backButton &&
+              navBar.backButton.icon &&
+              navBar.backButton.url ? (
+                <Link to={navBar.backButton.url} style={{ color: "white" }}>
+                  <IconButton edge="start" color="inherit" aria-label="menu">
+                    {navBar.backButton.icon}
+                  </IconButton>
+                </Link>
+              ) : navBar.backButton.function ? (
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={navBar.backButton.function}
                 >
-                  {navBar.title
-                    ? navBar.title
-                    : currentApp
-                      ? app
-                        ? app.data.name
-                        : ""
-                      : "AppBox"}
-                </Typography>
-                {!isMobile && (
-                  <Search style={{ flex: 4, maxWidth: 650, margin: "0 35px" }} />
-                )}
-                <div style={{ flex: 1 }} />
-                {actions &&
-                  map(actions, (button, key) => {
-                    if (button) {
-                      return button.label ? (
-                        <Button
-                          key={key}
-                          startIcon={button.icon}
-                          style={{ color: "white" }}
-                          onClick={button.function}
-                          variant={button.variant ? button.variant : "text"}
-                          color="primary"
-                        >
-                          {button.label}
-                        </Button>
-                      ) : (
-                          <IconButton
-                            key={key}
-                            onClick={button.function}
-                            style={{ color: "white" }}
-                          >
-                            {button.icon}
-                          </IconButton>
-                        );
-                    }
-                  })}
-              </>
-            )}
+                  {navBar.backButton.icon}
+                </IconButton>
+              ) : (
+                <Icon>{navBar.backButton.icon}</Icon>
+              )}
+              <Typography
+                variant="h6"
+                style={{ color: "white", flex: 1, cursor: "default" }}
+                noWrap
+              >
+                {navBar.title
+                  ? navBar.title
+                  : currentApp
+                  ? app
+                    ? app.data.name
+                    : ""
+                  : "AppBox"}
+              </Typography>
+              {!isMobile && (
+                <Search style={{ flex: 4, maxWidth: 650, margin: "0 35px" }} />
+              )}
+              <div style={{ flex: 1 }} />
+              {actions &&
+                map(actions, (button, key) => {
+                  if (button) {
+                    return button.label ? (
+                      <Button
+                        key={key}
+                        startIcon={button.icon}
+                        style={{ color: "white" }}
+                        onClick={button.function}
+                        variant={button.variant ? button.variant : "text"}
+                        color="primary"
+                      >
+                        {button.label}
+                      </Button>
+                    ) : (
+                      <IconButton
+                        key={key}
+                        onClick={button.function}
+                        style={{ color: "white" }}
+                      >
+                        {button.icon}
+                      </IconButton>
+                    );
+                  }
+                })}
+            </>
+          )}
           {isMobile && (
             <IconButton
               style={{ color: "white", float: "right" }}
@@ -164,8 +169,8 @@ const NavBar: React.FC<{ currentApp?}> = ({ currentApp }) => {
               {searchExpanded ? (
                 <FaSearchMinus style={{ width: 18 }} />
               ) : (
-                  <FaSearch style={{ width: 18 }} />
-                )}
+                <FaSearch style={{ width: 18 }} />
+              )}
             </IconButton>
           )}
         </Toolbar>

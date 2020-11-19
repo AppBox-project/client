@@ -177,7 +177,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                 event.preventDefault();
               }}
             >
-              <icons.FaBoxOpen style={{ width: 40, height: 40 }} />
+              <icons.FaBoxOpen className={styles.headerIcon} />
             </IconButton>
           </Tooltip>
         </Link>
@@ -339,7 +339,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                                 backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
                               }}
                             >
-                              <Icon />
+                              <Icon className={styles.icon} />
                             </Avatar>
                           </IconButton>
                         </Link>

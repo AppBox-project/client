@@ -1,4 +1,5 @@
 import React from "react";
+import { useGlobal } from "reactn";
 import styles from "./styles.module.scss";
 import {
   Typography,
@@ -49,6 +50,8 @@ const Card: React.FC<CardProps> = ({
   image,
   overflow,
 }) => {
+  const [gTheme] = useGlobal<any>("theme");
+
   const margins = {
     ...(withBigMargin
       ? {
@@ -92,7 +95,14 @@ const Card: React.FC<CardProps> = ({
                 {buttons.map((button, index) =>
                   button.compact ? (
                     <Tooltip title={button.label} placement="left">
-                      <IconButton onClick={button.onClick} color="primary">
+                      <IconButton
+                        onClick={button.onClick}
+                        color={
+                          gTheme.palette.type === "light"
+                            ? "primary"
+                            : "default"
+                        }
+                      >
                         <button.icon style={{ width: 18, height: 18 }} />
                       </IconButton>
                     </Tooltip>
@@ -106,7 +116,11 @@ const Card: React.FC<CardProps> = ({
             )}
             <Typography
               variant="h6"
-              color={titleInPrimaryColor ? "primary" : "initial"}
+              color={
+                gTheme.palette.type === "light" && titleInPrimaryColor
+                  ? "primary"
+                  : "initial"
+              }
               style={{
                 textAlign: centerTitle ? "center" : "left",
               }}

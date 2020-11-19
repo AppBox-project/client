@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGlobal } from "reactn";
 import {
   AppContextType,
   ModelType,
@@ -39,6 +40,7 @@ const AppQSTodoListLayout: React.FC<{
     ValueListItemType[]
   >([]);
   const [filteredTodos, setFilteredTodos] = useState<AppTodoType[]>();
+  const [gTheme] = useGlobal<any>("theme");
 
   // Lifecycle
   // -> In case model changes
@@ -132,8 +134,9 @@ const AppQSTodoListLayout: React.FC<{
     <Grid container>
       <Grid item xs={12} md={8} className={!isMobile && "scrollIndependently"}>
         <context.UI.Design.Card
-          title={`${project.data.name}${filteredTodos && ` (${filteredTodos?.length})`
-            }`}
+          title={`${project.data.name}${
+            filteredTodos && ` (${filteredTodos?.length})`
+          }`}
           titleDivider
           titleInPrimaryColor
           centerTitle
@@ -235,7 +238,7 @@ const AppQSTodoListLayout: React.FC<{
                 fullWidth
                 startIcon={showDone ? <FaToggleOn /> : <FaToggleOff />}
                 variant={showDone ? "outlined" : "text"}
-                color="primary"
+                color={gTheme.palette.type === "light" ? "primary" : "default"}
               >
                 Show done
               </Button>

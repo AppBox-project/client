@@ -48,7 +48,7 @@ const AppUIDesktop: React.FC<{
         className={styles.app}
         style={
           typeof appContext.actions === "function" ||
-            appContext.app.data.menu_type === "hidden"
+          appContext.app.data.menu_type === "hidden"
             ? { left: 0, width: "100%" }
             : {}
         }
@@ -57,26 +57,26 @@ const AppUIDesktop: React.FC<{
           {typeof appContext.actions === "function" ? (
             <appContext.actions context={appContext} />
           ) : (
-              appContext.actions.map((action) => {
-                return (
-                  <Route
-                    key={action.key}
-                    path={`/${appContext.appId}/${action.key}`}
-                    render={(props) => {
-                      const Component = action.component;
-                      setCurrentPage(action.key);
-                      return (
-                        <Component
-                          {...props}
-                          context={appContext}
-                          action={action.key}
-                        />
-                      );
-                    }}
-                  />
-                );
-              })
-            )}
+            appContext.actions.map((action) => {
+              return (
+                <Route
+                  key={action.key}
+                  path={`/${appContext.appId}/${action.key}`}
+                  render={(props) => {
+                    const Component = action.component;
+                    setCurrentPage(action.key);
+                    return (
+                      <Component
+                        {...props}
+                        context={appContext}
+                        action={action.key}
+                      />
+                    );
+                  }}
+                />
+              );
+            })
+          )}
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route
               path={`/${appContext.appId}/settings`}
@@ -110,6 +110,8 @@ const ActionMenu: React.FC<{
   currentPage: string;
 }> = ({ context, currentPage }) => {
   const [filter, setFilter] = useState<any>();
+  const [gTheme] = useGlobal<any>("theme");
+
   const list = {
     visible: {
       opacity: 1,
@@ -166,10 +168,12 @@ const ActionMenu: React.FC<{
               variant="h6"
               style={{
                 textAlign: "center",
-                color: `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
+                color:
+                  gTheme.palette.type === "light" &&
+                  `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`,
                 marginBottom: 15,
               }}
-              className="cursor"
+              className={styles.title}
             >
               {context.app.data.name}
             </Typography>
@@ -193,104 +197,104 @@ const ActionMenu: React.FC<{
         <List style={{ margin: 10 }}>
           {context.appConfig?.actions?.group
             ? map(groupedActions, (actions, group) => {
-              return (
-                <div key={group}>
-                  <motion.div variants={item}>
-                    {group !== "undefined" && (
-                      <ListSubheader
-                        color="primary"
-                        style={{ cursor: "default" }}
-                      >
-                        {group ? group : "Other"}
-                      </ListSubheader>
-                    )}
-                  </motion.div>
-                  {actions.map((action) => {
-                    const ActionIcon: React.FC<{ style }> = action.icon;
-
-                    return (
-                      <motion.div variants={item} key={action.key}>
-                        <Link
-                          className="no-link"
-                          to={`/${context.app.data.id}/${action.key}`}
-                          style={{ color: "rgb(66, 82, 110)" }}
+                return (
+                  <div key={group}>
+                    <motion.div variants={item}>
+                      {group !== "undefined" && (
+                        <ListSubheader
+                          color={
+                            gTheme.palette.type === "light"
+                              ? "primary"
+                              : "default"
+                          }
+                          style={{ cursor: "default" }}
                         >
-                          <ListItem
-                            button
-                            selected={currentPage === action.key}
+                          {group ? group : "Other"}
+                        </ListSubheader>
+                      )}
+                    </motion.div>
+                    {actions.map((action) => {
+                      const ActionIcon: React.FC<{ style }> = action.icon;
+
+                      return (
+                        <motion.div variants={item} key={action.key}>
+                          <Link
+                            className={styles.actionLink}
+                            to={`/${context.app.data.id}/${action.key}`}
                           >
-                            {ActionIcon && (
-                              <ListItemIcon>
-                                <Icon
+                            <ListItem
+                              button
+                              selected={currentPage === action.key}
+                            >
+                              {ActionIcon && (
+                                <ListItemIcon>
+                                  <Icon
+                                    color={
+                                      gTheme.palette.type === "light" &&
+                                      currentPage === action.key
+                                        ? "primary"
+                                        : "inherit"
+                                    }
+                                  >
+                                    <ActionIcon
+                                      style={{ width: 18, height: 18 }}
+                                    />
+                                  </Icon>
+                                </ListItemIcon>
+                              )}
+                              <ListItemText>
+                                <Typography
                                   color={
+                                    gTheme.palette.type === "light" &&
                                     currentPage === action.key
                                       ? "primary"
                                       : "inherit"
                                   }
                                 >
-                                  <ActionIcon
-                                    style={{ width: 18, height: 18 }}
-                                  />
-                                </Icon>
-                              </ListItemIcon>
-                            )}
-                            <ListItemText>
-                              <Typography
-                                color={
-                                  currentPage === action.key
-                                    ? "primary"
-                                    : "inherit"
-                                }
-                              >
-                                {action.label}
-                              </Typography>
-                            </ListItemText>
-                          </ListItem>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              );
-            })
+                                  {action.label}
+                                </Typography>
+                              </ListItemText>
+                            </ListItem>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                );
+              })
             : typeof actions === "object" &&
-            actions.map((action) => {
-              const ActionIcon: React.FC<{ style }> = action.icon;
-              return (
-                <motion.div variants={item} key={action.key}>
-                  <Link
-                    className="no-link"
-                    to={`/${context.app.data.id}/${action.key}`}
-                    style={{ color: "rgb(66, 82, 110)" }}
-                  >
-                    <ListItem button selected={currentPage === action.key}>
-                      {ActionIcon && (
-                        <ListItemIcon>
-                          <Icon
-                            color={
-                              currentPage === action.key
-                                ? "primary"
-                                : "inherit"
-                            }
-                          >
-                            <ActionIcon style={{ width: 18, height: 18 }} />
-                          </Icon>
-                        </ListItemIcon>
-                      )}
-                      <ListItemText>
-                        <Typography
-                          color={
-                            currentPage === action.key ? "primary" : "inherit"
-                          }
-                        >
+              actions.map((action) => {
+                const ActionIcon: React.FC<{ style }> = action.icon;
+                return (
+                  <motion.div variants={item} key={action.key}>
+                    <Link
+                      className={styles.actionLink}
+                      to={`/${context.app.data.id}/${action.key}`}
+                      style={{ color: "rgb(66, 82, 110)" }}
+                    >
+                      <ListItem button selected={currentPage === action.key}>
+                        {ActionIcon && (
+                          <ListItemIcon>
+                            <Icon
+                              color={
+                                gTheme.palette.type === "light" &&
+                                currentPage === action.key
+                                  ? "primary"
+                                  : "inherit"
+                              }
+                            >
+                              <ActionIcon style={{ width: 18, height: 18 }} />
+                            </Icon>
+                          </ListItemIcon>
+                        )}
+                        <ListItemText className={styles.actionLink}>
                           {action.label}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                  </Link>
-                </motion.div>
-              );
-            })}
+                        </ListItemText>
+                      </ListItem>
+                    </Link>
+                  </motion.div>
+                );
+              })}
         </List>
       </div>
       {context.appConfig && context.appConfig.settings && (
@@ -300,20 +304,38 @@ const ActionMenu: React.FC<{
         >
           <Divider />
           <List>
-            <Link className="no-link" to={`/${context.app.data.id}/settings`}>
+            <Link
+              className={styles.actionLink}
+              to={`/${context.app.data.id}/settings`}
+            >
               <ListItem button selected={currentPage === "settings"}>
                 <ListItemIcon>
                   <Icon
-                    color={currentPage === "settings" ? "primary" : "default"}
+                    color={
+                      gTheme.palette.type === "light" &&
+                      currentPage === "settings"
+                        ? "primary"
+                        : "default"
+                    }
                   >
                     <FaWrench style={{ width: 18, height: 18 }} />
                   </Icon>
                 </ListItemIcon>
                 <ListItemText
-                  color={currentPage === "settings" ? "primary" : "default"}
+                  color={
+                    gTheme.palette.type === "light" &&
+                    currentPage === "settings"
+                      ? "primary"
+                      : "default"
+                  }
                 >
                   <Typography
-                    color={currentPage === "settings" ? "primary" : "inherit"}
+                    color={
+                      gTheme.palette.type === "light" &&
+                      currentPage === "settings"
+                        ? "primary"
+                        : "inherit"
+                    }
                   >
                     Settings
                   </Typography>

@@ -75,3 +75,26 @@
   text-align: center;
   cursor: pointer;
 }
+
+.headerIcon {
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s;
+}
+.icon {
+  transition: all 0.3s;
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .headerIcon {
+    color: #bababa;
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .icon {
+    color: #fff;
+  }
+}

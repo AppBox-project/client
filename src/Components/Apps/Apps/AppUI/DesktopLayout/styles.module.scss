@@ -34,3 +34,31 @@
   flex-grow: 1;
   overflow-x: auto;
 }
+
+.actionLink {
+  cursor: default;
+  color: rgb(66, 82, 110);
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background-color: #323232;
+    border-right: 1px solid #333;
+  }
+
+  .icon {
+    color: #fff;
+  }
+  .title {
+    color: white !important;
+  }
+
+  .actionLink {
+    cursor: default;
+    color: #dcdddf;
+    &:hover {
+      color: white;
+    }
+  }
+}

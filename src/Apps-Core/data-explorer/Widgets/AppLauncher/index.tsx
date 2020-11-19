@@ -49,9 +49,9 @@ const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
                   transition: "all 1s",
                 }}
               >
-                <Icon style={{ width: 38, height: 38 }} />
+                <Icon className={styles.icon} />
               </Avatar>
-              <Typography noWrap style={{ fontSize: 14 }}>
+              <Typography noWrap className={styles.title}>
                 {app.data.name}
               </Typography>
             </Link>
