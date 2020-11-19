@@ -17,8 +17,8 @@ const AppQSActionTodo: React.FC<{
   const [flatProjects, setFlatProjects] = useState<{
     [key: string]: AppProjectType;
   }>();
-  const [isMobile] = useGlobal<any>("isMobile");
   const history = useHistory();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -76,10 +76,10 @@ const AppQSActionTodo: React.FC<{
       context={context}
       baseUrl="/quick-space/todo"
       list={projects}
+      style={{ paddingBottom: isMobile && 50 }}
       navWidth={2}
       DetailComponent={AppQSActionTodoDetail}
       detailComponentProps={{ projects: flatProjects }}
-      style={{ paddingBottom: isMobile && 50 }}
       title="Todos"
       footerComponent={
         (sharedProjects || []).length > 0 && (

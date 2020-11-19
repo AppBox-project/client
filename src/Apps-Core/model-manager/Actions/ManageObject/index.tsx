@@ -90,8 +90,6 @@ const AppActionManageObject: React.FC<{
         style={{
           flexGrow: 1,
           overflow: "auto",
-          paddingBottom: 110,
-          marginBottom: -48,
         }}
       >
         {currentTab === "object" && (

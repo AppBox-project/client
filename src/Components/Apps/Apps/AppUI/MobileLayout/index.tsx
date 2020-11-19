@@ -106,7 +106,7 @@ const AppUIMobile: React.FC<{
           height: "100%",
           overflow: "auto",
           paddingBottom: appContext.appConfig?.actions?.mobile?.displayAs ===
-            "bottom-navigation" && 80
+            "bottom-navigation" && 54
         }}
       >
         <Switch>
