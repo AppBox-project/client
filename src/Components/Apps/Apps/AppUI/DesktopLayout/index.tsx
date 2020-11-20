@@ -229,6 +229,11 @@ const ActionMenu: React.FC<{
                               {ActionIcon && (
                                 <ListItemIcon>
                                   <Icon
+                                    style={{
+                                      color:
+                                        gTheme.palette.type === "dark" &&
+                                        "white",
+                                    }}
                                     color={
                                       gTheme.palette.type === "light" &&
                                       currentPage === action.key

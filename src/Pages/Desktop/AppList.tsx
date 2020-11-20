@@ -21,7 +21,7 @@ const AppBarAppList: React.FC<{
   // UI
   return (
     <Card style={{ display: "flex", height: "100%", flexDirection: "column" }}>
-      <div style={{ height: 120 }}>
+      <div style={{ height: 80 }}>
         <InputInput
           autoFocus
           style={{ float: "right", width: "30%" }}
@@ -34,7 +34,7 @@ const AppBarAppList: React.FC<{
         <Divider style={{ margin: 15 }} />
       </div>
 
-      <Grid container spacing={8} style={{ overflowX: "hidden" }}>
+      <Grid container style={{ overflowX: "hidden" }}>
         {appList.map((app) => {
           const Icon = icons[app.data.icon];
 
@@ -83,7 +83,7 @@ const AppBarAppList: React.FC<{
                   transition: "all 1s",
                 }}
               >
-                <Icon style={{ width: 38, height: 38 }} />
+                <Icon className={styles.icon} />
               </Avatar>
               <Typography style={{ fontSize: 14 }}>{app.data.name}</Typography>
             </Grid>

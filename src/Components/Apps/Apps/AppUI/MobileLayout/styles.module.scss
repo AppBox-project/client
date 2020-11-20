@@ -16,11 +16,11 @@
 // Dark mode
 @media (prefers-color-scheme: dark) {
   .menu {
-    background-color: #323232;
+    background-color: rgba(50, 50, 50, 1);
   }
 
   .subheader {
-    background-color: #323232;
+    background-color: #323232 !important;
   }
 
   .actionLink {

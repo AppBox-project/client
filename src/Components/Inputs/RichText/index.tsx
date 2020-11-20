@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import styles from "./styles.module.scss";
 
 const InputRichText: React.FC<{
   placeholder?: string;
@@ -22,6 +23,7 @@ const InputRichText: React.FC<{
     <CKEditor
       editor={ClassicEditor}
       config={{}}
+      className={styles.editor}
       data={newValue}
       onChange={(event, editor) => {
         const data = editor.getData();

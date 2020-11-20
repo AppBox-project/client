@@ -95,7 +95,6 @@ const AppQSActionNotes: React.FC<{
         isMobile,
         model,
       }}
-      style={{ paddingBottom: isMobile && 50 }}
       footerComponent={
         (sharedProjects || []).length > 0 && (
           <context.UI.Design.Card

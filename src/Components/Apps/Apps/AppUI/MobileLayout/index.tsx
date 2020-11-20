@@ -11,7 +11,6 @@ import {
   ListItemIcon,
   ListSubheader,
   Icon,
-  Typography,
 } from "@material-ui/core";
 import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";

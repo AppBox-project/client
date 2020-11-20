@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import styles from "./styles.module.scss";
 import { Typography } from "@material-ui/core";
+import InputInput from "../../../../../Inputs/Input";
 
 const AppUITextField: React.FC<{
   label: string;
   value: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | number) => void;
   multiline?: boolean;
   style?: {};
   autoFocus?: boolean;
@@ -38,24 +38,16 @@ const AppUITextField: React.FC<{
   return (
     <>
       {label && !noLabel && <Typography variant="caption">{label}</Typography>}
-      <input
-        type={type ? type : "text"}
-        className={styles.input}
+      <InputInput
+        type={type || "text"}
         placeholder={label}
         value={newValue}
-        onChange={(event) => {
-          setNewValue(event.target.value);
-          if (onChange) onChange(event.target.value);
+        onChange={(value) => {
+          setNewValue(value);
+          if (onChange) onChange(value);
         }}
-        onKeyDown={(e) => {
-          if (onKeyPress) onKeyPress(newValue);
-          if (e.key === "Enter") {
-            if (onEnter) onEnter(newValue);
-          }
-          if (e.key === "Escape") {
-            if (onEscape) onEscape(newValue);
-          }
-        }}
+        onEnter={onEnter}
+        onEscape={onEscape}
         style={style}
         autoFocus={autoFocus ? true : false}
       />

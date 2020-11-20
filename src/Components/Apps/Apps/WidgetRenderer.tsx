@@ -130,11 +130,7 @@ const WidgetRenderer: React.FC<{
                         onChange={(value) => {
                           setDialogFormContent({
                             ...dialogFormContent,
-                            [formItem.key]: formItem.type
-                              ? formItem.type === "number"
-                                ? parseInt(value)
-                                : value
-                              : value,
+                            [formItem.key]: value,
                           });
                         }}
                       />

@@ -4,6 +4,7 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import { useGlobal } from "reactn";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 function arrayMove(array, from, to) {
   array = array.slice();
@@ -30,11 +31,13 @@ const InputRelationShipM: React.FC<{
   objectType: string;
   onChange?: (value) => void;
   value?: string[];
-}> = ({ label, objectType, onChange, value }) => {
+  style?: CSSProperties;
+}> = ({ label, objectType, onChange, value, style }) => {
   // Vars
   const [selected, setSelected] = useState<any>([]);
   const [options, setOptions] = useState<any>();
   const [app] = useGlobal<any>("app");
+  const [gTheme] = useGlobal<any>("theme");
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const newValue = arrayMove(selected, oldIndex, newIndex);
@@ -115,18 +118,56 @@ const InputRelationShipM: React.FC<{
       }}
       closeMenuOnSelect={false}
       styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
         menu: (styles) => ({
           ...styles,
-          zIndex: 101,
+          ...style,
+          backgroundColor: gTheme.palette.type === "dark" ? "#323232" : "white",
+          zIndex: 500,
+        }),
+        singleValue: (styles) => ({
+          ...styles,
+          ...style,
+          color: gTheme.palette.type === "dark" ? "white" : "black",
         }),
         control: (styles) => ({
           ...styles,
+          ...style,
+          backgroundColor: gTheme.palette.type === "dark" ? "#323232" : "white",
+          color: gTheme.palette.type === "dark" && "white",
+          border: "1px solid rgba(100, 100, 100, 1)",
           position: "relative",
+          transition: "all 0.3s",
           zIndex: 100,
+        }),
+        container: (styles) => ({
+          ...styles,
+          color: gTheme.palette.type === "dark" && "white",
+        }),
+        input: (styles) => ({
+          ...styles,
+          zIndex: 100,
+          margin: "10px 0",
+        }),
+        valueContainer: (styles) => ({
+          ...styles,
+          zIndex: 100,
+          color: gTheme.palette.type === "dark" && "white",
+        }),
+        multiValue: (styles) => ({
+          ...styles,
+          ...(gTheme.palette.type === "dark"
+            ? { backgroundColor: "#454545" }
+            : {}),
+        }),
+        multiValueLabel: (styles) => ({
+          ...styles,
+          ...(gTheme.palette.type === "dark" ? { color: "whitesmoke" } : {}),
         }),
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
           return {
             ...styles,
+            zIndex: 500,
             backgroundColor: isSelected
               ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
               : isFocused &&

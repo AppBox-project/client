@@ -21,7 +21,7 @@ import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
-import { FaBomb, FaFilter, FaEdit, FaCaretDown } from "react-icons/fa";
+import { FaBomb, FaFilter, FaCaretDown, FaStream } from "react-icons/fa";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
@@ -276,7 +276,7 @@ const Overview: React.FC<{
                       setAnchorEl(event.currentTarget);
                     }}
                   >
-                    <FaEdit style={{ width: 18, height: 18 }} />
+                    <FaStream style={{ width: 18, height: 18 }} />
                   </IconButton>
                 </Tooltip>
               ) : (
@@ -409,7 +409,7 @@ const Overview: React.FC<{
 
 const CardWithMargin: React.FC = ({ children }) => {
   return (
-    <Card withBigMargin style={{ overflowX: "auto" }}>
+    <Card withBigMargin withoutPadding style={{ overflowX: "auto" }}>
       {children}
     </Card>
   );

@@ -1,12 +1,3 @@
-// Dark mode
-@media (prefers-color-scheme: dark) {
-  html,
-  body {
-    background-color: #121212;
-    color: white;
-  }
-}
-
 html,
 body {
   margin: 0;
@@ -144,6 +135,12 @@ a:hover {
 
 // Dark mode
 @media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background-color: #121212;
+    color: white;
+  }
+
   .no-link,
   a {
     color: rgba(255, 255, 255, 0.75);
@@ -151,5 +148,12 @@ a:hover {
     &:hover {
       color: rgba(255, 255, 255, 1);
     }
+  }
+  // Temp fix
+  .rs-input-number,
+  .rs-input {
+    background-color: #323232;
+    color: white;
+    border: 1px solid rgba(100, 100, 100, 0.3);
   }
 }

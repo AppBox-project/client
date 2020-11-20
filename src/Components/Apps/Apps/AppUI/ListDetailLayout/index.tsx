@@ -20,8 +20,7 @@ import {
   ObjectType,
   ListDetailItemType,
 } from "../../../../../Utils/Types";
-import { FaTrash, FaAngleLeft } from "react-icons/fa";
-import { GrAdd } from "react-icons/gr";
+import { FaTrash, FaAngleLeft, FaPlus } from "react-icons/fa";
 import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
@@ -233,9 +232,13 @@ const ListNav: React.FC<{
   footerComponent,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
+  const [isMobile] = useGlobal<any>("isMobile");
 
   return (
-    <div style={{ ...style }} className={styles.listNav}>
+    <div
+      style={{ ...style, marginBottom: isMobile && 64 }}
+      className={styles.listNav}
+    >
       <Card withBigMargin withoutPadding>
         <List>
           {title && (
@@ -259,7 +262,7 @@ const ListNav: React.FC<{
           {addFunction && (
             <ListItem divider button onClick={addFunction}>
               <ListItemIcon style={{ minWidth: 25 }}>
-                <GrAdd style={{ width: 15, height: 15 }} />
+                <FaPlus style={{ width: 15, height: 15 }} />
               </ListItemIcon>
 
               <ListItemText>{addTitle || "Add new"}</ListItemText>

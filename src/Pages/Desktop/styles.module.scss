@@ -72,8 +72,17 @@
 }
 
 .appListApp {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
   text-align: center;
   cursor: pointer;
+  margin: 0;
+
+  & .icon {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 .headerIcon {
@@ -81,6 +90,7 @@
   height: 40px;
   transition: all 0.3s;
 }
+
 .icon {
   transition: all 0.3s;
 }
@@ -95,6 +105,9 @@
   }
 
   .icon {
-    color: #fff;
+    color: #efefef;
+    &:hover {
+      color: #fff;
+    }
   }
 }

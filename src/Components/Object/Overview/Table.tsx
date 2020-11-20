@@ -85,7 +85,7 @@ const RegularTable: React.FC<{
             <TableCell> </TableCell>
           )}
         </TableRow>
-      </TableHead>{" "}
+      </TableHead>
       <TableBody>
         {sortedData.map((object, index) => {
           const isItemSelected = selected

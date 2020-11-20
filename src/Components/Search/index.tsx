@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "reactn";
+import { useGlobal } from "reactn";
 import AsyncSelect from "react-select/async";
 import { components } from "react-select";
 import uniqid from "uniqid";
@@ -26,6 +27,8 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
   const [models, setModels] = useState<any>({});
   const history = useHistory();
   const [apps, setApps] = useState<any>([]);
+  const [gTheme] = useGlobal<any>("theme");
+  const [app] = useGlobal<any>("app");
 
   const debouncedLoadOptions = useRef(
     debounce((query) => {
@@ -111,7 +114,13 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
                         backgroundColor: `rgba(${handlerApp.data.color.r},${handlerApp.data.color.g},${handlerApp.data.color.b},${handlerApp.data.color.a})`,
                       }}
                     >
-                      <ActionIcon />
+                      <ActionIcon
+                        style={{
+                          ...(gTheme.palette.type === "dark"
+                            ? { color: "white" }
+                            : {}),
+                        }}
+                      />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
@@ -157,14 +166,26 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
               backgroundColor: "rgba(255,255,255,0.2)",
             },
           }),
-          option: (provided, state) => ({
-            ...provided,
-            borderBottom: "1px solid #efefef",
-            zIndex: 500,
-
-            color: state.isSelected ? "white" : "black",
-            padding: 20,
+          menu: (styles) => ({
+            ...styles,
+            ...(gTheme.palette.type === "dark"
+              ? { backgroundColor: "#212121" }
+              : {}),
           }),
+          option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            return {
+              ...styles,
+              zIndex: 500,
+              backgroundColor: isSelected
+                ? `rgba(${app?.data?.color?.r || 2},${
+                    app?.data?.color?.g || 71
+                  },${app?.data?.color?.b || 161},1)`
+                : isFocused &&
+                  `rgba(${app?.data?.color?.r || 2},${
+                    app?.data?.color?.g || 71
+                  },${app?.data?.color?.b || 161},0.4)`,
+            };
+          },
           input: (styles) => {
             return { ...styles, color: "white" };
           },
