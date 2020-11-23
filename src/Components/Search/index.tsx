@@ -159,7 +159,6 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             color: "white",
             borderRadius: 5,
             zIndex: 500,
-
             transition: "all 0.3s",
             boxShadow: "none",
             "&:active": {
@@ -176,6 +175,7 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             return {
               ...styles,
               zIndex: 500,
+              ...(gTheme.palette.type === "light" ? { color: "#212121" } : {}),
               backgroundColor: isSelected
                 ? `rgba(${app?.data?.color?.r || 2},${
                     app?.data?.color?.g || 71
