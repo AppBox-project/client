@@ -49,7 +49,6 @@ const LayoutDesigner: React.FC<{
                   ...layout.layout,
                   {
                     type: response.id,
-                    xs: 12,
                     id: uniqid(),
                     ...response.migration, // migrate any old data to here
                   },
@@ -152,7 +151,6 @@ const LayoutItem: React.FC<{
         if (!layoutItem?.items) layoutItem.items = [];
         layoutItem.items.push({
           type: response.id,
-          xs: 12,
           id: uniqid(),
           ...response.migration,
         });
