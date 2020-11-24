@@ -174,7 +174,6 @@ const App: React.FC<{
                 if (!display) {
                   map(formItem.onlyDisplayWhen, (v, k) => {
                     const depItem = find(dialog.form, (o) => o.key === k);
-
                     if ((dialogFormContent[k] || depItem?.value || "") === v)
                       display = true;
                   });
@@ -236,9 +235,9 @@ const App: React.FC<{
                               });
                             }}
                             checked={
-                              dialogFormContent !== undefined
-                                ? dialogFormContent[formItem.key]
-                                : formItem.value || false
+                              dialogFormContent[formItem.key] === undefined
+                                ? formItem.value
+                                : dialogFormContent[formItem.key]
                             }
                           />
                         }

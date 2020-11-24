@@ -285,6 +285,12 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     value: layoutItem.xl,
                     type: "number",
                   },
+                  {
+                    key: "scrollIndependently",
+                    label: "Scroll independently",
+                    value: layoutItem.scrollIndependently,
+                    type: "boolean",
+                  },
                 ],
                 buttons: [
                   {
@@ -738,6 +744,26 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     value: layoutItem.emptyMessage || "",
                     type: "text",
                   },
+                  {
+                    key: "createNew",
+                    label: "Enable creation",
+                    value: layoutItem.createNew,
+                    type: "boolean",
+                  },
+                  {
+                    key: "addLayout",
+                    label: "Create new layout",
+                    value: layoutItem.addLayout || "",
+                    type: "text",
+                    onlyDisplayWhen: { createNew: true },
+                  },
+                  {
+                    key: "valueCopyFields",
+                    label: "Value copy fields (target=source), comma seperated",
+                    value: layoutItem.valueCopyFields || "",
+                    type: "text",
+                    onlyDisplayWhen: { createNew: true },
+                  },
                 ],
                 buttons: [
                   {
@@ -749,6 +775,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                   {
                     label: "Update",
                     onClick: (response) => {
+                      console.log(response);
+
                       respond(response);
                       setHasChanged(true);
                     },

@@ -15,8 +15,6 @@ const ObjectLayoutItemDetailedRelatedList: React.FC<{
   // Vars
   const [relatedItems, setRelatedItems] = useState<any>();
   const [relatedModel, setRelatedModel] = useState<any>();
-  const history = useHistory();
-  const [showMore, setShowMore] = useState<any>(false);
   const [defaultValues, setDefaultValues] = useState<{}>({});
 
   // Lifecycle
@@ -52,6 +50,15 @@ const ObjectLayoutItemDetailedRelatedList: React.FC<{
     };
   }, [objectId]);
 
+  useEffect(() => {
+    const ndv = {};
+    layoutItem?.valueCopyFields?.split(",")?.map((defValue) => {
+      const vls = defValue.split("=");
+      ndv[vls[0]] = vls[1] === "_id" ? object._id : object.data[vls[1]];
+    });
+    setDefaultValues(ndv);
+  }, [layoutItem]);
+
   // UI
   if (!relatedModel || !relatedItems) return <Loading />;
   return (
@@ -75,11 +82,26 @@ const ObjectLayoutItemDetailedRelatedList: React.FC<{
               layoutId={layoutItem.layoutId}
               popup={true}
             />
-            {itemIndex < relatedItems.length - 1 && (
+            {(itemIndex < relatedItems.length - 1 || layoutItem.createNew) && (
               <Divider style={{ marginBottom: 15 }} />
             )}
           </div>
         ))
+      )}
+      {layoutItem.createNew && (
+        <context.UI.Object.Detail
+          context={context}
+          model={relatedModel}
+          layoutId={layoutItem.addLayout}
+          popup={true}
+          defaults={{
+            ...defaultValues,
+            [layoutItem.field]:
+              relatedModel.fields[layoutItem.field].type === "relationship_m"
+                ? [objectId]
+                : objectId,
+          }}
+        />
       )}
     </>
   );
