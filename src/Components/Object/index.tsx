@@ -755,6 +755,7 @@ const LayoutItem: React.FC<{
           md={layoutItem.md}
           lg={layoutItem.lg}
           xl={layoutItem.xl}
+          scrollIndependently={layoutItem.scrollIndependently}
         >
           {layoutItem.items &&
             layoutItem.items.map((item) => {
