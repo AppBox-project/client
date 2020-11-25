@@ -5,7 +5,7 @@ import {
   AppContextType,
 } from "../../../../../../Utils/Types";
 import { Grid, Typography, Button } from "@material-ui/core";
-import Select from "react-select";
+import InputSelect from "../../../../../../Components/Inputs/Select";
 
 const permissionTypes = [
   {
@@ -131,31 +131,21 @@ const AppActionManageObjectTabPermissionUI: React.FC<{
   permissionOptions;
 }> = ({ permission, UI, permissions, setPermissions, permissionOptions }) => {
   // Vars
-  const selected = [];
-  (permissions[permission.key] || []).map((p) => {
-    (selected || []).push({ label: p, value: p });
-  });
+
   // UI
   return (
-    <UI.Design.Card withBigMargin title={permission.label}>
+    <UI.Design.Card withBigMargin title={permission.label} overflow="auto">
       <Typography variant="subtitle2">{permission.description}</Typography>
-      <Select
+      <InputSelect
+        label={permission.label}
         options={permissionOptions}
-        isMulti
-        isClearable={false}
-        value={selected}
+        multiple
+        value={permissions[permission.key]}
         onChange={(value) => {
-          let newValue = [];
-          if (value) {
-            value.map((v) => {
-              newValue.push(v.value);
-            });
-          } else {
-            // If empty, at least add 'known'
-            newValue.push("known");
-          }
-
-          setPermissions({ ...permissions, [permission.key]: newValue });
+          setPermissions({
+            ...permissions,
+            [permission.key]: value || ["known"],
+          });
         }}
       />
     </UI.Design.Card>
