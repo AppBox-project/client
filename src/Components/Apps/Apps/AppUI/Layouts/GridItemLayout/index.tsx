@@ -27,7 +27,10 @@ const GridItemLayout: React.FC<{
           <Grid
             item
             xs={(cols || 6) < 4 ? 12 : 6} //@ts-ignore
-            md={Math.floor(12 / (cols || 6))}
+            md={
+              //@ts-ignore
+              Math.floor(12 / (cols || 6))
+            }
             key={item._id}
           >
             <AnimationItem>

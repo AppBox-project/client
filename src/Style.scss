@@ -149,7 +149,11 @@ a:hover {
       color: rgba(255, 255, 255, 1);
     }
   }
+
   // Temp fix
+  .cke_contents {
+    background-color: #212121 !important;
+  }
   .rs-input-number,
   .rs-input {
     background-color: #323232;
