@@ -110,6 +110,7 @@ const AppHubMyApps: React.FC<{
                 done: false,
                 progress: 0,
                 state: "Waiting...",
+                target: "Supervisor",
               },
               (response) => {
                 if (response.success) {
