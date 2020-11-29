@@ -18,8 +18,8 @@
   - [x] Installing apps
 - [x] OTA updates
   - [x] Apps
-    - [ ] Improvements
-      - [ ] Batch update (with one build)
+    - [x] Improvements
+      - [x] Batch update (with one build)
       - [x] Schedulable update (with one build)
   - [x] System
     - [x] Simple git pull update
@@ -51,11 +51,11 @@
       - [x] Drag and drop order
       - [x] Sub to-do's
     - [x] File / dropzone
-  - [ ] All-purpose CRM app
-  - [ ] Website builder
+  - [x] All-purpose CRM app
+  - [x] Website builder
 - [ ] Data model improvements
-  - [ ] Object level validations
-  - [ ] Automations
+  - [x] Object level validations
+  - [x] Automations
   - [x] Relationships
   - [x] Formulas
     - [x] Local (within objects)
