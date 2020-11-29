@@ -33,6 +33,12 @@ const AppSettingsUpdate: React.FC<{
           ) {
             setUpgradeTask(response.data[response.data.length - 1]);
             hasTask = true;
+
+            if (response.data[response.data.length - 1].data.progress === 100) {
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
           }
         } else {
           console.log(response);
