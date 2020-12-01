@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { CardProps } from "../Components/Design/Card";
+import { IconType } from "react-icons";
 
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
@@ -98,7 +99,15 @@ export interface ModelRuleType {
   name: string;
   rule: string;
   message: string;
-  checkedOn: "All" | "Insert" | "Update" | "Delete" | "InsertAndUpdate" | "InsertAndDelete" | "UpdateAndDelete" | "Never"
+  checkedOn:
+    | "All"
+    | "Insert"
+    | "Update"
+    | "Delete"
+    | "InsertAndUpdate"
+    | "InsertAndDelete"
+    | "UpdateAndDelete"
+    | "Never";
 }
 
 export interface ModelType {
@@ -189,16 +198,16 @@ export interface AppContextType {
     }
   ) => void;
   actions:
-  | React.FC<{ context: AppContextType }>
-  | [
-    {
-      label: string;
-      key: string;
-      component: FC;
-      icon?: React.FC;
-      group?: string;
-    }
-  ];
+    | React.FC<{ context: AppContextType }>
+    | [
+        {
+          label: string;
+          key: string;
+          component: FC;
+          icon?: React.FC;
+          group?: string;
+        }
+      ];
   UI: UIType;
   setButton: (
     buttonId,
@@ -241,6 +250,8 @@ export interface AppContextType {
   callBackendAction: (action, args) => void;
   archiveObject: (modelId: string, objectId: string) => Promise<string | null>;
   requestServerAction: (action: string, args) => Promise<any>;
+  getAppSettings: (key: string) => Promise<{}>;
+  setAppSettings: (key: string, value: any) => Promise<void>;
   formatString: (text: string, data: {}) => string;
 }
 
@@ -260,16 +271,16 @@ export interface WidgetContextType {
     };
   };
   actions:
-  | React.FC<{ context: AppContextType }>
-  | [
-    {
-      label: string;
-      key: string;
-      component: FC;
-      icon?: React.FC;
-      group?: string;
-    }
-  ];
+    | React.FC<{ context: AppContextType }>
+    | [
+        {
+          label: string;
+          key: string;
+          component: FC;
+          icon?: React.FC;
+          group?: string;
+        }
+      ];
   UI: UIType;
   setButton: (
     buttonId,
@@ -281,6 +292,7 @@ export interface WidgetContextType {
     filter: {},
     then: (response: ServerResponse) => void
   ) => AppRequestController;
+  getAppSettings: (key: string) => Promise<{}>;
   addObject: (type: string, object: {}, then: (response: any) => void) => void;
   deleteObjects: (type: string, filter: {}) => Promise<boolean | string>;
   updateModel: (type: string, newModel: {}, id) => Promise<boolean | string>;
@@ -353,6 +365,7 @@ export interface ListDetailItemType {
   label: string;
   id: string;
   subtitle?: string;
+  icon?: IconType;
   subItems?: ListDetailItemType[];
 }
 
@@ -362,6 +375,7 @@ export interface UIType {
   Animations: {
     AnimationContainer: React.FC<{ style?: CSSProperties }>;
     AnimationItem: React.FC<{ style?: CSSProperties }>;
+    Animation: React.FC<{ style?: CSSProperties }>;
   };
   Object: {
     Overview: React.FC<{
@@ -526,6 +540,15 @@ export interface UIType {
         value: boolean,
         event: React.ChangeEvent<HTMLInputElement>
       ) => void;
+    }>;
+    Color: React.FC<{
+      placeholder?: string;
+      label?: string;
+      value?:
+        | { r: number; g: number; b: number }
+        | string
+        | { h: number; s: number; l: number };
+      onChange?: (value: { r: number; g: number; b: number }) => void;
     }>;
     Switch: React.FC<{
       label?: string;

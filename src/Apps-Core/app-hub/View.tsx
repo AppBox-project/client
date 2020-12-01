@@ -1,8 +1,17 @@
-import { Button, Divider, Grid, Typography } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { FaShoppingBag } from "react-icons/fa";
-import { AppContextType, SystemTaskType } from "../../Utils/Types";
+import { FaShoppingBag, FaTrash } from "react-icons/fa";
+import { AppContextType, AppType, SystemTaskType } from "../../Utils/Types";
 import Install from "./Install";
+import Uninstall from "./Uninstall";
 import { StoreAppType } from "./Types";
 import AppHubWizard from "./Wizard";
 
@@ -15,9 +24,13 @@ const AppHubApp: React.FC<{
 
   // Vars
   const [app, setApp] = useState<StoreAppType>();
-  const [state, setState] = useState<"view" | "wizard" | "installing">("view");
+  const [state, setState] = useState<
+    "view" | "wizard" | "installing" | "uninstall"
+  >("view");
   const [task, setTask] = useState<SystemTaskType>();
   const [choices, setChoices] = useState<{}>({});
+  const [installedApp, setInstalledApp] = useState<AppType>();
+
   // Functions
   const onInstall = () => {
     setState(app.data.wizard ? "wizard" : "installing");
@@ -31,6 +44,16 @@ const AppHubApp: React.FC<{
       )
       .then((data: StoreAppType) => setApp(data[0]))
       .catch((err) => console.error(err));
+
+    const request = context.getObjects(
+      "apps",
+      { "data.id": appId },
+      (response) => {
+        if ((response.data || []).length > 0) setInstalledApp(response.data[0]);
+      }
+    );
+
+    return () => request.stop();
   }, []);
 
   // Set banner
@@ -52,15 +75,30 @@ const AppHubApp: React.FC<{
               </Typography>
             </Grid>
             <Grid item xs={1}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                startIcon={<FaShoppingBag />}
-                onClick={onInstall}
-              >
-                Install
-              </Button>
+              {installedApp ? (
+                <Tooltip title="Uninstall" placement="left">
+                  <IconButton
+                    style={{ float: "right" }}
+                    onClick={() => {
+                      setState("uninstall");
+                    }}
+                  >
+                    <Avatar color="primary">
+                      <FaTrash />
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  startIcon={<FaShoppingBag />}
+                  onClick={onInstall}
+                >
+                  Install
+                </Button>
+              )}
             </Grid>
           </Grid>
           <Divider style={{ margin: "10px 0" }} />
@@ -94,14 +132,14 @@ const AppHubApp: React.FC<{
       context={context}
       app={app}
       onProgress={(choices) => {
-        console.log(choices);
-
         setChoices(choices);
         setState("installing");
       }}
     />
-  ) : (
+  ) : state === "installing" ? (
     <Install context={context} choices={choices} app={app} />
+  ) : (
+    <Uninstall context={context} app={installedApp} />
   );
 };
 

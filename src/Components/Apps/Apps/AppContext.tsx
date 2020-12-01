@@ -2,7 +2,11 @@ import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
 import { AppType, ServerResponse } from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
-import { AnimationContainer, AnimationItem } from "./AppUI/Animations";
+import {
+  AnimationContainer,
+  AnimationItem,
+  Animation,
+} from "./AppUI/Animations";
 import * as Forms from "./AppUI/Forms";
 import ListDetailLayout from "./AppUI/ListDetailLayout";
 import TreeView from "./AppUI/TreeView";
@@ -23,6 +27,7 @@ import InputSelect from "../../Inputs/Select";
 import nunjucks from "../../../Utils/Nunjucks";
 import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
 import Axios from "axios";
+import InputColor from "../../Inputs/Color";
 
 export class AppContext {
   appId: string;
@@ -79,12 +84,13 @@ export class AppContext {
         Overview: AppComponentObjectOverviewLayout,
         Detail: ObjectLayout,
       },
-      Animations: { AnimationContainer, AnimationItem },
+      Animations: { AnimationContainer, AnimationItem, Animation },
       Inputs: {
         ...Forms,
         Switch: InputSwitch,
         RichText: InputRichText,
         Select: InputSelect,
+        Color: InputColor,
       },
       Field: AppUiField,
       FieldDisplay,
@@ -716,6 +722,35 @@ export class AppContext {
       });
     });
   };
+
+  getAppSettings = (key) =>
+    new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("getAppSettings", {
+        key,
+        appId: this.appId,
+        requestId,
+      });
+
+      Server.on(`receive-${requestId}`, (response) => {
+        resolve(response);
+      });
+    });
+
+  setAppSettings = (key, value) =>
+    new Promise((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("setAppSettings", {
+        key,
+        appId: this.appId,
+        requestId,
+        value,
+      });
+
+      Server.on(`receive-${requestId}`, () => {
+        resolve();
+      });
+    });
 
   // Parse data
   formatString = (string, data) =>

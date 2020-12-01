@@ -59,4 +59,13 @@ const AnimationItem: React.FC<{ children: any; style?: CSSProperties }> = ({
   );
 };
 
-export { AnimationItem, AnimationContainer };
+const Animation: React.FC<{ children; style?: CSSProperties }> = ({
+  children,
+  style,
+}) => (
+  <motion.div initial="hidden" animate="visible" variants={item}>
+    {children}
+  </motion.div>
+);
+
+export { AnimationItem, AnimationContainer, Animation };

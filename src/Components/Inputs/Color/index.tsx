@@ -5,8 +5,11 @@ import { ChromePicker } from "react-color";
 const InputColor: React.FC<{
   placeholder?: string;
   label?: string;
-  value?: string;
-  onChange?: (value: string) => void;
+  value?:
+    | { r: number; g: number; b: number }
+    | string
+    | { h: number; s: number; l: number };
+  onChange?: (value: { r: number; g: number; b: number }) => void;
 }> = ({ placeholder, label, value, onChange }) => {
   // Vars
   const [newValue, setNewValue] = useState<any>("");
