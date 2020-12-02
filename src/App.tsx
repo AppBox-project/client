@@ -67,9 +67,14 @@ const App: React.FC = () => {
     });
 
     // Auto toggle dark / light mode
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-      setgTheme({ ...gTheme, palette: { ...gTheme.palette, type: e.matches ? "dark" : "light" } });
-    });
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        setgTheme({
+          ...gTheme,
+          palette: { ...gTheme.palette, type: e.matches ? "dark" : "light" },
+        });
+      });
 
     if (localStorage.getItem("username") && localStorage.getItem("token")) {
       const signInRequest = uniqid();
@@ -122,20 +127,20 @@ const App: React.FC = () => {
             noInit ? (
               <PageOnboarding />
             ) : (
-                <PageOnboardingNoDb />
-              )
+              <PageOnboardingNoDb />
+            )
           ) : user === "error" || user === "none" ? (
             <LoginPage />
           ) : (
-                <>
-                  <Hidden xsDown>
-                    <Desktop />
-                  </Hidden>
-                  <Hidden smUp>
-                    <MobileLayout />
-                  </Hidden>
-                </>
-              )}
+            <>
+              <Hidden xsDown>
+                <Desktop />
+              </Hidden>
+              <Hidden smUp>
+                <MobileLayout />
+              </Hidden>
+            </>
+          )}
         </BrowserRouter>
         {snackbar && (
           <Snackbar
