@@ -14,7 +14,7 @@ const Install: React.FC<{
     if (!task) {
       let request;
       context.addObject(
-        "system-task",
+        "system-tasks",
         {
           type: "App install",
           name: `Installling ${app.data.name}`,
@@ -29,7 +29,7 @@ const Install: React.FC<{
         },
         (response) => {
           context.getObjects(
-            "system-task",
+            "system-tasks",
             { _id: response.data._id },
             (response) => {
               setTask(response.data[0]);

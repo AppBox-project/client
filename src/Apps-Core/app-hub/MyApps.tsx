@@ -100,7 +100,7 @@ const AppHubMyApps: React.FC<{
           startIcon={<icons.FaFileDownload />}
           onClick={() => {
             context.addObject(
-              "system-task",
+              "system-tasks",
               {
                 type: "Update apps",
                 name: "Update apps",
@@ -115,7 +115,7 @@ const AppHubMyApps: React.FC<{
               (response) => {
                 if (response.success) {
                   const request = context.getObjects(
-                    "system-task",
+                    "system-tasks",
                     { _id: response.data._id },
                     (response) => {
                       if (response.success) {

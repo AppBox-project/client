@@ -11,7 +11,7 @@ const Uninstall: React.FC<{
 
   const start = (dataAction: "delete" | "deleteAndBackup" | "keep") => {
     context.addObject(
-      "system-task",
+      "system-tasks",
       {
         type: "App uninstall",
         name: `Uninstalling ${app.data.name}`,
@@ -26,7 +26,7 @@ const Uninstall: React.FC<{
       },
       (response) => {
         context.getObjects(
-          "system-task",
+          "system-tasks",
           { _id: response.data._id },
           (response) => {
             setTask(response.data[0]);

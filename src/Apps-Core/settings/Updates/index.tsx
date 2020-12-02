@@ -23,7 +23,7 @@ const AppSettingsUpdate: React.FC<{
   useEffect(() => {
     let hasTask = false;
     const request = context.getObjects(
-      "system-task",
+      "system-tasks",
       { "data.action": "box-update" },
       (response) => {
         if (response.success) {
@@ -113,7 +113,7 @@ const AppSettingsUpdate: React.FC<{
                   style={{ margin: "15px 0 0 0" }}
                   onClick={() => {
                     context.addObject(
-                      "system-task",
+                      "system-tasks",
                       {
                         type: "Box update",
                         name: `Update box software`,

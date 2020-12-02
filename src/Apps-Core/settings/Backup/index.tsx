@@ -24,7 +24,7 @@ const AppSettingsBackup: React.FC<{
   useEffect(() => {
     let hasTask = false;
     const request = context.getObjects(
-      "system-task",
+      "system-tasks",
       {
         "data.action": "backup",
       },
@@ -107,7 +107,7 @@ const AppSettingsBackup: React.FC<{
                   fullWidth
                   onClick={() => {
                     context.addObject(
-                      "system-task",
+                      "system-tasks",
                       {
                         type: "Database export",
                         name: `Backing up database`,

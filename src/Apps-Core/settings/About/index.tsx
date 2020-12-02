@@ -26,7 +26,7 @@ const AppSettingsAbout: React.FC<{
   // Functions
   const addTask = (type) => {
     context.addObject(
-      "system-task",
+      "system-tasks",
       {
         name: `Restart ${type}`,
         description: "Triggered manually",
