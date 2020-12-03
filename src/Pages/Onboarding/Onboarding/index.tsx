@@ -12,7 +12,6 @@ const PageOnboarding: React.FC = () => {
   const [step, setStep] = useState<number>(1);
 
   // Lifecycle
-
   // UI
   return (
     <div className={styles.root}>
@@ -36,8 +35,11 @@ const PageOnboarding: React.FC = () => {
                 const requestId = uniqid();
                 Server.emit("createUser", { user, requestId });
                 Server.on(`receive-${requestId}`, (response) => {
-                  console.log(response);
-                  setStep(3);
+                  if (response.token) {
+                    localStorage.setItem("username", user.username);
+                    localStorage.setItem("token", response.token);
+                    window.location.reload();
+                  }
                 });
               }}
             />
