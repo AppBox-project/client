@@ -274,7 +274,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
               <ListItemIcon style={{ minWidth: 0, paddingRight: 10 }}>
                 {user.data.picture ? (
                   <Avatar
-                    style={{ width: 20, height: 20 }}
+                    style={{ width: 32, height: 32 }}
                     src={baseUrl + user.data.picture}
                   />
                 ) : (
@@ -284,6 +284,24 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                 )}
               </ListItemIcon>
               <ListItemText>{user.data.full_name}</ListItemText>
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                window.location.reload();
+              }}
+            >
+              <ListItemIcon
+                style={{ minWidth: 0, paddingRight: 10 }}
+                color="primary"
+              >
+                <Avatar style={{ width: 32, height: 32 }}>
+                  <icons.FaDoorOpen style={{ width: 20, height: 20 }} />
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText>Sign Out</ListItemText>
             </ListItem>
           </List>
         </Card>

@@ -6,57 +6,93 @@ import Server from "../../Utils/Server";
 import bg from "./bg.jpg";
 import Card from "../../Components/Design/Card";
 import InputInput from "../../Components/Inputs/Input";
+import { Animation } from "../../Components/Apps/Apps/AppUI/Animations";
+import { motion } from "framer-motion";
 
 const LoginPage: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<any>(0);
-  const list = {
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.1,
-        ease: "easeOut",
-      },
-    },
-    hidden: {
-      opacity: 0,
-      x: "-40vw",
-      transition: {
-        when: "afterChildren",
-      },
-    },
-  };
-  const item = {
-    visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: 10 },
-  };
-
   return (
-    <Grid
-      container
-      style={{ backgroundImage: `url(${bg})` }}
-      className={styles.root}
-    >
-      <Grid item xs={12} md={5}>
-        <Card className="center" title="Welcome to AppBox">
-          <Tabs
-            value={currentTab}
-            onChange={(_, v) => {
-              setCurrentTab(v);
+    <div className={styles.root} style={{ backgroundImage: `url(${bg})` }}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className="center"
+      >
+        <Grid item xs={12} lg={3}>
+          <motion.div
+            style={{
+              fontWeight: "bold",
+              letterSpacing: "-0.04em",
+              fontSize: 32,
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
             }}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
+            variants={{
+              before: {},
+              after: { transition: { staggerChildren: 0.07 } },
+            }}
+            initial={"before"}
+            animate={"after"}
           >
-            <Tab label="Log in" value={0} />
-            <Tab label="Register" value={1} />
-          </Tabs>
-          {currentTab === 0 && <Login />}
-          {currentTab === 1 && "Register"}
-        </Card>
+            {["A", "p", "p", "B", "o", "x"].map((letter, index) => (
+              <motion.div
+                key={index}
+                style={{ position: "relative" }} // Position elements
+                variants={{
+                  before: {
+                    opacity: 0,
+                    y: 20,
+                    transition: {
+                      type: "spring",
+                      damping: 16,
+                      stiffness: 200,
+                    },
+                  },
+                  after: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      damping: 16,
+                      stiffness: 200,
+                    },
+                  },
+                }}
+              >
+                {letter}
+              </motion.div>
+            ))}
+          </motion.div>
+          <Animation>
+            <Card withBigMargin hoverable withoutPadding>
+              <Tabs
+                value={currentTab}
+                onChange={(_, v) => {
+                  setCurrentTab(v);
+                }}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                <Tab label="Log in" value={0} />
+                <Tab label="Register" value={1} />
+              </Tabs>
+              <div style={{ padding: "15px 15px 0 15px" }}>
+                {currentTab === 0 && <Login />}
+                {currentTab === 1 && (
+                  <div style={{ marginBottom: 15 }}>
+                    Registration is disabled!
+                  </div>
+                )}
+              </div>
+            </Card>
+          </Animation>
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 };
 

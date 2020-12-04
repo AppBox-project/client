@@ -165,6 +165,19 @@ const MobileLayout: React.FC = () => {
             <ListItem
               button
               onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                window.location.reload();
+              }}
+            >
+              <ListItemIcon>
+                <icons.FaDoorOpen style={{ width: 24, height: 24 }} />
+              </ListItemIcon>
+              <ListItemText primary="Sign out" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
                 setDrawerOpen(false);
                 history.push("/system/user");
               }}
