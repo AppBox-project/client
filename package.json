@@ -44,7 +44,7 @@
     "reactn": "^2.2.5",
     "rrule": "^2.6.4",
     "rsuite": "^4.8.3",
-    "socket.io-client": "^2.3.0",
+    "socket.io-client": "^3.0.3",
     "uniqid": "^5.2.0"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "@types/react-big-calendar": "^0.24.5",
     "@types/react-dom": "^16.9.0",
     "@types/react-select": "^3.0.15",
-    "@types/socket.io-client": "^1.4.32",
+    "@types/socket.io-client": "^1.4.34",
     "@types/uniqid": "^5.2.0",
     "node-sass": "^4.13.1",
     "prettier": "^2.0.5",
