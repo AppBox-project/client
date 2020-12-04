@@ -89,6 +89,7 @@ const ViewObject: React.FC<{
   const [editMode, setMode] = useState<"view" | "edit">(
     objectId ? (mode ? mode : "view") : "edit"
   );
+  const [selectedField, setSelectedField] = useState<string>();
   const [toChange, setToChange] = useState<any>({ ...defaults });
   const [feedback, setFeedback] = useState<any>();
   const [toUpload, setToUpload] = useState<any>([]);
@@ -645,10 +646,14 @@ const ViewObject: React.FC<{
                 key={id}
                 layoutItem={layoutItem}
                 setToUpload={setToUpload}
+                selectedField={selectedField}
                 toUpload={toUpload}
                 model={appliedModel}
                 mode={editMode}
-                setMode={setMode}
+                setMode={(mode: "view" | "edit", field?: string) => {
+                  setMode(mode);
+                  if (field) setSelectedField(field);
+                }}
                 setToChange={setToChange}
                 toChange={toChange}
                 object={appliedObject}
@@ -692,6 +697,7 @@ const LayoutItem: React.FC<{
   setMode: (string) => void;
   object: any;
   setToUpload;
+  selectedField: string;
   toUpload;
   baseUrl: string;
   customFieldTypes: { [key: string]: React.FC<CustomFieldType> };
@@ -710,6 +716,7 @@ const LayoutItem: React.FC<{
   setToChange,
   setToUpload,
   toUpload,
+  selectedField,
   baseUrl,
   customFieldTypes,
   customLayoutItems,
@@ -733,6 +740,7 @@ const LayoutItem: React.FC<{
                 mode={mode}
                 setMode={setMode}
                 setToChange={setToChange}
+                selectedField={selectedField}
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
@@ -770,6 +778,7 @@ const LayoutItem: React.FC<{
                   setMode={setMode}
                   setToChange={setToChange}
                   toChange={toChange}
+                  selectedField={selectedField}
                   object={object}
                   baseUrl={baseUrl}
                   customFieldTypes={customFieldTypes}
@@ -797,6 +806,7 @@ const LayoutItem: React.FC<{
                   model={model}
                   mode={mode}
                   setMode={setMode}
+                  selectedField={selectedField}
                   setToChange={setToChange}
                   toChange={toChange}
                   object={object}
@@ -828,6 +838,7 @@ const LayoutItem: React.FC<{
                 setToChange={setToChange}
                 toChange={toChange}
                 object={object}
+                selectedField={selectedField}
                 baseUrl={baseUrl}
                 customFieldTypes={customFieldTypes}
                 customLayoutItems={customLayoutItems}
@@ -849,6 +860,7 @@ const LayoutItem: React.FC<{
           setToChange={setToChange}
           toChange={toChange}
           mode={mode}
+          selectedField={selectedField}
           setMode={setMode}
           context={context}
           defaults={defaults}
@@ -878,6 +890,7 @@ const LayoutItem: React.FC<{
                 mode={mode}
                 setMode={setMode}
                 setToChange={setToChange}
+                selectedField={selectedField}
                 toChange={toChange}
                 object={object}
                 baseUrl={baseUrl}
@@ -902,6 +915,7 @@ const LayoutItem: React.FC<{
             setMode={setMode}
             model={model}
             toChange={toChange}
+            selectedField={selectedField}
             onChange={(value) => {
               setToChange({ ...toChange, [layoutItem.field]: value });
             }}
@@ -951,6 +965,7 @@ const LayoutItem: React.FC<{
               customFieldTypes={customFieldTypes}
               customLayoutItems={customLayoutItems}
               context={context}
+              selectedField={selectedField}
               FactsBar={FactsBar}
               hideFields={hideFields}
               defaults={defaults}

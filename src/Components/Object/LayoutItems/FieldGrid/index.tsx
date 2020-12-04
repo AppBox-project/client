@@ -25,6 +25,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
     }[];
   };
   setToChange;
+  selectedField: string;
   toChange;
   setMode;
   mode;
@@ -35,6 +36,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
   object,
   model,
   setToChange,
+  selectedField,
   toChange,
   setMode,
   mode,
@@ -72,6 +74,7 @@ const ObjectLayoutItemFieldGrid: React.FC<{
                     mode={mode}
                     setMode={setMode}
                     model={model}
+                    selectedField={selectedField}
                     toChange={toChange}
                     onChange={(value) => {
                       setToChange({ ...toChange, [item]: value });

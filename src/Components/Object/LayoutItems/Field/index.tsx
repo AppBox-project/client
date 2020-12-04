@@ -28,10 +28,11 @@ const ObjectLayoutItemField: React.FC<{
   layoutItem;
   object;
   mode;
-  setMode;
+  setMode: (mode: "view" | "edit", field?: string) => void;
   model: ModelType;
   onChange?: (value: string | boolean | Date | number | object) => void;
   toChange;
+  selectedField: string;
   customFieldTypes?: { [key: string]: React.FC<CustomFieldType> };
   context: AppContextType;
   defaults;
@@ -44,6 +45,7 @@ const ObjectLayoutItemField: React.FC<{
   onChange,
   toChange,
   customFieldTypes,
+  selectedField,
   context,
   defaults,
 }) => {
@@ -108,7 +110,7 @@ const ObjectLayoutItemField: React.FC<{
             container
             className={`${styles.container} ${styles.containerView}`}
             onDoubleClick={() => {
-              setMode("edit");
+              setMode("edit", layoutItem.field);
             }}
           >
             <Grid item xs={12} md={6}>
@@ -156,6 +158,7 @@ const ObjectLayoutItemField: React.FC<{
                 onChange={(value) => {
                   onChange(value);
                 }}
+                autoFocus={layoutItem.field === selectedField}
                 readOnly={modelField.typeArgs?.readonly}
                 placeholder={modelField.name}
                 value={objectField || (defaults || {})[layoutItem.field]}
