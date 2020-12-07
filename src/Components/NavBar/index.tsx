@@ -76,11 +76,7 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         elevation={0}
         style={{
           ...(page.image && {
-            backgroundImage: `url(${
-              baseUrl.match("localhost")
-                ? `https://picsum.photos/200`
-                : page.image
-            })`,
+            backgroundImage: `url(${page.image})`,
             backgroundSize: "cover",
             height: "45vh",
             backgroundBlendMode: "overlay",

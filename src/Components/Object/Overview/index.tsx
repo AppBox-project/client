@@ -40,7 +40,16 @@ const Overview: React.FC<{
   baseUrl?: string;
   disableLists?: boolean;
   applyList?: string;
-}> = ({ layoutId, modelId, context, baseUrl, disableLists, applyList }) => {
+  alternativeTitle?: { single: string; plural: string };
+}> = ({
+  layoutId,
+  modelId,
+  context,
+  baseUrl,
+  disableLists,
+  applyList,
+  alternativeTitle,
+}) => {
   const [model, setModel] = useState<ModelType>();
   const [layout, setLayout] = useState<any>();
   const [objects, setObjects] = useState<any>();
@@ -127,8 +136,6 @@ const Overview: React.FC<{
 
   // When the hash changes
   useEffect(() => {
-    console.log(applyList);
-
     if (applyList) {
       setSelectedList(applyList);
     } else {
@@ -149,8 +156,8 @@ const Overview: React.FC<{
   let heaviness = 1;
   layout.fields.map((field) => {
     if (
-      model.fields[field].type === "relationship" ||
-      model.fields[field].type === "relationship_m"
+      model?.fields[field]?.type === "relationship" ||
+      model?.fields[field]?.type === "relationship_m"
     ) {
       heaviness++;
     }
@@ -165,7 +172,9 @@ const Overview: React.FC<{
         fullWidth
         PaperComponent={Card}
         PaperProps={{
-          title: `New ${model.name}`,
+          title: `New ${(
+            alternativeTitle?.single || model.name
+          ).toLocaleLowerCase()}`,
           style: {
             margin: 0,
           },
@@ -192,14 +201,16 @@ const Overview: React.FC<{
                 >
                   {selected.length === objects.length ? "All" : selected.length}{" "}
                   {selected.length === 1
-                    ? model.name.toLowerCase()
-                    : model.name_plural.toLowerCase()}{" "}
+                    ? (alternativeTitle?.single || model.name).toLowerCase()
+                    : (
+                        alternativeTitle?.plural || model.name_plural
+                      ).toLowerCase()}{" "}
                   selected
                 </Typography>
               ) : (
                 <div style={{ flex: 1 }}>
                   <Typography variant="h6" id="tableTitle" component="div">
-                    {model.name_plural}
+                    {alternativeTitle?.plural || model.name_plural}
                   </Typography>
                   {model.lists && !disableLists && (
                     <>
@@ -287,7 +298,11 @@ const Overview: React.FC<{
                       return (
                         <Tooltip
                           title={
-                            button.label ? button.label : `New ${model.name}`
+                            button.label
+                              ? button.label
+                              : `New ${(
+                                  alternativeTitle?.single || model.name
+                                ).toLocaleLowerCase()}`
                           }
                           placement="left"
                         >

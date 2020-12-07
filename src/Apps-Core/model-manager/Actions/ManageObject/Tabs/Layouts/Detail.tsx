@@ -17,6 +17,7 @@ import Card from "../../../../../../Components/Design/Card";
 import { useHistory } from "react-router-dom";
 import AppObjectLayoutFieldGridEditor from "./FieldGridEditor";
 import Select from "react-select";
+import InputSelect from "../../../../../../Components/Inputs/Select";
 
 interface WrapperPropsType {
   title?: string;
@@ -119,46 +120,32 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
     { label: "Archive", value: "archive" },
     ...customButtons,
   ];
-  const selectedButtons = [];
-  (layout.buttons || []).map((b) => {
-    selectedButtons.push(
-      find(buttonOptions, (o) => {
-        return o.value === b;
-      })
-    );
-  });
-  const factsBarItems = [];
-  (layout.factsBar || []).map((b) => {
-    factsBarItems.push(find(fieldList, (o) => o.value === b));
-  });
 
   return (
     <context.UI.Design.Card withBigMargin withoutPadding>
       <Grid container spacing={3} style={{ padding: 15 }}>
         <Grid item xs={12} md={6}>
           <Typography variant="body1">Actions</Typography>
-          <Select
-            isMulti
+          <InputSelect
+            label="Actions"
+            multiple
             options={buttonOptions}
-            value={selectedButtons}
+            value={layout.buttons}
             onChange={(value) => {
-              const newButtons = [];
-              (value || []).map((val) => newButtons.push(val.value));
-              setLayout({ ...layout, buttons: newButtons }); // Spread operator is required to force react to redraw
+              setLayout({ ...layout, buttons: value }); // Spread operator is required to force react to redraw
               setHasChanged(true);
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="body1">Facts bar</Typography>
-          <Select
-            isMulti
+          <InputSelect
+            label="Facts bar"
+            multiple
             options={fieldList}
-            value={factsBarItems}
+            value={layout.factsBar}
             onChange={(value) => {
-              const newFactsBar = [];
-              (value || []).map((val) => newFactsBar.push(val.value));
-              setLayout({ ...layout, factsBar: newFactsBar }); // Spread operator is required to force react to redraw
+              setLayout({ ...layout, factsBar: value }); // Spread operator is required to force react to redraw
               setHasChanged(true);
             }}
           />

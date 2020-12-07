@@ -8,7 +8,11 @@ const ObjectFieldDisplayPicture: React.FC<{
   small?: true;
 }> = ({ objectField, modelField, small }) => {
   return (
-    <Picture size={small ? "small" : "medium"} withShadow image={baseUrl.match('localhost') ? `https://picsum.photos/200` : `${baseUrl}${objectField}`} />
+    <Picture
+      size={small ? "small" : "medium"}
+      withShadow
+      image={`${baseUrl}${objectField}`}
+    />
   );
 };
 

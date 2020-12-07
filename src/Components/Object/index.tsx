@@ -360,7 +360,8 @@ const ViewObject: React.FC<{
   // Custom button lifecycle
   useEffect(() => {
     if (appliedModel?.layouts && appliedObject) {
-      const layout = appliedModel?.layouts[layoutId || "default"];
+      let layout = appliedModel?.layouts[layoutId || "default"];
+      if (!layout) layout = appliedModel?.layouts["default"];
       setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
 
       (layout.buttons || []).map((button) => {
@@ -524,11 +525,7 @@ const ViewObject: React.FC<{
           {factsBarPicture && (
             <Hidden xsDown>
               <Picture
-                image={
-                  baseAppUrl.match("localhost")
-                    ? `https://picsum.photos/200`
-                    : baseAppUrl + factsBarPicture
-                }
+                image={baseAppUrl + factsBarPicture}
                 className={styles.factsBarImage}
                 withShadow
               />
@@ -549,11 +546,7 @@ const ViewObject: React.FC<{
               <div style={{ display: "flex" }}>
                 {factsBarPicture && (
                   <Picture
-                    image={
-                      baseAppUrl.match("localhost")
-                        ? `https://picsum.photos/200`
-                        : baseAppUrl + factsBarPicture
-                    }
+                    image={baseAppUrl + factsBarPicture}
                     className={styles.factsBarImage}
                     withShadow
                     size="small"

@@ -7,10 +7,21 @@ const AppComponentObjectOverviewLayout: React.FC<{
   context: AppContextType;
   modelId: string;
   overviewId?: string;
+  detailId?: string;
   baseUrl: string;
   disableLists?: boolean;
   applyList?: string;
-}> = ({ context, modelId, overviewId, baseUrl, disableLists, applyList }) => {
+  alternativeTitle?: { single: string; plural: string };
+}> = ({
+  context,
+  modelId,
+  overviewId,
+  detailId,
+  baseUrl,
+  disableLists,
+  applyList,
+  alternativeTitle,
+}) => {
   return (
     <Switch>
       <Route
@@ -18,7 +29,7 @@ const AppComponentObjectOverviewLayout: React.FC<{
         render={(props) => (
           <context.UI.Object.Detail
             modelId={modelId}
-            layoutId={overviewId || "default"}
+            layoutId={detailId || "default"}
             context={context}
             objectId={props.match.params.objectId}
             baseUrl={baseUrl}
@@ -32,7 +43,9 @@ const AppComponentObjectOverviewLayout: React.FC<{
           modelId={modelId}
           context={context}
           baseUrl={baseUrl}
-          applyList={applyList} disableLists={disableLists}
+          applyList={applyList}
+          disableLists={disableLists}
+          alternativeTitle={alternativeTitle}
         />
       </Route>
     </Switch>
