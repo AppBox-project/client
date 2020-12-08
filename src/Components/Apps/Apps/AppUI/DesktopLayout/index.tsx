@@ -12,8 +12,15 @@ import {
   Icon,
   Divider,
   ListSubheader,
+  ListItemSecondaryAction,
+  Collapse,
 } from "@material-ui/core";
-import { FaWrench } from "react-icons/fa";
+import {
+  FaCaretDown,
+  FaChevronDown,
+  FaChevronUp,
+  FaWrench,
+} from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import { map } from "lodash";
@@ -37,6 +44,7 @@ const AppUIDesktop: React.FC<{
       setNoActions(false);
     };
   }, [appContext.app]);
+  const subItems = [];
   // UI
   return (
     <>
@@ -54,29 +62,47 @@ const AppUIDesktop: React.FC<{
         }
       >
         <Switch>
-          {typeof appContext.actions === "function" ? (
-            <appContext.actions context={appContext} />
-          ) : (
-            appContext.actions.map((action) => {
-              return (
-                <Route
-                  key={action.key}
-                  path={`/${appContext.appId}/${action.key}`}
-                  render={(props) => {
-                    const Component = action.component;
-                    setCurrentPage(action.key);
-                    return (
-                      <Component
-                        {...props}
-                        context={appContext}
-                        action={action.key}
-                      />
-                    );
-                  }}
-                />
-              );
-            })
-          )}
+          {appContext.actions.map((action) => {
+            if (action.subItems) {
+              action.subItems.map((subItem) => {
+                subItems.push(
+                  <Route
+                    key={subItem.key}
+                    path={`/${appContext.appId}/${subItem.key}`}
+                    render={(props) => {
+                      const Component = subItem.component;
+                      setCurrentPage(subItem.key);
+                      return (
+                        <Component
+                          {...props}
+                          context={appContext}
+                          action={subItem.key}
+                        />
+                      );
+                    }}
+                  />
+                );
+              });
+            }
+            return (
+              <Route
+                key={action.key}
+                path={`/${appContext.appId}/${action.key}`}
+                render={(props) => {
+                  const Component = action.component;
+                  setCurrentPage(action.key);
+                  return (
+                    <Component
+                      {...props}
+                      context={appContext}
+                      action={action.key}
+                    />
+                  );
+                }}
+              />
+            );
+          })}
+          {subItems.length > 0 && subItems.map((subItem) => subItem)}
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route
               path={`/${appContext.appId}/settings`}
@@ -213,93 +239,30 @@ const ActionMenu: React.FC<{
                         </ListSubheader>
                       )}
                     </motion.div>
-                    {actions.map((action) => {
-                      const ActionIcon: React.FC<{ style }> = action.icon;
-
-                      return (
-                        <motion.div variants={item} key={action.key}>
-                          <Link
-                            className={styles.actionLink}
-                            to={`/${context.app.data.id}/${action.key}`}
-                          >
-                            <ListItem
-                              button
-                              selected={currentPage === action.key}
-                            >
-                              {ActionIcon && (
-                                <ListItemIcon>
-                                  <Icon
-                                    style={{
-                                      color:
-                                        gTheme.palette.type === "dark" &&
-                                        "white",
-                                    }}
-                                    color={
-                                      gTheme.palette.type === "light" &&
-                                      currentPage === action.key
-                                        ? "primary"
-                                        : "inherit"
-                                    }
-                                  >
-                                    <ActionIcon
-                                      style={{ width: 18, height: 18 }}
-                                    />
-                                  </Icon>
-                                </ListItemIcon>
-                              )}
-                              <ListItemText>
-                                <Typography
-                                  color={
-                                    gTheme.palette.type === "light" &&
-                                    currentPage === action.key
-                                      ? "primary"
-                                      : "inherit"
-                                  }
-                                >
-                                  {action.label}
-                                </Typography>
-                              </ListItemText>
-                            </ListItem>
-                          </Link>
-                        </motion.div>
-                      );
-                    })}
+                    {actions.map((action) => (
+                      <Action
+                        context={context}
+                        item={item}
+                        action={action}
+                        currentPage={currentPage}
+                        gTheme={gTheme}
+                        key={action.key}
+                      />
+                    ))}
                   </div>
                 );
               })
             : typeof actions === "object" &&
-              actions.map((action) => {
-                const ActionIcon: React.FC<{ style }> = action.icon;
-                return (
-                  <motion.div variants={item} key={action.key}>
-                    <Link
-                      className={styles.actionLink}
-                      to={`/${context.app.data.id}/${action.key}`}
-                      style={{ color: "rgb(66, 82, 110)" }}
-                    >
-                      <ListItem button selected={currentPage === action.key}>
-                        {ActionIcon && (
-                          <ListItemIcon>
-                            <Icon
-                              color={
-                                gTheme.palette.type === "light" &&
-                                currentPage === action.key
-                                  ? "primary"
-                                  : "inherit"
-                              }
-                            >
-                              <ActionIcon style={{ width: 18, height: 18 }} />
-                            </Icon>
-                          </ListItemIcon>
-                        )}
-                        <ListItemText className={styles.actionLink}>
-                          {action.label}
-                        </ListItemText>
-                      </ListItem>
-                    </Link>
-                  </motion.div>
-                );
-              })}
+              actions.map((action) => (
+                <Action
+                  context={context}
+                  item={item}
+                  action={action}
+                  currentPage={currentPage}
+                  gTheme={gTheme}
+                  key={action.key}
+                />
+              ))}
         </List>
       </div>
       {context.appConfig && context.appConfig.settings && (
@@ -355,3 +318,89 @@ const ActionMenu: React.FC<{
 };
 
 export default AppUIDesktop;
+
+const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
+  item,
+  action,
+  context,
+  currentPage,
+  gTheme,
+}) => {
+  // Vars
+  const ActionIcon: React.FC<{
+    style;
+  }> = action.icon;
+  const [subItemsVisible, setSubItemsVisible] = useState<boolean>(false);
+
+  // UI
+  return (
+    <motion.div variants={item} key={action.key}>
+      <Link
+        className={styles.actionLink}
+        to={`/${context.app.data.id}/${action.key}`}
+      >
+        <ListItem button selected={currentPage === action.key}>
+          {ActionIcon && (
+            <ListItemIcon>
+              <Icon
+                style={{
+                  color: gTheme.palette.type === "dark" && "white",
+                }}
+                color={
+                  gTheme.palette.type === "light" && currentPage === action.key
+                    ? "primary"
+                    : "inherit"
+                }
+              >
+                <ActionIcon style={{ width: 18, height: 18 }} />
+              </Icon>
+            </ListItemIcon>
+          )}
+          <ListItemText>
+            <Typography
+              color={
+                gTheme.palette.type === "light" && currentPage === action.key
+                  ? "primary"
+                  : "inherit"
+              }
+            >
+              {action.label}
+            </Typography>
+          </ListItemText>
+          {action.subItems && (
+            <ListItemSecondaryAction
+              onClick={(event) => {
+                setSubItemsVisible(!subItemsVisible);
+                event.stopPropagation();
+                event.preventDefault();
+              }}
+            >
+              {subItemsVisible ? <FaChevronUp /> : <FaChevronDown />}
+            </ListItemSecondaryAction>
+          )}
+        </ListItem>
+      </Link>
+      {action.subItems && (
+        <Collapse
+          in={subItemsVisible}
+          timeout="auto"
+          unmountOnExit
+          style={{ marginLeft: 30 }}
+        >
+          <List component="div" disablePadding>
+            {action.subItems.map((subAction) => (
+              <Action
+                context={context}
+                action={subAction}
+                key={subAction.key}
+                currentPage={currentPage}
+                gTheme={gTheme}
+                item={item}
+              />
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </motion.div>
+  );
+};

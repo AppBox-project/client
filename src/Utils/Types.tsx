@@ -197,17 +197,14 @@ export interface AppContextType {
       action?: (close: () => void) => JSX.Element;
     }
   ) => void;
-  actions:
-    | React.FC<{ context: AppContextType }>
-    | [
-        {
-          label: string;
-          key: string;
-          component: FC;
-          icon?: React.FC;
-          group?: string;
-        }
-      ];
+  actions: {
+    label: string;
+    key: string;
+    component: FC;
+    icon?: React.FC;
+    group?: string;
+    subItems: any;
+  }[];
   UI: UIType;
   setButton: (
     buttonId,

@@ -130,3 +130,13 @@
     box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.2);
   }
 }
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .trigger,
+  .triggerAdd,
+  .condition,
+  .step {
+    background-color: #212121;
+  }
+}

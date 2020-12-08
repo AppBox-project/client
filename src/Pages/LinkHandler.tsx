@@ -59,7 +59,6 @@ const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({
                 ? get(object, field, "error")
                 : get(model, field, "error");
             });
-            console.log(`Redirecting to ${link}`);
             history.replace(link);
           });
         } else {

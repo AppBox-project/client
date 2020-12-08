@@ -112,9 +112,7 @@ const AppUIMobile: React.FC<{
         }}
       >
         <Switch>
-          {typeof appContext.actions === "function" ? (
-            <appContext.actions context={appContext} />
-          ) : (
+          {
             //@ts-ignore
             appContext.actions.map((action) => {
               return (
@@ -135,7 +133,7 @@ const AppUIMobile: React.FC<{
                 />
               );
             })
-          )}
+          }
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route
               path={`/${appContext.appId}/settings`}

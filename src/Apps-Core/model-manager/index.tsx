@@ -47,7 +47,7 @@ export default class App {
               resolve([
                 {
                   key: "new",
-                  label: "Add object",
+                  label: "New model",
                   component: AppActionAddObject,
                 },
                 ...actions,

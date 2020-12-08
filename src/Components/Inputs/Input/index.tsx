@@ -1,6 +1,5 @@
 import { TextareaAutosize } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { InputNumber } from "rsuite";
 import styles from "./styles.module.scss";
 
 const InputInput: React.FC<{
@@ -45,34 +44,6 @@ const InputInput: React.FC<{
   }, [value]);
 
   // UI
-  if (type === "number")
-    return (
-      <InputNumber
-        prefix={startAdornment && startAdornment}
-        autoFocus={autoFocus}
-        name={name}
-        style={style}
-        className={styles.input}
-        type={type ? type : "text"}
-        placeholder={placeholder}
-        disabled={readOnly || false}
-        value={newValue}
-        onChange={(value: string) => {
-          setNewValue(parseInt(value));
-          if (onChange && !readOnly) onChange(parseInt(value));
-        }}
-        onKeyDown={(e) => {
-          if (onKeyPress) onKeyPress(newValue);
-          if (e.key === "Enter") {
-            if (onEnter) onEnter(newValue);
-          }
-          if (e.key === "Escape") {
-            if (onEscape) onEscape(newValue);
-          }
-        }}
-      />
-    );
-
   if (type === "textarea")
     return (
       <TextareaAutosize
@@ -102,7 +73,7 @@ const InputInput: React.FC<{
             name={name}
             autoFocus={autoFocus}
             style={style}
-            type={type ? type : "text"}
+            type={type || "text"}
             className={styles.input}
             placeholder={placeholder}
             disabled={readOnly || false}

@@ -85,7 +85,6 @@ const Overview: React.FC<{
   // effect on filter change
   useEffect(() => {
     const objectFilter = {};
-
     filter.map((f) => {
       switch (f.operator) {
         case "equals":
@@ -99,39 +98,42 @@ const Overview: React.FC<{
           break;
       }
     });
-    ((selectedList && model?.lists[selectedList]?.filter) || []).map((f) => {
-      switch (f.operator) {
-        case "equals":
-          objectFilter[`data.${f.key}`] = f.value;
-          break;
-        case "not_equals":
-          objectFilter[`data.${f.key}`] = { $ne: f.value };
-          break;
-        default:
-          console.log(`Unknown operator ${f.operator}`);
-          break;
-      }
-    });
 
-    // Objects
-    const dataRequestId = uniqid();
-    Server.emit("listenForObjects", {
-      requestId: dataRequestId,
-      type: modelId,
-      filter: {
-        ...objectFilter,
-      },
-    });
-    Server.on(`receive-${dataRequestId}`, (response) => {
-      if (response.success) {
-        setObjects(response.data);
-      } else {
-        console.log(response);
-      }
-    });
-    return () => {
-      Server.emit("unlistenForObjects", { requestId: dataRequestId });
-    };
+    if (!(applyList || window.location.hash) || (selectedList && model)) {
+      // Only continue if there is no applyList and no hash, OR a list already selected (prevents duplicate calls)
+      ((selectedList && model?.lists[selectedList]?.filter) || []).map((f) => {
+        switch (f.operator) {
+          case "equals":
+            objectFilter[`data.${f.key}`] = f.value;
+            break;
+          case "not_equals":
+            objectFilter[`data.${f.key}`] = { $ne: f.value };
+            break;
+          default:
+            console.log(`Unknown operator ${f.operator}`);
+            break;
+        }
+      });
+      // Objects
+      const dataRequestId = uniqid();
+      Server.emit("listenForObjects", {
+        requestId: dataRequestId,
+        type: modelId,
+        filter: {
+          ...objectFilter,
+        },
+      });
+      Server.on(`receive-${dataRequestId}`, (response) => {
+        if (response.success) {
+          setObjects(response.data);
+        } else {
+          console.log(response);
+        }
+      });
+      return () => {
+        Server.emit("unlistenForObjects", { requestId: dataRequestId });
+      };
+    }
   }, [filter, selectedList, model]);
 
   // When the hash changes
