@@ -84,6 +84,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
                 <FieldDisplay
                   objectField={object.data[field]}
                   modelField={model.fields[field]}
+                  object={object}
                 />
               </Grid>
             );

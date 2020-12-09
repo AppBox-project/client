@@ -12,6 +12,7 @@ const AppComponentObjectOverviewLayout: React.FC<{
   disableLists?: boolean;
   applyList?: string;
   alternativeTitle?: { single: string; plural: string };
+  detailProps?;
 }> = ({
   context,
   modelId,
@@ -21,35 +22,35 @@ const AppComponentObjectOverviewLayout: React.FC<{
   disableLists,
   applyList,
   alternativeTitle,
-}) => {
-  return (
-    <Switch>
-      <Route
-        path={`${baseUrl}/:objectId`}
-        render={(props) => (
-          <context.UI.Object.Detail
-            modelId={modelId}
-            layoutId={detailId || "default"}
-            context={context}
-            objectId={props.match.params.objectId}
-            baseUrl={baseUrl}
-          />
-        )}
-      ></Route>
-
-      <Route path={`${baseUrl}`}>
-        <Overview
-          layoutId={overviewId || "default"}
+  detailProps,
+}) => (
+  <Switch>
+    <Route
+      path={`${baseUrl}/:objectId`}
+      render={(props) => (
+        <context.UI.Object.Detail
           modelId={modelId}
+          layoutId={detailId || "default"}
           context={context}
+          objectId={props.match.params.objectId}
           baseUrl={baseUrl}
-          applyList={applyList}
-          disableLists={disableLists}
-          alternativeTitle={alternativeTitle}
+          {...(detailProps || {})}
         />
-      </Route>
-    </Switch>
-  );
-};
+      )}
+    ></Route>
+
+    <Route path={`${baseUrl}`}>
+      <Overview
+        layoutId={overviewId || "default"}
+        modelId={modelId}
+        context={context}
+        baseUrl={baseUrl}
+        applyList={applyList}
+        disableLists={disableLists}
+        alternativeTitle={alternativeTitle}
+      />
+    </Route>
+  </Switch>
+);
 
 export default AppComponentObjectOverviewLayout;

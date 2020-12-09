@@ -598,6 +598,7 @@ export interface CustomFieldType {
   value;
   context: AppContextType;
   onChange?: (newValue) => void;
+  fullObject: ObjectType;
 }
 
 export interface CustomLayoutElementType {
@@ -605,6 +606,7 @@ export interface CustomLayoutElementType {
   context: AppContextType;
   layoutItem;
   object: ObjectType;
+  fullObject: ObjectType;
 }
 
 export interface PersonType {

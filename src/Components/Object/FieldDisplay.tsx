@@ -8,7 +8,7 @@ import ObjectFieldDisplayColor from "./FieldDisplay/Color";
 import ObjectFieldDisplayRelationshipM from "./FieldDisplay/Relationship_m";
 import ObjectFieldDisplayFile from "./FieldDisplay/File";
 import ObjectFieldDisplayDate from "./FieldDisplay/Date";
-import { CustomFieldType, AppContextType } from "../../Utils/Types";
+import { CustomFieldType, AppContextType, ObjectType } from "../../Utils/Types";
 import QRCode from "qrcode.react";
 import ObjectFieldDisplayOptions from "./FieldDisplay/Options";
 
@@ -23,6 +23,7 @@ const FieldDisplay: React.FC<{
   small?: true;
   CustomField?: React.FC<CustomFieldType>;
   context?: AppContextType;
+  object: ObjectType;
 }> = ({
   objectField,
   modelField,
@@ -34,6 +35,7 @@ const FieldDisplay: React.FC<{
   small,
   CustomField,
   context,
+  object,
 }) => {
   return (
     <>
@@ -119,7 +121,12 @@ const FieldDisplay: React.FC<{
         <QRCode value={objectField} size={small && 50} />
       )}
       {modelField.type === "custom" && (
-        <CustomField mode="view" value={objectField} context={context} />
+        <CustomField
+          mode="view"
+          value={objectField}
+          context={context}
+          fullObject={object}
+        />
       )}
       {modelField.type === "formula" &&
         (!(modelField.typeArgs || {}).type ||

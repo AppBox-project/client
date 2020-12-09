@@ -593,6 +593,7 @@ const ViewObject: React.FC<{
                         objectField={appliedObject.data[fact]}
                         modelField={field}
                         small
+                        object={object}
                       />
                     </Typography>
                   </Grid>
@@ -605,6 +606,7 @@ const ViewObject: React.FC<{
     </AnimationItem>
   );
 
+  if (!appliedObject) return <context.UI.Loading />;
   return (
     <div
       style={{ height: "100%" }}

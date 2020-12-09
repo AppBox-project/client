@@ -35,8 +35,8 @@ const AppActionManageObjectTabFields: React.FC<{
           display: true,
           title: "New field",
           form: [
-            { key: "key", label: "Field key" },
             { key: "name", label: "Field name" },
+            { key: "key", label: "Field key" },
           ],
           buttons: [
             {

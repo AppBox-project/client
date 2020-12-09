@@ -152,6 +152,7 @@ const ObjectLayoutItemRelatedList: React.FC<{
                       layoutItem={layoutItem}
                       key={item._id}
                       model={relatedModel}
+                      object={object}
                     />
                   );
                 })}
@@ -187,6 +188,7 @@ const ObjectLayoutItemRelatedList: React.FC<{
                                   history={history}
                                   layoutItem={layoutItem}
                                   model={relatedModel}
+                                  object={object}
                                 />
                               );
                             })}
@@ -245,13 +247,14 @@ const MaybeCard: React.FC<{
     <>{children}</>
   );
 
-const ResultRow: React.FC<{ item; history; layoutItem; key; model }> = ({
-  item,
-  history,
-  layoutItem,
-  key,
-  model,
-}) => {
+const ResultRow: React.FC<{
+  item;
+  history;
+  layoutItem;
+  key;
+  model;
+  object;
+}> = ({ item, history, layoutItem, key, model, object }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const Icon = icons[model.icon ? model.icon : "FaTags"];
 
@@ -285,6 +288,7 @@ const ResultRow: React.FC<{ item; history; layoutItem; key; model }> = ({
               <FieldDisplay
                 objectField={item.data[field]}
                 modelField={model.fields[field]}
+                object={object}
               />
             </TableCell>
           );

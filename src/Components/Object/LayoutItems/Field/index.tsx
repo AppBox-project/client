@@ -58,8 +58,10 @@ const ObjectLayoutItemField: React.FC<{
   );
   // Lifecycle
   useEffect(() => {
-    setObjectField(object ? object.data[layoutItem.field] : "");
-  }, [object]);
+    setObjectField(
+      toChange[layoutItem.field] || object.data[layoutItem.field] || ""
+    );
+  }, [object, toChange]);
   useEffect(() => {
     setModelField(model.fields[layoutItem.field]);
   }, [model]);
@@ -104,6 +106,7 @@ const ObjectLayoutItemField: React.FC<{
             modelField={modelField}
             CustomField={CustomField}
             context={context}
+            object={object}
           />
         ) : (
           <Grid
@@ -124,6 +127,7 @@ const ObjectLayoutItemField: React.FC<{
                 modelField={modelField}
                 CustomField={CustomField}
                 context={context}
+                object={object}
               />
             </Grid>
           </Grid>
@@ -139,9 +143,11 @@ const ObjectLayoutItemField: React.FC<{
               layoutItem.field in toChange && ` ${styles.toChange}`
             }`}
           >
-            <Typography variant="body1" className={styles.titleEdit}>
-              {modelField.name}
-            </Typography>
+            {!layoutItem.noLabel && (
+              <Typography variant="body1" className={styles.titleEdit}>
+                {modelField.name}
+              </Typography>
+            )}
             {modelField.type === "formula" && (
               <div style={{ textAlign: "center" }}>
                 <ObjectFieldDisplayInput
@@ -286,6 +292,7 @@ const ObjectLayoutItemField: React.FC<{
                 value={objectField}
                 context={context}
                 onChange={onChange}
+                fullObject={object}
               />
             )}
           </div>

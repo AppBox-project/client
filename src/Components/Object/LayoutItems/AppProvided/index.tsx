@@ -1,7 +1,4 @@
 import React from "react";
-import { Tabs, makeStyles, Tab } from "@material-ui/core";
-import Loading from "../../../Loading";
-import { useHistory } from "react-router-dom";
 import {
   CustomLayoutElementType,
   AppContextType,
@@ -28,6 +25,7 @@ const ObjectLayoutItemAppProvided: React.FC<{
       mode={mode}
       layoutItem={layoutItem}
       object={object}
+      fullObject={object}
     />
   );
 };

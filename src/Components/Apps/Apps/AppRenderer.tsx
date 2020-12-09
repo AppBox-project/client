@@ -284,6 +284,7 @@ const App: React.FC<{
                         ...dialog,
                         display: false,
                       });
+                      setDialogFormContent({});
                       button.onClick({
                         ...defaultDialogContent,
                         ...dialogFormContent,

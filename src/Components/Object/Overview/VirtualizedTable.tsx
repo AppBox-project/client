@@ -176,6 +176,7 @@ const ReactVirtualizedTable: React.FC<{
                               });
                             }
                           }}
+                          object={rowData}
                         />
                       </TableCell>
                     );
