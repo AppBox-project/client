@@ -261,6 +261,8 @@ const ViewObject: React.FC<{
             console.log(response);
           }
         });
+      } else {
+        setObject({});
       }
     }
 
@@ -340,7 +342,7 @@ const ViewObject: React.FC<{
 
   useEffect(() => {
     if (appliedObject && appliedModel) {
-      setPageTitle(appliedObject.data[appliedModel.primary]);
+      setPageTitle((appliedObject?.data || {})[appliedModel.primary]);
     }
 
     map(appliedModel?.fields || {}, (field, key) => {
@@ -386,6 +388,7 @@ const ViewObject: React.FC<{
   }, [appliedModel, layoutId, appliedObject]);
 
   // UI
+
   if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
   const layout: LayoutType = appliedModel.layouts[layoutId || "default"];
 

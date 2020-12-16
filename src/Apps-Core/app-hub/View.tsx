@@ -40,7 +40,7 @@ const AppHubApp: React.FC<{
   useEffect(() => {
     context
       .getDataFromExternalApi(
-        `https://appbox.vicvancooten.nl/api/appbox-app/read/?baseUrl=base&key=${appId}`
+        `https://box.vtvc.nl/api/appbox-app/read/?baseUrl=base&key=${appId}`
       )
       .then((data: StoreAppType) => setApp(data[0]))
       .catch((err) => console.error(err));

@@ -28,6 +28,7 @@ import nunjucks from "../../../Utils/Nunjucks";
 import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
 import Axios from "axios";
 import InputColor from "../../Inputs/Color";
+import PageLayouts from "./AppUI/PageLayouts";
 
 export class AppContext {
   appId: string;
@@ -77,6 +78,7 @@ export class AppContext {
     this.UI = {
       Loading,
       Margin: Margin,
+      PageLayouts,
       Design: {
         Card,
       },
@@ -294,7 +296,6 @@ export class AppContext {
         if (response.success) {
           then(response);
         } else {
-          console.log("Query failed: ", response.reason);
           if (response.reason === "no-permission-app") {
             this.setDialog({
               display: true,

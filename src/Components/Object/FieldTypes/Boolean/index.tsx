@@ -24,7 +24,7 @@ const FieldTypeBoolean: React.FC<{
 }) => {
   // Hooks
   const [newValue, setNewValue] = useState<boolean>(
-    value !== undefined ? value : object?.data[fieldKey]
+    value || (object?.data || {})[fieldKey]
   );
   // Lifecycle
   useEffect(() => {
@@ -34,7 +34,7 @@ const FieldTypeBoolean: React.FC<{
         : field.default === "true"
         ? true
         : false;
-    setNewValue(value ? value : object?.data[fieldKey] || defaultValue);
+    setNewValue(value || (object?.data || {})[fieldKey] || defaultValue);
   }, [fieldKey]);
 
   // UI

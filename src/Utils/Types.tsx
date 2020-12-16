@@ -369,6 +369,28 @@ export interface ListDetailItemType {
 export interface UIType {
   Loading: React.FC<{ label?: string }>;
   Margin: React.FC;
+  PageLayouts: {
+    CenteredBlock: React.FC<{
+      children;
+      title?: string;
+      width?:
+        | boolean
+        | "auto"
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12;
+      centered?: true;
+    }>;
+  };
   Animations: {
     AnimationContainer: React.FC<{ style?: CSSProperties }>;
     AnimationItem: React.FC<{ style?: CSSProperties }>;

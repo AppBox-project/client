@@ -15,12 +15,7 @@ import {
   ListItemSecondaryAction,
   Collapse,
 } from "@material-ui/core";
-import {
-  FaCaretDown,
-  FaChevronDown,
-  FaChevronUp,
-  FaWrench,
-} from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaWrench } from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import { map } from "lodash";
@@ -45,7 +40,11 @@ const AppUIDesktop: React.FC<{
     };
   }, [appContext.app]);
   const subItems = [];
+
   // UI
+  let SingleAction: React.FC<{ context: AppContextType }>;
+  if (typeof appContext.actions === "function")
+    SingleAction = appContext.actions;
   return (
     <>
       {typeof appContext.actions === "object" &&
@@ -62,46 +61,50 @@ const AppUIDesktop: React.FC<{
         }
       >
         <Switch>
-          {appContext.actions.map((action) => {
-            if (action.subItems) {
-              action.subItems.map((subItem) => {
-                subItems.push(
-                  <Route
-                    key={subItem.key}
-                    path={`/${appContext.appId}/${subItem.key}`}
-                    render={(props) => {
-                      const Component = subItem.component;
-                      setCurrentPage(subItem.key);
-                      return (
-                        <Component
-                          {...props}
-                          context={appContext}
-                          action={subItem.key}
-                        />
-                      );
-                    }}
-                  />
-                );
-              });
-            }
-            return (
-              <Route
-                key={action.key}
-                path={`/${appContext.appId}/${action.key}`}
-                render={(props) => {
-                  const Component = action.component;
-                  setCurrentPage(action.key);
-                  return (
-                    <Component
-                      {...props}
-                      context={appContext}
-                      action={action.key}
+          {SingleAction ? (
+            <SingleAction context={appContext} />
+          ) : (
+            appContext.actions.map((action) => {
+              if (action.subItems) {
+                action.subItems.map((subItem) => {
+                  subItems.push(
+                    <Route
+                      key={subItem.key}
+                      path={`/${appContext.appId}/${subItem.key}`}
+                      render={(props) => {
+                        const Component = subItem.component;
+                        setCurrentPage(subItem.key);
+                        return (
+                          <Component
+                            {...props}
+                            context={appContext}
+                            action={subItem.key}
+                          />
+                        );
+                      }}
                     />
                   );
-                }}
-              />
-            );
-          })}
+                });
+              }
+              return (
+                <Route
+                  key={action.key}
+                  path={`/${appContext.appId}/${action.key}`}
+                  render={(props) => {
+                    const Component = action.component;
+                    setCurrentPage(action.key);
+                    return (
+                      <Component
+                        {...props}
+                        context={appContext}
+                        action={action.key}
+                      />
+                    );
+                  }}
+                />
+              );
+            })
+          )}
           {subItems.length > 0 && subItems.map((subItem) => subItem)}
           {appContext.appConfig && appContext.appConfig.settings && (
             <Route

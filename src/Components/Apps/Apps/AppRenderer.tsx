@@ -118,7 +118,22 @@ const App: React.FC<{
   }, [gPage]);
 
   //UI
-  if (!appContext) return <Loading />;
+  if (!appContext) {
+    if (dialog) {
+      // In case we need to ask for permission during initalisation phase.
+      return (
+        <DialogPopup
+          dialog={dialog}
+          setDialog={setDialog}
+          setDialogFormContent={setDialogFormContent}
+          appContext={appContext}
+          dialogFormContent={dialogFormContent}
+        />
+      );
+    } else {
+      return <Loading />;
+    }
+  }
   return (
     <>
       <Hidden xsDown>
@@ -136,168 +151,13 @@ const App: React.FC<{
         />
       </Hidden>
       {dialog !== undefined && (
-        <Dialog
-          PaperComponent={Card}
-          PaperProps={{
-            // @ts-ignore
-            title: dialog.title,
-            hoverable: true,
-            style: {
-              margin: 0,
-              backgroundImage: dialog.background && `url(${dialog.background})`,
-              backgroundSize: "cover",
-              ...(dialog.style || {}),
-            },
-          }}
-          onClose={() => {
-            setDialog({ ...dialog, display: false });
-            if (dialog.onClose) dialog.onClose();
-          }}
-          aria-labelledby="simple-dialog-title"
-          open={dialog.display}
-          maxWidth={dialog.size ? dialog.size : "sm"}
-          fullWidth
-        >
-          {dialog.content && (
-            <DialogContent
-              style={{
-                padding: "8px 0",
-              }}
-            >
-              {dialog.content}
-            </DialogContent>
-          )}
-          {dialog.form && (
-            <Grid container style={{ width: "90%", marginLeft: 25 }}>
-              {dialog.form.map((formItem) => {
-                let display = formItem.onlyDisplayWhen ? false : true;
-                if (!display) {
-                  map(formItem.onlyDisplayWhen, (v, k) => {
-                    const depItem = find(dialog.form, (o) => o.key === k);
-                    if ((dialogFormContent[k] || depItem?.value || "") === v)
-                      display = true;
-                  });
-                }
-                return display ? (
-                  <Grid
-                    item
-                    xs={formItem.xs ? formItem.xs : 12}
-                    key={formItem.key}
-                  >
-                    {(!formItem.type ||
-                      formItem.type === "text" ||
-                      formItem.type === "number") && (
-                      <TextInput
-                        label={formItem.label}
-                        type={
-                          formItem.type
-                            ? formItem.type === "number"
-                              ? formItem.type
-                              : "text"
-                            : "text"
-                        }
-                        value={
-                          dialogFormContent[formItem.key] || formItem.value
-                        }
-                        onChange={(value) => {
-                          setDialogFormContent({
-                            ...dialogFormContent,
-                            [formItem.key]: value,
-                          });
-                        }}
-                      />
-                    )}
-                    {formItem.type === "dropdown" && (
-                      <InputSelect
-                        options={formItem.dropdownOptions}
-                        label={formItem.label}
-                        value={
-                          dialogFormContent[formItem.key] || formItem.value
-                        }
-                        onChange={(value) => {
-                          setDialogFormContent({
-                            ...dialogFormContent,
-                            [formItem.key]: value,
-                          });
-                        }}
-                      />
-                    )}
-
-                    {formItem.type === "boolean" && (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            color="primary"
-                            onChange={(e) => {
-                              setDialogFormContent({
-                                ...dialogFormContent,
-                                [formItem.key]: e.target.checked,
-                              });
-                            }}
-                            checked={
-                              dialogFormContent[formItem.key] === undefined
-                                ? formItem.value
-                                : dialogFormContent[formItem.key]
-                            }
-                          />
-                        }
-                        label={formItem.label}
-                      />
-                    )}
-                    {formItem.type === "custom" && (
-                      <formItem.customInput
-                        {...(formItem.customInputProps || {})}
-                        context={appContext}
-                        value={
-                          dialogFormContent
-                            ? dialogFormContent[formItem.key] || formItem.value
-                            : formItem.value
-                        }
-                        onChange={(value) => {
-                          setDialogFormContent({
-                            ...dialogFormContent,
-                            [formItem.key]: value,
-                          });
-                        }}
-                      />
-                    )}
-                  </Grid>
-                ) : (
-                  <></>
-                );
-              })}
-            </Grid>
-          )}
-          {dialog.buttons && (
-            <DialogActions>
-              {dialog.buttons.map((button, index) => {
-                return (
-                  <Button
-                    key={index}
-                    onClick={() => {
-                      const defaultDialogContent = {};
-                      (dialog.form || []).map((formItem) => {
-                        defaultDialogContent[formItem.key] = formItem.value;
-                      });
-
-                      setDialog({
-                        ...dialog,
-                        display: false,
-                      });
-                      setDialogFormContent({});
-                      button.onClick({
-                        ...defaultDialogContent,
-                        ...dialogFormContent,
-                      });
-                    }}
-                  >
-                    {button.label}
-                  </Button>
-                );
-              })}
-            </DialogActions>
-          )}
-        </Dialog>
+        <DialogPopup
+          dialog={dialog}
+          setDialog={setDialog}
+          setDialogFormContent={setDialogFormContent}
+          appContext={appContext}
+          dialogFormContent={dialogFormContent}
+        />
       )}
       <Snackbar
         anchorOrigin={{
@@ -321,3 +181,172 @@ const App: React.FC<{
 };
 
 export default App;
+
+const DialogPopup: React.FC<{
+  dialog;
+  setDialog;
+  dialogFormContent;
+  setDialogFormContent;
+  appContext;
+}> = ({
+  dialog,
+  setDialog,
+  dialogFormContent,
+  setDialogFormContent,
+  appContext,
+}) => (
+  <Dialog
+    PaperComponent={Card}
+    PaperProps={{
+      title: dialog.title, // @ts-ignore
+
+      hoverable: true,
+      style: {
+        margin: 0,
+        backgroundImage: dialog.background && `url(${dialog.background})`,
+        backgroundSize: "cover",
+        ...(dialog.style || {}),
+      },
+    }}
+    onClose={() => {
+      setDialog({ ...dialog, display: false });
+      if (dialog.onClose) dialog.onClose();
+    }}
+    aria-labelledby="simple-dialog-title"
+    open={dialog.display}
+    maxWidth={dialog.size ? dialog.size : "sm"}
+    fullWidth
+  >
+    {dialog.content && (
+      <DialogContent
+        style={{
+          padding: "8px 0",
+        }}
+      >
+        {dialog.content}
+      </DialogContent>
+    )}
+    {dialog.form && (
+      <Grid container style={{ width: "90%", marginLeft: 25 }}>
+        {dialog.form.map((formItem) => {
+          let display = formItem.onlyDisplayWhen ? false : true;
+          if (!display) {
+            map(formItem.onlyDisplayWhen, (v, k) => {
+              const depItem = find(dialog.form, (o) => o.key === k);
+              if ((dialogFormContent[k] || depItem?.value || "") === v)
+                display = true;
+            });
+          }
+          return display ? (
+            <Grid item xs={formItem.xs ? formItem.xs : 12} key={formItem.key}>
+              {(!formItem.type ||
+                formItem.type === "text" ||
+                formItem.type === "number") && (
+                <TextInput
+                  label={formItem.label}
+                  type={
+                    formItem.type
+                      ? formItem.type === "number"
+                        ? formItem.type
+                        : "text"
+                      : "text"
+                  }
+                  value={dialogFormContent[formItem.key] || formItem.value}
+                  onChange={(value) => {
+                    setDialogFormContent({
+                      ...dialogFormContent,
+                      [formItem.key]: value,
+                    });
+                  }}
+                />
+              )}
+              {formItem.type === "dropdown" && (
+                <InputSelect
+                  options={formItem.dropdownOptions}
+                  label={formItem.label}
+                  value={dialogFormContent[formItem.key] || formItem.value}
+                  onChange={(value) => {
+                    setDialogFormContent({
+                      ...dialogFormContent,
+                      [formItem.key]: value,
+                    });
+                  }}
+                />
+              )}
+
+              {formItem.type === "boolean" && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="primary"
+                      onChange={(e) => {
+                        setDialogFormContent({
+                          ...dialogFormContent,
+                          [formItem.key]: e.target.checked,
+                        });
+                      }}
+                      checked={
+                        dialogFormContent[formItem.key] === undefined
+                          ? formItem.value
+                          : dialogFormContent[formItem.key]
+                      }
+                    />
+                  }
+                  label={formItem.label}
+                />
+              )}
+              {formItem.type === "custom" && (
+                <formItem.customInput
+                  {...(formItem.customInputProps || {})}
+                  context={appContext}
+                  value={
+                    dialogFormContent
+                      ? dialogFormContent[formItem.key] || formItem.value
+                      : formItem.value
+                  }
+                  onChange={(value) => {
+                    setDialogFormContent({
+                      ...dialogFormContent,
+                      [formItem.key]: value,
+                    });
+                  }}
+                />
+              )}
+            </Grid>
+          ) : (
+            <></>
+          );
+        })}
+      </Grid>
+    )}
+    {dialog.buttons && (
+      <DialogActions>
+        {dialog.buttons.map((button, index) => {
+          return (
+            <Button
+              key={index}
+              onClick={() => {
+                const defaultDialogContent = {};
+                (dialog.form || []).map((formItem) => {
+                  defaultDialogContent[formItem.key] = formItem.value;
+                });
+
+                setDialog({
+                  ...dialog,
+                  display: false,
+                });
+                setDialogFormContent({});
+                button.onClick({
+                  ...defaultDialogContent,
+                  ...dialogFormContent,
+                });
+              }}
+            >
+              {button.label}
+            </Button>
+          );
+        })}
+      </DialogActions>
+    )}
+  </Dialog>
+);

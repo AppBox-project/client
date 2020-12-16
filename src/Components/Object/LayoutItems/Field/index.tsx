@@ -54,12 +54,12 @@ const ObjectLayoutItemField: React.FC<{
     model.fields[layoutItem.field]
   );
   const [objectField, setObjectField] = useState<any>(
-    object?.data[layoutItem.field]
+    (object?.data || {})[layoutItem.field]
   );
   // Lifecycle
   useEffect(() => {
     setObjectField(
-      toChange[layoutItem.field] || object.data[layoutItem.field] || ""
+      toChange[layoutItem.field] || (object?.data || {})[layoutItem.field] || ""
     );
   }, [object, toChange]);
   useEffect(() => {

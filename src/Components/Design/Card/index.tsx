@@ -79,6 +79,7 @@ const Card: React.FC<CardProps> = ({
         overflow: overflow ? overflow : !image && "auto",
         padding: withoutPadding && 0,
         marginRight: withBigMargin ? 15 : withSmallMargin ? 5 : 0, // Unsure why this is required
+        ...(onClick && { cursor: "pointer" }),
       }}
     >
       {image && (

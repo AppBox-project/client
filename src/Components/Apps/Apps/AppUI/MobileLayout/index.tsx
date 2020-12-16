@@ -73,6 +73,11 @@ const AppUIMobile: React.FC<{
     }
   }
 
+  // UI
+  let SingleAction: React.FC<{ context: AppContextType }>;
+  if (typeof appContext.actions === "function")
+    SingleAction = appContext.actions;
+
   return (
     <>
       {appContext.app.data.menu_type !== "hidden" &&
@@ -111,50 +116,54 @@ const AppUIMobile: React.FC<{
               "bottom-navigation" && 54,
         }}
       >
-        <Switch>
-          {
-            //@ts-ignore
-            appContext.actions.map((action) => {
-              return (
-                <Route
-                  key={action.key}
-                  path={`/${appContext.appId}/${action.key}`}
-                  render={(props) => {
-                    const Component = action.component;
-                    setCurrentPage(action.key);
-                    return (
-                      <Component
-                        {...props}
-                        context={appContext}
-                        action={action.key}
-                      />
-                    );
-                  }}
-                />
-              );
-            })
-          }
-          {appContext.appConfig && appContext.appConfig.settings && (
-            <Route
-              path={`/${appContext.appId}/settings`}
-              render={(props) => {
+        {SingleAction ? (
+          <SingleAction context={appContext} />
+        ) : (
+          <Switch>
+            {
+              //@ts-ignore
+              appContext.actions.map((action) => {
                 return (
-                  <appContext.appConfig.settings
-                    context={appContext}
-                    {...props}
+                  <Route
+                    key={action.key}
+                    path={`/${appContext.appId}/${action.key}`}
+                    render={(props) => {
+                      const Component = action.component;
+                      setCurrentPage(action.key);
+                      return (
+                        <Component
+                          {...props}
+                          context={appContext}
+                          action={action.key}
+                        />
+                      );
+                    }}
                   />
                 );
-              }}
-            />
-          )}
-          {appContext.onNoAction && (
-            <Route
-              render={(props) => (
-                <appContext.onNoAction {...props} context={appContext} />
-              )}
-            />
-          )}
-        </Switch>
+              })
+            }
+            {appContext.appConfig && appContext.appConfig.settings && (
+              <Route
+                path={`/${appContext.appId}/settings`}
+                render={(props) => {
+                  return (
+                    <appContext.appConfig.settings
+                      context={appContext}
+                      {...props}
+                    />
+                  );
+                }}
+              />
+            )}
+            {appContext.onNoAction && (
+              <Route
+                render={(props) => (
+                  <appContext.onNoAction {...props} context={appContext} />
+                )}
+              />
+            )}
+          </Switch>
+        )}
         {appContext.appConfig?.actions?.mobile?.displayAs === "menu" && (
           <SwipeableDrawer
             anchor="right"
