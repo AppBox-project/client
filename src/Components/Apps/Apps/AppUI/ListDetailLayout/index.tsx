@@ -27,6 +27,7 @@ import ListDetailLayoutSkeleton from "./LoadingSkeleton";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { find } from "lodash";
 import Card from "../../../../Design/Card";
+import FaIcon from "../../../../Icons";
 
 /*
  * This UI element provides a lay-out that consists of a list of items and a detail component.
@@ -321,7 +322,6 @@ const ListItemObject: React.FC<{
 }) => {
   const object = objects ? find(objects, (o) => o._id === listItem.id) : false;
   const [gTheme] = useGlobal<any>("theme");
-
   return (
     <Link to={`${baseUrl}/${listItem.id}`}>
       <ListItem button selected={selectedItem === listItem.id}>
@@ -331,7 +331,7 @@ const ListItemObject: React.FC<{
         {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
         {listItem.icon && (
           <ListItemIcon>
-            <listItem.icon />
+            <FaIcon icon={listItem.icon} />
           </ListItemIcon>
         )}
         {imageField && object && object.data[imageField] && (

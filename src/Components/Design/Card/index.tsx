@@ -11,7 +11,7 @@ import {
 export interface CardProps {
   children;
   hoverable?: true | boolean;
-  title?: string;
+  title?: string | any;
   style?;
   centerTitle?: true;
   titleDivider?: true;

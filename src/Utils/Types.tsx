@@ -246,7 +246,7 @@ export interface AppContextType {
   ) => AppRequestController;
   callBackendAction: (action, args) => void;
   archiveObject: (modelId: string, objectId: string) => Promise<string | null>;
-  requestServerAction: (action: string, args) => Promise<any>;
+  requestServerAction: (action: string, args: {}) => Promise<any>;
   getAppSettings: (key: string) => Promise<{}>;
   setAppSettings: (key: string, value: any) => Promise<void>;
   formatString: (text: string, data: {}) => string;
@@ -367,6 +367,7 @@ export interface ListDetailItemType {
 }
 
 export interface UIType {
+  Icon: React.FC<{ icon: string }>;
   Loading: React.FC<{ label?: string }>;
   Margin: React.FC;
   PageLayouts: {
@@ -523,6 +524,14 @@ export interface UIType {
   }>;
 
   Inputs: {
+    Checkboxes: React.FC<{
+      label?: string;
+      value?: string;
+      onChange?: (value: string) => void;
+      readOnly?: boolean;
+      type?: "radio" | "checkbox";
+      options: { value; label: string }[];
+    }>;
     Select: React.FC<{
       label?: string;
       options: { value; label: string }[];

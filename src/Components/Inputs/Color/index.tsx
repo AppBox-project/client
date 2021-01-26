@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import { ChromePicker } from "react-color";
+import { Typography } from "@material-ui/core";
 
 const InputColor: React.FC<{
   placeholder?: string;
@@ -22,15 +23,18 @@ const InputColor: React.FC<{
   // UI
 
   return (
-    <ChromePicker
-      color={newValue}
-      onChange={(color) => {
-        setNewValue(color.hex);
-      }}
-      onChangeComplete={(color) => {
-        if (onChange) onChange(color.rgb);
-      }}
-    />
+    <>
+      {label && <Typography variant="body2">{label}</Typography>}
+      <ChromePicker
+        color={newValue}
+        onChange={(color) => {
+          setNewValue(color.hex);
+        }}
+        onChangeComplete={(color) => {
+          if (onChange) onChange(color.rgb);
+        }}
+      />
+    </>
   );
 };
 

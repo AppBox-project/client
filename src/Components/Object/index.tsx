@@ -347,7 +347,9 @@ const ViewObject: React.FC<{
 
     map(appliedModel?.fields || {}, (field, key) => {
       if (field.typeArgs?.asBanner) {
-        context.setImage(appliedObject?.data[key]);
+        if (appliedObject?.data) {
+          context.setImage(appliedObject?.data[key]);
+        }
       }
       if (field.typeArgs?.asColor) {
         context.setColor(appliedObject?.data[key]);

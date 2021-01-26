@@ -29,6 +29,8 @@ import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
 import Axios from "axios";
 import InputColor from "../../Inputs/Color";
 import PageLayouts from "./AppUI/PageLayouts";
+import InputCheckboxes from "../../../Components/Inputs/Checkboxes";
+import FaIcon from "../../Icons";
 
 export class AppContext {
   appId: string;
@@ -76,6 +78,7 @@ export class AppContext {
     this.setSnackbar = setSnackbar;
     this.setSessionVariables = setSessionVariables;
     this.UI = {
+      Icon: FaIcon,
       Loading,
       Margin: Margin,
       PageLayouts,
@@ -89,6 +92,7 @@ export class AppContext {
       Animations: { AnimationContainer, AnimationItem, Animation },
       Inputs: {
         ...Forms,
+        Checkboxes: InputCheckboxes,
         Switch: InputSwitch,
         RichText: InputRichText,
         Select: InputSelect,
@@ -199,7 +203,10 @@ export class AppContext {
       appId: this.appId,
     });
     Server.on(`receive-${requestId}`, (response) => {
-      console.log(response);
+      if (!response.success) {
+        console.log(response);
+      }
+      then(response);
     });
   };
 
@@ -658,10 +665,10 @@ export class AppContext {
       });
     });
 
-  requestServerAction = (action, args) =>
+  requestServerAction = (action: string, args: {}) =>
     new Promise((resolve, reject) => {
       const requestId = uniqid();
-      Server.emit("requestAction", {
+      Server.emit("performBackendAction", {
         action,
         args,
         requestId,
