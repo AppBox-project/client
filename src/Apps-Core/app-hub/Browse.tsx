@@ -25,7 +25,7 @@ const AppHubBrowse: React.FC<{
   useEffect(() => {
     context
       .getDataFromExternalApi(
-        "https://appbox.vicvancooten.nl/api/appbox-app/read?baseUrl=base"
+        "https://box.vtvc.nl/api/appbox-app/read?baseUrl=base"
       )
       .then((data: StoreAppType[]) => setApps(data))
       .catch((err) => console.log(err));
