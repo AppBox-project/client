@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.3-6",
-  "description": "Object logic change",
+  "version": "0.2.3-7",
+  "description": "Support for publisher",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
