@@ -220,7 +220,8 @@ const DialogPopup: React.FC<{
     {dialog.content && (
       <DialogContent
         style={{
-          padding: "8px 0",
+          padding: 0,
+          paddingTop: 8,
         }}
       >
         {dialog.content}

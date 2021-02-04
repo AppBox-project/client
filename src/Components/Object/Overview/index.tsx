@@ -186,7 +186,14 @@ const Overview: React.FC<{
         }}
         aria-labelledby="form-dialog-title"
       >
-        <DialogContent>{dialogContent}</DialogContent>
+        <DialogContent
+          style={{
+            padding: 0,
+            paddingTop: 8,
+          }}
+        >
+          {dialogContent}
+        </DialogContent>
       </Dialog>
       <AnimationContainer>
         <AnimationItem>

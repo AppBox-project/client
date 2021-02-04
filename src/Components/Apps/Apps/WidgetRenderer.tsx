@@ -100,7 +100,16 @@ const WidgetRenderer: React.FC<{
           {dialog.title && (
             <DialogTitle id="dialog-title">{dialog.title}</DialogTitle>
           )}
-          {dialog.content && <DialogContent>{dialog.content}</DialogContent>}
+          {dialog.content && (
+            <DialogContent
+              style={{
+                padding: 0,
+                paddingTop: 8,
+              }}
+            >
+              {dialog.content}
+            </DialogContent>
+          )}
           {dialog.form && (
             <Grid container style={{ width: "90%", marginLeft: 25 }}>
               {dialog.form.map((formItem) => {

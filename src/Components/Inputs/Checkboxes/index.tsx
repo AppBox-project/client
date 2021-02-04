@@ -26,7 +26,6 @@ const InputCheckboxes: React.FC<{
   }, [value]);
 
   // UI
-
   return (
     <div>
       {type === "checkbox" ? (

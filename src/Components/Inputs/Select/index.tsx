@@ -3,6 +3,7 @@ import { useGlobal } from "reactn";
 import Select from "react-select";
 import { find } from "lodash";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import InputCheckboxes from "../Checkboxes";
 
 const InputSelect: React.FC<{
   label: string;
@@ -12,7 +13,17 @@ const InputSelect: React.FC<{
   onChange?: (value) => void;
   multiple?: true | boolean;
   style?: CSSProperties;
-}> = ({ label, options, value, isLoading, onChange, multiple, style }) => {
+  display?: "select" | "radio" | "checkbox";
+}> = ({
+  label,
+  options,
+  value,
+  isLoading,
+  onChange,
+  multiple,
+  style,
+  display,
+}) => {
   // Vars
   const [newValue, setNewValue] = useState<string | any[]>();
   const [app] = useGlobal<any>("app");
@@ -20,26 +31,40 @@ const InputSelect: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    if ((options || []).includes(value)) {
-      // We were sent an entire object
-      setNewValue(value);
-    } else {
-      // We were only sent a value, map it!
-      if (Array.isArray(value)) {
-        // Multiple
-        const nv = [];
-        value.map((v) => nv.push(find(options, (o) => o.value === v)));
-        setNewValue(nv);
+    if (display === "select") {
+      if ((options || []).includes(value)) {
+        // We were sent an entire object
+        setNewValue(value);
       } else {
-        // Single
-        setNewValue(find(options, (o) => o.value === value));
+        // We were only sent a value, map it!
+        if (Array.isArray(value)) {
+          // Multiple
+          const nv = [];
+          value.map((v) => nv.push(find(options, (o) => o.value === v)));
+          setNewValue(nv);
+        } else {
+          // Single
+          setNewValue(find(options, (o) => o.value === value));
+        }
       }
+    } else {
+      setNewValue(value);
     }
   }, [value, options]);
 
   // UI
 
-  return (
+  return display === "radio" ? (
+    <InputCheckboxes
+      label={label}
+      options={options}
+      value={newValue as string}
+      onChange={(chosen) => {
+        setNewValue(chosen);
+        if (onChange) onChange(chosen);
+      }}
+    />
+  ) : (
     <Select
       isClearable
       options={options}

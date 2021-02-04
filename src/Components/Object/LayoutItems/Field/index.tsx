@@ -143,11 +143,6 @@ const ObjectLayoutItemField: React.FC<{
               layoutItem.field in toChange && ` ${styles.toChange}`
             }`}
           >
-            {!layoutItem.noLabel && (
-              <Typography variant="body1" className={styles.titleEdit}>
-                {modelField.name}
-              </Typography>
-            )}
             {modelField.type === "formula" && (
               <div style={{ textAlign: "center" }}>
                 <ObjectFieldDisplayInput
@@ -227,6 +222,11 @@ const ObjectLayoutItemField: React.FC<{
                 onChange={(value) => {
                   onChange(value);
                 }}
+                display={
+                  modelField.typeArgs.display === "multi-dropdown"
+                    ? "select"
+                    : modelField.typeArgs.display
+                }
               />
             )}
             {modelField.type === "picture" && (
