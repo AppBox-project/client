@@ -701,6 +701,8 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                 model={model}
                 value={field.conditions || []}
                 onChange={(conditions) => {
+                  console.log(conditions);
+
                   setField({
                     ...field,
                     conditions,

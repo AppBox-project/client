@@ -29,7 +29,7 @@ const App: React.FC<{
   },
   setCurrentApp,
 }) => {
-  const [appContext, setAppcontext] = useState<AppContextType>();
+  const [appContext, setAppcontext] = useState<AppContext>();
   const [currentPage, setCurrentPage] = useState<any>();
   const [dialog, setDialog] = useState<dialogType>();
   const [dialogFormContent, setDialogFormContent] = useState<{}>({});
@@ -49,7 +49,7 @@ const App: React.FC<{
   //Lifecycle
   useEffect(() => {
     setCurrentApp(appId);
-    const context = new AppContext(
+    const context: AppContext = new AppContext(
       appId,
       setDialog,
       appButtons,
@@ -61,7 +61,6 @@ const App: React.FC<{
       }
     );
     context.isReady.then(() => {
-      //@ts-ignore
       setAppcontext(context);
       const newColor = `rgb(${context.app.data.color.r},${context.app.data.color.g},${context.app.data.color.b})`;
       var metaThemeColor = document.querySelector("meta[name=theme-color]");

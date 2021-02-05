@@ -1,5 +1,4 @@
 import React, { useState, useGlobal } from "reactn";
-import { AppContextType } from "../../../../../Utils/Types";
 import { motion } from "framer-motion";
 import { Link, Switch, Route } from "react-router-dom";
 import styles from "./styles.module.scss";
@@ -20,9 +19,10 @@ import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import { map } from "lodash";
 import { useEffect } from "reactn";
+import { AppContext } from "../../AppContext";
 
 const AppUIDesktop: React.FC<{
-  appContext: AppContextType;
+  appContext: AppContext;
   currentPage;
   setCurrentPage;
 }> = ({ appContext, currentPage, setCurrentPage }) => {
@@ -42,7 +42,7 @@ const AppUIDesktop: React.FC<{
   const subItems = [];
 
   // UI
-  let SingleAction: React.FC<{ context: AppContextType }>;
+  let SingleAction: React.FC<{ context: AppContext }>;
   if (typeof appContext.actions === "function")
     SingleAction = appContext.actions;
   return (
@@ -135,7 +135,7 @@ const AppUIDesktop: React.FC<{
 };
 
 const ActionMenu: React.FC<{
-  context: AppContextType;
+  context: AppContext;
   currentPage: string;
 }> = ({ context, currentPage }) => {
   const [filter, setFilter] = useState<any>();

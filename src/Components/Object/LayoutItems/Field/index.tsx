@@ -80,6 +80,10 @@ const ObjectLayoutItemField: React.FC<{
         if (objectField !== condition.value) {
           conditionsMet = false;
         }
+      } else if (condition.operator === "not_equals") {
+        if (objectField === condition.value) {
+          conditionsMet = false;
+        }
       }
     });
   }
@@ -187,7 +191,8 @@ const ObjectLayoutItemField: React.FC<{
                 }}
                 disabled={modelField.typeArgs?.readonly || false}
                 value={objectField}
-                mode="free"
+                mode={mode}
+                label={modelField.name}
                 field={modelField}
                 object={object}
                 fieldKey={layoutItem.field}

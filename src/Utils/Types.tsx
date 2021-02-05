@@ -168,6 +168,12 @@ export interface AppType {
     core?: boolean;
     menu_type: string;
     pages?: {};
+    type?: "collection" | "code";
+    collection_data?: {
+      installScript: [];
+      data: {};
+      actions: { key: string; label: string; icon: string }[];
+    };
   };
   objectId: string;
 }

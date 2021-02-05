@@ -4,6 +4,7 @@ import Select from "react-select";
 import { find } from "lodash";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import InputCheckboxes from "../Checkboxes";
+import { Typography } from "@material-ui/core";
 
 const InputSelect: React.FC<{
   label: string;
@@ -31,7 +32,7 @@ const InputSelect: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    if (display === "select") {
+    if ((display || "select") === "select") {
       if ((options || []).includes(value)) {
         // We were sent an entire object
         setNewValue(value);
@@ -53,7 +54,6 @@ const InputSelect: React.FC<{
   }, [value, options]);
 
   // UI
-
   return display === "radio" ? (
     <InputCheckboxes
       label={label}
@@ -65,86 +65,91 @@ const InputSelect: React.FC<{
       }}
     />
   ) : (
-    <Select
-      isClearable
-      options={options}
-      value={newValue}
-      isMulti={multiple}
-      placeholder={label}
-      isLoading={isLoading}
-      name={label}
-      onChange={(chosen) => {
-        setNewValue(chosen);
-        if (onChange) {
-          if (Array.isArray(chosen)) {
-            const val = [];
-            chosen.map((v) => val.push(v.value));
-            onChange(val);
-          } else {
-            onChange(chosen?.value);
+    <>
+      {label && <Typography variant="body2">{label}</Typography>}
+      <Select
+        isClearable
+        options={options}
+        value={newValue}
+        isMulti={multiple}
+        placeholder={label}
+        isLoading={isLoading}
+        name={label}
+        onChange={(chosen) => {
+          setNewValue(chosen);
+          if (onChange) {
+            if (Array.isArray(chosen)) {
+              const val = [];
+              chosen.map((v) => val.push(v.value));
+              onChange(val);
+            } else {
+              onChange(chosen?.value);
+            }
           }
-        }
-      }}
-      menuPortalTarget={document.body}
-      styles={{
-        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-        menu: (styles) => ({
-          ...styles,
-          ...style,
-          backgroundColor: gTheme.palette.type === "dark" ? "#323232" : "white",
-          zIndex: 500,
-        }),
-        singleValue: (styles) => ({
-          ...styles,
-          ...style,
-          color: gTheme.palette.type === "dark" ? "white" : "black",
-        }),
-        control: (styles) => ({
-          ...styles,
-          ...style,
-          backgroundColor: gTheme.palette.type === "dark" ? "#323232" : "white",
-          color: gTheme.palette.type === "dark" && "white",
-          border: "1px solid rgba(100, 100, 100, 1)",
-          position: "relative",
-          transition: "all 0.3s",
-          zIndex: 100,
-        }),
-        container: (styles) => ({
-          ...styles,
-          color: gTheme.palette.type === "dark" && "white",
-        }),
-        input: (styles) => ({
-          ...styles,
-          zIndex: 100,
-          margin: "10px 0",
-        }),
-        valueContainer: (styles) => ({
-          ...styles,
-          zIndex: 100,
-          color: gTheme.palette.type === "dark" && "white",
-        }),
-        multiValue: (styles) => ({
-          ...styles,
-          ...(gTheme.palette.type === "dark"
-            ? { backgroundColor: "#454545" }
-            : {}),
-        }),
-        multiValueLabel: (styles) => ({
-          ...styles,
-          ...(gTheme.palette.type === "dark" ? { color: "whitesmoke" } : {}),
-        }),
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-          return {
+        }}
+        menuPortalTarget={document.body}
+        styles={{
+          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+          menu: (styles) => ({
             ...styles,
+            ...style,
+            backgroundColor:
+              gTheme.palette.type === "dark" ? "#323232" : "white",
             zIndex: 500,
-            backgroundColor: isSelected
-              ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
-              : isFocused &&
-                `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},0.4)`,
-          };
-        },
-      }}
-    />
+          }),
+          singleValue: (styles) => ({
+            ...styles,
+            ...style,
+            color: gTheme.palette.type === "dark" ? "white" : "black",
+          }),
+          control: (styles) => ({
+            ...styles,
+            ...style,
+            backgroundColor:
+              gTheme.palette.type === "dark" ? "#323232" : "white",
+            color: gTheme.palette.type === "dark" && "white",
+            border: "1px solid rgba(100, 100, 100, 1)",
+            position: "relative",
+            transition: "all 0.3s",
+            zIndex: 100,
+          }),
+          container: (styles) => ({
+            ...styles,
+            color: gTheme.palette.type === "dark" && "white",
+          }),
+          input: (styles) => ({
+            ...styles,
+            zIndex: 100,
+            margin: "10px 0",
+          }),
+          valueContainer: (styles) => ({
+            ...styles,
+            zIndex: 100,
+            color: gTheme.palette.type === "dark" && "white",
+          }),
+          multiValue: (styles) => ({
+            ...styles,
+            ...(gTheme.palette.type === "dark"
+              ? { backgroundColor: "#454545" }
+              : {}),
+          }),
+          multiValueLabel: (styles) => ({
+            ...styles,
+            ...(gTheme.palette.type === "dark" ? { color: "whitesmoke" } : {}),
+          }),
+          option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            return {
+              ...styles,
+              zIndex: 500,
+              backgroundColor: isSelected
+                ? `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},1)`
+                : isFocused &&
+                  `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b},0.4)`,
+            };
+          },
+        }}
+      />
+    </>
   );
 };
 

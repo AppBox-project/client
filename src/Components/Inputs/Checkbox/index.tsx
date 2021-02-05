@@ -19,10 +19,10 @@ const InputCheckbox: React.FC<{
 
   return label ? (
     <FormControlLabel
-      style={style}
+      style={{ ...style, padding: 0 }}
       control={
         <Checkbox
-          style={{ padding: 0 }}
+          style={{ ...style, padding: 0 }}
           color="primary"
           checked={newValue}
           indeterminate={isIndeterminate}

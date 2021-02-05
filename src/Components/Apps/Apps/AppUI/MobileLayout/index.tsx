@@ -12,7 +12,6 @@ import {
   ListSubheader,
   Icon,
 } from "@material-ui/core";
-import { AppContextType } from "../../../../../Utils/Types";
 import { useHistory, Switch, Route } from "react-router-dom";
 import { FaLemon, FaDropbox, FaCogs } from "react-icons/fa";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
@@ -20,9 +19,10 @@ import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
 import { map } from "lodash";
 import styles from "./styles.module.scss";
+import { AppContext } from "../../AppContext";
 
 const AppUIMobile: React.FC<{
-  appContext: AppContextType;
+  appContext: AppContext;
   currentPage;
   setCurrentPage;
 }> = ({ appContext, currentPage, setCurrentPage }) => {
@@ -74,7 +74,7 @@ const AppUIMobile: React.FC<{
   }
 
   // UI
-  let SingleAction: React.FC<{ context: AppContextType }>;
+  let SingleAction: React.FC<{ context: AppContext }>;
   if (typeof appContext.actions === "function")
     SingleAction = appContext.actions;
 

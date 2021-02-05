@@ -31,6 +31,7 @@ import InputColor from "../../Inputs/Color";
 import PageLayouts from "./AppUI/PageLayouts";
 import InputCheckboxes from "../../../Components/Inputs/Checkboxes";
 import FaIcon from "../../Icons";
+import CollectionCode from "../../../Apps-Core/collections";
 
 export class AppContext {
   appId: string;
@@ -48,7 +49,16 @@ export class AppContext {
   };
   isReady: Promise<unknown>;
   appCode: any;
-  actions: [{ label: string; key: string }];
+  actions: [
+    {
+      label: string;
+      key: string;
+      subItems?;
+      component;
+      group?: string;
+      icon?: React.FC;
+    }
+  ];
   UI: any;
   dataListeners: [{ requestId: string; unlistenAction: string }];
   setDialog: any;
@@ -112,7 +122,7 @@ export class AppContext {
         },
       },
     };
-    this.isReady = new Promise((resolve, reject) => {
+    this.isReady = new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       this.dataListeners = [
         {
@@ -130,20 +140,30 @@ export class AppContext {
           if (response.data[0]) {
             this.app = response.data[0];
           }
-          import(
-            `../../../Apps-${this.app.data.core ? "Core" : "User"}/${
-              this.appId
-            }/index.tsx`
-          ).then((app) => {
-            const AppCode = app.default;
-            this.appCode = new AppCode(this);
+          if (this.app.data.type === "collection") {
+            this.appCode = new CollectionCode(this);
             this.appConfig = this.appCode.appConfig;
             this.onNoAction = this.appCode.onNoAction;
             this.appCode.getActions().then((actions) => {
               this.actions = actions;
               resolve();
             });
-          });
+          } else {
+            import(
+              `../../../Apps-${this.app.data.core ? "Core" : "User"}/${
+                this.appId
+              }/index.tsx`
+            ).then((app) => {
+              const AppCode = app.default;
+              this.appCode = new AppCode(this);
+              this.appConfig = this.appCode.appConfig;
+              this.onNoAction = this.appCode.onNoAction;
+              this.appCode.getActions().then((actions) => {
+                this.actions = actions;
+                resolve();
+              });
+            });
+          }
         } else {
           console.log(response);
         }

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { ModelType, SelectOptionType, ConditionsType } from "../../Utils/Types";
+import {
+  ModelType,
+  SelectOptionType,
+  ConditionsType,
+  ValueListItemType,
+} from "../../Utils/Types";
 import {
   ListItem,
   List,
@@ -36,7 +41,12 @@ const ConditionDesigner: React.FC<{
       )}
       {(value?.conditions || []).map((condition, index) => {
         const field = model.fields[condition.field];
-        console.log("buh", condition);
+        let options: ValueListItemType[] = [];
+        if (field?.typeArgs?.options) {
+          field.typeArgs.options.map((o) =>
+            options.push({ label: o.label, value: o.key })
+          );
+        }
 
         return (
           <ListItem key={index}>
@@ -63,9 +73,14 @@ const ConditionDesigner: React.FC<{
                       { label: "is not equal to", value: "not_equals" },
                     ]}
                     value={condition.operator}
+                    onChange={(checked) => {
+                      const newValue = value;
+                      newValue.conditions[index].operator = checked;
+                      onChange(newValue);
+                    }}
                   />
                 </Grid>
-                <Grid item xs={4} style={{ padding: 10, paddingLeft: 15 }}>
+                <Grid item xs={4}>
                   {field.type === "boolean" && (
                     <InputCheckbox
                       label={condition.value ? "Checked" : "Unchecked"}
@@ -73,6 +88,18 @@ const ConditionDesigner: React.FC<{
                       onChange={(checked) => {
                         const newValue = value;
                         newValue.conditions[index].value = checked;
+                        onChange(newValue);
+                      }}
+                    />
+                  )}
+                  {field.type === "options" && (
+                    <InputSelect
+                      label={field.name}
+                      value={condition.value}
+                      options={options}
+                      onChange={(newVal) => {
+                        const newValue = value;
+                        newValue.conditions[index].value = newVal;
                         onChange(newValue);
                       }}
                     />

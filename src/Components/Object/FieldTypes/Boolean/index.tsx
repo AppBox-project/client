@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, Checkbox } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
+import InputCheckbox from "../../../Inputs/Checkbox";
 
 const FieldTypeBoolean: React.FC<{
   mode: "view" | "edit" | "free";
@@ -12,6 +13,7 @@ const FieldTypeBoolean: React.FC<{
   onChange: (value: boolean) => void;
   value?: boolean;
   disabled?: boolean;
+  label?: string;
 }> = ({
   mode,
   field,
@@ -21,6 +23,7 @@ const FieldTypeBoolean: React.FC<{
   onChange,
   value,
   disabled,
+  label,
 }) => {
   // Hooks
   const [newValue, setNewValue] = useState<boolean>(
@@ -39,17 +42,14 @@ const FieldTypeBoolean: React.FC<{
 
   // UI
   if (newValue === undefined) return <Loading />;
-  const isIndeterminate = newValue !== true && newValue !== false;
   if (mode === "free")
     return (
-      <Checkbox
-        checked={newValue || false}
+      <InputCheckbox
+        value={newValue || false}
         disabled={disabled}
-        indeterminate={isIndeterminate}
-        color="primary"
-        onChange={(event) => {
-          setNewValue(event.target.checked);
-          onChange(event.target.checked);
+        onChange={(newVal) => {
+          setNewValue(newVal);
+          onChange(newVal);
         }}
       />
     );
@@ -79,7 +79,7 @@ const FieldTypeBoolean: React.FC<{
                 <Checkbox
                   checked={newValue || false}
                   disabled
-                  indeterminate={isIndeterminate}
+                  indeterminate={newValue !== true && newValue !== false}
                   color="primary"
                   style={{ paddingLeft: 0, marginLeft: 0 }}
                 />
@@ -88,27 +88,15 @@ const FieldTypeBoolean: React.FC<{
           </div>
         )}
         {mode === "edit" && (
-          <Grid container>
-            <Grid item xs={6}>
-              <Typography variant="body1" style={{ fontWeight: 500 }}>
-                {field.name}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body2">
-                <Checkbox
-                  checked={newValue || false}
-                  color="primary"
-                  indeterminate={isIndeterminate}
-                  disabled={disabled}
-                  onChange={(event) => {
-                    setNewValue(event.target.checked);
-                    onChange(event.target.checked);
-                  }}
-                />
-              </Typography>
-            </Grid>
-          </Grid>
+          <InputCheckbox
+            value={newValue || false}
+            disabled={disabled}
+            label={label}
+            onChange={(newVal) => {
+              setNewValue(newVal);
+              onChange(newVal);
+            }}
+          />
         )}
       </div>
     </div>
