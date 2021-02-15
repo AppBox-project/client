@@ -16,7 +16,7 @@ const PLCenteredBlock: React.FC<{
         direction="row"
         justify="center"
         alignItems="center"
-        style={{ marginTop: 75 }}
+        style={{ marginTop: 75, marginBottom: -75 }}
       >
         <Grid item xs={12} md={width || 3}>
           <Card withBigMargin title={title}>

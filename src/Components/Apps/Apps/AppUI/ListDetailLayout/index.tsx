@@ -58,6 +58,7 @@ const ListDetailLayout: React.FC<{
   itemSecondary?: (item) => JSX.Element;
   customNavItems?: [JSX.Element];
   footerComponent?: JSX.Element;
+  description?: string;
 }> = ({
   list,
   CustomNavComponent,
@@ -82,6 +83,7 @@ const ListDetailLayout: React.FC<{
   itemSecondary,
   customNavItems,
   footerComponent,
+  description,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -150,6 +152,7 @@ const ListDetailLayout: React.FC<{
                     list={list}
                     navFixedIcon={navFixedIcon}
                     title={title}
+                    description={description}
                     addTitle={addTitle}
                     imageField={imageField}
                     objects={objects}
@@ -161,7 +164,10 @@ const ListDetailLayout: React.FC<{
                   />
                 )
               ) : (
-                <ListDetailLayoutSkeleton title={title} />
+                <ListDetailLayoutSkeleton
+                  title={title}
+                  description={description}
+                />
               )}
             </AnimationItem>
           </Grid>
@@ -176,8 +182,8 @@ const ListDetailLayout: React.FC<{
                     <div
                       style={{
                         overflowX: "auto",
-                        height: "100%",
-                        marginBottom: isMobile && 64,
+                        height: "calc(100% - 64px)",
+                        paddingBottom: 64,
                       }}
                     >
                       <DetailComponent
@@ -215,6 +221,7 @@ const ListNav: React.FC<{
   itemSecondary?: (item) => JSX.Element;
   customNavItems?: [JSX.Element];
   footerComponent?: JSX.Element;
+  description?: string;
 }> = ({
   addFunction,
   deleteFunction,
@@ -231,6 +238,7 @@ const ListNav: React.FC<{
   itemSecondary,
   customNavItems,
   footerComponent,
+  description,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
   const [isMobile] = useGlobal<any>("isMobile");
@@ -242,20 +250,39 @@ const ListNav: React.FC<{
     >
       <Card withBigMargin withoutPadding>
         <List>
-          {title && (
+          {(title || description) && (
             <>
-              <Typography
-                variant="h6"
-                color={gTheme.palette.type === "light" ? "primary" : "initial"}
-                style={{
-                  textAlign: "center",
-                  margin: 13,
-                  cursor: "default",
-                }}
-                gutterBottom
-              >
-                {title}
-              </Typography>
+              {title && (
+                <Typography
+                  variant="h6"
+                  color={
+                    gTheme.palette.type === "light" ? "primary" : "initial"
+                  }
+                  style={{
+                    textAlign: "center",
+                    margin: 13,
+                    cursor: "default",
+                  }}
+                  gutterBottom={!description}
+                >
+                  {title}
+                </Typography>
+              )}
+              {description && (
+                <>
+                  <Divider />
+                  <Typography
+                    variant="body2"
+                    style={{
+                      margin: 8,
+                      cursor: "default",
+                    }}
+                    gutterBottom
+                  >
+                    {description}
+                  </Typography>
+                </>
+              )}
               <Divider />
             </>
           )}
@@ -330,8 +357,12 @@ const ListItemObject: React.FC<{
         )}
         {navFixedIcon && <ListItemIcon>{navFixedIcon}</ListItemIcon>}
         {listItem.icon && (
-          <ListItemIcon>
-            <FaIcon icon={listItem.icon} />
+          <ListItemIcon style={{ minWidth: 25 }}>
+            {typeof listItem.icon === "string" ? (
+              <FaIcon icon={listItem.icon} />
+            ) : (
+              <listItem.icon />
+            )}
           </ListItemIcon>
         )}
         {imageField && object && object.data[imageField] && (

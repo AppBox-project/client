@@ -19,7 +19,7 @@ export default class App {
           label: action.label,
           key: action.key,
           icon: Icon,
-          component: CollectionsDisplayObject,
+          component: action.page.type === "model" && CollectionsDisplayObject,
         });
       });
       resolve(actions);

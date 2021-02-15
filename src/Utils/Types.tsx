@@ -172,7 +172,12 @@ export interface AppType {
     collection_data?: {
       installScript: [];
       data: {};
-      actions: { key: string; label: string; icon: string }[];
+      actions: {
+        key: string;
+        label: string;
+        icon: string;
+        page: { type: "model"; model?: string };
+      }[];
     };
   };
   objectId: string;
@@ -368,7 +373,7 @@ export interface ListDetailItemType {
   label: string;
   id: string;
   subtitle?: string;
-  icon?: IconType;
+  icon?: IconType | string;
   subItems?: ListDetailItemType[];
 }
 
@@ -494,19 +499,19 @@ export interface UIType {
       itemSecondary?: (item) => JSX.Element;
       customNavItems?: [JSX.Element];
       footerComponent?: JSX.Element;
+      description?: string;
     }>;
     SortableList: React.FC<{
-      listItems: [];
-      listTextPath?: string;
-      listSubTextPath?: string;
-      baseUrl: string;
-      linkToPath?: string;
-      button?: true;
-      ListIcon?: React.FC;
-      listAction?: (id: string, object) => JSX.Element;
-      onListItemClick?: (object) => void;
-      onAdd?: () => void;
-      customItem?: (listItem) => JSX.Element;
+      items: {
+        label: string;
+        id: string;
+      }[];
+      onChange: (
+        items: {
+          label: string;
+          id: string;
+        }[]
+      ) => void;
     }>;
   };
   Field: React.FC<{

@@ -1,149 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText, ListItemIcon } from "@material-ui/core";
-import { get } from "lodash";
-import { useHistory } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { FaPlus } from "react-icons/fa";
-import Server from "../../../Utils/Server";
-import uniqid from "uniqid";
+
+interface ItemType {
+  label: string;
+  id: string;
+}
 
 const SortableList: React.FC<{
-  listItems: [];
-  listTextPath: string;
-  listSubTextPath?: string;
-  ListIcon?: React.FC;
-  listAction?: (id: string, object) => JSX.Element;
-  baseUrl: string;
-  linkToPath?: string;
-  button: true;
-  onAdd: () => void;
-  onListItemClick?: (object) => void;
-  customItem?: (listItem) => void;
-}> = ({
-  listItems,
-  listTextPath,
-  baseUrl,
-  linkToPath,
-  button,
-  ListIcon,
-  listAction,
-  listSubTextPath,
-  onAdd,
-  onListItemClick,
-  customItem,
-}) => {
+  items: ItemType[];
+  onChange: (items: ItemType[]) => void;
+}> = ({ items, onChange }) => {
   // Vars
-  const history = useHistory();
-  const [items, setItems] = useState<any>([]);
+  const [newItems, setNewItems] = useState<ItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
-    setItems(listItems);
-  }, [listItems]);
+    setNewItems(items);
+  }, [items]);
 
   // UI
   return (
     <DragDropContext
-      onDragEnd={(swap) => {
-        if (swap.destination) {
-          const result = listItems;
-          const [removed] = result.splice(swap.source.index, 1);
-
-          result.splice(swap.destination.index, 0, removed);
-          setItems(result);
-          const changes = {};
-          for (let x = 0; x < result.length; x++) {
-            //@ts-ignore
-            changes[result[x]._id] = { order: x };
-          }
-
-          // Batch update the order for all the items
-          const requestId = uniqid();
-          Server.emit("updateMany", { changes, requestId });
-          Server.on(`receive-${requestId}`, (response) => {
-            console.log(response);
-          });
+      onDragEnd={(result) => {
+        // dropped outside the list
+        if (!result.destination) {
+          return;
         }
+
+        const items: ItemType[] = reorder(
+          newItems,
+          result.source.index,
+          result.destination.index
+        );
+
+        setNewItems(items);
+        onChange(items);
       }}
     >
-      <List>
-        <Droppable droppableId="memos">
-          {(droppableProvided, droppableSnapshot) => (
-            <div
-              ref={droppableProvided.innerRef}
-              style={{
-                transition: "all 1s",
-              }}
-            >
-              {listItems.map((listItem, index) => {
-                return (
-                  <Draggable
-                    key={
-                      //@ts-ignore
-                      listItem._id
-                    }
-                    draggableId={
-                      //@ts-ignore
-                      listItem._id
-                    }
-                    index={index}
+      <Droppable droppableId="droppable">
+        {(provided, snapshot) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {newItems.map((item, index) => (
+              <Draggable key={item.id} draggableId={item.id} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
                   >
-                    {(draggableProvided, draggableSnapshot) => {
-                      return customItem ? (
-                        <div
-                          ref={draggableProvided.innerRef}
-                          {...draggableProvided.draggableProps}
-                          {...draggableProvided.dragHandleProps}
-                        >
-                          {customItem(listItem)}
-                        </div>
-                      ) : (
-                        <ListItem
-                          button={button}
-                          ref={draggableProvided.innerRef}
-                          {...draggableProvided.draggableProps}
-                          {...draggableProvided.dragHandleProps}
-                        >
-                          {(ListIcon || listAction) && (
-                            <ListItemIcon>
-                              {listAction ? (
-                                listAction(get(listItem, linkToPath), listItem)
-                              ) : (
-                                <ListIcon />
-                              )}
-                            </ListItemIcon>
-                          )}
-                          <ListItemText
-                            primary={get(listItem, listTextPath)}
-                            secondary={get(listItem, listSubTextPath)}
-                            onClick={() => {
-                              if (linkToPath)
-                                history.push(
-                                  `${baseUrl}/${get(listItem, linkToPath)}`
-                                );
-                              if (onListItemClick) onListItemClick(listItem);
-                            }}
-                          />
-                        </ListItem>
-                      );
-                    }}
-                  </Draggable>
-                );
-              })}
-              {droppableProvided.placeholder}
-            </div>
-          )}
-        </Droppable>
-        {onAdd && (
-          <ListItem button onClick={onAdd}>
-            <ListItemIcon>
-              <FaPlus />
-            </ListItemIcon>
-          </ListItem>
+                    {item.label}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
         )}
-      </List>
+      </Droppable>
     </DragDropContext>
   );
 };
 
 export default SortableList;
+
+const reorder = (list, startIndex, endIndex) => {
+  const result: ItemType[] = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};

@@ -57,7 +57,7 @@ const AppSettingsUpdate: React.FC<{
           direction="row"
           justify="center"
           alignItems="center"
-          style={{ marginTop: 75 }}
+          style={{ marginTop: 75, marginBottom: -75 }}
         >
           <Grid item xs={12} md={4}>
             {upgradeTask ? (

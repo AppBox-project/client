@@ -36,7 +36,7 @@ const AnimationContainer: React.FC<{
       initial="hidden"
       animate="visible"
       variants={list}
-      style={{ height: "100%", ...style }}
+      style={{ ...style }}
       className="AnimationContainer"
     >
       {children}

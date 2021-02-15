@@ -5,11 +5,13 @@ import {
   FaDownload,
   FaCogs,
   FaHistory,
+  FaThLarge,
 } from "react-icons/fa";
 import AppSettingsBackup from "./Backup";
 import AppSettingsProcesses from "./Automations";
 import AppSettingsAbout from "./About";
 import AppSettingsSystem from "./System";
+import AppSettingsApps from "./Apps";
 
 export default class App {
   context: any;
@@ -34,6 +36,13 @@ export default class App {
           label: "System settings",
           component: AppSettingsSystem,
           icon: FaCogs,
+          group: "System",
+        },
+        {
+          key: "apps",
+          label: "Apps",
+          component: AppSettingsApps,
+          icon: FaThLarge,
           group: "System",
         },
         {

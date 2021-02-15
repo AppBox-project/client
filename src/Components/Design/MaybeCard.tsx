@@ -5,7 +5,10 @@ interface MaybeCardProps extends CardProps {
   showCard: boolean;
 }
 
-const MaybeCard: React.FC<MaybeCardProps> = ({ showCard, children }, props) =>
-  showCard ? <Card {...props}>{children}</Card> : children;
+const MaybeCard: React.FC<MaybeCardProps> = ({
+  showCard,
+  children,
+  ...props
+}) => (showCard ? <Card {...props}>{children}</Card> : children);
 
 export default MaybeCard;

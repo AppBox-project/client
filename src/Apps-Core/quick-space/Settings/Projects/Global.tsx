@@ -28,11 +28,7 @@ const AppQSSettingsProjectGlobal: React.FC<{
       </context.UI.Animations.AnimationItem>
       <context.UI.Animations.AnimationItem>
         <context.UI.Design.Card title="Project settings" withBigMargin>
-          <context.UI.Layouts.SortableList
-            baseUrl="/quick-space/settings/projects/settings"
-            listItems={projectList}
-            listTextPath="data.name"
-          />
+          Feature removed
         </context.UI.Design.Card>
       </context.UI.Animations.AnimationItem>
     </context.UI.Animations.AnimationContainer>
