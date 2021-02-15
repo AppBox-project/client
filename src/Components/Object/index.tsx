@@ -347,19 +347,19 @@ const ViewObject: React.FC<{
 
     map(appliedModel?.fields || {}, (field, key) => {
       if (field.typeArgs?.asBanner) {
-        if (appliedObject?.data) {
+        if (appliedObject?.data || {}) {
           context.setImage((appliedObject?.data || {})[key]);
         }
       }
       if (field.typeArgs?.asColor) {
-        if (appliedObject?.data[key]) {
+        if ((appliedObject?.data || {})[key]) {
           context.setColor((appliedObject?.data || {})[key]);
         }
       }
     });
     return () => {
-      context.setImage(undefined);
-      context.setColor(undefined);
+      context?.setImage(undefined);
+      context?.setColor(undefined);
     };
   }, [appliedObject, appliedModel]);
 
