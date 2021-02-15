@@ -11,9 +11,10 @@ import {
   ListItemIcon,
   ListSubheader,
   Icon,
+  Popover,
 } from "@material-ui/core";
 import { useHistory, Switch, Route } from "react-router-dom";
-import { FaLemon, FaDropbox, FaCogs } from "react-icons/fa";
+import { FaLemon, FaDropbox, FaCogs, FaEllipsisV } from "react-icons/fa";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
@@ -35,6 +36,7 @@ const AppUIMobile: React.FC<{
   const [gActions, setgActions] = useGlobal<any>("actions");
   const [filter, setFilter] = useState<any>();
   const [gTheme] = useGlobal<any>("theme");
+  const [anchorElMoreNav, setAnchorElMoreNav] = useState();
 
   useEffect(() => {
     if (appContext.appConfig?.actions?.mobile?.displayAs === "menu") {
@@ -274,12 +276,64 @@ const AppUIMobile: React.FC<{
           </SwipeableDrawer>
         )}
         {appContext.appConfig?.actions?.mobile?.displayAs ===
+          "bottom-navigation" &&
+          appContext.actions.length >
+            (appContext?.appConfig?.settings ? 3 : 4) && (
+            <Popover
+              id="more-options"
+              open={Boolean(anchorElMoreNav)}
+              anchorEl={anchorElMoreNav}
+              onClose={() => setAnchorElMoreNav(null)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              transformOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+            >
+              <List>
+                {appContext.actions
+                  .slice(3, appContext.actions.length)
+                  .map((action) => {
+                    const Icon: React.FC<{ style }> = action.icon;
+                    return (
+                      <ListItem
+                        key={action.key}
+                        button
+                        selected={currentAction === action.key}
+                        onClick={() => {
+                          history.push(`/${appContext.appId}/${action.key}`);
+                          setAnchorElMoreNav(undefined);
+                        }}
+                      >
+                        <ListItemIcon style={{ minWidth: 32 }}>
+                          {Icon ? (
+                            <Icon style={{ height: 20, width: 20 }} />
+                          ) : (
+                            <FaLemon />
+                          )}
+                        </ListItemIcon>
+                        <ListItemText>{action.label}</ListItemText>
+                      </ListItem>
+                    );
+                  })}
+              </List>
+            </Popover>
+          )}
+        {appContext.appConfig?.actions?.mobile?.displayAs ===
           "bottom-navigation" && (
           <BottomNavigation
             value={currentAction}
             showLabels
             onChange={(event, newValue) => {
-              history.push(`/${appContext.appId}/${newValue}`);
+              if (newValue === "more") {
+                //@ts-ignore
+                setAnchorElMoreNav(event.currentTarget);
+              } else {
+                history.push(`/${appContext.appId}/${newValue}`);
+              }
             }}
             style={{
               bottom: 0,
@@ -290,13 +344,31 @@ const AppUIMobile: React.FC<{
           >
             {typeof actions === "object" &&
               //@ts-ignore
-              appContext.actions.map((action) => {
+              (appContext.actions.length >
+              (appContext?.appConfig?.settings ? 3 : 4)
+                ? [
+                    ...appContext.actions.slice(0, 3),
+                    { icon: FaEllipsisV, key: "more", label: "More" },
+                  ]
+                : appContext.actions
+              ).map((action) => {
                 const Icon: React.FC<{ style }> = action.icon;
                 return (
                   <BottomNavigationAction
                     key={action.key}
                     label={action.label}
                     value={action.key}
+                    color={
+                      currentAction === action.key &&
+                      gTheme.palette.type === "light" &&
+                      "primary"
+                    }
+                    style={{
+                      color:
+                        currentAction === action.key &&
+                        gTheme.palette.type !== "light" &&
+                        "#fff",
+                    }}
                     icon={
                       Icon ? (
                         <Icon style={{ height: 20, width: 20 }} />
@@ -307,7 +379,7 @@ const AppUIMobile: React.FC<{
                   />
                 );
               })}
-            {appContext.appConfig && appContext.appConfig.settings && (
+            {appContext?.appConfig?.settings && (
               <BottomNavigationAction
                 key="settings"
                 label="Settings"
