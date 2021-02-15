@@ -352,7 +352,9 @@ const ViewObject: React.FC<{
         }
       }
       if (field.typeArgs?.asColor) {
-        context.setColor(appliedObject?.data[key]);
+        if (appliedObject?.data[key]) {
+          context.setColor(appliedObject?.data[key]);
+        }
       }
     });
     return () => {
