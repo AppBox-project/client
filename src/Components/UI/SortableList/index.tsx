@@ -9,7 +9,8 @@ interface ItemType {
 const SortableList: React.FC<{
   items: ItemType[];
   onChange: (items: ItemType[]) => void;
-}> = ({ items, onChange }) => {
+  renderItem?: (item: ItemType, index: number) => JSX.Element;
+}> = ({ items, onChange, renderItem }) => {
   // Vars
   const [newItems, setNewItems] = useState<ItemType[]>([]);
 
@@ -48,7 +49,7 @@ const SortableList: React.FC<{
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    {item.label}
+                    {renderItem ? renderItem(item, index) : item.label}
                   </div>
                 )}
               </Draggable>

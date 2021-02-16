@@ -512,6 +512,7 @@ export interface UIType {
           id: string;
         }[]
       ) => void;
+      renderItem?: (item, index: number) => JSX.Element;
     }>;
   };
   Field: React.FC<{
