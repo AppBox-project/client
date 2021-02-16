@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "reactn";
 import {
   AppContextType,
@@ -5,6 +6,7 @@ import {
   ListDetailItemType,
 } from "../../../Utils/Types";
 import AppsDetail from "./Detail";
+import { useHistory } from "react-router-dom";
 
 const AppSettingsApps: React.FC<{
   match: { isExact: boolean };
@@ -14,6 +16,7 @@ const AppSettingsApps: React.FC<{
   // Vars
   const [appList, setAppList] = useState<ListDetailItemType[]>();
   const [apps, setApps] = useState<AppType[]>();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -43,10 +46,57 @@ const AppSettingsApps: React.FC<{
       DetailComponent={AppsDetail}
       detailComponentProps={{ apps }}
       list={appList}
+      deleteFunction={(id) =>
+        context.setDialog({
+          display: true,
+          title: "Are you sure?",
+          content: `Deleting this app can't be undone.`,
+          buttons: [
+            {
+              label: (
+                <Typography variant="button" style={{ color: "red" }}>
+                  Continue, delete
+                </Typography>
+              ),
+              onClick: () => {
+                context.deleteObjects("apps", { "data.id": id });
+                history.replace(`/settings/apps`);
+              },
+            },
+            {
+              label: "Keep",
+              onClick: () => {},
+            },
+          ],
+        })
+      }
       title="Apps"
       addTitle="Add new collection"
       navWidth={3}
-      addFunction={() => {}}
+      addFunction={() => {
+        context.setDialog({
+          display: true,
+          title: "Create new app",
+          content: (
+            <context.UI.Object.Detail
+              context={context}
+              modelId="apps"
+              layoutId="settings-create-collection"
+              popup
+              defaults={{
+                type: "collection",
+                collection_data: {
+                  installScript: { script: [], data: { objects: [] } },
+                  actions: [],
+                },
+              }}
+              onSuccess={() => {
+                context.setDialog({ display: false });
+              }}
+            />
+          ),
+        });
+      }}
       description="Create and manage collections; the purely UI controlled version of apps."
     />
   );

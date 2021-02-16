@@ -423,7 +423,7 @@ export interface UIType {
       objectId?: string;
       object?: ObjectType;
       popup?: true;
-      defaults?: { [key: string]: string };
+      defaults?: { [key: string]: string | any };
       baseUrl?: string;
       onObjectDisappears?: (history) => void;
       mode?: "view" | "edit";

@@ -8,7 +8,13 @@ export default class App {
   constructor(context: AppContext) {
     this.context = context;
   }
-
+  appConfig = {
+    actions: {
+      mobile: { displayAs: "bottom-navigation" },
+      group: true,
+      filter: true,
+    },
+  };
   getActions = () => {
     return new Promise((resolve) => {
       const actions = [];
