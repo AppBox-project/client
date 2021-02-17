@@ -86,7 +86,10 @@ const AppSettingsApps: React.FC<{
               defaults={{
                 type: "collection",
                 collection_data: {
-                  installScript: { script: [], data: { objects: [] } },
+                  installScript: {
+                    script: [],
+                    data: { models: {}, objects: [] },
+                  },
                   actions: [],
                 },
               }}

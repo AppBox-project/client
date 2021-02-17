@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, AppType } from "../../../Utils/Types";
 import { find } from "lodash";
-import FourOhFour from "../../../Components/FourOhFour";
 import AppsDetailGeneral from "./General";
 import { FaDatabase, FaStream, FaTools, FaUpload } from "react-icons/fa";
 import AppsDetailActions from "./Actions";
 import Todo from "../../../Components/Todo";
+import AppsDetailExport from "./Export";
 
 const AppsDetail: React.FC<{
   match: { params: { detailId } };
@@ -36,8 +36,7 @@ const AppsDetail: React.FC<{
       list={[
         { label: "Basic settings", id: "general", icon: FaTools },
         { label: "Actions", id: "actions", icon: FaStream },
-        { label: "Mapped data", id: "data", icon: FaDatabase },
-        { label: "Publish", id: "publish", icon: FaUpload },
+        { label: "Package", id: "package", icon: FaUpload },
       ]}
       DetailComponent={DetailPage}
       detailComponentProps={{ app }}
@@ -65,6 +64,8 @@ const DetailPage: React.FC<{
       <AppsDetailGeneral context={context} app={app} />
     ) : detailId === "actions" ? (
       <AppsDetailActions context={context} app={app} />
+    ) : detailId === "package" ? (
+      <AppsDetailExport context={context} app={app} />
     ) : (
       <Todo withCard title={detailId} />
     )}

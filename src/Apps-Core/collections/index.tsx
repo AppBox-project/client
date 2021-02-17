@@ -18,16 +18,17 @@ export default class App {
   getActions = () => {
     return new Promise((resolve) => {
       const actions = [];
-      this.context.app.data.collection_data.actions.map((action) => {
-        const Icon = icons[action.icon];
-
-        return actions.push({
-          label: action.label,
-          key: action.key,
-          icon: Icon,
-          component: action.page.type === "model" && CollectionsDisplayObject,
-        });
-      });
+      (this?.context?.app?.data?.collection_data?.actions || []).map(
+        (action) => {
+          const Icon = icons[action.icon];
+          return actions.push({
+            label: action.label,
+            key: action.key,
+            icon: Icon,
+            component: action.page.type === "model" && CollectionsDisplayObject,
+          });
+        }
+      );
       resolve(actions);
     });
   };
