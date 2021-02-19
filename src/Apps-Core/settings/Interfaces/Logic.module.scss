@@ -1,0 +1,82 @@
+.row {
+  min-height: 75px;
+  padding: 15px;
+  margin: 0 auto;
+  width: 150px;
+}
+
+.diamond {
+  width: 0;
+  height: 0;
+  border: 75px solid transparent;
+  border-bottom-color: #485263;
+  position: relative;
+  top: -75px;
+  z-index: 100;
+
+  & div {
+    position: relative;
+    top: 65px;
+    left: -75px;
+    width: 150px;
+    text-align: center;
+    z-index: 101;
+    color: white;
+    font-size: 18px;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: -75px;
+    top: 75px;
+    width: 0;
+    height: 0;
+    border: 75px solid transparent;
+    border-top-color: #485263;
+    z-index: 100;
+  }
+}
+
+.step {
+  position: relative;
+  width: 150px;
+  height: 100px;
+  margin: 20px 0;
+  background: #485263;
+  border-radius: 50% / 10%;
+  color: white;
+  text-align: center;
+  text-indent: 0.1em;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    right: -5%;
+    left: -5%;
+    background: inherit;
+    border-radius: 5% / 50%;
+  }
+
+  & div {
+    position: relative;
+    top: 40px;
+    width: 150px;
+    text-align: center;
+    z-index: 101;
+    color: white;
+    font-size: 18px;
+  }
+}
+
+.add {
+  text-align: center;
+
+  &:after {
+    background-color: #485263;
+    height: 150px;
+    width: 3px;
+  }
+}

@@ -32,3 +32,19 @@ export interface AutomationType extends ObjectType {
     data: { triggers?: ProcessTrigger[]; steps?: ProcessStep[] };
   };
 }
+
+export interface InterfaceType extends ObjectType {
+  data: {
+    name: string;
+    key: string;
+    data: {
+      logic: {
+        key: string;
+        label: string;
+        action: { action: "showUI"; UI?: string };
+      }[];
+      variables: { [key: string]: { type; label: string } };
+      interfaces: { [key: string]: { type: "text"; content: string }[] };
+    };
+  };
+}

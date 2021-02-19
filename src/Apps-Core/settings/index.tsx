@@ -6,12 +6,14 @@ import {
   FaCogs,
   FaHistory,
   FaThLarge,
+  FaColumns,
 } from "react-icons/fa";
 import AppSettingsBackup from "./Backup";
 import AppSettingsProcesses from "./Automations";
 import AppSettingsAbout from "./About";
 import AppSettingsSystem from "./System";
 import AppSettingsApps from "./Apps";
+import AppSettingsInterfaces from "./Interfaces";
 
 export default class App {
   context: any;
@@ -38,19 +40,27 @@ export default class App {
           icon: FaCogs,
           group: "System",
         },
-        {
-          key: "apps",
-          label: "Apps",
-          component: AppSettingsApps,
-          icon: FaThLarge,
-          group: "System",
-        },
+
         {
           key: "automations",
           label: "Automations",
           component: AppSettingsProcesses,
           icon: FaRobot,
           group: "System",
+        },
+        {
+          key: "apps",
+          label: "Apps",
+          component: AppSettingsApps,
+          icon: FaThLarge,
+          group: "Apps",
+        },
+        {
+          key: "interfaces",
+          label: "Interfaces",
+          component: AppSettingsInterfaces,
+          icon: FaColumns,
+          group: "Apps",
         },
         {
           key: "update",
