@@ -11,7 +11,11 @@ import React, { useEffect, useState } from "react";
 import { FaCaretDown, FaCaretUp, FaPlus } from "react-icons/fa";
 import FaIcon from "../../../Components/Icons";
 
-import { AppContextType, AppType } from "../../../Utils/Types";
+import {
+  AppContextType,
+  AppType,
+  ValueListItemType,
+} from "../../../Utils/Types";
 
 const AppsDetailActions: React.FC<{
   app: AppType;
@@ -19,7 +23,8 @@ const AppsDetailActions: React.FC<{
 }> = ({ app, context }) => {
   // Vars
   const [items, setItems] = useState([]);
-  const [originalItems, setOriginalItems] = useState([]);
+  const [originalItems, setOriginalItems] = useState<string>();
+  const [interfaceList, setInterfaceList] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
@@ -28,7 +33,18 @@ const AppsDetailActions: React.FC<{
       newItems.push({ label: item.label, id: item.key, icon: item.icon, item })
     );
     setItems(newItems);
-    setOriginalItems(newItems);
+    setOriginalItems(JSON.stringify(newItems));
+    const interfaceRequest = context.getObjects(
+      "interfaces",
+      {},
+      (response) => {
+        const nl: ValueListItemType[] = [];
+        response.data.map((i) => nl.push({ label: i.data.name, value: i._id }));
+        setInterfaceList(nl);
+      }
+    );
+
+    return () => interfaceRequest.stop();
   }, [app]);
 
   // UI
@@ -46,11 +62,12 @@ const AppsDetailActions: React.FC<{
               <SortableItem
                 item={item}
                 context={context}
+                interfaceList={interfaceList}
                 key={item.key}
                 onChange={(newItem) => {
                   const newItems = items;
                   newItems[index] = newItem;
-                  setItems(newItems);
+                  setItems([...newItems]);
                 }}
               />
             )}
@@ -80,7 +97,7 @@ const AppsDetailActions: React.FC<{
             <ListItemText>Add</ListItemText>
           </ListItem>
         </List>
-        {JSON.stringify(originalItems) !== JSON.stringify(items) && (
+        {originalItems !== JSON.stringify(items) && (
           <Button
             fullWidth
             color="primary"
@@ -107,7 +124,8 @@ const SortableItem: React.FC<{
   item;
   context: AppContextType;
   onChange: (newItem) => void;
-}> = ({ item, context, onChange }) => {
+  interfaceList: ValueListItemType[];
+}> = ({ item, context, onChange, interfaceList }) => {
   // Vars
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
@@ -164,7 +182,10 @@ const SortableItem: React.FC<{
         <context.UI.Inputs.Select
           value={item.item.page.type}
           label="Type"
-          options={[{ label: "Model", value: "model" }]}
+          options={[
+            { label: "Model", value: "model" },
+            { label: "Custom interface", value: "interface" },
+          ]}
           onChange={(newType) => {
             const newItem = item;
             newItem.item.page.type = newType;
@@ -178,6 +199,18 @@ const SortableItem: React.FC<{
             onChange={(newValue) => {
               const newItem = item;
               newItem.item.page.model = newValue;
+              onChange(newItem);
+            }}
+          />
+        )}
+        {item.item.page.type === "interface" && (
+          <context.UI.Inputs.Select
+            label="Interface to render"
+            value={item.item.page.interface}
+            options={interfaceList}
+            onChange={(newValue) => {
+              const newItem = item;
+              newItem.item.page.interface = newValue;
               onChange(newItem);
             }}
           />

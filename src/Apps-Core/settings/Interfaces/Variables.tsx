@@ -1,15 +1,21 @@
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
-import { FaPlus } from "react-icons/fa";
-import { AppContextType } from "../../../Utils/Types";
-import { InterfaceType } from "../Types";
+import { FaAlignJustify, FaPlus, FaUser, FaUsers } from "react-icons/fa";
+import {
+  AppContextType,
+  InterfaceType,
+  ModelType,
+  ValueListItemType,
+} from "../../../Utils/Types";
 import { map } from "lodash";
 
 const AppSettingsInterfaceVariables: React.FC<{
   newInterface: InterfaceType;
   context: AppContextType;
   setNewInterface: (newInterface: InterfaceType) => void;
-}> = ({ newInterface, context, setNewInterface }) => {
+  models: ModelType[];
+  modelList: ValueListItemType[];
+}> = ({ newInterface, context, setNewInterface, modelList }) => {
   return (
     <List>
       {map(newInterface.data.data.variables, (value, key) => (
@@ -29,11 +35,29 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.label,
                 },
                 {
+                  label: "Description (optional)",
+                  key: "description",
+                  type: "text",
+                  value: value.description,
+                },
+                {
                   label: "Type",
                   key: "type",
                   type: "dropdown",
                   value: value.type,
-                  dropdownOptions: [{ label: "Text", value: "text" }],
+                  dropdownOptions: [
+                    { label: "Text", value: "text" },
+                    { label: "Object", value: "object" },
+                    { label: "Objects", value: "objects" },
+                  ],
+                },
+                {
+                  label: "Model",
+                  key: "model",
+                  type: "dropdown",
+                  value: value.model,
+                  dropdownOptions: modelList,
+                  onlyDisplayWhen: { type: "objects" },
                 },
               ],
               buttons: [
@@ -42,10 +66,7 @@ const AppSettingsInterfaceVariables: React.FC<{
                   onClick: (form) => {
                     const newInt = newInterface;
                     delete newInterface.data.data.variables[key];
-                    newInterface.data.data.variables[form.key] = {
-                      label: form.label,
-                      type: form.type,
-                    };
+                    newInterface.data.data.variables[form.key] = form;
                     setNewInterface(newInt);
                   },
                 },
@@ -53,7 +74,12 @@ const AppSettingsInterfaceVariables: React.FC<{
             });
           }}
         >
-          <ListItemText>{value.label}</ListItemText>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            {value.type === "objects" && <FaUsers />}
+            {value.type === "object" && <FaUser />}
+            {value.type === "text" && <FaAlignJustify />}
+          </ListItemIcon>
+          <ListItemText primary={value.label} secondary={value.description} />
         </ListItem>
       ))}
       <ListItem

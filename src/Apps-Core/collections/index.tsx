@@ -1,5 +1,7 @@
 import * as icons from "react-icons/fa";
 import { AppContext } from "../../Components/Apps/Apps/AppContext";
+import Todo from "../../Components/Todo";
+import CollectionsDisplayInterface from "./Interface";
 import CollectionsDisplayObject from "./ObjectDisplay";
 
 export default class App {
@@ -25,7 +27,12 @@ export default class App {
             label: action.label,
             key: action.key,
             icon: Icon,
-            component: action.page.type === "model" && CollectionsDisplayObject,
+            component:
+              action.page.type === "model"
+                ? CollectionsDisplayObject
+                : action.page.type === "interface"
+                ? CollectionsDisplayInterface
+                : Todo,
           });
         }
       );

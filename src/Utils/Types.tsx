@@ -683,3 +683,35 @@ export interface SystemTaskType extends ObjectType {
     state: string;
   };
 }
+
+export interface InterfaceLogicStepType {
+  label: string;
+  key: string;
+  type: "renderInterface" | "getObject" | "getObjects";
+  args?: { assignedVar?: string; filter?: string; layoutId?: string };
+}
+
+export interface InterfaceInterfaces {
+  label: string;
+  content: {
+    [key: string]: { type: "text"; content: string; label: string }[];
+  };
+}
+
+export interface InterfaceType extends ObjectType {
+  data: {
+    name: string;
+    key: string;
+    data: {
+      logic: InterfaceLogicStepType[];
+      variables: {
+        [key: string]: {
+          type;
+          label: string;
+          model?: string;
+        };
+      };
+      interfaces: InterfaceInterfaces;
+    };
+  };
+}
