@@ -113,6 +113,8 @@ const DropTarget: React.FC<{
             width: "100%",
             flex: 1,
             lineHeight: "42px",
+            position: "relative",
+            left: -18,
           }}
           ref={drop}
         >

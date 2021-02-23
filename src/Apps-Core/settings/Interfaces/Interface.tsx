@@ -26,6 +26,7 @@ import {
   FaSquare,
   FaTh,
   FaThLarge,
+  FaToggleOn,
 } from "react-icons/fa";
 import DropTarget from "./InterfaceDesigner/DropTarget";
 import Component from "./InterfaceDesigner/Component";
@@ -277,7 +278,83 @@ const AppSettingsInterfaceUI: React.FC<{
                       Button
                     </>
                   ),
-                  popup: (component, layoutItem, respond, deleteItem) => {},
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
+                },
+                toggle: {
+                  label: (
+                    <>
+                      <FaToggleOn style={{ marginRight: 15 }} />
+                      Toggle
+                    </>
+                  ),
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit toggle",
+                      form: [
+                        {
+                          type: "dropdown",
+                          label: "Attach to variable",
+                          value: layoutItem?.varName,
+                          key: "varName",
+                          dropdownOptions: filter(
+                            varList,
+                            (o) => o.args.type === "boolean"
+                          ),
+                        },
+                        {
+                          key: "labelWhenTrue",
+                          label: "Label when true",
+                          value: layoutItem?.labelWhenTrue,
+                          type: "text",
+                        },
+                        {
+                          key: "labelWhenFalse",
+                          label: "Label when false",
+                          value: layoutItem?.labelWhenFalse,
+                          type: "text",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
                 },
               }}
               onDrop={(newContent) => {
@@ -430,6 +507,14 @@ export const InterfaceComponentsList: React.FC<{
             <FaMouse />
           </ListItemIcon>
           <ListItemText>Button</ListItemText>
+        </ListItem>
+      </Component>
+      <Component id="toggle">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaToggleOn />
+          </ListItemIcon>
+          <ListItemText>Toggle</ListItemText>
         </ListItem>
       </Component>
     </List>

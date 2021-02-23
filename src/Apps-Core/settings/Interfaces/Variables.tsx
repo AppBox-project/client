@@ -1,6 +1,12 @@
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
-import { FaAlignJustify, FaPlus, FaUser, FaUsers } from "react-icons/fa";
+import {
+  FaAlignJustify,
+  FaPlus,
+  FaToggleOn,
+  FaUser,
+  FaUsers,
+} from "react-icons/fa";
 import {
   AppContextType,
   InterfaceType,
@@ -47,6 +53,7 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.type,
                   dropdownOptions: [
                     { label: "Text", value: "text" },
+                    { label: "Boolean", value: "boolean" },
                     { label: "Object", value: "object" },
                     { label: "Objects", value: "objects" },
                   ],
@@ -57,7 +64,22 @@ const AppSettingsInterfaceVariables: React.FC<{
                   type: "dropdown",
                   value: value.model,
                   dropdownOptions: modelList,
+                  onlyDisplayWhen: { type: "object" },
+                },
+                {
+                  label: "Model",
+                  key: "model",
+                  type: "dropdown",
+                  value: value.model,
+                  dropdownOptions: modelList,
                   onlyDisplayWhen: { type: "objects" },
+                },
+                {
+                  label: "Default value",
+                  key: "default",
+                  type: "boolean",
+                  value: value.default,
+                  onlyDisplayWhen: { type: "boolean" },
                 },
               ],
               buttons: [
@@ -78,6 +100,7 @@ const AppSettingsInterfaceVariables: React.FC<{
             {value.type === "objects" && <FaUsers />}
             {value.type === "object" && <FaUser />}
             {value.type === "text" && <FaAlignJustify />}
+            {value.type === "boolean" && <FaToggleOn />}
           </ListItemIcon>
           <ListItemText primary={value.label} secondary={value.description} />
         </ListItem>

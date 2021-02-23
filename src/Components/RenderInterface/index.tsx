@@ -11,6 +11,7 @@ import RenderInterfaceGridItem from "./InterfaceComponents/GridItem";
 import RenderInterfaceCard from "./InterfaceComponents/Card";
 import RenderInterfaceAnimationSingle from "./InterfaceComponents/AnimationSingle";
 import RenderInterfaceList from "./InterfaceComponents/List";
+import RenderInterfaceToggle from "./InterfaceComponents/Toggle";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -81,6 +82,7 @@ const RenderInterface: React.FC<{
           key={contentKey}
           layoutItem={contentItem}
           vars={varValues}
+          setVars={setVarValues}
         />
       ))}
     </>
@@ -99,12 +101,15 @@ interface LayoutItemType {
   varName?: string;
   primary?: string;
   secondary?: string;
+  labelWhenTrue?: string;
+  labelWhenFalse?: string;
 }
 
 const LayoutItem: React.FC<{
   layoutItem: LayoutItemType;
   vars: { [varKey: string]: {} };
-}> = ({ layoutItem, vars }) => {
+  setVars;
+}> = ({ layoutItem, vars, setVars }) => {
   return (
     <>
       {layoutItem.type === "text" ? (
@@ -112,13 +117,23 @@ const LayoutItem: React.FC<{
       ) : layoutItem.type === "grid_container" ? (
         <RenderInterfaceGridContainer>
           {layoutItem.items.map((child) => (
-            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+            />
           ))}
         </RenderInterfaceGridContainer>
       ) : layoutItem.type === "grid_item" ? (
         <RenderInterfaceGridItem>
           {layoutItem.items.map((child) => (
-            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+            />
           ))}
         </RenderInterfaceGridItem>
       ) : layoutItem.type === "card" ? (
@@ -127,13 +142,23 @@ const LayoutItem: React.FC<{
           title={layoutItem.title}
         >
           {layoutItem.items.map((child) => (
-            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+            />
           ))}
         </RenderInterfaceCard>
       ) : layoutItem.type === "animation_single" ? (
         <RenderInterfaceAnimationSingle>
           {layoutItem.items.map((child) => (
-            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+            />
           ))}
         </RenderInterfaceAnimationSingle>
       ) : layoutItem.type === "list" ? (
@@ -142,6 +167,15 @@ const LayoutItem: React.FC<{
           list={(vars[layoutItem.varName] as []) || []}
           primary={layoutItem.primary}
           secondary={layoutItem.secondary}
+        />
+      ) : layoutItem.type === "toggle" ? (
+        <RenderInterfaceToggle
+          value={(vars[layoutItem.varName] as boolean) || false}
+          labelWhenTrue={layoutItem.labelWhenTrue}
+          labelWhenFalse={layoutItem.labelWhenFalse}
+          onChange={(newVal) =>
+            setVars({ ...vars, [layoutItem.varName]: newVal })
+          }
         />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`
