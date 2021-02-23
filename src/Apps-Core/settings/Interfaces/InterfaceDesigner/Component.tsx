@@ -2,11 +2,11 @@ import React from "react";
 import { useDrag } from "react-dnd";
 import styles from "./styles.module.scss";
 
-const Component: React.FC<{ label; id: string }> = ({ label, id }) => {
+const Component: React.FC<{ id: string; children }> = ({ id, children }) => {
   const [, drag] = useDrag({ item: { type: "box", id } });
   return (
-    <div ref={drag} style={{ margin: "0 auto" }} className={styles.draggable}>
-      {label}
+    <div ref={drag} className={styles.draggable}>
+      {children}
     </div>
   );
 };

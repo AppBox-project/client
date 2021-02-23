@@ -15,9 +15,12 @@
 }
 
 .componentWrapperSmall {
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid #485263;
+  background-color: rgba(72, 82, 99, 0.9);
+  border-radius: 15px;
   box-sizing: border-box;
   margin-bottom: 15px;
+  color: white;
 }
 
 .dropTarget {
@@ -44,5 +47,5 @@
 }
 
 .draggable {
-  border: 1px solid #485263;
+  cursor: grab;
 }

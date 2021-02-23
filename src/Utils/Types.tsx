@@ -693,9 +693,7 @@ export interface InterfaceLogicStepType {
 
 export interface InterfaceInterfaces {
   label: string;
-  content: {
-    [key: string]: { type: "text"; content: string; label: string }[];
-  };
+  content: LayoutDesignerItem[];
 }
 
 export interface InterfaceType extends ObjectType {

@@ -25,7 +25,7 @@ const AppSettingsInterfaceLogic: React.FC<{
   return (
     <>
       <div className={styles.row}>
-        <div className={styles.trigger}>Trigger</div>
+        <div className={styles.trigger}>{newInterface.data.name}</div>
         <div className={styles.lineDown} />
       </div>
 
