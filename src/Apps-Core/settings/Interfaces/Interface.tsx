@@ -6,7 +6,7 @@ import {
   ListSubheader,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppContextType,
   ValueListItemType,
@@ -14,11 +14,12 @@ import {
   InterfaceType,
   LayoutType,
 } from "../../../Utils/Types";
-import { map } from "lodash";
+import { map, filter } from "lodash";
 import {
   FaAlignLeft,
   FaColumns,
   FaKeyboard,
+  FaList,
   FaMouse,
   FaObjectGroup,
   FaObjectUngroup,
@@ -41,8 +42,16 @@ const AppSettingsInterfaceUI: React.FC<{
   selectedInterface: string;
 }> = ({ newInterface, context, selectedInterface, setNewInterface }) => {
   // Vars
+  const [varList, setVarList] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
+  useEffect(() => {
+    const nl: ValueListItemType[] = [];
+    map(newInterface.data.data.variables, (nv, nk) => {
+      nl.push({ label: nv.label, value: nk, args: { ...nv } });
+    });
+    setVarList(nl);
+  }, [newInterface]);
 
   // UI
   if (!selectedInterface) return <>Please select an interface on the right</>;
@@ -118,7 +127,32 @@ const AppSettingsInterfaceUI: React.FC<{
                     </>
                   ),
                   droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit card",
+                      form: [
+                        {
+                          type: "text",
+                          label: "Title",
+                          value: layoutItem?.title,
+                          key: "title",
+                        },
+                        {
+                          type: "boolean",
+                          label: "With margin",
+                          value: layoutItem?.withBigMargin,
+                          key: "withBigMargin",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
                 },
                 animation_group: {
                   label: (
@@ -186,6 +220,55 @@ const AppSettingsInterfaceUI: React.FC<{
                       ],
                     });
                   },
+                },
+                list: {
+                  label: (
+                    <>
+                      <FaList style={{ marginRight: 15 }} />
+                      List
+                    </>
+                  ),
+                  popup: (component, layoutItem, respond, deleteItem) =>
+                    context.setDialog({
+                      display: true,
+                      title: "Edit list",
+                      form: [
+                        {
+                          type: "dropdown",
+                          label: "Show variable",
+                          value: layoutItem?.varName,
+                          key: "varName",
+                          dropdownOptions: filter(
+                            varList,
+                            (o) => o.args.type === "objects"
+                          ),
+                        },
+                        {
+                          type: "text",
+                          label: "Title",
+                          value: layoutItem?.title,
+                          key: "title",
+                        },
+                        {
+                          type: "text",
+                          label: "primary",
+                          value: layoutItem?.primary,
+                          key: "primary",
+                        },
+                        {
+                          type: "text",
+                          label: "secondary",
+                          value: layoutItem?.secondary,
+                          key: "secondary",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    }),
                 },
                 button: {
                   label: (
@@ -331,6 +414,14 @@ export const InterfaceComponentsList: React.FC<{
             <FaAlignLeft />
           </ListItemIcon>
           <ListItemText>Text</ListItemText>
+        </ListItem>
+      </Component>
+      <Component id="list">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaList />
+          </ListItemIcon>
+          <ListItemText>List</ListItemText>
         </ListItem>
       </Component>
       <Component id="button">

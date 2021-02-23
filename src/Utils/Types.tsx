@@ -367,6 +367,7 @@ export interface TreeViewDataItem {
 export interface ValueListItemType {
   label: string;
   value: string;
+  args?: { [key: string]: any };
 }
 
 export interface ListDetailItemType {

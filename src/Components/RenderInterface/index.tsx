@@ -6,6 +6,11 @@ import {
   InterfaceType,
 } from "../../Utils/Types";
 import { map } from "lodash";
+import RenderInterfaceGridContainer from "./InterfaceComponents/GridContainer";
+import RenderInterfaceGridItem from "./InterfaceComponents/GridItem";
+import RenderInterfaceCard from "./InterfaceComponents/Card";
+import RenderInterfaceAnimationSingle from "./InterfaceComponents/AnimationSingle";
+import RenderInterfaceList from "./InterfaceComponents/List";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -72,7 +77,11 @@ const RenderInterface: React.FC<{
   return (
     <>
       {map(currentInterface.content, (contentItem, contentKey) => (
-        <LayoutItem key={contentKey} layoutItem={contentItem} />
+        <LayoutItem
+          key={contentKey}
+          layoutItem={contentItem}
+          vars={varValues}
+        />
       ))}
     </>
   );
@@ -82,17 +91,61 @@ export default RenderInterface;
 
 interface LayoutItemType {
   type: "text";
-  content?: string;
+  text?: string;
+  items?: LayoutItemType[];
+  key: string;
+  title?: string;
+  withBigMargin?: true;
+  varName?: string;
+  primary?: string;
+  secondary?: string;
 }
 
-const LayoutItem: React.FC<{ layoutItem: LayoutItemType }> = ({
-  layoutItem,
-}) => {
+const LayoutItem: React.FC<{
+  layoutItem: LayoutItemType;
+  vars: { [varKey: string]: {} };
+}> = ({ layoutItem, vars }) => {
   return (
     <>
-      {layoutItem.type === "text"
-        ? layoutItem.content
-        : `Unknown layoutItem ${layoutItem.type}`}
+      {layoutItem.type === "text" ? (
+        <div>{layoutItem.text}</div>
+      ) : layoutItem.type === "grid_container" ? (
+        <RenderInterfaceGridContainer>
+          {layoutItem.items.map((child) => (
+            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+          ))}
+        </RenderInterfaceGridContainer>
+      ) : layoutItem.type === "grid_item" ? (
+        <RenderInterfaceGridItem>
+          {layoutItem.items.map((child) => (
+            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+          ))}
+        </RenderInterfaceGridItem>
+      ) : layoutItem.type === "card" ? (
+        <RenderInterfaceCard
+          withBigMargin={layoutItem.withBigMargin}
+          title={layoutItem.title}
+        >
+          {layoutItem.items.map((child) => (
+            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+          ))}
+        </RenderInterfaceCard>
+      ) : layoutItem.type === "animation_single" ? (
+        <RenderInterfaceAnimationSingle>
+          {layoutItem.items.map((child) => (
+            <LayoutItem key={child.key} layoutItem={child} vars={vars} />
+          ))}
+        </RenderInterfaceAnimationSingle>
+      ) : layoutItem.type === "list" ? (
+        <RenderInterfaceList
+          title={layoutItem.title}
+          list={(vars[layoutItem.varName] as []) || []}
+          primary={layoutItem.primary}
+          secondary={layoutItem.secondary}
+        />
+      ) : (
+        `Unknown layoutItem ${layoutItem.type}`
+      )}
     </>
   );
 };
