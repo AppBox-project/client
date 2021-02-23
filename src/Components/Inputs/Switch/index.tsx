@@ -22,11 +22,11 @@ const InputSwitch: React.FC<{
   const SwitchElement = (
     <Switch
       checked={state}
+      color="primary"
       onChange={(event) => {
         setState(event.target.checked);
         if (onChange) onChange(event.target.checked);
       }}
-      color="primary"
     />
   );
 

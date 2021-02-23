@@ -76,7 +76,7 @@ const RenderInterface: React.FC<{
   if (!interfaceObject) return <context.UI.Loading />;
   if (!currentInterface) return <>No interface set</>;
   return (
-    <>
+    <div style={{ marginBottom: 82 }}>
       {map(currentInterface.content, (contentItem, contentKey) => (
         <LayoutItem
           key={contentKey}
@@ -85,7 +85,7 @@ const RenderInterface: React.FC<{
           setVars={setVarValues}
         />
       ))}
-    </>
+    </div>
   );
 };
 
