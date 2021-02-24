@@ -12,6 +12,8 @@ import RenderInterfaceCard from "./InterfaceComponents/Card";
 import RenderInterfaceAnimationSingle from "./InterfaceComponents/AnimationSingle";
 import RenderInterfaceList from "./InterfaceComponents/List";
 import RenderInterfaceToggle from "./InterfaceComponents/Toggle";
+import Loading from "../Loading";
+import formula from "../../Utils/Functions/ClientFormula";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -110,6 +112,18 @@ const LayoutItem: React.FC<{
   vars: { [varKey: string]: {} };
   setVars;
 }> = ({ layoutItem, vars, setVars }) => {
+  // Vars
+  const [newLayoutItem, setNewLayoutItem] = useState<LayoutItemType>();
+
+  // Lifecycle
+  useEffect(() => {
+    parseObjectFormulas(layoutItem, vars).then((result: LayoutItemType) => {
+      setNewLayoutItem(result);
+    });
+  }, [layoutItem, vars]);
+
+  // UI
+  if (!newLayoutItem) return <Loading />;
   return (
     <>
       {layoutItem.type === "text" ? (
@@ -163,7 +177,7 @@ const LayoutItem: React.FC<{
         </RenderInterfaceAnimationSingle>
       ) : layoutItem.type === "list" ? (
         <RenderInterfaceList
-          title={layoutItem.title}
+          title={newLayoutItem.title}
           list={(vars[layoutItem.varName] as []) || []}
           primary={layoutItem.primary}
           secondary={layoutItem.secondary}
@@ -183,3 +197,21 @@ const LayoutItem: React.FC<{
     </>
   );
 };
+
+const parseObjectFormulas = (obj, data) =>
+  new Promise<{}>(async (resolve) => {
+    const newObject = { ...obj };
+    //@ts-ignore
+    await Object.keys(newObject).reduce(async (prev, currKey) => {
+      await prev;
+      const i = newObject[currKey];
+      if (typeof i === "string") {
+        if (i.match(/{{.*}}/gm)) {
+          newObject[currKey] = await formula(i, { ...data });
+        }
+      }
+
+      return currKey;
+    }, Object.keys(newObject)[0]);
+    resolve(newObject);
+  });
