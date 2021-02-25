@@ -14,6 +14,7 @@ import RenderInterfaceList from "./InterfaceComponents/List";
 import RenderInterfaceToggle from "./InterfaceComponents/Toggle";
 import Loading from "../Loading";
 import formula from "../../Utils/Functions/ClientFormula";
+import RenderInterfaceOptions from "./InterfaceComponents/Options";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -22,8 +23,17 @@ const RenderInterface: React.FC<{
   // Vars
   const [interfaceObject, setInterfaceObject] = useState<InterfaceType>();
   const [varValues, setVarValues] = useState<{ [varKey: string]: {} }>({});
+  const [prevVarValues, setPrevVarValues] = useState<{ [varKey: string]: {} }>(
+    {}
+  );
   const [currentInterface, setCurrentInterface] = useState<
     InterfaceInterfaces
+  >();
+  const [staticQueries, setStaticQueries] = useState<
+    { vars: []; objectId; filter; varName: string }[]
+  >();
+  const [dynamicQueries, setDynamicQueries] = useState<
+    { vars: []; objectId; filter; varName: string }[]
   >();
 
   // Lifecycle
@@ -33,46 +43,129 @@ const RenderInterface: React.FC<{
       {},
       async (response) => {
         const newInterface: InterfaceType = response.data[0];
-
-        // Execute interface logic
-        const newVarValues = {};
-        //@ts-ignore
-        await newInterface.data.data.logic.reduce(async (prev, logicStep) => {
-          await prev;
-          switch (logicStep.type) {
-            case "getObjects":
-              const filter = JSON.parse(logicStep.args.filter);
-              const modelId =
-                newInterface.data.data.variables[logicStep.args.assignedVar]
-                  .model;
-              const fetchDataPromise = new Promise((resolve) => {
-                context.getObjects(modelId, filter, (response) => {
-                  resolve(response.data);
-                });
-              });
-              newVarValues[logicStep.args.assignedVar] = await fetchDataPromise;
-              setVarValues(newVarValues);
-              break;
-            case "renderInterface":
-              setCurrentInterface(
-                newInterface.data.data.interfaces[logicStep.args.layoutId]
-              );
-              break;
-            default:
-              console.log(`Unknown logic step type ${logicStep.type}`);
-
-              break;
-          }
-
-          return logicStep;
-        }, newInterface.data.data.logic[0]);
-
         setInterfaceObject(newInterface);
       }
     );
 
     return () => interfaceRequest.stop();
   }, [interfaceId]);
+  useEffect(() => {
+    const newVarValues = {};
+    const newStaticQueries = [];
+    const newDynamicQueries = [];
+
+    if (interfaceObject) {
+      map(interfaceObject.data.data.variables, (nVar, nKey) => {
+        if (nVar.default) {
+          newVarValues[nKey] = nVar.default;
+        }
+      });
+
+      interfaceObject.data.data.logic.map((logicStep) => {
+        switch (logicStep.type) {
+          case "getObjects":
+            const filter = JSON.parse(logicStep.args.filter);
+            let isStatic = true;
+            const queryVars = [];
+            map(filter, (val, key) => {
+              if (val.var) {
+                isStatic = false;
+                queryVars.push(val.var);
+              }
+            });
+
+            if (isStatic) {
+              newStaticQueries.push({
+                varName: logicStep.args.assignedVar,
+                objectId:
+                  interfaceObject.data.data.variables[
+                    logicStep.args.assignedVar
+                  ].model,
+                filter,
+              });
+            } else {
+              newDynamicQueries.push({
+                varName: logicStep.args.assignedVar,
+                vars: queryVars,
+                objectId:
+                  interfaceObject.data.data.variables[
+                    logicStep.args.assignedVar
+                  ].model,
+                filter,
+              });
+            }
+
+            break;
+          case "renderInterface":
+            setCurrentInterface(
+              interfaceObject.data.data.interfaces[logicStep.args.layoutId]
+            );
+
+            break;
+          default:
+            console.log(`Unknown logic step type ${logicStep.type}`);
+
+            break;
+        }
+      });
+
+      setVarValues(newVarValues);
+      setStaticQueries(newStaticQueries);
+      setDynamicQueries(newDynamicQueries);
+    }
+  }, [interfaceObject]);
+
+  // Static queries (only change when the query changes)
+  useEffect(() => {
+    const requests = [];
+    (staticQueries || []).map((sq) => {
+      requests.push(
+        context.getObjects(sq.objectId, sq.filter, (response) => {
+          setVarValues({
+            ...varValues,
+            [sq.varName]: response.data,
+          });
+        })
+      );
+    });
+
+    return () => {
+      requests.map((r) => r.stop());
+    };
+  }, [staticQueries]);
+
+  // Dynamic queries (changes when the variable changes)
+  useEffect(() => {
+    const requests = [];
+    (dynamicQueries || []).map((query) => {
+      let hasChanged = false;
+      query.vars.map((qv) => {
+        if (varValues[qv] !== prevVarValues[qv]) {
+          hasChanged = true;
+        }
+      });
+
+      if (hasChanged) {
+        const filter = { ...query.filter };
+        map(filter, (v, k) => {
+          if (v.var) {
+            filter[k] = varValues[v.var];
+          }
+        });
+
+        requests.push(
+          context.getObjects(query.objectId, filter, (response) => {
+            setVarValues({ ...varValues, [query.varName]: response.data });
+          })
+        );
+        setPrevVarValues({ ...varValues });
+      }
+    });
+
+    return () => {
+      requests.map((r) => r.stop());
+    };
+  }, [dynamicQueries, varValues, prevVarValues]);
 
   // UI
   if (!interfaceObject) return <context.UI.Loading />;
@@ -85,6 +178,7 @@ const RenderInterface: React.FC<{
           layoutItem={contentItem}
           vars={varValues}
           setVars={setVarValues}
+          interfaceObject={interfaceObject}
         />
       ))}
     </div>
@@ -105,13 +199,15 @@ interface LayoutItemType {
   secondary?: string;
   labelWhenTrue?: string;
   labelWhenFalse?: string;
+  linkTo?: string;
 }
 
 const LayoutItem: React.FC<{
   layoutItem: LayoutItemType;
   vars: { [varKey: string]: {} };
   setVars;
-}> = ({ layoutItem, vars, setVars }) => {
+  interfaceObject: InterfaceType;
+}> = ({ layoutItem, vars, setVars, interfaceObject }) => {
   // Vars
   const [newLayoutItem, setNewLayoutItem] = useState<LayoutItemType>();
 
@@ -127,7 +223,7 @@ const LayoutItem: React.FC<{
   return (
     <>
       {layoutItem.type === "text" ? (
-        <div>{layoutItem.text}</div>
+        <div>{newLayoutItem.text}</div>
       ) : layoutItem.type === "grid_container" ? (
         <RenderInterfaceGridContainer>
           {layoutItem.items.map((child) => (
@@ -136,6 +232,7 @@ const LayoutItem: React.FC<{
               layoutItem={child}
               vars={vars}
               setVars={setVars}
+              interfaceObject={interfaceObject}
             />
           ))}
         </RenderInterfaceGridContainer>
@@ -147,6 +244,7 @@ const LayoutItem: React.FC<{
               layoutItem={child}
               vars={vars}
               setVars={setVars}
+              interfaceObject={interfaceObject}
             />
           ))}
         </RenderInterfaceGridItem>
@@ -161,6 +259,7 @@ const LayoutItem: React.FC<{
               layoutItem={child}
               vars={vars}
               setVars={setVars}
+              interfaceObject={interfaceObject}
             />
           ))}
         </RenderInterfaceCard>
@@ -172,24 +271,34 @@ const LayoutItem: React.FC<{
               layoutItem={child}
               vars={vars}
               setVars={setVars}
+              interfaceObject={interfaceObject}
             />
           ))}
         </RenderInterfaceAnimationSingle>
       ) : layoutItem.type === "list" ? (
         <RenderInterfaceList
           title={newLayoutItem.title}
-          list={(vars[layoutItem.varName] as []) || []}
-          primary={layoutItem.primary}
-          secondary={layoutItem.secondary}
+          list={(vars[newLayoutItem.varName] as []) || []}
+          primary={newLayoutItem.primary}
+          secondary={newLayoutItem.secondary}
+          linkTo={layoutItem.linkTo}
         />
       ) : layoutItem.type === "toggle" ? (
         <RenderInterfaceToggle
-          value={(vars[layoutItem.varName] as boolean) || false}
-          labelWhenTrue={layoutItem.labelWhenTrue}
-          labelWhenFalse={layoutItem.labelWhenFalse}
+          value={(vars[newLayoutItem.varName] as boolean) || false}
+          labelWhenTrue={newLayoutItem.labelWhenTrue}
+          labelWhenFalse={newLayoutItem.labelWhenFalse}
           onChange={(newVal) =>
-            setVars({ ...vars, [layoutItem.varName]: newVal })
+            setVars({ ...vars, [newLayoutItem.varName]: newVal })
           }
+        />
+      ) : layoutItem.type === "options" ? (
+        <RenderInterfaceOptions
+          value={vars[newLayoutItem.varName] as string}
+          onChange={(newVal) =>
+            setVars({ ...vars, [newLayoutItem.varName]: newVal })
+          }
+          varMeta={interfaceObject.data.data.variables[newLayoutItem.varName]}
         />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`

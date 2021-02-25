@@ -2,6 +2,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
 import {
   FaAlignJustify,
+  FaList,
   FaPlus,
   FaToggleOn,
   FaUser,
@@ -53,6 +54,7 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.type,
                   dropdownOptions: [
                     { label: "Text", value: "text" },
+                    { label: "Options", value: "options" },
                     { label: "Boolean", value: "boolean" },
                     { label: "Object", value: "object" },
                     { label: "Objects", value: "objects" },
@@ -81,6 +83,20 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.default,
                   onlyDisplayWhen: { type: "boolean" },
                 },
+                {
+                  label: "Options (comma seperated)",
+                  key: "options",
+                  type: "text",
+                  value: value.options,
+                  onlyDisplayWhen: { type: "options" },
+                },
+                {
+                  label: "Default value",
+                  key: "default",
+                  type: "text",
+                  value: value.default,
+                  onlyDisplayWhen: { type: "options" },
+                },
               ],
               buttons: [
                 {
@@ -101,6 +117,7 @@ const AppSettingsInterfaceVariables: React.FC<{
             {value.type === "object" && <FaUser />}
             {value.type === "text" && <FaAlignJustify />}
             {value.type === "boolean" && <FaToggleOn />}
+            {value.type === "options" && <FaList />}
           </ListItemIcon>
           <ListItemText primary={value.label} secondary={value.description} />
         </ListItem>

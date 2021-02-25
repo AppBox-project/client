@@ -2,18 +2,35 @@ import { List, ListItem, ListItemText, ListSubheader } from "@material-ui/core";
 import React from "react";
 import { ObjectType } from "../../../Utils/Types";
 import { get } from "lodash";
+import formula from "../../../Utils/Functions/ClientFormula";
+import { useHistory } from "react-router-dom";
 
 const RenderInterfaceList: React.FC<{
   title?: string;
   list: any[];
   primary?: string;
   secondary?: string;
-}> = ({ title, list, primary, secondary }) => {
+  linkTo: string;
+}> = ({ title, list, primary, secondary, linkTo }) => {
+  // Vars
+  const history = useHistory();
+  // UI
   return (
     <List>
       {title && <ListSubheader>{title}</ListSubheader>}
       {list.map((item: ObjectType) => (
-        <ListItem key={item._id}>
+        <ListItem
+          key={item._id}
+          /*@ts-ignore */
+          button={linkTo !== undefined}
+          onClick={
+            linkTo
+              ? async () => {
+                  history.push(await formula(linkTo, { ...item }));
+                }
+              : () => {}
+          }
+        >
           <ListItemText
             primary={primary ? get(item, primary) : "error"}
             secondary={secondary && get(item, secondary)}

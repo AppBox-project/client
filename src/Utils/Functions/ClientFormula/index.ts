@@ -17,7 +17,7 @@ const formula = async (input, data) =>
             processFormula(func[1], func[2], data)
           );
         } else {
-          console.log("Regular", tag);
+          formula = formula.replace(match[0], data[tag]);
         }
       }
     );

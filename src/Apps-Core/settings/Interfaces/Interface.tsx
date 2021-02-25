@@ -20,6 +20,7 @@ import {
   FaColumns,
   FaKeyboard,
   FaList,
+  FaListUl,
   FaMouse,
   FaObjectGroup,
   FaObjectUngroup,
@@ -252,15 +253,21 @@ const AppSettingsInterfaceUI: React.FC<{
                         },
                         {
                           type: "text",
-                          label: "primary",
+                          label: "Primary text",
                           value: layoutItem?.primary,
                           key: "primary",
                         },
                         {
                           type: "text",
-                          label: "secondary",
+                          label: "Secondary text",
                           value: layoutItem?.secondary,
                           key: "secondary",
+                        },
+                        {
+                          type: "text",
+                          label: "Link to",
+                          value: layoutItem?.linkTo,
+                          key: "linkTo",
                         },
                       ],
                       buttons: [
@@ -334,6 +341,60 @@ const AppSettingsInterfaceUI: React.FC<{
                           label: "Label when false",
                           value: layoutItem?.labelWhenFalse,
                           type: "text",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
+                },
+                options: {
+                  label: (
+                    <>
+                      <FaListUl style={{ marginRight: 15 }} />
+                      Options
+                    </>
+                  ),
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit options",
+                      form: [
+                        {
+                          type: "dropdown",
+                          label: "Attach to variable",
+                          value: layoutItem?.varName,
+                          key: "varName",
+                          dropdownOptions: filter(
+                            varList,
+                            (o) => o.args.type === "options"
+                          ),
+                        },
+                        {
+                          type: "dropdown",
+                          label: "Display as",
+                          value: layoutItem?.displayAs,
+                          key: "displayAs",
+                          dropdownOptions: [
+                            { label: "Dropdown", value: "dropdown" },
+                            { label: "Buttons", value: "buttons" },
+                            { label: "Radio", value: "radio" },
+                          ],
                         },
                       ],
                       buttons: [
@@ -515,6 +576,14 @@ export const InterfaceComponentsList: React.FC<{
             <FaToggleOn />
           </ListItemIcon>
           <ListItemText>Toggle</ListItemText>
+        </ListItem>
+      </Component>
+      <Component id="options">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaListUl />
+          </ListItemIcon>
+          <ListItemText>Options</ListItemText>
         </ListItem>
       </Component>
     </List>
