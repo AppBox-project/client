@@ -7,20 +7,18 @@ const formula = async (input, data) =>
     data = { ...data };
 
     // Extract tags
-    [...formula.matchAll(new RegExp(/{{\s*(?<var>.*?)\s*}}/gm))].map(
-      (match) => {
-        const tag = match.groups.var;
-        if (tag.match(/\w*\(.+\)/)) {
-          const func = new RegExp(/(?<fName>\w*)\((?<fArgs>.*)\)/gm).exec(tag);
-          formula = formula.replace(
-            match[0],
-            processFormula(func[1], func[2], data)
-          );
-        } else {
-          formula = formula.replace(match[0], data[tag]);
-        }
+    [...formula.matchAll(new RegExp(/{{\s*(.*?)\s*}}/gm))].map((match) => {
+      const tag = match[1];
+      if (tag.match(/\w*\(.+\)/)) {
+        const func = new RegExp(/(\w*)\((.*)\)/gm).exec(tag);
+        formula = formula.replace(
+          match[0],
+          processFormula(func[1], func[2], data)
+        );
+      } else {
+        formula = formula.replace(match[0], data[tag]);
       }
-    );
+    });
 
     // Output
     resolve(formula);
