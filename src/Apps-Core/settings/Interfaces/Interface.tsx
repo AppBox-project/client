@@ -1,4 +1,5 @@
 import {
+  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -45,6 +46,7 @@ const AppSettingsInterfaceUI: React.FC<{
 }> = ({ newInterface, context, selectedInterface, setNewInterface }) => {
   // Vars
   const [varList, setVarList] = useState<ValueListItemType[]>([]);
+  const [actionList, setActionList] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
@@ -53,6 +55,12 @@ const AppSettingsInterfaceUI: React.FC<{
       nl.push({ label: nv.label, value: nk, args: { ...nv } });
     });
     setVarList(nl);
+
+    const na: ValueListItemType[] = [];
+    map(newInterface.data.data.actions, (nv, nk) => {
+      na.push({ label: nv.label, value: nk, args: { ...nv } });
+    });
+    setActionList(na);
   }, [newInterface]);
 
   // UI
@@ -108,6 +116,13 @@ const AppSettingsInterfaceUI: React.FC<{
                       Grid (container)
                     </>
                   ),
+                  wrapper: (Props) => {
+                    return (
+                      <Grid container {...Props}>
+                        {Props.children}
+                      </Grid>
+                    );
+                  },
                   droppable: true,
                   popup: (component, layoutItem, respond, deleteItem) => {},
                 },
@@ -119,7 +134,57 @@ const AppSettingsInterfaceUI: React.FC<{
                     </>
                   ),
                   droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
+                  wrapper: (Props) => {
+                    return (
+                      <Grid item {...Props}>
+                        {Props.children}
+                      </Grid>
+                    );
+                  },
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit grid item",
+                      form: [
+                        {
+                          type: "number",
+                          label: "Extra small screens",
+                          value: layoutItem?.xs,
+                          key: "xs",
+                        },
+                        {
+                          type: "number",
+                          label: "Small screens",
+                          value: layoutItem?.sm,
+                          key: "sm",
+                        },
+                        {
+                          type: "number",
+                          label: "Medium screens",
+                          value: layoutItem?.md,
+                          key: "md",
+                        },
+                        {
+                          type: "number",
+                          label: "Large screens",
+                          value: layoutItem?.lg,
+                          key: "lg",
+                        },
+                        {
+                          type: "number",
+                          label: "Extra large screens",
+                          value: layoutItem?.xl,
+                          key: "xl",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
                 },
                 card: {
                   label: (
@@ -288,6 +353,43 @@ const AppSettingsInterfaceUI: React.FC<{
                   popup: (component, layoutItem, respond, deleteItem) => {
                     context.setDialog({
                       display: true,
+                      form: [
+                        {
+                          label: "Label",
+                          value: layoutItem.label,
+                          key: "label",
+                        },
+                        {
+                          label: "Action",
+                          key: "action",
+                          value: layoutItem.action,
+                          type: "dropdown",
+                          dropdownOptions: actionList,
+                        },
+                        {
+                          label: "Variant",
+                          key: "variant",
+                          value: layoutItem.variant,
+                          type: "dropdown",
+                          dropdownOptions: [
+                            { label: "Text", value: "text" },
+                            { label: "Contained", value: "contained" },
+                            { label: "Outlined", value: "outlined" },
+                          ],
+                        },
+                        {
+                          label: "Colored",
+                          key: "colored",
+                          value: layoutItem.colored,
+                          type: "boolean",
+                        },
+                        {
+                          label: "Full width",
+                          key: "fullWidth",
+                          value: layoutItem.fullWidth,
+                          type: "boolean",
+                        },
+                      ],
                       buttons: [
                         {
                           label: (

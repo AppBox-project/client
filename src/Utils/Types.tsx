@@ -697,12 +697,18 @@ export interface InterfaceInterfaces {
   content: LayoutDesignerItem[];
 }
 
+export interface InterfaceActionType {
+  label: string;
+  actions: { type: "set_variables"; vars?: {} }[];
+}
+
 export interface InterfaceType extends ObjectType {
   data: {
     name: string;
     key: string;
     data: {
       logic: InterfaceLogicStepType[];
+      actions: { [key: string]: InterfaceActionType };
       variables: {
         [key: string]: {
           type;

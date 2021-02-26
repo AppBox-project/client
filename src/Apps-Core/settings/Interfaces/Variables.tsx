@@ -4,6 +4,7 @@ import {
   FaAlignJustify,
   FaList,
   FaPlus,
+  FaSortNumericDown,
   FaToggleOn,
   FaUser,
   FaUsers,
@@ -54,8 +55,9 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.type,
                   dropdownOptions: [
                     { label: "Text", value: "text" },
-                    { label: "Options", value: "options" },
+                    { label: "Number", value: "number" },
                     { label: "Boolean", value: "boolean" },
+                    { label: "Options", value: "options" },
                     { label: "Object", value: "object" },
                     { label: "Objects", value: "objects" },
                   ],
@@ -97,6 +99,13 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.default,
                   onlyDisplayWhen: { type: "options" },
                 },
+                {
+                  label: "Default value",
+                  key: "default",
+                  type: "number",
+                  value: value.default,
+                  onlyDisplayWhen: { type: "number" },
+                },
               ],
               buttons: [
                 {
@@ -118,6 +127,7 @@ const AppSettingsInterfaceVariables: React.FC<{
             {value.type === "text" && <FaAlignJustify />}
             {value.type === "boolean" && <FaToggleOn />}
             {value.type === "options" && <FaList />}
+            {value.type === "number" && <FaSortNumericDown />}
           </ListItemIcon>
           <ListItemText primary={value.label} secondary={value.description} />
         </ListItem>

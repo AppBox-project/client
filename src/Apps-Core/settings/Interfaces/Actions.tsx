@@ -1,10 +1,32 @@
-import React from "react";
+import {
+  Collapse,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
+import React, { useState } from "react";
 import {
   AppContextType,
   ValueListItemType,
   ModelType,
   InterfaceType,
 } from "../../../Utils/Types";
+import { map } from "lodash";
+import {
+  FaCaretDown,
+  FaCaretUp,
+  FaEquals,
+  FaLocationArrow,
+  FaPlus,
+} from "react-icons/fa";
+import InputInput from "../../../Components/Inputs/Input";
+import InputSelect from "../../../Components/Inputs/Select";
+import { useEffect } from "reactn";
 
 const AppSettingsInterfaceActions: React.FC<{
   newInterface: InterfaceType;
@@ -12,8 +34,244 @@ const AppSettingsInterfaceActions: React.FC<{
   setNewInterface: (newInterface) => void;
   models: ModelType[];
   modelList: ValueListItemType[];
-}> = ({ newInterface, context }) => {
-  return <div style={{ margin: 15 }}>Actions</div>;
+}> = ({ newInterface, context, setNewInterface }) => {
+  // Vars
+  const [varList, setVarList] = useState<ValueListItemType[]>([]);
+
+  // Lifecycle
+  useEffect(() => {
+    const nl: ValueListItemType[] = [];
+    map(newInterface.data.data.variables, (varValue, varKey) =>
+      nl.push({ label: varValue.label, value: varKey })
+    );
+    setVarList(nl);
+  }, [newInterface]);
+
+  // UI
+  return (
+    <List>
+      {map(newInterface.data.data.actions, (action, actionKey) => (
+        <ListItem
+          key={actionKey}
+          button
+          onClick={() =>
+            context.setDialog({
+              display: true,
+              title: "Edit action",
+              size: "md",
+              form: [
+                {
+                  label: "Label",
+                  key: "label",
+                  value: action.label,
+                  type: "text",
+                },
+                {
+                  label: "Key",
+                  key: "key",
+                  value: actionKey,
+                  type: "text",
+                },
+                {
+                  type: "custom",
+                  customInput: ActionInput,
+                  customInputProps: { varList },
+                  key: "actions",
+                  value: action.actions,
+                  label: "Actions",
+                },
+              ],
+              buttons: [
+                {
+                  label: "Update",
+                  onClick: (form) => {
+                    const newInt = newInterface;
+                    delete newInterface.data.data.actions[actionKey];
+                    newInterface.data.data.actions[form.key] = form;
+                    setNewInterface(newInt);
+                  },
+                },
+              ],
+            })
+          }
+        >
+          <ListItemIcon style={{ minWidth: 24 }}>
+            <FaLocationArrow />
+          </ListItemIcon>
+          <ListItemText>{action.label}</ListItemText>
+        </ListItem>
+      ))}
+      <ListItem
+        button
+        onClick={() => {
+          setNewInterface({
+            ...newInterface,
+            data: {
+              ...newInterface.data,
+              data: {
+                ...newInterface.data.data,
+                actions: {
+                  ...newInterface.data.data.actions,
+                  new: {
+                    label: "New action",
+                    actions: [
+                      { type: "set_variables", label: "New step", args: {} },
+                    ],
+                  },
+                },
+              },
+            },
+          });
+        }}
+      >
+        <ListItemIcon style={{ minWidth: 24 }}>
+          <FaPlus />
+        </ListItemIcon>
+        <ListItemText>Add</ListItemText>
+      </ListItem>
+    </List>
+  );
 };
 
 export default AppSettingsInterfaceActions;
+
+const ActionInput: React.FC<{ value; onChange; varList? }> = ({
+  value,
+  onChange,
+  varList,
+}) => {
+  return (
+    <>
+      <Typography variant="h6">Actions</Typography>
+      <List>
+        {(value || []).map((actionStep, actionStepIndex) => (
+          <ActionStep
+            varList={varList}
+            key={actionStepIndex}
+            actionStep={actionStep}
+            onChange={(newVal) => {
+              const newValue = value;
+              newValue[actionStepIndex] = newVal;
+              onChange(newValue);
+            }}
+          />
+        ))}
+        <ListItem
+          button
+          onClick={() =>
+            onChange([...value, { type: "set_variables", label: "New step" }])
+          }
+        >
+          <ListItemIcon>
+            <FaPlus />
+          </ListItemIcon>
+          <ListItemText>Add step</ListItemText>
+        </ListItem>
+      </List>
+    </>
+  );
+};
+
+const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
+  actionStep,
+  onChange,
+  varList,
+}) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      <ListItem button onClick={() => setOpen(!open)}>
+        <ListItemIcon>
+          {actionStep.type === "set_variables" && <FaEquals />}
+        </ListItemIcon>
+        <ListItemText>{actionStep.label}</ListItemText>
+        <ListItemSecondaryAction>
+          {open ? <FaCaretUp /> : <FaCaretDown />}
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+        style={{
+          marginLeft: 24,
+          paddingLeft: 16,
+          paddingTop: 16,
+          paddingBottom: 16,
+          borderLeft: "1px solid #485263",
+        }}
+      >
+        <InputInput
+          label="Label"
+          value={actionStep.label}
+          onChange={(label) => onChange({ ...actionStep, label })}
+        />
+        <InputSelect
+          label="Type"
+          value={actionStep.type}
+          options={[{ label: "Set variables", value: "set_variables" }]}
+          onChange={(type) => onChange({ ...actionStep, type })}
+        />
+
+        {actionStep.type === "set_variables" && (
+          <>
+            <Typography variant="h6">Set variable configuration</Typography>
+            <Divider />
+            {(actionStep.vars || []).map((v, vIndex) => (
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <InputSelect
+                    label="Variable"
+                    value={v.var}
+                    options={varList}
+                    onChange={(newVal) => {
+                      const newActionStep = actionStep;
+                      newActionStep.vars[vIndex].var = newVal;
+                      onChange(newActionStep);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputSelect
+                    label="Operator"
+                    value={v.operator}
+                    options={[{ label: "Equals", value: "equals" }]}
+                    onChange={(newVal) => {
+                      const newActionStep = actionStep;
+                      newActionStep.vars[vIndex].operator = newVal;
+                      onChange(newActionStep);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <InputInput
+                    label="Value"
+                    value={v.value}
+                    onChange={(newVal) => {
+                      const newActionStep = actionStep;
+                      newActionStep.vars[vIndex].value = newVal;
+                      onChange(newActionStep);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            ))}
+            <Grid
+              item
+              xs={12}
+              onClick={() => {
+                onChange({
+                  ...actionStep,
+                  vars: [...(actionStep.vars || []), {}],
+                });
+              }}
+            >
+              Add
+            </Grid>
+          </>
+        )}
+      </Collapse>
+    </>
+  );
+};

@@ -15,6 +15,9 @@ import RenderInterfaceToggle from "./InterfaceComponents/Toggle";
 import Loading from "../Loading";
 import formula from "../../Utils/Functions/ClientFormula";
 import RenderInterfaceOptions from "./InterfaceComponents/Options";
+import RenderInterfaceAnimationContainer from "./InterfaceComponents/AnimationContainer";
+import RenderInterfaceAnimationItem from "./InterfaceComponents/AnimationItem";
+import RenderInterfaceButton from "./InterfaceComponents/Button";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -200,6 +203,16 @@ interface LayoutItemType {
   labelWhenTrue?: string;
   labelWhenFalse?: string;
   linkTo?: string;
+  xs?: number;
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+  variant?: string;
+  fullWidth?: boolean;
+  label?: string;
+  colored?: boolean;
+  action?: string;
 }
 
 const LayoutItem: React.FC<{
@@ -237,7 +250,7 @@ const LayoutItem: React.FC<{
           ))}
         </RenderInterfaceGridContainer>
       ) : layoutItem.type === "grid_item" ? (
-        <RenderInterfaceGridItem>
+        <RenderInterfaceGridItem {...layoutItem}>
           {layoutItem.items.map((child) => (
             <LayoutItem
               key={child.key}
@@ -275,6 +288,30 @@ const LayoutItem: React.FC<{
             />
           ))}
         </RenderInterfaceAnimationSingle>
+      ) : layoutItem.type === "animation_group" ? (
+        <RenderInterfaceAnimationContainer>
+          {layoutItem.items.map((child) => (
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+              interfaceObject={interfaceObject}
+            />
+          ))}
+        </RenderInterfaceAnimationContainer>
+      ) : layoutItem.type === "animation_item" ? (
+        <RenderInterfaceAnimationItem>
+          {layoutItem.items.map((child) => (
+            <LayoutItem
+              key={child.key}
+              layoutItem={child}
+              vars={vars}
+              setVars={setVars}
+              interfaceObject={interfaceObject}
+            />
+          ))}
+        </RenderInterfaceAnimationItem>
       ) : layoutItem.type === "list" ? (
         <RenderInterfaceList
           title={newLayoutItem.title}
@@ -299,6 +336,17 @@ const LayoutItem: React.FC<{
             setVars({ ...vars, [newLayoutItem.varName]: newVal })
           }
           varMeta={interfaceObject.data.data.variables[newLayoutItem.varName]}
+        />
+      ) : layoutItem.type === "button" ? (
+        <RenderInterfaceButton
+          interfaceObject={interfaceObject}
+          fullWidth={layoutItem.fullWidth}
+          variant={layoutItem.variant}
+          label={layoutItem.label}
+          colored={layoutItem.colored}
+          actionId={layoutItem.action}
+          vars={vars}
+          setVars={setVars}
         />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`

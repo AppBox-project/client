@@ -77,7 +77,7 @@ const DropTarget: React.FC<{
       }
       {...layoutItem}
     >
-      <div ref={drag} style={{ display: "flex" }}>
+      <div ref={drag} style={{ display: "flex", width: "100%" }}>
         {componentList[layoutItem.type].popup && (
           <IconButton
             onClick={() => {

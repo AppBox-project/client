@@ -227,7 +227,7 @@ const DialogPopup: React.FC<{
       </DialogContent>
     )}
     {dialog.form && (
-      <Grid container style={{ width: "90%", marginLeft: 25 }}>
+      <Grid container>
         {dialog.form.map((formItem) => {
           let display = formItem.onlyDisplayWhen ? false : true;
           if (!display) {
@@ -238,7 +238,12 @@ const DialogPopup: React.FC<{
             });
           }
           return display ? (
-            <Grid item xs={formItem.xs ? formItem.xs : 12} key={formItem.key}>
+            <Grid
+              item
+              xs={formItem.xs ? formItem.xs : 12}
+              key={formItem.key}
+              style={{ margin: "5px 0" }}
+            >
               {(!formItem.type ||
                 formItem.type === "text" ||
                 formItem.type === "number") && (
