@@ -10,6 +10,5 @@ export default async (action, vars, setVars) => {
     });
     return currStep;
   }, action.vars[0]);
-
   setVars({ ...vars, ...varsToUpdate });
 };

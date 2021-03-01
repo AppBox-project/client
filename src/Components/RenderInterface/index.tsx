@@ -26,153 +26,83 @@ const RenderInterface: React.FC<{
   // Vars
   const [interfaceObject, setInterfaceObject] = useState<InterfaceType>();
   const [varValues, setVarValues] = useState<{ [varKey: string]: {} }>({});
-  const [prevVarValues, setPrevVarValues] = useState<{ [varKey: string]: {} }>(
-    {}
-  );
+  const [prevVarValues, setPrevVarValues] = useState<{ [varKey: string]: {} }>({
+    initial: true,
+  });
   const [currentInterface, setCurrentInterface] = useState<
     InterfaceInterfaces
   >();
-  const [staticQueries, setStaticQueries] = useState<
-    { vars: []; objectId; filter; varName: string }[]
-  >();
-  const [dynamicQueries, setDynamicQueries] = useState<
-    { vars: []; objectId; filter; varName: string }[]
-  >();
+  const [error, setError] = useState<string>();
 
   // Lifecycle
   useEffect(() => {
     const interfaceRequest = context.getObjects(
       "interfaces",
       {},
-      async (response) => {
-        const newInterface: InterfaceType = response.data[0];
-        setInterfaceObject(newInterface);
+      (response) => {
+        setInterfaceObject(response.data[0]);
       }
     );
 
     return () => interfaceRequest.stop();
   }, [interfaceId]);
+  // When the interface changes
   useEffect(() => {
-    const newVarValues = {};
-    const newStaticQueries = [];
-    const newDynamicQueries = [];
+    const newVarValues = { ...varValues };
+    const requests = [];
 
-    if (interfaceObject) {
+    if (
+      interfaceObject &&
+      JSON.stringify(varValues) !== JSON.stringify(prevVarValues)
+    ) {
       map(interfaceObject.data.data.variables, (nVar, nKey) => {
-        if (nVar.default) {
+        if (nVar.default && !newVarValues[nKey]) {
           newVarValues[nKey] = nVar.default;
         }
       });
+      if (interfaceObject.data.data.logic.trigger) {
+        executeTrigger(
+          context,
+          interfaceObject,
+          interfaceObject.data.data.logic.trigger,
+          setError,
+          newVarValues,
+          (newValue, key) => {
+            newVarValues[key] = newValue;
 
-      interfaceObject.data.data.logic.map((logicStep) => {
-        switch (logicStep.type) {
-          case "getObjects":
-            const filter = JSON.parse(logicStep.args.filter);
-            let isStatic = true;
-            const queryVars = [];
-            map(filter, (val, key) => {
-              if (val.var) {
-                isStatic = false;
-                queryVars.push(val.var);
-              }
-            });
-
-            if (isStatic) {
-              newStaticQueries.push({
-                varName: logicStep.args.assignedVar,
-                objectId:
-                  interfaceObject.data.data.variables[
-                    logicStep.args.assignedVar
-                  ].model,
-                filter,
-              });
-            } else {
-              newDynamicQueries.push({
-                varName: logicStep.args.assignedVar,
-                vars: queryVars,
-                objectId:
-                  interfaceObject.data.data.variables[
-                    logicStep.args.assignedVar
-                  ].model,
-                filter,
-              });
-            }
-
-            break;
-          case "renderInterface":
-            setCurrentInterface(
-              interfaceObject.data.data.interfaces[logicStep.args.layoutId]
-            );
-
-            break;
-          default:
-            console.log(`Unknown logic step type ${logicStep.type}`);
-
-            break;
-        }
-      });
-
-      setVarValues(newVarValues);
-      setStaticQueries(newStaticQueries);
-      setDynamicQueries(newDynamicQueries);
-    }
-  }, [interfaceObject]);
-
-  // Static queries (only change when the query changes)
-  useEffect(() => {
-    const requests = [];
-    (staticQueries || []).map((sq) => {
-      requests.push(
-        context.getObjects(sq.objectId, sq.filter, (response) => {
-          setVarValues({
-            ...varValues,
-            [sq.varName]: response.data,
-          });
-        })
-      );
-    });
-
-    return () => {
-      requests.map((r) => r.stop());
-    };
-  }, [staticQueries]);
-
-  // Dynamic queries (changes when the variable changes)
-  useEffect(() => {
-    const requests = [];
-    (dynamicQueries || []).map((query) => {
-      let hasChanged = false;
-      query.vars.map((qv) => {
-        if (varValues[qv] !== prevVarValues[qv]) {
-          hasChanged = true;
-        }
-      });
-
-      if (hasChanged) {
-        const filter = { ...query.filter };
-        map(filter, (v, k) => {
-          if (v.var) {
-            filter[k] = varValues[v.var];
+            setVarValues(newVarValues);
+            setPrevVarValues(newVarValues);
+          },
+          (r) => {
+            requests.push(r);
+          },
+          (currentInterface) => {
+            setCurrentInterface(currentInterface);
+            setError(undefined);
           }
-        });
-
-        requests.push(
-          context.getObjects(query.objectId, filter, (response) => {
-            setVarValues({ ...varValues, [query.varName]: response.data });
-          })
         );
-        setPrevVarValues({ ...varValues });
+      } else {
+        setError("This interface has no initial trigger!");
       }
-    });
-
-    return () => {
-      requests.map((r) => r.stop());
-    };
-  }, [dynamicQueries, varValues, prevVarValues]);
+      return () => requests.map((r) => r && r.stop());
+    }
+  }, [interfaceObject, varValues, prevVarValues]);
 
   // UI
+  if (error)
+    return (
+      <context.UI.Animations.Animation>
+        <context.UI.Design.Card title="Error" withBigMargin>
+          {error}
+        </context.UI.Design.Card>
+      </context.UI.Animations.Animation>
+    );
+
   if (!interfaceObject) return <context.UI.Loading />;
-  if (!currentInterface) return <>No interface set</>;
+  if (!currentInterface) {
+    setError("No interface has been set, so none can be rendered");
+    return;
+  }
   return (
     <div style={{ marginBottom: 82 }}>
       {map(currentInterface.content, (contentItem, contentKey) => (
@@ -233,6 +163,7 @@ const LayoutItem: React.FC<{
 
   // UI
   if (!newLayoutItem) return <Loading />;
+
   return (
     <>
       {layoutItem.type === "text" ? (
@@ -340,11 +271,11 @@ const LayoutItem: React.FC<{
       ) : layoutItem.type === "button" ? (
         <RenderInterfaceButton
           interfaceObject={interfaceObject}
-          fullWidth={layoutItem.fullWidth}
-          variant={layoutItem.variant}
-          label={layoutItem.label}
-          colored={layoutItem.colored}
-          actionId={layoutItem.action}
+          fullWidth={newLayoutItem.fullWidth}
+          variant={newLayoutItem.variant}
+          label={newLayoutItem.label}
+          colored={newLayoutItem.colored}
+          actionId={newLayoutItem.action}
           vars={vars}
           setVars={setVars}
         />
@@ -371,4 +302,65 @@ const parseObjectFormulas = (obj, data) =>
       return currKey;
     }, Object.keys(newObject)[0]);
     resolve(newObject);
+  });
+
+const executeTrigger = async (
+  context: AppContextType,
+  interfaceObject: InterfaceType,
+  stepId: string,
+  setError,
+  varValues,
+  setVarValues: (value, key) => void,
+  addToRequests: (request) => void,
+  setCurrentInterface
+) =>
+  new Promise(async (resolve, reject) => {
+    const step = interfaceObject.data.data.logic.steps[stepId];
+    if (!step) {
+      setError(`Error executing step ${stepId}`);
+      return;
+    }
+
+    switch (step.type) {
+      case "getObjects":
+        const filter: {} = JSON.parse(step.args.filter);
+        map(filter, (v, k) => {
+          if (v.var) {
+            filter[k] = varValues[v.var];
+          }
+        });
+
+        addToRequests(
+          context.getObjects(
+            interfaceObject.data.data.variables[step.args.assignedVar].model,
+            filter,
+            (response) => {
+              const newVarValues = varValues;
+              newVarValues[step.args.assignedVar] = response.data;
+              setVarValues(response.data, step.args.assignedVar);
+
+              executeTrigger(
+                context,
+                interfaceObject,
+                step.results[0].step,
+                setError,
+                newVarValues,
+                setVarValues,
+                addToRequests,
+                setCurrentInterface
+              );
+            }
+          )
+        );
+
+        break;
+      case "renderInterface":
+        setCurrentInterface(
+          interfaceObject.data.data.interfaces[step.args.layoutId]
+        );
+        break;
+      default:
+        setError(`Failed to execute step ${stepId}: unknown type ${step.type}`);
+        break;
+    }
   });

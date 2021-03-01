@@ -1,8 +1,7 @@
 .row {
-  min-height: 75px;
   padding: 15px;
-  margin: 0 auto;
-  width: 150px;
+  height: 95px;
+  margin: -15px 0 15px 0;
 }
 
 .trigger {
@@ -14,6 +13,8 @@
   text-align: center;
   color: white;
   box-shadow: 0px 3px 20px rgba(72, 82, 99, 0.2);
+  margin: 0 auto;
+  width: 150px;
 }
 
 .step {
@@ -27,22 +28,37 @@
   box-shadow: 0px 3px 20px rgba(72, 82, 99, 0.2);
   z-index: 55;
   cursor: pointer;
+  margin: 0 auto;
+  width: 150px;
 }
 
 /* Lines */
 .lineDown {
-  height: 30px;
+  height: 75px;
   background-color: #485263;
   width: 3px;
   position: relative;
-  left: 75px;
-  margin-top: -75px;
-  top: 75px;
+  left: 50%;
   z-index: 50;
   transition: all 0.3s;
   cursor: pointer;
   &:hover {
-    background-color: black;
     box-shadow: 0px 3px 20px rgba(72, 82, 99, 0.2);
+  }
+  z-index: 50;
+  transition: all 0.3s;
+
+  & div {
+    background-color: rgb(72, 82, 99);
+    width: 125px;
+    height: 25px;
+    text-align: center;
+    border-radius: 18px;
+    line-height: 25px;
+    position: relative;
+    left: -60px;
+    top: 25px;
+    z-index: 51 !important;
+    color: white;
   }
 }

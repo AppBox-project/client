@@ -1,4 +1,4 @@
-import { Button, Divider, Typography } from "@material-ui/core";
+import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import {
   AppContextType,
@@ -9,6 +9,7 @@ import {
 } from "../../../Utils/Types";
 import styles from "./Logic.module.scss";
 import { map } from "lodash";
+import uniqid from "uniqid";
 
 const AppSettingsInterfaceLogic: React.FC<{
   newInterface: InterfaceType;
@@ -23,70 +24,168 @@ const AppSettingsInterfaceLogic: React.FC<{
 
   // UI
   return (
-    <>
+    <div style={{ paddingBottom: 50 }}>
       <div className={styles.row}>
         <div className={styles.trigger}>{newInterface.data.name}</div>
-        <div className={styles.lineDown} />
-      </div>
-
-      {newInterface.data.data.logic.map((logicStep, stepIndex) => (
-        <div key={logicStep.key} className={styles.row}>
-          <div
-            className={styles.step}
-            onClick={() =>
-              context.setDialog({
-                display: true,
-                size: "md",
-                title: "Edit logic step",
-                content: (
-                  <PopupContent
-                    newInterface={newInterface}
-                    step={logicStep}
-                    context={context}
-                    onChange={(newStep) => {
-                      const newSteps = newInterface.data.data.logic;
-                      newSteps[stepIndex] = newStep;
-                      setNewInterface({
-                        ...newInterface,
-                        data: {
-                          ...newInterface.data,
-                          data: { ...newInterface.data.data, logic: newSteps },
-                        },
-                      });
-                      context.setDialog({ display: false });
-                    }}
-                  />
-                ),
-              })
-            }
-          >
-            {logicStep.label}
-          </div>
-          <div
-            className={styles.lineDown}
-            onClick={() =>
-              setNewInterface({
-                ...newInterface,
+        <div
+          className={styles.lineDown}
+          onClick={() => {
+            const newStepId = uniqid();
+            setNewInterface({
+              ...newInterface,
+              data: {
+                ...newInterface.data,
                 data: {
-                  ...newInterface.data,
-                  data: {
-                    ...newInterface.data.data,
-                    logic: [
-                      ...newInterface.data.data.logic,
-                      { label: "New step", key: "new" },
-                    ],
+                  ...newInterface.data.data,
+                  logic: {
+                    ...(newInterface.data.data.logic || {}),
+                    trigger: newStepId,
+                    steps: {
+                      ...(newInterface.data.data.logic?.steps || {}),
+                      [newStepId]: {
+                        label: "⌚ Fetch data",
+                        type: "getObjects",
+                        results: [{ label: "After loading" }],
+                      },
+                    },
                   },
                 },
-              })
-            }
-          />
-        </div>
-      ))}
-    </>
+              },
+            });
+          }}
+        />
+      </div>
+      {newInterface.data.data.logic?.trigger && (
+        <RenderLogicStep
+          stepId={newInterface.data.data.logic.trigger}
+          step={
+            newInterface.data.data.logic.steps[
+              newInterface.data.data.logic.trigger
+            ]
+          }
+          newInterface={newInterface}
+          setNewInterface={setNewInterface}
+          context={context}
+        />
+      )}
+    </div>
   );
 };
 
 export default AppSettingsInterfaceLogic;
+
+const RenderLogicStep: React.FC<{
+  stepId: string;
+  step: InterfaceLogicStepType;
+  setNewInterface;
+  newInterface;
+  context: AppContextType;
+}> = ({ stepId, step, setNewInterface, newInterface, context }) => {
+  return (
+    <>
+      <div
+        className={styles.row}
+        onClick={() => {
+          context.setDialog({
+            display: true,
+            title: "Edit logic step",
+
+            content: (
+              <PopupContent
+                {...{ context, newInterface, step }}
+                onChange={(newStep) => {
+                  const newSteps = newInterface.data.data.logic;
+                  newSteps.steps[stepId] = newStep;
+                  console.log(newSteps);
+
+                  setNewInterface({
+                    ...newInterface,
+                    data: {
+                      ...newInterface.data,
+                      data: { ...newInterface.data.data, logic: newSteps },
+                    },
+                  });
+                  context.setDialog({ display: false });
+                }}
+              />
+            ),
+          });
+        }}
+      >
+        <div className={styles.step}>{step.label}</div>
+      </div>
+      <Grid container style={{ width: "100%" }}>
+        {step.results.map((result, resultIndex) => (
+          <Grid
+            item
+            key={resultIndex}
+            xs={
+              (12 / step.results.length) as
+                | 1
+                | 2
+                | 3
+                | 4
+                | 5
+                | 6
+                | 7
+                | 8
+                | 9
+                | 10
+                | 11
+                | 12
+            }
+          >
+            <div
+              style={{ marginTop: -50 }}
+              className={styles.lineDown}
+              onClick={() => {
+                const newStepId = uniqid();
+                const newResults =
+                  newInterface.data.data.logic.steps[stepId].results;
+                newResults[resultIndex].step = newStepId;
+                setNewInterface({
+                  ...newInterface,
+                  data: {
+                    ...newInterface.data,
+                    data: {
+                      ...newInterface.data.data,
+                      logic: {
+                        ...(newInterface.data.data.logic || {}),
+                        steps: {
+                          ...(newInterface.data.data.logic?.steps || {}),
+                          [stepId]: {
+                            ...newInterface.data.data.logic.steps[stepId],
+                            results: newResults,
+                          },
+                          [newStepId]: {
+                            label: "💻 Show interface",
+                            type: "renderInterface",
+                            results: [],
+                          },
+                        },
+                      },
+                    },
+                  },
+                });
+              }}
+            >
+              <div>{result.label}</div>
+            </div>
+            {result.step && (
+              <RenderLogicStep
+                stepId={result.step}
+                step={newInterface.data.data.logic.steps[result.step]}
+                newInterface={newInterface}
+                setNewInterface={setNewInterface}
+                context={context}
+              />
+            )}
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+};
 
 const PopupContent: React.FC<{
   step: InterfaceLogicStepType;
@@ -110,15 +209,23 @@ const PopupContent: React.FC<{
         value={newStep.label}
         onChange={(label) => setNewStep({ ...newStep, label })}
       />
-      <context.UI.Inputs.TextInput
-        label="Key"
-        value={newStep.key}
-        onChange={(key) => setNewStep({ ...newStep, key })}
-      />
       <context.UI.Inputs.Select
         label="Type"
         value={newStep.type}
-        onChange={(type) => setNewStep({ ...newStep, type })}
+        onChange={(type) =>
+          setNewStep({
+            ...newStep,
+            type,
+            results:
+              type === "renderInterface"
+                ? []
+                : type === "getObject"
+                ? [{ label: "Object fetched" }]
+                : type === "getObjects"
+                ? [{ label: "Objects fetched" }]
+                : [], // Unknown type
+          })
+        }
         options={[
           { label: "Render interface", value: "renderInterface" },
           { label: "Get object", value: "getObject" },

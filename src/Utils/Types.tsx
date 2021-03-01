@@ -690,6 +690,7 @@ export interface InterfaceLogicStepType {
   key: string;
   type: "renderInterface" | "getObject" | "getObjects";
   args?: { assignedVar?: string; filter?: string; layoutId?: string };
+  results: { label: string; step?: string }[];
 }
 
 export interface InterfaceInterfaces {
@@ -707,7 +708,10 @@ export interface InterfaceType extends ObjectType {
     name: string;
     key: string;
     data: {
-      logic: InterfaceLogicStepType[];
+      logic: {
+        steps: { [stepKey: string]: InterfaceLogicStepType };
+        trigger?: string;
+      };
       actions: { [key: string]: InterfaceActionType };
       variables: {
         [key: string]: {
