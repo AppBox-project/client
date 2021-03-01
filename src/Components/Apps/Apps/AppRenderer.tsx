@@ -304,6 +304,7 @@ const DialogPopup: React.FC<{
                 <formItem.customInput
                   {...(formItem.customInputProps || {})}
                   context={appContext}
+                  label={formItem.label}
                   value={
                     dialogFormContent
                       ? dialogFormContent[formItem.key] || formItem.value

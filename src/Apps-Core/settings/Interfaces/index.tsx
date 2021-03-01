@@ -77,6 +77,45 @@ const AppSettingsInterfaces: React.FC<{
       title="Interfaces"
       navWidth={2}
       detailComponentProps={{ interfaces, models, modelList }}
+      addFunction={() => {
+        context.setDialog({
+          display: true,
+          title: "Add new interface",
+          form: [
+            { key: "name", label: "Name" },
+            { key: "key", label: "Key" },
+          ],
+          buttons: [
+            {
+              label: "Create",
+              onClick: (form) => {
+                context.addObject(
+                  "interfaces",
+                  {
+                    name: form.name,
+                    key: form.key,
+                    data: {
+                      arguments: [],
+                      interfaces: {
+                        main: {
+                          label: "Main UI",
+                          content: [],
+                        },
+                      },
+                      variables: {},
+                      actions: {},
+                      logic: {
+                        steps: {},
+                      },
+                    },
+                  },
+                  (response) => {}
+                );
+              },
+            },
+          ],
+        });
+      }}
     />
   );
 };

@@ -18,6 +18,8 @@ import RenderInterfaceOptions from "./InterfaceComponents/Options";
 import RenderInterfaceAnimationContainer from "./InterfaceComponents/AnimationContainer";
 import RenderInterfaceAnimationItem from "./InterfaceComponents/AnimationItem";
 import RenderInterfaceButton from "./InterfaceComponents/Button";
+import RenderInterfaceInput from "./InterfaceComponents/Input";
+import { GridSpacing } from "@material-ui/core";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -38,7 +40,7 @@ const RenderInterface: React.FC<{
   useEffect(() => {
     const interfaceRequest = context.getObjects(
       "interfaces",
-      {},
+      { _id: interfaceId },
       (response) => {
         setInterfaceObject(response.data[0]);
       }
@@ -143,6 +145,7 @@ interface LayoutItemType {
   label?: string;
   colored?: boolean;
   action?: string;
+  spacing?: GridSpacing;
 }
 
 const LayoutItem: React.FC<{
@@ -169,7 +172,7 @@ const LayoutItem: React.FC<{
       {layoutItem.type === "text" ? (
         <div>{newLayoutItem.text}</div>
       ) : layoutItem.type === "grid_container" ? (
-        <RenderInterfaceGridContainer>
+        <RenderInterfaceGridContainer spacing={layoutItem.spacing}>
           {layoutItem.items.map((child) => (
             <LayoutItem
               key={child.key}
@@ -279,6 +282,12 @@ const LayoutItem: React.FC<{
           vars={vars}
           setVars={setVars}
         />
+      ) : layoutItem.type === "input" ? (
+        <RenderInterfaceInput
+          layoutItem={newLayoutItem}
+          vars={vars}
+          setVars={setVars}
+        />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`
       )}
@@ -335,6 +344,11 @@ const executeTrigger = async (
             interfaceObject.data.data.variables[step.args.assignedVar].model,
             filter,
             (response) => {
+              console.log(
+                "Todo: minimize amount of queries. Response received: ",
+                response
+              );
+
               const newVarValues = varValues;
               newVarValues[step.args.assignedVar] = response.data;
               setVarValues(response.data, step.args.assignedVar);

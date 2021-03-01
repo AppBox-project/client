@@ -14,8 +14,9 @@ import {
   ModelType,
   InterfaceType,
   LayoutType,
+  CustomFormInputType,
 } from "../../../Utils/Types";
-import { map, filter } from "lodash";
+import { map, filter, find } from "lodash";
 import {
   FaAlignLeft,
   FaColumns,
@@ -124,7 +125,37 @@ const AppSettingsInterfaceUI: React.FC<{
                     );
                   },
                   droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit grid container",
+                      form: [
+                        {
+                          type: "number",
+                          label: "Spacing",
+                          value: layoutItem?.spacing,
+                          key: "spacing",
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
                 },
                 grid_item: {
                   label: (
@@ -258,7 +289,97 @@ const AppSettingsInterfaceUI: React.FC<{
                       Input
                     </>
                   ),
-                  popup: (component, layoutItem, respond, deleteItem) => {},
+                  popup: (component, layoutItem, respond, deleteItem) => {
+                    context.setDialog({
+                      display: true,
+                      title: "Edit input",
+                      form: [
+                        {
+                          type: "text",
+                          label: "Label",
+                          value: layoutItem?.label,
+                          key: "label",
+                        },
+                        {
+                          key: "inputType",
+                          value: layoutItem?.inputType,
+                          label: "Type",
+                          type: "dropdown",
+                          dropdownOptions: [
+                            { label: "Text", value: "text" },
+                            { label: "Number", value: "number" },
+                            { label: "Email", value: "email" },
+                            { label: "Password", value: "password" },
+                          ],
+                        },
+                        {
+                          key: "attachToVariable",
+                          value: layoutItem?.attachToVariable,
+                          label: "Attach to variable",
+                          type: "custom",
+                          customInput: AttachInputToVariable,
+                          customInputProps: {
+                            varList,
+                            inputType: "text",
+                          },
+                          onlyDisplayWhen: { inputType: "text" },
+                        },
+                        {
+                          key: "attachToVariable",
+                          value: layoutItem?.attachToVariable,
+                          label: "Attach to variable",
+                          type: "custom",
+                          customInput: AttachInputToVariable,
+                          customInputProps: {
+                            varList,
+                            inputType: "email",
+                          },
+                          onlyDisplayWhen: { inputType: "email" },
+                        },
+                        {
+                          key: "attachToVariable",
+                          value: layoutItem?.attachToVariable,
+                          label: "Attach to variable",
+                          type: "custom",
+                          customInput: AttachInputToVariable,
+                          customInputProps: {
+                            varList,
+                            inputType: "number",
+                          },
+                          onlyDisplayWhen: { inputType: "number" },
+                        },
+                        {
+                          key: "attachToVariable",
+                          value: layoutItem?.attachToVariable,
+                          label: "Attach to variable",
+                          type: "custom",
+                          customInput: AttachInputToVariable,
+                          customInputProps: {
+                            varList,
+                            inputType: "password",
+                          },
+                          onlyDisplayWhen: { inputType: "password" },
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
+                        {
+                          label: "Update",
+                          onClick: (form) => respond(form),
+                        },
+                      ],
+                    });
+                  },
                 },
                 text: {
                   label: (
@@ -280,6 +401,17 @@ const AppSettingsInterfaceUI: React.FC<{
                         },
                       ],
                       buttons: [
+                        {
+                          label: (
+                            <Typography
+                              style={{ color: "red" }}
+                              variant="button"
+                            >
+                              Delete
+                            </Typography>
+                          ),
+                          onClick: () => deleteItem(),
+                        },
                         {
                           label: "Update",
                           onClick: (form) => respond(form),
@@ -747,5 +879,73 @@ const LayoutItem: React.FC<{
           );
         })}
     </DropTarget>
+  );
+};
+
+const AttachInputToVariable: React.FC<CustomFormInputType> = ({
+  label,
+  context,
+  varList,
+  value,
+  onChange,
+  inputType,
+}) => {
+  // Vars
+  const currentVariableIsObject =
+    value?.var &&
+    find(varList, (o) => o.value === value.var).args.type === "object";
+  const [model, setModel] = useState<ModelType>();
+  const [fieldOptions, setFieldOptions] = useState<ValueListItemType[]>([]);
+
+  // Lifecycle
+  useEffect(() => {
+    if (currentVariableIsObject) {
+      const modelKey = find(varList, (o) => o.value === value.var).args.model;
+      const request = context.getModel(modelKey, (response) => {
+        setModel(response.data);
+        const nl: ValueListItemType[] = [];
+
+        map(
+          response.data.fields,
+          (field, fieldKey) =>
+            field.type === "input" &&
+            (field.typeArgs?.type === inputType ||
+              (inputType === "text" && !field.typeArgs?.type)) &&
+            nl.push({ label: field.name, value: fieldKey })
+        );
+        setFieldOptions(nl);
+      });
+    }
+  }, [currentVariableIsObject, value]);
+  // UI
+
+  return (
+    <Grid container>
+      <Grid item xs={6}>
+        <context.UI.Inputs.Select
+          label={label}
+          value={value?.var}
+          onChange={(newVal) => {
+            onChange({ ...(value || {}), var: newVal });
+          }}
+          options={filter(
+            varList,
+            (o) => o.args.type === "object" || o.args.type === "text"
+          )}
+        />
+      </Grid>
+      {currentVariableIsObject && model && (
+        <Grid item xs={6}>
+          <context.UI.Inputs.Select
+            label={`${model.name} fields`}
+            value={value?.field}
+            onChange={(newVal) => {
+              onChange({ ...(value || {}), field: newVal });
+            }}
+            options={fieldOptions}
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 };

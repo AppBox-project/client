@@ -27,6 +27,7 @@ const CollectionsDisplayInterface: React.FC<{
 
   // UI
   if (!currentAction) return <context.UI.Loading />;
+
   return (
     <RenderInterface
       context={context}

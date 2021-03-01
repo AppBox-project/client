@@ -21,6 +21,7 @@ import {
   FaCaretDown,
   FaCaretUp,
   FaEquals,
+  FaFileImport,
   FaLocationArrow,
   FaPlus,
 } from "react-icons/fa";
@@ -184,6 +185,7 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
       <ListItem button onClick={() => setOpen(!open)}>
         <ListItemIcon>
           {actionStep.type === "set_variables" && <FaEquals />}
+          {actionStep.type === "insert_object" && <FaFileImport />}
         </ListItemIcon>
         <ListItemText>{actionStep.label}</ListItemText>
         <ListItemSecondaryAction>
@@ -210,7 +212,10 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
         <InputSelect
           label="Type"
           value={actionStep.type}
-          options={[{ label: "Set variables", value: "set_variables" }]}
+          options={[
+            { label: "Set variables", value: "set_variables" },
+            { label: "Insert object", value: "insert_object" },
+          ]}
           onChange={(type) => onChange({ ...actionStep, type })}
         />
 
@@ -269,6 +274,13 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
             >
               Add
             </Grid>
+          </>
+        )}
+        {actionStep.type === "insert_object" && (
+          <>
+            <Typography variant="h6">Insert object configuration</Typography>
+            <Divider />
+            Todo
           </>
         )}
       </Collapse>

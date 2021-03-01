@@ -669,6 +669,8 @@ export interface CustomFormInputType {
   onChange: (value: string) => void;
   context: AppContextType;
   value;
+  label: string;
+  [x: string]: any;
 }
 
 export interface SystemTaskType extends ObjectType {
