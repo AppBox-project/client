@@ -114,6 +114,7 @@ const RenderInterface: React.FC<{
           vars={varValues}
           setVars={setVarValues}
           interfaceObject={interfaceObject}
+          context={context}
         />
       ))}
     </div>
@@ -153,7 +154,8 @@ const LayoutItem: React.FC<{
   vars: { [varKey: string]: {} };
   setVars;
   interfaceObject: InterfaceType;
-}> = ({ layoutItem, vars, setVars, interfaceObject }) => {
+  context: AppContextType;
+}> = ({ layoutItem, vars, setVars, interfaceObject, context }) => {
   // Vars
   const [newLayoutItem, setNewLayoutItem] = useState<LayoutItemType>();
 
@@ -180,6 +182,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceGridContainer>
@@ -192,6 +195,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceGridItem>
@@ -207,6 +211,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceCard>
@@ -219,6 +224,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceAnimationSingle>
@@ -231,6 +237,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceAnimationContainer>
@@ -243,6 +250,7 @@ const LayoutItem: React.FC<{
               vars={vars}
               setVars={setVars}
               interfaceObject={interfaceObject}
+              context={context}
             />
           ))}
         </RenderInterfaceAnimationItem>
@@ -281,6 +289,7 @@ const LayoutItem: React.FC<{
           actionId={newLayoutItem.action}
           vars={vars}
           setVars={setVars}
+          context={context}
         />
       ) : layoutItem.type === "input" ? (
         <RenderInterfaceInput

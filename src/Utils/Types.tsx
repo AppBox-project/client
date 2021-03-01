@@ -702,7 +702,7 @@ export interface InterfaceInterfaces {
 
 export interface InterfaceActionType {
   label: string;
-  actions: { type: "set_variables"; vars?: {} }[];
+  actions: { type: "set_variables" | "insert_object"; vars?: {} }[];
 }
 
 export interface InterfaceType extends ObjectType {

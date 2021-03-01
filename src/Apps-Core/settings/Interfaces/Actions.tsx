@@ -75,8 +75,9 @@ const AppSettingsInterfaceActions: React.FC<{
                 },
                 {
                   type: "custom",
+                  //@ts-ignore
                   customInput: ActionInput,
-                  customInputProps: { varList },
+                  customInputProps: { varList, interfaceObject: newInterface },
                   key: "actions",
                   value: action.actions,
                   label: "Actions",
@@ -136,11 +137,12 @@ const AppSettingsInterfaceActions: React.FC<{
 
 export default AppSettingsInterfaceActions;
 
-const ActionInput: React.FC<{ value; onChange; varList? }> = ({
-  value,
-  onChange,
-  varList,
-}) => {
+const ActionInput: React.FC<{
+  value;
+  onChange;
+  varList?;
+  interfaceObject: InterfaceType;
+}> = ({ value, onChange, varList, interfaceObject }) => {
   return (
     <>
       <Typography variant="h6">Actions</Typography>
@@ -155,6 +157,7 @@ const ActionInput: React.FC<{ value; onChange; varList? }> = ({
               newValue[actionStepIndex] = newVal;
               onChange(newValue);
             }}
+            interfaceObject={interfaceObject}
           />
         ))}
         <ListItem
@@ -173,11 +176,12 @@ const ActionInput: React.FC<{ value; onChange; varList? }> = ({
   );
 };
 
-const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
-  actionStep,
-  onChange,
-  varList,
-}) => {
+const ActionStep: React.FC<{
+  actionStep;
+  onChange;
+  varList;
+  interfaceObject: InterfaceType;
+}> = ({ actionStep, onChange, varList, interfaceObject }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -236,6 +240,19 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
                       onChange(newActionStep);
                     }}
                   />
+                  {v.var &&
+                    interfaceObject.data.data.variables[v.var].type ===
+                      "object" && (
+                      <InputInput
+                        label="Model field"
+                        value={v.field}
+                        onChange={(newVal) => {
+                          const newActionStep = actionStep;
+                          newActionStep.vars[vIndex].field = newVal;
+                          onChange(newActionStep);
+                        }}
+                      />
+                    )}
                 </Grid>
                 <Grid item xs={4}>
                   <InputSelect
@@ -250,6 +267,19 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
                   />
                 </Grid>
                 <Grid item xs={4}>
+                  <InputSelect
+                    label="Value type"
+                    value={v.valueType || "formula"}
+                    onChange={(newVal) => {
+                      const newActionStep = actionStep;
+                      newActionStep.vars[vIndex].valueType = newVal;
+                      onChange(newActionStep);
+                    }}
+                    options={[
+                      { label: "Formula", value: "formula" },
+                      { label: "Data", value: "data" },
+                    ]}
+                  />
                   <InputInput
                     label="Value"
                     value={v.value}
@@ -280,7 +310,14 @@ const ActionStep: React.FC<{ actionStep; onChange; varList }> = ({
           <>
             <Typography variant="h6">Insert object configuration</Typography>
             <Divider />
-            Todo
+            <InputSelect
+              label="Variable"
+              value={actionStep.var}
+              options={varList}
+              onChange={(newVal) => {
+                onChange({ ...actionStep, var: newVal });
+              }}
+            />
           </>
         )}
       </Collapse>

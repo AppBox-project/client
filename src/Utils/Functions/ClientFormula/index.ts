@@ -1,4 +1,5 @@
 import functions from "./Functions";
+import { get } from "lodash";
 
 const formula = async (input, data) =>
   new Promise(async (resolve) => {
@@ -18,7 +19,7 @@ const formula = async (input, data) =>
           await processFormula(func[1], func[2], data)
         );
       } else {
-        formula = formula.replace(match[0], data[tag]);
+        formula = formula.replace(match[0], get(data, tag));
       }
       return match;
     }, tags[0]);

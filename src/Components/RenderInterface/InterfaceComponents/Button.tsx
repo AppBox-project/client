@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { InterfaceType } from "../../../Utils/Types";
+import { AppContextType, InterfaceType } from "../../../Utils/Types";
 import performAction from "../Actions";
 
 const RenderInterfaceButton: React.FC<{
@@ -12,6 +12,7 @@ const RenderInterfaceButton: React.FC<{
   interfaceObject: InterfaceType;
   vars;
   setVars;
+  context: AppContextType;
 }> = ({
   fullWidth,
   variant,
@@ -21,6 +22,7 @@ const RenderInterfaceButton: React.FC<{
   actionId,
   vars,
   setVars,
+  context,
 }) => {
   // Vars
   const action = interfaceObject.data.data.actions[actionId];
@@ -32,7 +34,7 @@ const RenderInterfaceButton: React.FC<{
       variant={variant}
       color={colored ? "primary" : "default"}
       onClick={() => {
-        performAction(action, vars, setVars);
+        performAction(action, vars, setVars, interfaceObject, context);
       }}
     >
       {label}
