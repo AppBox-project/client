@@ -76,7 +76,11 @@ const AppSettingsInterfaces: React.FC<{
       baseUrl="/settings/interfaces"
       title="Interfaces"
       navWidth={2}
-      detailComponentProps={{ interfaces, models, modelList }}
+      detailComponentProps={{
+        interfaces,
+        models,
+        modelList,
+      }}
       addFunction={() => {
         context.setDialog({
           display: true,
@@ -141,6 +145,7 @@ const InterfaceWrapper: React.FC<{
   const [isMobile] = useGlobal<any>("isMobile");
   const [newInterface, setNewInterface] = useState<InterfaceType>();
   const [originalInterface, setOriginalInterface] = useState<string>();
+  const [selectedInterface, setSelectedInterface] = useState<string>();
 
   // Lifecycle
   useEffect(() => {
@@ -164,6 +169,8 @@ const InterfaceWrapper: React.FC<{
           setNewInterface={setNewInterface}
           models={models}
           modelList={modelList}
+          selectedInterface={selectedInterface}
+          setSelectedInterface={setSelectedInterface}
         />
       ) : (
         <DesktopLayout
@@ -172,6 +179,8 @@ const InterfaceWrapper: React.FC<{
           setNewInterface={setNewInterface}
           models={models}
           modelList={modelList}
+          selectedInterface={selectedInterface}
+          setSelectedInterface={setSelectedInterface}
         />
       )}
       {originalInterface !== JSON.stringify(newInterface) && (
@@ -199,7 +208,17 @@ const DesktopLayout: React.FC<{
   setNewInterface: (newInterface) => void;
   models: ModelType[];
   modelList: ValueListItemType[];
-}> = ({ context, newInterface, setNewInterface, models, modelList }) => {
+  selectedInterface: string;
+  setSelectedInterface;
+}> = ({
+  context,
+  newInterface,
+  setNewInterface,
+  models,
+  modelList,
+  selectedInterface,
+  setSelectedInterface,
+}) => {
   const [leftTab, setLeftTab] = useState<"Interface" | "Logic">("Logic");
   const [rightTab, setRightTab] = useState<"Variables" | "Actions">(
     "Variables"
@@ -207,7 +226,6 @@ const DesktopLayout: React.FC<{
   const [rightUITab, setRightUITab] = useState<"Interfaces" | "Components">(
     "Interfaces"
   );
-  const [selectedInterface, setSelectedInterface] = useState<string>();
 
   return (
     <context.UI.Animations.AnimationContainer>
@@ -243,6 +261,7 @@ const DesktopLayout: React.FC<{
                     models={models}
                     modelList={modelList}
                     selectedInterface={selectedInterface}
+                    setSelectedInterface={setSelectedInterface}
                   />
                 </div>
               )}
@@ -330,7 +349,17 @@ const MobileLayout: React.FC<{
   setNewInterface: (newInterface) => void;
   models: ModelType[];
   modelList: ValueListItemType[];
-}> = ({ context, newInterface, setNewInterface, models, modelList }) => {
+  selectedInterface: string;
+  setSelectedInterface;
+}> = ({
+  context,
+  newInterface,
+  setNewInterface,
+  models,
+  modelList,
+  selectedInterface,
+  setSelectedInterface,
+}) => {
   const [currentTab, setCurrentTab] = useState<
     "Interface" | "Logic" | "Variables" | "Actions"
   >("Interface");
@@ -357,7 +386,17 @@ const MobileLayout: React.FC<{
             setNewInterface={setNewInterface}
             models={models}
             modelList={modelList}
-            selectedInterface=""
+            selectedInterface={selectedInterface}
+            setSelectedInterface={setSelectedInterface}
+            Components={
+              <InterfaceComponentsList
+                context={context}
+                newInterface={newInterface}
+                setNewInterface={setNewInterface}
+                setSelectedInterface={setSelectedInterface}
+                setRightUITab={() => {}}
+              />
+            }
           />
         )}
         {currentTab === "Logic" && (

@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import { useGlobal } from "reactn";
 import {
   AppContextType,
   ValueListItemType,
@@ -44,10 +45,20 @@ const AppSettingsInterfaceUI: React.FC<{
   models: ModelType[];
   modelList: ValueListItemType[];
   selectedInterface: string;
-}> = ({ newInterface, context, selectedInterface, setNewInterface }) => {
+  setSelectedInterface;
+  Components?;
+}> = ({
+  newInterface,
+  context,
+  selectedInterface,
+  setNewInterface,
+  setSelectedInterface,
+  Components,
+}) => {
   // Vars
   const [varList, setVarList] = useState<ValueListItemType[]>([]);
   const [actionList, setActionList] = useState<ValueListItemType[]>([]);
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -65,6 +76,16 @@ const AppSettingsInterfaceUI: React.FC<{
   }, [newInterface]);
 
   // UI
+  if (!selectedInterface && isMobile)
+    return (
+      <List>
+        {map(newInterface.data.data.interfaces, (value, key) => (
+          <ListItem key={key} button onClick={() => setSelectedInterface(key)}>
+            <ListItemText>{value.label}</ListItemText>
+          </ListItem>
+        ))}
+      </List>
+    );
   if (!selectedInterface) return <>Please select an interface on the right</>;
   const interf = newInterface.data.data.interfaces[selectedInterface];
   return (
@@ -676,6 +697,7 @@ const AppSettingsInterfaceUI: React.FC<{
           );
         })}
       </DropTarget>
+      {Components}
     </>
   );
 };
