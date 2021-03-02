@@ -1,5 +1,4 @@
 import formula from "../../../Utils/Functions/ClientFormula";
-import { set } from "lodash";
 
 export default (action, vars, setVars) =>
   new Promise<void>(async (resolve) => {
@@ -28,7 +27,6 @@ export default (action, vars, setVars) =>
       }
       return currStep;
     }, action.vars[0]);
-
     setVars({ ...vars, ...varsToUpdate });
     resolve();
   });

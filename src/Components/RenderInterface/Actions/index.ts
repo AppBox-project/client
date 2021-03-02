@@ -42,4 +42,5 @@ export default async (
     }
     return currAction;
   }, action.actions[0]);
+  setVars(newVars);
 };

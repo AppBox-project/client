@@ -62,16 +62,17 @@ const RenderInterface: React.FC<{
           newVarValues[nKey] = nVar.default;
         }
       });
+
       if (interfaceObject.data.data.logic.trigger) {
         executeTrigger(
           context,
           interfaceObject,
           interfaceObject.data.data.logic.trigger,
           setError,
+          prevVarValues,
           newVarValues,
           (newValue, key) => {
             newVarValues[key] = newValue;
-
             setVarValues(newVarValues);
             setPrevVarValues(newVarValues);
           },
@@ -327,6 +328,7 @@ const executeTrigger = async (
   interfaceObject: InterfaceType,
   stepId: string,
   setError,
+  prevVarValues,
   varValues,
   setVarValues: (value, key) => void,
   addToRequests: (request) => void,
@@ -341,40 +343,48 @@ const executeTrigger = async (
 
     switch (step.type) {
       case "getObjects":
+        let queryVariableHasChanged = false;
         const filter: {} = JSON.parse(step.args.filter);
         map(filter, (v, k) => {
           if (v.var) {
+            if (prevVarValues[v.var] !== varValues[v.var]) {
+              queryVariableHasChanged = true;
+            }
             filter[k] = varValues[v.var];
           }
         });
 
-        addToRequests(
-          context.getObjects(
-            interfaceObject.data.data.variables[step.args.assignedVar].model,
-            filter,
-            (response) => {
-              console.log(
-                "Todo: minimize amount of queries. Response received: ",
-                response
-              );
+        if (queryVariableHasChanged) {
+          // Only create new query if a filter variable has actually changed from it's previous state to save database work.
+          addToRequests(
+            context.getObjects(
+              interfaceObject.data.data.variables[step.args.assignedVar].model,
+              filter,
+              (response) => {
+                console.log(
+                  "Todo: minimize amount of queries. Response received: ",
+                  response
+                );
 
-              const newVarValues = varValues;
-              newVarValues[step.args.assignedVar] = response.data;
-              setVarValues(response.data, step.args.assignedVar);
+                const newVarValues = varValues;
+                newVarValues[step.args.assignedVar] = response.data;
+                setVarValues(response.data, step.args.assignedVar);
 
-              executeTrigger(
-                context,
-                interfaceObject,
-                step.results[0].step,
-                setError,
-                newVarValues,
-                setVarValues,
-                addToRequests,
-                setCurrentInterface
-              );
-            }
-          )
-        );
+                executeTrigger(
+                  context,
+                  interfaceObject,
+                  step.results[0].step,
+                  setError,
+                  prevVarValues,
+                  newVarValues,
+                  setVarValues,
+                  addToRequests,
+                  setCurrentInterface
+                );
+              }
+            )
+          );
+        }
 
         break;
       case "renderInterface":

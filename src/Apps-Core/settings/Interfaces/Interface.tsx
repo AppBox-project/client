@@ -942,7 +942,7 @@ const AttachInputToVariable: React.FC<CustomFormInputType> = ({
   // UI
 
   return (
-    <Grid container>
+    <Grid container spacing={3}>
       <Grid item xs={6}>
         <context.UI.Inputs.Select
           label={label}
