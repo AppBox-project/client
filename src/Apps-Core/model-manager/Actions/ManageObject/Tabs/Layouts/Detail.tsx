@@ -4,11 +4,13 @@ import {
   ModelType,
   LayoutType,
   ValueListItemType,
+  InterfaceType,
+  CustomFormInputType,
 } from "../../../../../../Utils/Types";
 import { Fab, Grid, Divider, Typography } from "@material-ui/core";
 import LayoutDesigner from "../../../../../../Components/LayoutDesigner";
 import { FaSave } from "react-icons/fa";
-import { map, find } from "lodash";
+import { map, find, filter } from "lodash";
 import {
   AnimationContainer,
   AnimationItem,
@@ -16,7 +18,6 @@ import {
 import Card from "../../../../../../Components/Design/Card";
 import { useHistory } from "react-router-dom";
 import AppObjectLayoutFieldGridEditor from "./FieldGridEditor";
-import Select from "react-select";
 import InputSelect from "../../../../../../Components/Inputs/Select";
 
 interface WrapperPropsType {
@@ -78,9 +79,28 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   const [layout, setLayout] = useState<LayoutType>();
   const history = useHistory();
   const [customButtons, setCustomButtons] = useState<ValueListItemType[]>([]);
+  const [interfaceList, setInterfaceList] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
+    // Interfaces
+    const nl: ValueListItemType[] = [];
+    const interfaceRequest = context.getObjects(
+      "interfaces",
+      {},
+      (response) => {
+        response.data.map((intObject: InterfaceType) =>
+          nl.push({
+            label: intObject.data.name,
+            value: intObject._id,
+            args: intObject,
+          })
+        );
+        setInterfaceList(nl);
+      }
+    );
+
+    // Other
     if ((model.layouts || {})[detailId]) {
       const newFieldList = [];
       map(model.fields, (field, key) => {
@@ -109,6 +129,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
         });
       }
     });
+
+    return () => {};
   }, [model, detailId]);
 
   // UI
@@ -465,6 +487,60 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                     label: "Hide while editing",
                     key: "hideEdit",
                     type: "boolean",
+                  },
+                ],
+                buttons: [
+                  {
+                    label: <div style={{ color: "red" }}>Delete</div>,
+                    onClick: (response) => {
+                      deleteItem();
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (response) => {
+                      respond(response);
+                      setHasChanged(true);
+                    },
+                  },
+                ],
+              });
+            },
+          },
+          Interface: {
+            label: "Custom interface",
+            dynamicLabel: "interface",
+            popup: (component, layoutItem, respond, deleteItem) => {
+              // Show tweak UI
+              context.setDialog({
+                display: true,
+                title: "Display custom interface",
+                content:
+                  "Custom interfaces can be designed from settings and displayed within the context of the current lay-out.",
+                form: [
+                  {
+                    key: "interface",
+                    label: "Interface",
+                    value: layoutItem.interface,
+                    type: "dropdown",
+                    dropdownOptions: interfaceList,
+                  },
+                  {
+                    key: "setVariables",
+                    value: layoutItem.setVariables,
+                    label: "Set variables from context",
+                    type: "custom",
+                    customInput: CustomInputInterfaceSetVariablesFromContext,
+                    customInputProps: {
+                      model,
+                      test: { layoutItem, interfaceList },
+                      interfaceObject: (
+                        find(
+                          interfaceList,
+                          (o) => o.args._id === layoutItem.interface
+                        ) || { args: {} }
+                      ).args,
+                    },
                   },
                 ],
                 buttons: [
@@ -862,3 +938,59 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
 };
 
 export default AppActionManageObjectTabLayoutsDetail;
+
+const CustomInputInterfaceSetVariablesFromContext: React.FC<CustomFormInputType> = ({
+  label,
+  interfaceObject,
+  context,
+  onChange,
+  value,
+}) => {
+  //Vars
+  const [options, setOptions] = useState<ValueListItemType[]>([]);
+  const [hasVariables, setHasVariables] = useState<Boolean>();
+
+  // Lifecycle
+  useEffect(() => {
+    const nl: ValueListItemType[] = [];
+    map(
+      (interfaceObject as InterfaceType).data?.data?.variables,
+      (value, key) => {
+        if (value.input_var) {
+          nl.push({ label: value.label, value: key, args: value });
+        }
+      }
+    );
+    setOptions(nl);
+    nl.length > 0 ? setHasVariables(true) : setHasVariables(false);
+  }, [interfaceObject]);
+
+  // UI
+  return (
+    <>
+      <Typography variant="body1">{label}</Typography>
+      {hasVariables === false &&
+        "This interface has no variables available for input."}
+      {hasVariables && (
+        <>
+          <context.UI.Inputs.Select
+            label="Assign object to"
+            options={filter(options, (o) => o.args.type === "object")}
+            value={value?.object}
+            onChange={(object) => {
+              onChange({ ...value, object });
+            }}
+          />
+          <context.UI.Inputs.Select
+            label="Assign objectId to"
+            options={filter(options, (o) => o.args.type === "string")}
+            value={value?.id}
+            onChange={(id) => {
+              onChange({ ...value, id });
+            }}
+          />
+        </>
+      )}
+    </>
+  );
+};

@@ -106,6 +106,27 @@ const AppSettingsInterfaceVariables: React.FC<{
                   value: value.default,
                   onlyDisplayWhen: { type: "number" },
                 },
+                {
+                  key: "input_var",
+                  label: "Input variable",
+                  value: value.input_var,
+                  type: "boolean",
+                  onlyDisplayWhen: { type: "object" },
+                },
+                {
+                  key: "input_var",
+                  label: "Input variable",
+                  value: value.input_var,
+                  type: "boolean",
+                  onlyDisplayWhen: { type: "text" },
+                },
+                {
+                  key: "input_required",
+                  label: "Required for input",
+                  value: value.input_required,
+                  type: "boolean",
+                  onlyDisplayWhen: { input_var: true },
+                },
               ],
               buttons: [
                 {

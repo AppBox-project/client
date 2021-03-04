@@ -46,6 +46,7 @@ import { map } from "lodash";
 import ObjectLayoutItemAttachments from "./LayoutItems/Attachments";
 import Picture from "../Picture";
 import ObjectLayoutItemDetailedRelatedList from "./LayoutItems/DetailedRelatedList";
+import ObjectLayoutItemInterface from "./LayoutItems/Interface";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -1003,9 +1004,16 @@ const LayoutItem: React.FC<{
           object={object}
         />
       );
+    case "Interface":
+      return (
+        <ObjectLayoutItemInterface
+          layoutItem={layoutItem}
+          context={context}
+          object={object}
+        />
+      );
     case "FactsBar":
       return FactsBar;
-
     default:
       return <>Unknown layoutItem type:{layoutItem.type}</>;
   }

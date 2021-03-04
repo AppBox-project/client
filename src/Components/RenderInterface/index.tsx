@@ -23,10 +23,14 @@ import { GridSpacing } from "@material-ui/core";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
-  interfaceId: string;
-}> = ({ context, interfaceId }) => {
+  interfaceId?: string;
+  interfaceObject?: InterfaceType;
+  premappedVariables?: { [varName: string]: any };
+}> = ({ context, interfaceId, interfaceObject, premappedVariables }) => {
   // Vars
-  const [interfaceObject, setInterfaceObject] = useState<InterfaceType>();
+  const [appliedInterfaceObject, setInterfaceObject] = useState<
+    InterfaceType
+  >();
   const [varValues, setVarValues] = useState<{ [varKey: string]: {} }>({});
   const [prevVarValues, setPrevVarValues] = useState<{ [varKey: string]: {} }>({
     initial: true,
@@ -38,36 +42,44 @@ const RenderInterface: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const interfaceRequest = context.getObjects(
-      "interfaces",
-      { _id: interfaceId },
-      (response) => {
-        setInterfaceObject(response.data[0]);
-      }
-    );
+    let interfaceRequest;
+    if (interfaceId && !interfaceObject) {
+      interfaceRequest = context.getObjects(
+        "interfaces",
+        { _id: interfaceId },
+        (response) => {
+          setInterfaceObject(response.data[0]);
+        }
+      );
+    } else if (interfaceObject) {
+      setInterfaceObject(interfaceObject);
+    } else {
+      console.log("Error, neither interfaceObject nor interfaceId supplied.");
+    }
 
-    return () => interfaceRequest.stop();
+    return () => interfaceRequest?.stop();
   }, [interfaceId]);
+
   // When the interface changes
   useEffect(() => {
-    const newVarValues = { ...varValues };
+    const newVarValues = { ...varValues, ...premappedVariables };
     const requests = [];
 
     if (
-      interfaceObject &&
+      appliedInterfaceObject &&
       JSON.stringify(varValues) !== JSON.stringify(prevVarValues)
     ) {
-      map(interfaceObject.data.data.variables, (nVar, nKey) => {
+      map(appliedInterfaceObject.data.data.variables, (nVar, nKey) => {
         if (nVar.default && !newVarValues[nKey]) {
           newVarValues[nKey] = nVar.default;
         }
       });
 
-      if (interfaceObject.data.data.logic.trigger) {
+      if (appliedInterfaceObject.data.data.logic.trigger) {
         executeTrigger(
           context,
-          interfaceObject,
-          interfaceObject.data.data.logic.trigger,
+          appliedInterfaceObject,
+          appliedInterfaceObject.data.data.logic.trigger,
           setError,
           prevVarValues,
           newVarValues,
@@ -84,12 +96,15 @@ const RenderInterface: React.FC<{
             setError(undefined);
           }
         );
+        setVarValues(newVarValues);
+        setPrevVarValues(newVarValues);
       } else {
         setError("This interface has no initial trigger!");
       }
+
       return () => requests.map((r) => r && r.stop());
     }
-  }, [interfaceObject, varValues, prevVarValues]);
+  }, [appliedInterfaceObject, varValues, prevVarValues, premappedVariables]);
 
   // UI
   if (error)
@@ -101,24 +116,25 @@ const RenderInterface: React.FC<{
       </context.UI.Animations.Animation>
     );
 
-  if (!interfaceObject) return <context.UI.Loading />;
+  if (!appliedInterfaceObject) return <context.UI.Loading />;
   if (!currentInterface) {
     setError("No interface has been set, so none can be rendered");
     return;
   }
+
   return (
-    <div style={{ marginBottom: 82 }}>
+    <>
       {map(currentInterface.content, (contentItem, contentKey) => (
         <LayoutItem
           key={contentKey}
           layoutItem={contentItem}
           vars={varValues}
           setVars={setVarValues}
-          interfaceObject={interfaceObject}
+          interfaceObject={appliedInterfaceObject}
           context={context}
         />
       ))}
-    </div>
+    </>
   );
 };
 
@@ -369,7 +385,6 @@ const executeTrigger = async (
                 const newVarValues = varValues;
                 newVarValues[step.args.assignedVar] = response.data;
                 setVarValues(response.data, step.args.assignedVar);
-
                 executeTrigger(
                   context,
                   interfaceObject,
