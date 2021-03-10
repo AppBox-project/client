@@ -1,10 +1,14 @@
 import {
+  Button,
   Grid,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Tab,
+  Tabs,
   Typography,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
@@ -20,6 +24,8 @@ import {
 import { map, filter, find } from "lodash";
 import {
   FaAlignLeft,
+  FaCode,
+  FaCogs,
   FaColumns,
   FaKeyboard,
   FaList,
@@ -27,6 +33,8 @@ import {
   FaMouse,
   FaObjectGroup,
   FaObjectUngroup,
+  FaPlus,
+  FaRandom,
   FaSquare,
   FaTh,
   FaThLarge,
@@ -37,6 +45,7 @@ import Component from "./InterfaceDesigner/Component";
 import { BsBoundingBoxCircles } from "react-icons/bs";
 import { remove, updateById } from "../../../Utils/Functions/General";
 import uniqid from "uniqid";
+import ObjectDesigner from "../../../Components/ObjectDesigner/Filter";
 
 const AppSettingsInterfaceUI: React.FC<{
   newInterface: InterfaceType;
@@ -59,6 +68,562 @@ const AppSettingsInterfaceUI: React.FC<{
   const [varList, setVarList] = useState<ValueListItemType[]>([]);
   const [actionList, setActionList] = useState<ValueListItemType[]>([]);
   const [isMobile] = useGlobal<any>("isMobile");
+  const componentList = {
+    grid_container: {
+      label: (
+        <>
+          <FaTh style={{ marginRight: 15 }} />
+          Grid (container)
+        </>
+      ),
+      wrapper: (Props) => {
+        return (
+          <Grid container {...Props}>
+            {Props.children}
+          </Grid>
+        );
+      },
+      droppable: true,
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit grid container",
+          form: [
+            {
+              type: "number",
+              label: "Spacing",
+              value: layoutItem?.spacing,
+              key: "spacing",
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    grid_item: {
+      label: (
+        <>
+          <FaSquare style={{ marginRight: 15 }} />
+          Grid (item)
+        </>
+      ),
+      droppable: true,
+      wrapper: (Props) => {
+        return (
+          <Grid item {...Props}>
+            {Props.children}
+          </Grid>
+        );
+      },
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit grid item",
+          form: [
+            {
+              type: "number",
+              label: "Extra small screens",
+              value: layoutItem?.xs,
+              key: "xs",
+            },
+            {
+              type: "number",
+              label: "Small screens",
+              value: layoutItem?.sm,
+              key: "sm",
+            },
+            {
+              type: "number",
+              label: "Medium screens",
+              value: layoutItem?.md,
+              key: "md",
+            },
+            {
+              type: "number",
+              label: "Large screens",
+              value: layoutItem?.lg,
+              key: "lg",
+            },
+            {
+              type: "number",
+              label: "Extra large screens",
+              value: layoutItem?.xl,
+              key: "xl",
+            },
+          ],
+          buttons: [
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    card: {
+      label: (
+        <>
+          <BsBoundingBoxCircles style={{ marginRight: 15 }} />
+          Card
+        </>
+      ),
+      droppable: true,
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit card",
+          form: [
+            {
+              type: "text",
+              label: "Title",
+              value: layoutItem?.title,
+              key: "title",
+            },
+            {
+              type: "boolean",
+              label: "With margin",
+              value: layoutItem?.withBigMargin,
+              key: "withBigMargin",
+            },
+          ],
+          buttons: [
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    animation_group: {
+      label: (
+        <>
+          <FaObjectGroup style={{ marginRight: 15 }} />
+          Animation (container)
+        </>
+      ),
+      droppable: true,
+      popup: (component, layoutItem, respond, deleteItem) => {},
+    },
+    animation_item: {
+      label: (
+        <>
+          <FaObjectUngroup style={{ marginRight: 15 }} />
+          Animation (item)
+        </>
+      ),
+      droppable: true,
+      popup: (component, layoutItem, respond, deleteItem) => {},
+    },
+    animation_single: {
+      label: (
+        <>
+          <FaSquare style={{ marginRight: 15 }} />
+          Animation (single)
+        </>
+      ),
+      droppable: true,
+      popup: (component, layoutItem, respond, deleteItem) => {},
+    },
+    text: {
+      label: (
+        <>
+          <FaAlignLeft style={{ marginRight: 15 }} />
+          Text
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit text",
+          form: [
+            {
+              type: "text",
+              label: "Text",
+              value: layoutItem?.text,
+              key: "text",
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    input: {
+      label: (
+        <>
+          <FaKeyboard style={{ marginRight: 15 }} />
+          Input
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit input",
+          form: [
+            {
+              type: "text",
+              label: "Label",
+              value: layoutItem?.label,
+              key: "label",
+            },
+            {
+              key: "inputType",
+              value: layoutItem?.inputType,
+              label: "Type",
+              type: "dropdown",
+              dropdownOptions: [
+                { label: "Text", value: "text" },
+                { label: "Number", value: "number" },
+                { label: "Email", value: "email" },
+                { label: "Password", value: "password" },
+              ],
+            },
+            {
+              key: "attachToVariable",
+              value: layoutItem?.attachToVariable,
+              label: "Attach to variable",
+              type: "custom",
+              customInput: AttachInputToVariable,
+              customInputProps: {
+                varList,
+                inputType: "text",
+              },
+              onlyDisplayWhen: { inputType: "text" },
+            },
+            {
+              key: "attachToVariable",
+              value: layoutItem?.attachToVariable,
+              label: "Attach to variable",
+              type: "custom",
+              customInput: AttachInputToVariable,
+              customInputProps: {
+                varList,
+                inputType: "email",
+              },
+              onlyDisplayWhen: { inputType: "email" },
+            },
+            {
+              key: "attachToVariable",
+              value: layoutItem?.attachToVariable,
+              label: "Attach to variable",
+              type: "custom",
+              customInput: AttachInputToVariable,
+              customInputProps: {
+                varList,
+                inputType: "number",
+              },
+              onlyDisplayWhen: { inputType: "number" },
+            },
+            {
+              key: "attachToVariable",
+              value: layoutItem?.attachToVariable,
+              label: "Attach to variable",
+              type: "custom",
+              customInput: AttachInputToVariable,
+              customInputProps: {
+                varList,
+                inputType: "password",
+              },
+              onlyDisplayWhen: { inputType: "password" },
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+
+    list: {
+      label: (
+        <>
+          <FaList style={{ marginRight: 15 }} />
+          List
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) =>
+        context.setDialog({
+          display: true,
+          title: "Edit list",
+          form: [
+            {
+              type: "dropdown",
+              label: "Show variable",
+              value: layoutItem?.varName,
+              key: "varName",
+              dropdownOptions: filter(
+                varList,
+                (o) => o.args.type === "objects"
+              ),
+            },
+            {
+              type: "text",
+              label: "Title",
+              value: layoutItem?.title,
+              key: "title",
+            },
+            {
+              type: "text",
+              label: "Primary text",
+              value: layoutItem?.primary,
+              key: "primary",
+            },
+            {
+              type: "text",
+              label: "Secondary text",
+              value: layoutItem?.secondary,
+              key: "secondary",
+            },
+            {
+              type: "text",
+              label: "Link to",
+              value: layoutItem?.linkTo,
+              key: "linkTo",
+            },
+          ],
+          buttons: [
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        }),
+    },
+    button: {
+      label: (
+        <>
+          <FaMouse style={{ marginRight: 15 }} />
+          Button
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          form: [
+            {
+              label: "Label",
+              value: layoutItem.label,
+              key: "label",
+            },
+            {
+              label: "Action",
+              key: "action",
+              value: layoutItem.action,
+              type: "dropdown",
+              dropdownOptions: actionList,
+            },
+            {
+              label: "Variant",
+              key: "variant",
+              value: layoutItem.variant,
+              type: "dropdown",
+              dropdownOptions: [
+                { label: "Text", value: "text" },
+                { label: "Contained", value: "contained" },
+                { label: "Outlined", value: "outlined" },
+              ],
+            },
+            {
+              label: "Colored",
+              key: "colored",
+              value: layoutItem.colored,
+              type: "boolean",
+            },
+            {
+              label: "Full width",
+              key: "fullWidth",
+              value: layoutItem.fullWidth,
+              type: "boolean",
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    toggle: {
+      label: (
+        <>
+          <FaToggleOn style={{ marginRight: 15 }} />
+          Toggle
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit toggle",
+          form: [
+            {
+              type: "dropdown",
+              label: "Attach to variable",
+              value: layoutItem?.varName,
+              key: "varName",
+              dropdownOptions: filter(
+                varList,
+                (o) => o.args.type === "boolean"
+              ),
+            },
+            {
+              key: "labelWhenTrue",
+              label: "Label when true",
+              value: layoutItem?.labelWhenTrue,
+              type: "text",
+            },
+            {
+              key: "labelWhenFalse",
+              label: "Label when false",
+              value: layoutItem?.labelWhenFalse,
+              type: "text",
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    options: {
+      label: (
+        <>
+          <FaListUl style={{ marginRight: 15 }} />
+          Options
+        </>
+      ),
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit options",
+          form: [
+            {
+              type: "dropdown",
+              label: "Attach to variable",
+              value: layoutItem?.varName,
+              key: "varName",
+              dropdownOptions: filter(
+                varList,
+                (o) => o.args.type === "options"
+              ),
+            },
+            {
+              type: "dropdown",
+              label: "Display as",
+              value: layoutItem?.displayAs,
+              key: "displayAs",
+              dropdownOptions: [
+                { label: "Dropdown", value: "dropdown" },
+                { label: "Buttons", value: "buttons" },
+                { label: "Radio", value: "radio" },
+              ],
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+    switch: {
+      label: (
+        <>
+          <FaCode style={{ marginRight: 15 }} />
+          Condition
+        </>
+      ),
+      wrapper: LayoutItemConditionalRendering,
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit conditional lay-out",
+          form: [],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
+  };
 
   // Lifecycle
   useEffect(() => {
@@ -93,6 +658,7 @@ const AppSettingsInterfaceUI: React.FC<{
       <Typography variant="h6">{interf.label}</Typography>
       <DropTarget
         Wrapper={EmptyWrapper}
+        context={context}
         root
         onChange={(response) => {
           // If there is a migration, delete the old entry first
@@ -124,555 +690,16 @@ const AppSettingsInterfaceUI: React.FC<{
             },
           });
         }}
+        layout={interf}
+        path=""
       >
         {interf.content.map((layoutItem, key) => {
           return (
             <LayoutItem
+              context={context}
               key={key}
               layoutItem={layoutItem}
-              componentList={{
-                grid_container: {
-                  label: (
-                    <>
-                      <FaTh style={{ marginRight: 15 }} />
-                      Grid (container)
-                    </>
-                  ),
-                  wrapper: (Props) => {
-                    return (
-                      <Grid container {...Props}>
-                        {Props.children}
-                      </Grid>
-                    );
-                  },
-                  droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit grid container",
-                      form: [
-                        {
-                          type: "number",
-                          label: "Spacing",
-                          value: layoutItem?.spacing,
-                          key: "spacing",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                grid_item: {
-                  label: (
-                    <>
-                      <FaSquare style={{ marginRight: 15 }} />
-                      Grid (item)
-                    </>
-                  ),
-                  droppable: true,
-                  wrapper: (Props) => {
-                    return (
-                      <Grid item {...Props}>
-                        {Props.children}
-                      </Grid>
-                    );
-                  },
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit grid item",
-                      form: [
-                        {
-                          type: "number",
-                          label: "Extra small screens",
-                          value: layoutItem?.xs,
-                          key: "xs",
-                        },
-                        {
-                          type: "number",
-                          label: "Small screens",
-                          value: layoutItem?.sm,
-                          key: "sm",
-                        },
-                        {
-                          type: "number",
-                          label: "Medium screens",
-                          value: layoutItem?.md,
-                          key: "md",
-                        },
-                        {
-                          type: "number",
-                          label: "Large screens",
-                          value: layoutItem?.lg,
-                          key: "lg",
-                        },
-                        {
-                          type: "number",
-                          label: "Extra large screens",
-                          value: layoutItem?.xl,
-                          key: "xl",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                card: {
-                  label: (
-                    <>
-                      <BsBoundingBoxCircles style={{ marginRight: 15 }} />
-                      Card
-                    </>
-                  ),
-                  droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit card",
-                      form: [
-                        {
-                          type: "text",
-                          label: "Title",
-                          value: layoutItem?.title,
-                          key: "title",
-                        },
-                        {
-                          type: "boolean",
-                          label: "With margin",
-                          value: layoutItem?.withBigMargin,
-                          key: "withBigMargin",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                animation_group: {
-                  label: (
-                    <>
-                      <FaObjectGroup style={{ marginRight: 15 }} />
-                      Animation (container)
-                    </>
-                  ),
-                  droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
-                },
-                animation_item: {
-                  label: (
-                    <>
-                      <FaObjectUngroup style={{ marginRight: 15 }} />
-                      Animation (item)
-                    </>
-                  ),
-                  droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
-                },
-                animation_single: {
-                  label: (
-                    <>
-                      <FaSquare style={{ marginRight: 15 }} />
-                      Animation (single)
-                    </>
-                  ),
-                  droppable: true,
-                  popup: (component, layoutItem, respond, deleteItem) => {},
-                },
-                input: {
-                  label: (
-                    <>
-                      <FaKeyboard style={{ marginRight: 15 }} />
-                      Input
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit input",
-                      form: [
-                        {
-                          type: "text",
-                          label: "Label",
-                          value: layoutItem?.label,
-                          key: "label",
-                        },
-                        {
-                          key: "inputType",
-                          value: layoutItem?.inputType,
-                          label: "Type",
-                          type: "dropdown",
-                          dropdownOptions: [
-                            { label: "Text", value: "text" },
-                            { label: "Number", value: "number" },
-                            { label: "Email", value: "email" },
-                            { label: "Password", value: "password" },
-                          ],
-                        },
-                        {
-                          key: "attachToVariable",
-                          value: layoutItem?.attachToVariable,
-                          label: "Attach to variable",
-                          type: "custom",
-                          customInput: AttachInputToVariable,
-                          customInputProps: {
-                            varList,
-                            inputType: "text",
-                          },
-                          onlyDisplayWhen: { inputType: "text" },
-                        },
-                        {
-                          key: "attachToVariable",
-                          value: layoutItem?.attachToVariable,
-                          label: "Attach to variable",
-                          type: "custom",
-                          customInput: AttachInputToVariable,
-                          customInputProps: {
-                            varList,
-                            inputType: "email",
-                          },
-                          onlyDisplayWhen: { inputType: "email" },
-                        },
-                        {
-                          key: "attachToVariable",
-                          value: layoutItem?.attachToVariable,
-                          label: "Attach to variable",
-                          type: "custom",
-                          customInput: AttachInputToVariable,
-                          customInputProps: {
-                            varList,
-                            inputType: "number",
-                          },
-                          onlyDisplayWhen: { inputType: "number" },
-                        },
-                        {
-                          key: "attachToVariable",
-                          value: layoutItem?.attachToVariable,
-                          label: "Attach to variable",
-                          type: "custom",
-                          customInput: AttachInputToVariable,
-                          customInputProps: {
-                            varList,
-                            inputType: "password",
-                          },
-                          onlyDisplayWhen: { inputType: "password" },
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                text: {
-                  label: (
-                    <>
-                      <FaAlignLeft style={{ marginRight: 15 }} />
-                      Text
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit text",
-                      form: [
-                        {
-                          type: "text",
-                          label: "Text",
-                          value: layoutItem?.text,
-                          key: "text",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                list: {
-                  label: (
-                    <>
-                      <FaList style={{ marginRight: 15 }} />
-                      List
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) =>
-                    context.setDialog({
-                      display: true,
-                      title: "Edit list",
-                      form: [
-                        {
-                          type: "dropdown",
-                          label: "Show variable",
-                          value: layoutItem?.varName,
-                          key: "varName",
-                          dropdownOptions: filter(
-                            varList,
-                            (o) => o.args.type === "objects"
-                          ),
-                        },
-                        {
-                          type: "text",
-                          label: "Title",
-                          value: layoutItem?.title,
-                          key: "title",
-                        },
-                        {
-                          type: "text",
-                          label: "Primary text",
-                          value: layoutItem?.primary,
-                          key: "primary",
-                        },
-                        {
-                          type: "text",
-                          label: "Secondary text",
-                          value: layoutItem?.secondary,
-                          key: "secondary",
-                        },
-                        {
-                          type: "text",
-                          label: "Link to",
-                          value: layoutItem?.linkTo,
-                          key: "linkTo",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    }),
-                },
-                button: {
-                  label: (
-                    <>
-                      <FaMouse style={{ marginRight: 15 }} />
-                      Button
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      form: [
-                        {
-                          label: "Label",
-                          value: layoutItem.label,
-                          key: "label",
-                        },
-                        {
-                          label: "Action",
-                          key: "action",
-                          value: layoutItem.action,
-                          type: "dropdown",
-                          dropdownOptions: actionList,
-                        },
-                        {
-                          label: "Variant",
-                          key: "variant",
-                          value: layoutItem.variant,
-                          type: "dropdown",
-                          dropdownOptions: [
-                            { label: "Text", value: "text" },
-                            { label: "Contained", value: "contained" },
-                            { label: "Outlined", value: "outlined" },
-                          ],
-                        },
-                        {
-                          label: "Colored",
-                          key: "colored",
-                          value: layoutItem.colored,
-                          type: "boolean",
-                        },
-                        {
-                          label: "Full width",
-                          key: "fullWidth",
-                          value: layoutItem.fullWidth,
-                          type: "boolean",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                toggle: {
-                  label: (
-                    <>
-                      <FaToggleOn style={{ marginRight: 15 }} />
-                      Toggle
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit toggle",
-                      form: [
-                        {
-                          type: "dropdown",
-                          label: "Attach to variable",
-                          value: layoutItem?.varName,
-                          key: "varName",
-                          dropdownOptions: filter(
-                            varList,
-                            (o) => o.args.type === "boolean"
-                          ),
-                        },
-                        {
-                          key: "labelWhenTrue",
-                          label: "Label when true",
-                          value: layoutItem?.labelWhenTrue,
-                          type: "text",
-                        },
-                        {
-                          key: "labelWhenFalse",
-                          label: "Label when false",
-                          value: layoutItem?.labelWhenFalse,
-                          type: "text",
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-                options: {
-                  label: (
-                    <>
-                      <FaListUl style={{ marginRight: 15 }} />
-                      Options
-                    </>
-                  ),
-                  popup: (component, layoutItem, respond, deleteItem) => {
-                    context.setDialog({
-                      display: true,
-                      title: "Edit options",
-                      form: [
-                        {
-                          type: "dropdown",
-                          label: "Attach to variable",
-                          value: layoutItem?.varName,
-                          key: "varName",
-                          dropdownOptions: filter(
-                            varList,
-                            (o) => o.args.type === "options"
-                          ),
-                        },
-                        {
-                          type: "dropdown",
-                          label: "Display as",
-                          value: layoutItem?.displayAs,
-                          key: "displayAs",
-                          dropdownOptions: [
-                            { label: "Dropdown", value: "dropdown" },
-                            { label: "Buttons", value: "buttons" },
-                            { label: "Radio", value: "radio" },
-                          ],
-                        },
-                      ],
-                      buttons: [
-                        {
-                          label: (
-                            <Typography
-                              style={{ color: "red" }}
-                              variant="button"
-                            >
-                              Delete
-                            </Typography>
-                          ),
-                          onClick: () => deleteItem(),
-                        },
-                        {
-                          label: "Update",
-                          onClick: (form) => respond(form),
-                        },
-                      ],
-                    });
-                  },
-                },
-              }}
+              componentList={componentList}
               onDrop={(newContent) => {
                 setNewInterface({
                   ...newInterface,
@@ -794,20 +821,20 @@ export const InterfaceComponentsList: React.FC<{
         </ListItem>
       </Component>
       <ListSubheader>Components</ListSubheader>
-      <Component id="input">
-        <ListItem>
-          <ListItemIcon style={{ minWidth: 32 }}>
-            <FaKeyboard />
-          </ListItemIcon>
-          <ListItemText>Input</ListItemText>
-        </ListItem>
-      </Component>
       <Component id="text">
         <ListItem>
           <ListItemIcon style={{ minWidth: 32 }}>
             <FaAlignLeft />
           </ListItemIcon>
           <ListItemText>Text</ListItemText>
+        </ListItem>
+      </Component>
+      <Component id="input">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaKeyboard />
+          </ListItemIcon>
+          <ListItemText>Input</ListItemText>
         </ListItem>
       </Component>
       <Component id="list">
@@ -842,6 +869,23 @@ export const InterfaceComponentsList: React.FC<{
           <ListItemText>Options</ListItemText>
         </ListItem>
       </Component>
+      <ListSubheader>Logic</ListSubheader>
+      <Component id="switch">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaRandom />
+          </ListItemIcon>
+          <ListItemText>Switch rendering</ListItemText>
+        </ListItem>
+      </Component>
+      <Component id="condition">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaCode />
+          </ListItemIcon>
+          <ListItemText>Condition</ListItemText>
+        </ListItem>
+      </Component>
     </List>
   </>
 );
@@ -853,15 +897,16 @@ const LayoutItem: React.FC<{
   onDrop;
   layout: LayoutType;
   path;
-}> = ({ key, layoutItem, componentList, onDrop, layout, path }) => {
-  const Wrapper = componentList[layoutItem.type].wrapper
-    ? componentList[layoutItem.type].wrapper
-    : EmptyWrapper;
+  context: AppContextType;
+}> = ({ key, layoutItem, componentList, onDrop, layout, path, context }) => {
+  const Wrapper =
+    ((componentList || {})[layoutItem.type] || {}).wrapper || EmptyWrapper;
 
   return (
     <DropTarget
       key={key}
       Wrapper={Wrapper}
+      context={context}
       componentList={componentList}
       layoutItem={layoutItem}
       onDelete={() => {
@@ -871,7 +916,9 @@ const LayoutItem: React.FC<{
         map(result, (change, key) => {
           layoutItem[key] = change;
         });
+
         updateById(layout, layoutItem);
+        onDrop(layout);
       }}
       onChange={(response) => {
         if (response.migration) {
@@ -883,9 +930,10 @@ const LayoutItem: React.FC<{
           id: uniqid(),
           ...response.migration,
         });
-        updateById(layout, layoutItem);
         onDrop(layout);
       }}
+      layout={layout}
+      path={path}
     >
       {layoutItem.items &&
         layoutItem.items.map((layoutItem, key) => {
@@ -896,6 +944,7 @@ const LayoutItem: React.FC<{
               componentList={componentList}
               onDrop={onDrop}
               layout={layout}
+              context={context}
               path={path + layoutItem.id}
             />
           );
@@ -969,5 +1018,207 @@ const AttachInputToVariable: React.FC<CustomFormInputType> = ({
         </Grid>
       )}
     </Grid>
+  );
+};
+
+const LayoutItemConditionalRendering: React.FC<{
+  conditions;
+  defaultCondition;
+  onChange: (props: {}) => void;
+  componentList;
+  layout;
+  path;
+  context: AppContextType;
+}> = ({
+  conditions,
+  defaultCondition,
+  onChange,
+  componentList,
+  layout,
+  path,
+  context,
+}) => {
+  // Vars
+  const [selectedCase, setSelectedCase] = useState<number | "default" | "add">(
+    "default"
+  );
+
+  // Lifecycle
+
+  // UI
+
+  return (
+    <>
+      <Typography variant="h6">Switch rendering</Typography>
+      <Tabs
+        value={selectedCase}
+        onChange={(event, newValue) => {
+          setSelectedCase(newValue);
+        }}
+        aria-label="Cases"
+        centered
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        {(conditions || []).map((condition, conditionIndex) => (
+          <Tab
+            label={condition.label}
+            value={conditionIndex}
+            key={conditionIndex}
+          />
+        ))}
+        <Tab label={<FaPlus />} value="add" />
+        <Tab label="Default" value="default" />
+      </Tabs>
+      {selectedCase === "add" && (
+        <>
+          <Button
+            onClick={() => {
+              onChange({
+                conditions: [...(conditions || []), { label: "New" }],
+              });
+              setSelectedCase((conditions || []).length);
+            }}
+          >
+            Add
+          </Button>
+        </>
+      )}
+      {selectedCase !== "add" && selectedCase !== "default" && (
+        <>
+          <Typography variant="h6">
+            <IconButton
+              onClick={() =>
+                context.setDialog({
+                  display: true,
+                  title: "Edit case",
+                  form: [
+                    {
+                      key: "label",
+                      value: conditions[selectedCase].label,
+                      label: "Label",
+                    },
+                    {
+                      key: "criteria",
+                      value: conditions[selectedCase].criteria,
+                      label: "Criteria",
+                      type: "text",
+                    },
+                  ],
+                  buttons: [
+                    {
+                      label: (
+                        <Typography style={{ color: "red" }}>
+                          Delete case
+                        </Typography>
+                      ),
+                      onClick: () => console.log("todo"),
+                    },
+                    {
+                      label: "Update case",
+                      onClick: (form) => {
+                        const newConditions = conditions;
+                        newConditions[selectedCase].label = form.label;
+                        newConditions[selectedCase].criteria = form.criteria;
+                        onChange({ conditions: newConditions });
+                      },
+                    },
+                  ],
+                })
+              }
+            >
+              <FaCogs />
+            </IconButton>
+            {((conditions || {})[selectedCase] || {}).label}
+          </Typography>
+          <DropTarget
+            Wrapper={EmptyWrapper}
+            root
+            context={context}
+            layout={((conditions || {})[selectedCase] || {}).items}
+            path={path}
+            onChange={(response) => {
+              // If there is a migration, delete the old entry first
+              if (response.migration) {
+                remove(layout.content, response.migration.id);
+              }
+              const newConditions = conditions;
+              newConditions[selectedCase].items = [
+                ...(newConditions[selectedCase].items || []),
+                {
+                  type: response.id,
+                  id: uniqid(),
+                  ...response.migration, // migrate any old data to here
+                },
+              ];
+              onChange({ conditions: newConditions });
+            }}
+          >
+            {(((conditions || {})[selectedCase] || {}).items || []).map(
+              (layoutItem, key) => {
+                return (
+                  <LayoutItem
+                    key={key}
+                    layoutItem={layoutItem}
+                    context={context}
+                    layout={
+                      ((conditions || {})[selectedCase] || {}).items || []
+                    }
+                    componentList={componentList}
+                    onDrop={(newContent) => {
+                      onChange(newContent);
+                    }}
+                    path={path + layoutItem.id}
+                  />
+                );
+              }
+            )}
+          </DropTarget>
+        </>
+      )}
+      {selectedCase === "default" && (
+        <>
+          <Typography variant="h6">Default case</Typography>
+          <DropTarget
+            Wrapper={EmptyWrapper}
+            root
+            layout={layout}
+            path={path}
+            context={context}
+            onChange={(response) => {
+              // If there is a migration, delete the old entry first
+              if (response.migration) {
+                remove(layout.content, response.migration.id);
+              }
+              const newDefaultCondition = [
+                ...(defaultCondition || []),
+                {
+                  type: response.id,
+                  id: uniqid(),
+                  ...response.migration, // migrate any old data to here
+                },
+              ];
+              onChange({ defaultCondition: newDefaultCondition });
+            }}
+          >
+            {(defaultCondition || []).map((layoutItem, key) => {
+              return (
+                <LayoutItem
+                  key={key}
+                  layoutItem={layoutItem}
+                  componentList={componentList}
+                  context={context}
+                  onDrop={(newContent) => {
+                    onChange(newContent);
+                  }}
+                  layout={layout?.defaultCondition || []}
+                  path={path + layoutItem.id}
+                />
+              );
+            })}
+          </DropTarget>
+        </>
+      )}
+    </>
   );
 };

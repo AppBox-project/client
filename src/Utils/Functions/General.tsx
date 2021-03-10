@@ -5,7 +5,7 @@ export const remove = (array, id) => {
 };
 
 export const updateById = (array, newItem) => {
-  array.forEach(update(newItem.id, newItem));
+  (array || []).forEach(update(newItem.id, newItem));
 };
 
 let update = (id, newItem) => (obj) => {

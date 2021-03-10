@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 import { Typography, IconButton } from "@material-ui/core";
 import { FaCog } from "react-icons/fa";
 import { useDrag } from "react-dnd";
-import { LayoutDesignerItem } from "../../../../Utils/Types";
+import { AppContextType, LayoutDesignerItem } from "../../../../Utils/Types";
 
 export interface DustbinState {
   hasDropped: boolean;
@@ -21,6 +21,9 @@ const DropTarget: React.FC<{
   onChangeProps?: (result) => void;
   onDelete?;
   Wrapper;
+  layout;
+  path;
+  context: AppContextType;
 }> = ({
   layoutItem,
   children,
@@ -30,6 +33,9 @@ const DropTarget: React.FC<{
   onChangeProps,
   onDelete,
   Wrapper,
+  layout,
+  path,
+  context,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
 
@@ -57,7 +63,14 @@ const DropTarget: React.FC<{
 
   if (root)
     return (
-      <Wrapper {...layoutItem} ref={drag}>
+      <Wrapper
+        {...layoutItem}
+        ref={drag}
+        componentList={componentList}
+        layout={layout}
+        path={path}
+        context={context}
+      >
         <div ref={drop} className={className}>
           {children ? (
             <>{children}</>
@@ -67,18 +80,24 @@ const DropTarget: React.FC<{
         </div>
       </Wrapper>
     );
+  const component = (componentList || {})[layoutItem.type] || {};
   return (
     <Wrapper
       ref={drag}
+      componentList={componentList}
+      layout={layout}
+      path={path}
+      context={context}
       className={
-        componentList[layoutItem.type].droppable
+        component.droppable
           ? `${styles.componentWrapper} ${className}`
           : styles.componentWrapperSmall
       }
       {...layoutItem}
+      onChange={onChangeProps}
     >
       <div ref={drag} style={{ display: "flex", width: "100%" }}>
-        {componentList[layoutItem.type].popup && (
+        {component.popup && (
           <IconButton
             onClick={() => {
               componentList[layoutItem.type].popup(
@@ -94,7 +113,7 @@ const DropTarget: React.FC<{
             <FaCog
               style={{
                 float: "left",
-                color: componentList[layoutItem.type].droppable
+                color: component.droppable
                   ? gTheme.palette.type === "light"
                     ? "#485263"
                     : "white"
@@ -106,7 +125,7 @@ const DropTarget: React.FC<{
           </IconButton>
         )}
         <Typography
-          variant={componentList[layoutItem.type].droppable ? "h6" : "body1"}
+          variant={component.droppable ? "h6" : "body1"}
           style={{
             textAlign: "center",
             cursor: "default",
@@ -118,12 +137,11 @@ const DropTarget: React.FC<{
           }}
           ref={drop}
         >
-          {componentList[layoutItem.type].label}
-          {componentList[layoutItem.type].dynamicLabel &&
-            ": " + layoutItem[componentList[layoutItem.type].dynamicLabel]}
+          {component.label}
+          {component.dynamicLabel && ": " + layoutItem[component.dynamicLabel]}
         </Typography>
       </div>
-      {componentList[layoutItem.type].droppable && (
+      {component.droppable && (
         <>
           <Typography
             variant="caption"

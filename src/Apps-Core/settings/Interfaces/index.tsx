@@ -185,7 +185,7 @@ const InterfaceWrapper: React.FC<{
       )}
       {originalInterface !== JSON.stringify(newInterface) && (
         <Fab
-          style={{ position: "fixed", right: 15, bottom: 15 }}
+          style={{ position: "fixed", right: 15, bottom: 15, zIndex: 101 }}
           color="primary"
           onClick={() => {
             context.updateObject(
