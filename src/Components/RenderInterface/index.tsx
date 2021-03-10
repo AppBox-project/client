@@ -20,6 +20,7 @@ import RenderInterfaceAnimationItem from "./InterfaceComponents/AnimationItem";
 import RenderInterfaceButton from "./InterfaceComponents/Button";
 import RenderInterfaceInput from "./InterfaceComponents/Input";
 import { GridSpacing } from "@material-ui/core";
+import RenderInterfaceSwitch from "./InterfaceComponents/Switch";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -313,6 +314,24 @@ const LayoutItem: React.FC<{
           layoutItem={newLayoutItem}
           vars={vars}
           setVars={setVars}
+        />
+      ) : layoutItem.type === "switch" ? (
+        <RenderInterfaceSwitch
+          context={context}
+          layoutItem={layoutItem}
+          vars={vars}
+          renderChildren={(items) =>
+            items.map((child) => (
+              <LayoutItem
+                key={child.key}
+                layoutItem={child}
+                vars={vars}
+                setVars={setVars}
+                interfaceObject={interfaceObject}
+                context={context}
+              />
+            ))
+          }
         />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`
