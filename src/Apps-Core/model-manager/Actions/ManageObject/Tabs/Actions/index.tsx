@@ -45,7 +45,7 @@ const AppActionManageObjectTabActions: React.FC<{
                     ...model,
                     actions: {
                       ...model.actions,
-                      [response.key]: {},
+                      [response.key]: {label: "New action"},
                     },
                   },
                   model._id
