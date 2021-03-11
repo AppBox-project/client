@@ -58,8 +58,7 @@ export interface ModelFieldType {
 
 export interface ModelOverviewType {
   fields: string[];
-  buttons: string[];
-  actions: string[];
+  buttons: { global?: string[]; single?: string[]; multiple?: string[] };
 }
 interface ModelApiType {
   active: boolean;
@@ -109,7 +108,15 @@ export interface ModelRuleType {
     | "UpdateAndDelete"
     | "Never";
 }
-
+export interface ModelActionType {
+  label: string;
+  mode: "free" | "single" | "multiple";
+  type: "create" | "interface";
+  interface?: string;
+  layout?: string;
+  passContextTo?: string;
+  icon: string;
+}
 export interface ModelType {
   key: string;
   name: string;
@@ -131,7 +138,9 @@ export interface ModelType {
   };
   handlers: {};
   layouts: any;
-  actions: any;
+  actions: {
+    [name: string]: ModelActionType;
+  };
   extensions?: { [key: string]: {} };
   api?: {
     read?: ModelApiType;
@@ -602,7 +611,7 @@ export interface UIType {
 
 export interface LayoutType {
   layout: LayoutDesignerItem[];
-  buttons: string[];
+  buttons: { key: string; args: { type?: "extension" | "action" } }[];
   factsBar: string[];
 }
 
@@ -720,6 +729,7 @@ export interface InterfaceType extends ObjectType {
           type;
           label: string;
           model?: string;
+          input_var?: boolean;
         };
       };
       interfaces: InterfaceInterfaces;

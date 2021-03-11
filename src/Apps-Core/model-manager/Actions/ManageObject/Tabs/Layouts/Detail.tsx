@@ -112,6 +112,17 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       history.replace(`/model-manager/${model.key}/layouts`); // Redirect back to overview if there is no such layout
     }
 
+    // Custom actions
+    map(model?.actions || {}, (action, key) => {
+      if (action.mode !== "multiple") {
+        customButtons.push({
+          label: action.label,
+          value: key,
+          args: { type: "action" },
+        });
+      }
+    });
+
     // Custom buttons
     map(model?.extensions || {}, (value, key) => {
       if (value.active) {
@@ -123,14 +134,20 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
           map(extension.provides?.buttons, (button, buttonKey) => {
             setCustomButtons([
               ...customButtons,
-              { value: `${key}-${buttonKey}`, label: button.label },
+              {
+                value: `${key}-${buttonKey}`,
+                label: button.label,
+                args: { type: "extension" },
+              },
             ]);
           });
         });
       }
     });
 
-    return () => {};
+    return () => {
+      interfaceRequest.stop();
+    };
   }, [model, detailId]);
 
   // UI
@@ -142,25 +159,30 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
     { label: "Archive", value: "archive" },
     ...customButtons,
   ];
+  const buttonValue = [];
+  (layout?.buttons || []).map((b) => buttonValue.push(b.key));
 
   return (
     <context.UI.Design.Card withBigMargin withoutPadding>
       <Grid container spacing={3} style={{ padding: 15 }}>
         <Grid item xs={12} md={6}>
-          <Typography variant="body1">Actions</Typography>
           <InputSelect
             label="Actions"
             multiple
             options={buttonOptions}
-            value={layout.buttons}
-            onChange={(value) => {
-              setLayout({ ...layout, buttons: value }); // Spread operator is required to force react to redraw
+            value={buttonValue}
+            onChange={(value, args) => {
+              const newButtons = [];
+              (value || []).map((v, vIndex) =>
+                newButtons.push({ key: v, args: args[vIndex] })
+              );
+
+              setLayout({ ...layout, buttons: newButtons }); // Spread operator is required to force react to redraw
               setHasChanged(true);
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="body1">Facts bar</Typography>
           <InputSelect
             label="Facts bar"
             multiple

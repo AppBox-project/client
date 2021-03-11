@@ -41,14 +41,14 @@ const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({
 
             // All data loaded, find correct handler
             const handlers = {
-              "data-explorer": "/data-explorer/{model:key}/{object:_id}",
+              explorer: "/explorer/{model:key}/{object:_id}",
               ...model.handlers,
             };
             // Check if the model's main app has a handle registered
-            // Else: go for data-explorer
+            // Else: go for explorer
             // Todo: catch the situation when there's another app, rather than the default or DE. Present a picker.
             // Todo 2: allow user preference to override this behaviour
-            const app = handlers[model.app] ? model.app : "data-explorer";
+            const app = handlers[model.app] ? model.app : "explorer";
 
             // Replace variables in link format with actual data
             const link = handlers[app].replace(/{(.*?)}/g, (a, v) => {

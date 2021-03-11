@@ -14,6 +14,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
+  ListItemIcon,
 } from "@material-ui/core";
 import { AppContextType, ModelType } from "../../../Utils/Types";
 import uniqid from "uniqid";
@@ -21,7 +23,14 @@ import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import ViewObject from "../../Object/index";
 import { useHistory } from "react-router-dom";
-import { FaBomb, FaFilter, FaCaretDown, FaStream } from "react-icons/fa";
+import {
+  FaBomb,
+  FaFilter,
+  FaCaretDown,
+  FaStream,
+  FaTimes,
+  FaTrash,
+} from "react-icons/fa";
 import ReactVirtualizedTable from "./VirtualizedTable";
 import RegularTable from "./Table";
 import Skeleton from "./Skeleton";
@@ -31,7 +40,9 @@ import {
   AnimationItem,
 } from "../../Apps/Apps/AppUI/Animations";
 import ObjectOverviewFilter from "./Filter";
-import { map } from "lodash";
+import { map, find } from "lodash";
+import RenderInterface from "../../RenderInterface";
+import FaIcon from "../../Icons";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -208,6 +219,15 @@ const Overview: React.FC<{
                   component="div"
                   style={{ flex: 1 }}
                 >
+                  <Tooltip title="Clear selection" placement="right">
+                    <IconButton
+                      onClick={() => {
+                        setSelected([]);
+                      }}
+                    >
+                      <FaTimes style={{ width: 18, height: 18 }} />
+                    </IconButton>
+                  </Tooltip>
                   {selected.length === objects.length ? "All" : selected.length}{" "}
                   {selected.length === 1
                     ? (alternativeTitle?.single || model.name).toLowerCase()
@@ -257,7 +277,7 @@ const Overview: React.FC<{
                             button
                             onClick={() => {
                               history.push(
-                                `${baseUrl || `/data-explorer/${model.key}`}`
+                                `${baseUrl || `/explorer/${model.key}`}`
                               );
                               setListPopupElement(null);
                             }}
@@ -272,7 +292,7 @@ const Overview: React.FC<{
                               onClick={() => {
                                 history.push(
                                   `${
-                                    baseUrl || `/data-explorer/${model.key}`
+                                    baseUrl || `/explorer/${model.key}`
                                   }#${key}`
                                 );
                                 setListPopupElement(null);
@@ -301,17 +321,16 @@ const Overview: React.FC<{
                 </Tooltip>
               ) : (
                 <>
-                  {layout.buttons.map((buttonInfo) => {
+                  {(layout?.buttons?.global || []).map((buttonInfo) => {
                     if (model.actions[buttonInfo]) {
                       const button = model.actions[buttonInfo];
-                      return (
+                      return button.type === "create" ? (
                         <Tooltip
                           title={
-                            button.label
-                              ? button.label
-                              : `New ${(
-                                  alternativeTitle?.single || model.name
-                                ).toLocaleLowerCase()}`
+                            button?.label ||
+                            `New ${(
+                              alternativeTitle?.single || model.name
+                            ).toLocaleLowerCase()}`
                           }
                           placement="left"
                         >
@@ -334,6 +353,47 @@ const Overview: React.FC<{
                             <IoIosAddCircleOutline />
                           </IconButton>
                         </Tooltip>
+                      ) : button.type === "interface" ? (
+                        button.icon ? (
+                          <Tooltip title={button.label} placement="left">
+                            <IconButton
+                              onClick={() =>
+                                context.setDialog({
+                                  display: true,
+                                  title: button.label,
+                                  content: (
+                                    <RenderInterface
+                                      context={context}
+                                      interfaceId={button.interface}
+                                    />
+                                  ),
+                                })
+                              }
+                            >
+                              <FaIcon icon={button.icon} />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              context.setDialog({
+                                display: true,
+                                title: button.label,
+                                content: (
+                                  <RenderInterface
+                                    context={context}
+                                    interfaceId={button.interface}
+                                  />
+                                ),
+                              })
+                            }
+                          >
+                            {button.label}
+                          </Button>
+                        )
+                      ) : (
+                        <>Unknown button type {button.type}</>
                       );
                     }
                   })}
@@ -382,32 +442,145 @@ const Overview: React.FC<{
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => {
+          setAnchorEl(null);
+          setSelected([]);
+        }}
       >
-        <MenuItem
-          onClick={() => {
-            setAnchorEl(null);
-            selected.map((deleteId) => {
-              const requestId = uniqid();
-              Server.emit("deleteObject", { objectId: deleteId, requestId });
-              Server.on(`receive-${requestId}`, (response) => {
-                if (!response.success) {
-                  setSnackbar({
-                    display: true,
-                    message: response.reason,
-                    type: "error",
-                    icon: <FaBomb />,
-                    duration: 2500,
-                    position: { horizontal: "right" },
-                  });
-                }
-              });
-            });
-            setSelected([]);
-          }}
-        >
-          Delete
-        </MenuItem>
+        {selected.length === 1
+          ? layout.buttons.single.map((singleButton) => {
+              const action = (model.actions || {})[singleButton];
+              return singleButton === "delete" ? (
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    const requestId = uniqid();
+                    Server.emit("deleteObject", {
+                      objectId: selected[0],
+                      requestId,
+                    });
+                    Server.on(`receive-${requestId}`, (response) => {
+                      if (!response.success) {
+                        setSnackbar({
+                          display: true,
+                          message: response.reason,
+                          type: "error",
+                          icon: <FaBomb />,
+                          duration: 2500,
+                          position: { horizontal: "right" },
+                        });
+                      }
+                    });
+                    setSelected([]);
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 32 }}>
+                    <FaTrash />
+                  </ListItemIcon>
+                  Delete
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    switch (action.type) {
+                      case "interface":
+                        setAnchorEl(undefined);
+                        context.setDialog({
+                          display: true,
+                          title: action.label,
+                          content: (
+                            <RenderInterface
+                              context={context}
+                              interfaceId={action.interface}
+                              premappedVariables={{
+                                [action.passContextTo]: find(
+                                  objects,
+                                  (o) => o._id === selected[0]
+                                ),
+                              }}
+                            />
+                          ),
+                        });
+                        setSelected([]);
+                        break;
+                      default:
+                        console.log(`Unknown action type ${action.type}`);
+                        break;
+                    }
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 32 }}>
+                    <FaIcon icon={action.icon} />
+                  </ListItemIcon>
+                  {action.label}
+                </MenuItem>
+              );
+            })
+          : layout.buttons.multiple.map((multiButton) => {
+              const action = (model.actions || {})[multiButton];
+              return multiButton === "delete" ? (
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    const requestId = uniqid();
+                    Server.emit("deleteObjects", {
+                      objectId: selected,
+                      requestId,
+                    });
+                    Server.on(`receive-${requestId}`, (response) => {
+                      if (!response.success) {
+                        setSnackbar({
+                          display: true,
+                          message: response.reason,
+                          type: "error",
+                          icon: <FaBomb />,
+                          duration: 2500,
+                          position: { horizontal: "right" },
+                        });
+                      }
+                    });
+                    setSelected([]);
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 32 }}>
+                    <FaTrash />
+                  </ListItemIcon>
+                  Delete
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    switch (action.type) {
+                      case "interface":
+                        setAnchorEl(undefined);
+                        context.setDialog({
+                          display: true,
+                          title: action.label,
+                          content: (
+                            <RenderInterface
+                              context={context}
+                              interfaceId={action.interface}
+                              premappedVariables={{
+                                [action.passContextTo]: find(
+                                  objects,
+                                  (o) => o._id === selected[0]
+                                ),
+                              }}
+                            />
+                          ),
+                        });
+                        setSelected([]);
+                        break;
+                      default:
+                        console.log(`Unknown action type ${action.type}`);
+                        break;
+                    }
+                  }}
+                >
+                  {action.label}
+                </MenuItem>
+              );
+            })}
       </Menu>
       <Drawer
         anchor="bottom"

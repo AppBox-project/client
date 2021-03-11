@@ -12,7 +12,7 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
     <div style={{ paddingBottom: 80 }}>
       <Switch>
         <Route
-          path={`/data-explorer/${action}/:id`}
+          path={`/explorer/${action}/:id`}
           render={(props) => {
             return (
               <DetailModule context={context} {...props} object={action} />
@@ -20,7 +20,7 @@ const AppActionObject: React.FC<{ action; context: AppContextType }> = ({
           }}
         />
         <Route
-          path={`/data-explorer/${action}`}
+          path={`/explorer/${action}`}
           render={(props) => {
             return (
               <OverviewModule {...props} object={action} context={context} />
@@ -54,7 +54,7 @@ const DetailModule: React.FC<{
     <div style={{ marginTop: 50 }}>
       <ViewObject
         modelId={object}
-        appId="data-explorer"
+        appId="explorer"
         objectId={id}
         context={context}
       />

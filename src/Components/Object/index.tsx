@@ -47,6 +47,7 @@ import ObjectLayoutItemAttachments from "./LayoutItems/Attachments";
 import Picture from "../Picture";
 import ObjectLayoutItemDetailedRelatedList from "./LayoutItems/DetailedRelatedList";
 import ObjectLayoutItemInterface from "./LayoutItems/Interface";
+import RenderInterface from "../RenderInterface";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -372,21 +373,24 @@ const ViewObject: React.FC<{
       setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
 
       (layout.buttons || []).map((button) => {
-        if (!["clone", "archive", "delete"].includes(button)) {
-          import(`../Object/Extensions/${button.split("-")[0]}/index.tsx`).then(
-            async (component) => {
+        if (!["clone", "archive", "delete"].includes(button.key)) {
+          if (button.args.type === "extension") {
+            import(
+              `../Object/Extensions/${button.key.split("-")[0]}/index.tsx`
+            ).then(async (component) => {
               const getInfo = component.default;
               const extension = await getInfo(
-                appliedModel.extensions[button.split("-")[0]],
+                appliedModel.extensions[button.key.split("-")[0]],
                 context,
                 appliedObject
               );
               setCustomButtonInfo({
                 ...customButtonInfo,
-                [button]: extension.provides.buttons[button.split("-")[1]],
+                [button.key]:
+                  extension.provides.buttons[button.key.split("-")[1]],
               });
-            }
-          );
+            });
+          }
         }
       });
     }
@@ -499,11 +503,13 @@ const ViewObject: React.FC<{
           });
         },
       },
-    }[button];
-    return (
+    }[button.key];
+    return !button.args || button.args.type === "extension" ? (
       <Button
         color="primary"
-        variant={buttonInfo?.variant || "text"}
+        variant={
+          (buttonInfo?.variant as "text" | "contained" | "outlined") || "text"
+        }
         onClick={() => {
           if (buttonInfo?.onClick) {
             buttonInfo.onClick();
@@ -521,8 +527,57 @@ const ViewObject: React.FC<{
             : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
         }}
       >
-        {buttonInfo?.label || button}
+        {buttonInfo?.label || button.key}
       </Button>
+    ) : button.args.type === "action" ? (
+      <Button
+        color="primary"
+        onClick={() => {
+          switch (appliedModel.actions[button.key].type) {
+            case "interface":
+              const premappedVariables = {};
+              if (appliedModel.actions[button.key].mode === "single")
+                premappedVariables[
+                  appliedModel.actions[button.key].passContextTo
+                ] = appliedObject;
+
+              context.setDialog({
+                display: true,
+                title: appliedModel.actions[button.key].label,
+                content: (
+                  <RenderInterface
+                    context={context}
+                    interfaceId={appliedModel.actions[button.key].interface}
+                    premappedVariables={premappedVariables}
+                  />
+                ),
+              });
+              break;
+            case "create":
+              console.log("Todo: create", appliedModel.actions[button.key]);
+
+              break;
+            default:
+              console.log(
+                `Unknown button type ${appliedModel.actions[button.key].type}`
+              );
+
+              break;
+          }
+        }}
+        style={{
+          margin: 5,
+          color: !popup
+            ? layout?.factsBar
+              ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
+              : "white"
+            : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
+        }}
+      >
+        {appliedModel.actions[button.key].label || button.key}
+      </Button>
+    ) : (
+      <>Unknown Button Type</>
     );
   });
 

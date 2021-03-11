@@ -1,13 +1,15 @@
-import React, { useEffect, useState, useGlobal } from "reactn";
+import React, { useEffect, useState } from "react";
 import {
   AppContextType,
   ModelOverviewType,
   ModelFieldType,
   ModelType,
   UIType,
+  ListDetailItemType,
+  ValueListItemType,
+  ModelActionType,
 } from "../../../../../../Utils/Types";
 import {
-  Typography,
   Table,
   TableHead,
   TableCell,
@@ -20,7 +22,6 @@ import {
   ListItemAvatar,
   TableRow,
   Fab,
-  ListItemIcon,
 } from "@material-ui/core";
 import {
   FaAngleUp,
@@ -28,8 +29,6 @@ import {
   FaAngleLeft,
   FaAngleRight,
   FaSave,
-  FaCheckSquare,
-  FaSquare,
 } from "react-icons/fa";
 import { map, filter, indexOf } from "lodash";
 
@@ -49,12 +48,22 @@ const AppActionManageObjectOverviewEditor: React.FC<{
 
   // States & Hooks
   const [overview, setOverview] = useState<ModelOverviewType>();
-  const [gTheme] = useGlobal<any>("theme");
+  const [actionList, setActionList] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
     setOverview(model.overviews[detailId]);
   }, [detailId]);
+  useEffect(() => {
+    const nl: ValueListItemType[] = [
+      { label: "Delete", value: "delete", args: { mode: "single" } },
+      { label: "Delete", value: "delete", args: { mode: "multiple" } },
+    ];
+    map(model.actions, (action: ModelActionType, actionKey) =>
+      nl.push({ label: action.label, value: actionKey, args: { ...action } })
+    );
+    setActionList(nl);
+  }, [model]);
 
   if (!overview) return <UI.Loading />;
   return (
@@ -198,133 +207,62 @@ const AppActionManageObjectOverviewEditor: React.FC<{
                 </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <UI.Animations.AnimationItem>
                 <context.UI.Design.Card hoverable withBigMargin title="Buttons">
-                  <List>
-                    {map(model.actions, (action, key) => {
-                      return (
-                        <ListItem
-                          style={{ cursor: "pointer" }}
-                          selected={overview.buttons.includes(key)}
-                          onClick={() => {
-                            if (overview.buttons.includes(key)) {
-                              setOverview({
-                                ...overview,
-                                buttons: filter(overview.buttons, (o) => {
-                                  return o !== key;
-                                }),
-                              });
-                            } else {
-                              const buttons = overview.buttons
-                                ? overview.buttons
-                                : [];
-                              buttons.push(key);
-                              setOverview({ ...overview, buttons });
-                            }
-                          }}
-                        >
-                          <ListItemIcon>
-                            <IconButton
-                              color={
-                                overview.buttons.includes(key)
-                                  ? gTheme.palette.type === "dark"
-                                    ? "inherit"
-                                    : "primary"
-                                  : "inherit"
-                              }
-                            >
-                              {overview.buttons.includes(key) ? (
-                                <FaCheckSquare
-                                  style={{ width: 18, height: 18 }}
-                                />
-                              ) : (
-                                <FaSquare style={{ width: 18, height: 18 }} />
-                              )}
-                            </IconButton>
-                          </ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              color={
-                                overview.buttons.includes(key)
-                                  ? gTheme.palette.type === "dark"
-                                    ? "inherit"
-                                    : "primary"
-                                  : "inherit"
-                              }
-                            >
-                              {key}
-                            </Typography>
-                          </ListItemText>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </context.UI.Design.Card>
-              </UI.Animations.AnimationItem>
-            </Grid>
-            <Grid item xs={6}>
-              <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withBigMargin title="Actions">
-                  <List>
-                    {map({ delete: { label: "Delete" } }, (action, key) => {
-                      return (
-                        <ListItem
-                          style={{ cursor: "pointer" }}
-                          selected={overview.actions.includes(key)}
-                          onClick={() => {
-                            if (overview.actions.includes(key)) {
-                              setOverview({
-                                ...overview,
-                                actions: filter(overview.actions, (o) => {
-                                  return o !== key;
-                                }),
-                              });
-                            } else {
-                              const actions = overview.actions
-                                ? overview.actions
-                                : [];
-                              actions.push(key);
-                              setOverview({ ...overview, actions });
-                            }
-                          }}
-                        >
-                          <ListItemIcon>
-                            <IconButton
-                              color={
-                                overview.actions.includes(key)
-                                  ? gTheme.palette.type === "dark"
-                                    ? "inherit"
-                                    : "primary"
-                                  : "inherit"
-                              }
-                            >
-                              {overview.actions.includes(key) ? (
-                                <FaCheckSquare
-                                  style={{ width: 18, height: 18 }}
-                                />
-                              ) : (
-                                <FaSquare style={{ width: 18, height: 18 }} />
-                              )}
-                            </IconButton>
-                          </ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              color={
-                                overview.actions.includes(key)
-                                  ? gTheme.palette.type === "dark"
-                                    ? "inherit"
-                                    : "primary"
-                                  : "inherit"
-                              }
-                            >
-                              {action.label}
-                            </Typography>
-                          </ListItemText>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
+                  <Grid container spacing={3}>
+                    <Grid item xs={4}>
+                      <context.UI.Inputs.Select
+                        multiple
+                        label="Global buttons"
+                        value={overview?.buttons?.global}
+                        options={filter(
+                          actionList,
+                          (o) => o.args.mode === "free"
+                        )}
+                        onChange={(global) => {
+                          setOverview({
+                            ...overview,
+                            buttons: { ...(overview.buttons || {}), global },
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <context.UI.Inputs.Select
+                        multiple
+                        label="Single object buttons"
+                        value={overview?.buttons?.single}
+                        options={filter(
+                          actionList,
+                          (o) => o.args.mode === "single"
+                        )}
+                        onChange={(single) => {
+                          setOverview({
+                            ...overview,
+                            buttons: { ...(overview.buttons || {}), single },
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <context.UI.Inputs.Select
+                        multiple
+                        label="Multi-select buttons"
+                        value={overview?.buttons?.multiple}
+                        options={filter(
+                          actionList,
+                          (o) => o.args.mode === "multiple"
+                        )}
+                        onChange={(multiple) => {
+                          setOverview({
+                            ...overview,
+                            buttons: { ...(overview.buttons || {}), multiple },
+                          });
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
                 </context.UI.Design.Card>
               </UI.Animations.AnimationItem>
             </Grid>

@@ -97,12 +97,12 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
             const model: ModelType = models[props.data.obj.type];
             const ActionIcon = icons[model.icon];
             const compatibleApps = {
-              "data-explorer": "/data-explorer/{model.key}/{object._id}",
+              explorer: "/explorer/{model.key}/{object._id}",
               ...model.handlers,
             };
             const defaultHandler = compatibleApps[model.app]
               ? model.app
-              : "data-explorer";
+              : "explorer";
             const handlerApp = find(apps, (o) => o.data.id === defaultHandler);
 
             return (

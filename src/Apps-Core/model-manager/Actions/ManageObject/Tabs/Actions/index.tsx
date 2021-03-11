@@ -15,7 +15,7 @@ const AppActionManageObjectTabActions: React.FC<{
   // States & Hooks
   const list = [];
   map(model.actions, (overview, key) => {
-    list.push({ label: key, id: key, url: key });
+    list.push({ label: overview.label || key, id: key, url: key });
   });
 
   // UI
@@ -45,7 +45,7 @@ const AppActionManageObjectTabActions: React.FC<{
                     ...model,
                     actions: {
                       ...model.actions,
-                      [response.key]: { layout: "create" },
+                      [response.key]: {},
                     },
                   },
                   model._id
