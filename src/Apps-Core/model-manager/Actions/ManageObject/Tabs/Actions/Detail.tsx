@@ -177,7 +177,20 @@ const AppActionManageObjectActionsDetail: React.FC<{
                   }}
                 />
               )}
-              {action?.mode === "multiple" && "NMulti"}
+              {action?.mode === "multiple" && (
+                <context.UI.Inputs.Select
+                  label="Variable to pass selected objects to"
+                  options={filter(
+                    selectedInterfaceVarList,
+                    (o) => o.args.type === "objects" && o.args.input_var
+                  )}
+                  value={action.passContextTo}
+                  onChange={(value) => {
+                    setAction({ ...action, passContextTo: value });
+                    setHasChanged(true);
+                  }}
+                />
+              )}
             </>
           )}
         </context.UI.Design.Card>

@@ -33,7 +33,13 @@ const RenderInterfaceList: React.FC<{
         >
           <ListItemText
             primary={primary ? get(item, primary) : "error"}
-            secondary={secondary && get(item, secondary)}
+            secondary={
+              secondary && (
+                <div
+                  dangerouslySetInnerHTML={{ __html: get(item, secondary) }}
+                />
+              )
+            }
           />
         </ListItem>
       ))}

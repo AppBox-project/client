@@ -118,6 +118,13 @@ const AppSettingsInterfaceVariables: React.FC<{
                   label: "Input variable",
                   value: value.input_var,
                   type: "boolean",
+                  onlyDisplayWhen: { type: "objects" },
+                },
+                {
+                  key: "input_var",
+                  label: "Input variable",
+                  value: value.input_var,
+                  type: "boolean",
                   onlyDisplayWhen: { type: "text" },
                 },
                 {

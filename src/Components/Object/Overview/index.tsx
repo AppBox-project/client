@@ -40,7 +40,7 @@ import {
   AnimationItem,
 } from "../../Apps/Apps/AppUI/Animations";
 import ObjectOverviewFilter from "./Filter";
-import { map, find } from "lodash";
+import { map, find, filter as filterLodash } from "lodash";
 import RenderInterface from "../../RenderInterface";
 import FaIcon from "../../Icons";
 
@@ -561,9 +561,9 @@ const Overview: React.FC<{
                               context={context}
                               interfaceId={action.interface}
                               premappedVariables={{
-                                [action.passContextTo]: find(
+                                [action.passContextTo]: filterLodash(
                                   objects,
-                                  (o) => o._id === selected[0]
+                                  (o) => selected.includes(o._id)
                                 ),
                               }}
                             />
@@ -577,6 +577,9 @@ const Overview: React.FC<{
                     }
                   }}
                 >
+                  <ListItemIcon style={{ minWidth: 32 }}>
+                    <FaIcon icon={action.icon} />
+                  </ListItemIcon>
                   {action.label}
                 </MenuItem>
               );
