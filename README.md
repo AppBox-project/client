@@ -2,64 +2,23 @@
 
 ## Goals
 
-- Have a salesforce-like abstract datastructure that can be controlled from the UI.
-- Have realtime data
-- Have support for apps
+- Make flexibility of developer-driven software available to companies lacking the budget to hire consultants and developers for each change.
+- Support major business processess such as
+  - Main CRM; manage customers, inventory, orders, sales, etc
+  - Website; host website with data from within the platform
+  - Flexibility within UI design and business logic.
 
-## In progress
+## Current state
 
-- [x] Datamodel + realtime data
-- [x] Interface with pluggable apps
-- [ ] Security test
-- [x] Make accessible via the web
-  - [x] Package as docker container
-- [x] App store
-  - [x] Browsing apps
-  - [x] Installing apps
-- [x] OTA updates
-  - [x] Apps
-    - [x] Improvements
-      - [x] Batch update (with one build)
-      - [x] Schedulable update (with one build)
-  - [x] System
-    - [x] Simple git pull update
-    - [ ] Better update UI
-    - [ ] Changelogs
-- [x] Better app context
-  - [x] Data interactions
-    - [x] Subscribing to data
-    - [x] Cancelling listeners before the app closes
-    - [x] Updating data
-  - [x] More UI elements
-    - [x] Pre-made UI lay-outs
-      - [x] ListDetail-Layout
-- [ ] Layouts
-  - [x] Desktop-layout
-  - [x] Mobile layout
-    - [x] Design layout
-    - [x] Make existing properties more responsive
-    - [x] PWA
-- [ ] Improve app logic
-  - [ ] Every app will have it's own desktop
-- [ ] Make apps
-  - [x] Quick space
-    - [x] Notes
-      - [ ] Eventually: clone onenote
-    - [x] To-do
-      - [x] Base version
-      - [x] Mobile friendly
-      - [x] Drag and drop order
-      - [x] Sub to-do's
-    - [x] File / dropzone
-  - [x] All-purpose CRM app
-  - [x] Website builder
-- [ ] Data model improvements
-  - [x] Object level validations
-  - [x] Automations
-  - [x] Relationships
-  - [x] Formulas
-    - [x] Local (within objects)
-    - [x] Following the relationship model
-  - [ ] Improved permissions system
-    - [x] Global controls
-    - [ ] Per-field controls
+The project was started as a PoC. However, it has advanced beyond that state. It's nowhere close to a beta though. In day-to-day use it's reasonably stable and has many functions. However, these things are still in-progress.
+
+- A rigorous security audit.
+  - Priority 1: `supervisor` and it's OS interactions
+  - Priority 2: data security in `server`
+  - Priority 3: In-app role escalation
+  - Priority 4: WA-level security
+  - ... more
+- Standardisation of the API and data-model
+- Data-integrity
+- If `engine` isn't running, formulas and automations don't get executed
+- When the core data structure changes, propagate these changes to everyone's instance

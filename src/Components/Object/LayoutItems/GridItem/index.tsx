@@ -1,13 +1,13 @@
 import React from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 
 const ObjectLayoutItemGridItem: React.FC<{
   children;
-  xs?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-  sm?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-  md?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-  lg?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-  xl?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  xs?: GridSize;
+  sm?: GridSize;
+  md?: GridSize;
+  lg?: GridSize;
+  xl?: GridSize;
   scrollIndependently?: boolean;
 }> = ({ children, xs, sm, md, lg, xl, scrollIndependently }) => {
   return (

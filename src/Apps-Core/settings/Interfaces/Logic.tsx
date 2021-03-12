@@ -207,7 +207,7 @@ const PopupContent: React.FC<{
       <context.UI.Inputs.TextInput
         label="Label"
         value={newStep.label}
-        onChange={(label) => setNewStep({ ...newStep, label })}
+        onChange={(label: string) => setNewStep({ ...newStep, label })}
       />
       <context.UI.Inputs.Select
         label="Type"

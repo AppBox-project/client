@@ -154,7 +154,7 @@ const AppQSTodoListLayout: React.FC<{
                 autoFocus={!isMobile}
                 noLabel
                 value={newTodo}
-                onChange={(value) => setNewTodo(value)}
+                onChange={(value: string) => setNewTodo(value)}
                 onEnter={() => {
                   context.addObject(
                     "qs-todo",

@@ -10,13 +10,13 @@ import {
   Typography,
   Divider,
   Avatar,
+  GridSize,
 } from "@material-ui/core";
 import { Link, Route } from "react-router-dom";
 import { AnimationContainer, AnimationItem } from "../Animations";
 import {
   AppContextType,
   TreeViewDataItem,
-  ColumnWidth,
   ObjectType,
   ListDetailItemType,
 } from "../../../../../Utils/Types";
@@ -48,7 +48,7 @@ const ListDetailLayout: React.FC<{
   addFunction?: () => void;
   addTitle?: string;
   deleteFunction?: (id) => void;
-  navWidth?: ColumnWidth;
+  navWidth?: GridSize;
   navFixedIcon?: JSX.Element;
   title?;
   isLoading?: true | boolean;

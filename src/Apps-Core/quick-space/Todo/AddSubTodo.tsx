@@ -13,7 +13,7 @@ const AppQSAddSubTodo: React.FC<CustomLayoutElementType> = ({
       style={{ margin: 15 }}
       label="Add subtodo"
       value={newTodo}
-      onChange={(value) => setNewTodo(value)}
+      onChange={(value: string) => setNewTodo(value)}
       onEscape={() => setNewTodo("")}
       onEnter={() => {
         setNewTodo("");

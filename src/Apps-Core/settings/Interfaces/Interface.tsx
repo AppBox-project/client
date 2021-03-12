@@ -29,6 +29,7 @@ import {
   FaColumns,
   FaKeyboard,
   FaList,
+  FaListAlt,
   FaListUl,
   FaMouse,
   FaObjectGroup,
@@ -46,6 +47,7 @@ import { BsBoundingBoxCircles } from "react-icons/bs";
 import { remove, updateById } from "../../../Utils/Functions/General";
 import uniqid from "uniqid";
 import ObjectDesigner from "../../../Components/ObjectDesigner/Filter";
+import LayoutItemListDetailLayout from "./Interface/LayoutItemWrappers/ListDetailLayout";
 
 const AppSettingsInterfaceUI: React.FC<{
   newInterface: InterfaceType;
@@ -166,6 +168,14 @@ const AppSettingsInterfaceUI: React.FC<{
           ],
           buttons: [
             {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
               label: "Update",
               onClick: (form) => respond(form),
             },
@@ -200,6 +210,14 @@ const AppSettingsInterfaceUI: React.FC<{
             },
           ],
           buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
             {
               label: "Update",
               onClick: (form) => respond(form),
@@ -623,6 +641,43 @@ const AppSettingsInterfaceUI: React.FC<{
         });
       },
     },
+    listDetail: {
+      label: (
+        <>
+          <FaListAlt style={{ marginRight: 15 }} />
+          List-Detail lay-out
+        </>
+      ),
+      wrapper: LayoutItemListDetailLayout,
+      popup: (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit text",
+          form: [
+            {
+              type: "text",
+              label: "Text",
+              value: layoutItem?.text,
+              key: "text",
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
+    },
   };
 
   // Lifecycle
@@ -660,6 +715,7 @@ const AppSettingsInterfaceUI: React.FC<{
         Wrapper={EmptyWrapper}
         context={context}
         root
+        varList={varList}
         onChange={(response) => {
           // If there is a migration, delete the old entry first
           if (response.migration) {
@@ -699,6 +755,7 @@ const AppSettingsInterfaceUI: React.FC<{
               context={context}
               key={key}
               layoutItem={layoutItem}
+              varList={varList}
               componentList={componentList}
               onDrop={(newContent) => {
                 setNewInterface({
@@ -869,6 +926,15 @@ export const InterfaceComponentsList: React.FC<{
           <ListItemText>Options</ListItemText>
         </ListItem>
       </Component>
+      <ListSubheader>Lay-outs</ListSubheader>
+      <Component id="listDetail">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaListAlt />
+          </ListItemIcon>
+          <ListItemText>List-detail lay-out</ListItemText>
+        </ListItem>
+      </Component>
       <ListSubheader>Logic</ListSubheader>
       <Component id="switch">
         <ListItem>
@@ -898,7 +964,17 @@ const LayoutItem: React.FC<{
   layout: LayoutType;
   path;
   context: AppContextType;
-}> = ({ key, layoutItem, componentList, onDrop, layout, path, context }) => {
+  varList;
+}> = ({
+  key,
+  layoutItem,
+  componentList,
+  onDrop,
+  layout,
+  path,
+  context,
+  varList,
+}) => {
   const Wrapper =
     ((componentList || {})[layoutItem.type] || {}).wrapper || EmptyWrapper;
 
@@ -909,6 +985,7 @@ const LayoutItem: React.FC<{
       context={context}
       componentList={componentList}
       layoutItem={layoutItem}
+      varList={varList}
       onDelete={() => {
         remove(layout, layoutItem.id);
       }}
@@ -945,6 +1022,7 @@ const LayoutItem: React.FC<{
               onDrop={onDrop}
               layout={layout}
               context={context}
+              varList={varList}
               path={path + layoutItem.id}
             />
           );
@@ -1029,6 +1107,7 @@ const LayoutItemConditionalRendering: React.FC<{
   layout;
   path;
   context: AppContextType;
+  varList;
 }> = ({
   conditions,
   defaultCondition,
@@ -1037,6 +1116,7 @@ const LayoutItemConditionalRendering: React.FC<{
   layout,
   path,
   context,
+  varList,
 }) => {
   // Vars
   const [selectedCase, setSelectedCase] = useState<number | "default" | "add">(
@@ -1137,6 +1217,7 @@ const LayoutItemConditionalRendering: React.FC<{
             context={context}
             layout={((conditions || {})[selectedCase] || {}).items}
             path={path}
+            varList={varList}
             onChange={(response) => {
               // If there is a migration, delete the old entry first
               if (response.migration) {
@@ -1161,6 +1242,7 @@ const LayoutItemConditionalRendering: React.FC<{
                     key={key}
                     layoutItem={layoutItem}
                     context={context}
+                    varList={varList}
                     layout={
                       ((conditions || {})[selectedCase] || {}).items || []
                     }
@@ -1184,6 +1266,7 @@ const LayoutItemConditionalRendering: React.FC<{
             root
             layout={layout}
             path={path}
+            varList={varList}
             context={context}
             onChange={(response) => {
               // If there is a migration, delete the old entry first
@@ -1205,6 +1288,7 @@ const LayoutItemConditionalRendering: React.FC<{
               return (
                 <LayoutItem
                   key={key}
+                  varList={varList}
                   layoutItem={layoutItem}
                   componentList={componentList}
                   context={context}

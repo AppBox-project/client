@@ -24,6 +24,7 @@ const DropTarget: React.FC<{
   layout;
   path;
   context: AppContextType;
+  varList;
 }> = ({
   layoutItem,
   children,
@@ -36,6 +37,7 @@ const DropTarget: React.FC<{
   layout,
   path,
   context,
+  varList,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
 
@@ -70,6 +72,7 @@ const DropTarget: React.FC<{
         layout={layout}
         path={path}
         context={context}
+        varList={varList}
       >
         <div ref={drop} className={className}>
           {children ? (
@@ -88,6 +91,7 @@ const DropTarget: React.FC<{
       layout={layout}
       path={path}
       context={context}
+      varList={varList}
       className={
         component.droppable
           ? `${styles.componentWrapper} ${className}`

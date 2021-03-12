@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 import React from "react";
 import { ObjectType } from "../../../../../../Utils/Types";
 import Card from "../../../../../Design/Card";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const GridItemLayout: React.FC<{
   data: ObjectType[];
-  cols?: 1 | 2 | 3 | 4 | 5 | 6;
+  cols?: GridSize;
   title?: string;
   text?: string;
   link?: string;

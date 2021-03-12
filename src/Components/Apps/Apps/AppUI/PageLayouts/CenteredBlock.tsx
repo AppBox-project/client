@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, GridSize } from "@material-ui/core";
 import React from "react";
 import Card from "../../../../Design/Card";
 import { Animation } from "../Animations";
@@ -6,7 +6,7 @@ import { Animation } from "../Animations";
 const PLCenteredBlock: React.FC<{
   children;
   title?: string;
-  width?: boolean | "auto" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  width?: GridSize;
   centered?: true;
 }> = ({ children, title, width, centered }) => {
   return (

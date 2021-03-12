@@ -2,8 +2,8 @@ import { FC } from "react";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { CardProps } from "../Components/Design/Card";
 import { IconType } from "react-icons";
+import { GridSize } from "@material-ui/core";
 
-export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type ServerResponse = { success: boolean; data?; reason?: string };
 
 export interface OptionType {
@@ -357,7 +357,7 @@ export interface dialogType {
     customInputProps?: {};
     value?: string;
     dropdownOptions?: { label: string; value: string }[];
-    xs?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+    xs?: GridSize;
     onlyDisplayWhen?: {};
   }[];
   buttons?: { label: string | JSX.Element; onClick: (response) => void }[];
@@ -474,7 +474,7 @@ export interface UIType {
     };
     GridItemLayout: React.FC<{
       data: ObjectType[];
-      cols?: 1 | 2 | 3 | 4 | 5 | 6;
+      cols?: GridSize;
       title?: string;
       text?: string;
       link?: string;
@@ -498,7 +498,7 @@ export interface UIType {
       addFunction?: () => void;
       addTitle?: string;
       deleteFunction?: (id) => void;
-      navWidth?: ColumnWidth;
+      navWidth?: GridSize;
       navFixedIcon?: JSX.Element;
       title?: string;
       isLoading?: true | boolean;
@@ -574,7 +574,7 @@ export interface UIType {
       label?: string;
       value: string;
       type?: "text" | "number";
-      onChange?: (value: string) => void;
+      onChange?: (value: string | number) => void;
       multiline?: boolean;
       style?: {};
       autoFocus?: boolean;

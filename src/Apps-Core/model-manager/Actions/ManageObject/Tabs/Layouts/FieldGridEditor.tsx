@@ -10,6 +10,7 @@ import {
   IconButton,
   Divider,
   Grid,
+  GridSize,
 } from "@material-ui/core";
 import { AppContextType, ModelType } from "../../../../../../Utils/Types";
 import uniqid from "uniqid";
@@ -22,7 +23,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
   value: {
     id: string;
     name: string;
-    columns: 1 | 2 | 3 | 4;
+    columns: GridSize;
     items: string[];
     showTitle: boolean;
     defaultExpanded: boolean;
@@ -65,7 +66,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
               <context.UI.Inputs.TextInput
                 style={{ display: "inline", width: "80%" }}
                 value={group.name}
-                onChange={(newValue) => {
+                onChange={(newValue: string) => {
                   const newGroups = value;
                   newGroups[index].name = newValue;
                   onChange(newGroups);
@@ -75,6 +76,7 @@ const AppObjectLayoutFieldGridEditor: React.FC<{
                 <IconButton
                   onClick={() => {
                     const newGroups = value;
+                    //@ts-ignore
                     newGroups[index].columns++;
                     if (newGroups[index].columns > 4)
                       newGroups[index].columns = 1;

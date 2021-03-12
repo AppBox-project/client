@@ -379,9 +379,11 @@ const executeTrigger = async (
     switch (step.type) {
       case "getObjects":
         let queryVariableHasChanged = false;
+        let hasQueryVariables = false;
         const filter: {} = JSON.parse(step.args.filter);
         map(filter, (v, k) => {
           if (v.var) {
+            hasQueryVariables = true;
             if (prevVarValues[v.var] !== varValues[v.var]) {
               queryVariableHasChanged = true;
             }
@@ -389,7 +391,7 @@ const executeTrigger = async (
           }
         });
 
-        if (queryVariableHasChanged) {
+        if (queryVariableHasChanged || !hasQueryVariables) {
           // Only create new query if a filter variable has actually changed from it's previous state to save database work.
           addToRequests(
             context.getObjects(

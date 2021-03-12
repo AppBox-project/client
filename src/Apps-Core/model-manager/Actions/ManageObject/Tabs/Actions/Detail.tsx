@@ -86,7 +86,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
               <context.UI.Inputs.TextInput
                 label="Label"
                 value={action?.label}
-                onChange={(value) => {
+                onChange={(value: string) => {
                   setAction({ ...action, label: value });
                   setHasChanged(true);
                 }}
@@ -94,7 +94,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
               <context.UI.Inputs.TextInput
                 label="Icon"
                 value={action?.icon}
-                onChange={(icon) => {
+                onChange={(icon: string) => {
                   setAction({ ...action, icon });
                   setHasChanged(true);
                 }}
@@ -144,7 +144,7 @@ const AppActionManageObjectActionsDetail: React.FC<{
                 <context.UI.Inputs.TextInput
                   label="Lay-out"
                   value={action.layout}
-                  onChange={(value) => {
+                  onChange={(value: string) => {
                     setAction({ ...action, layout: value });
                     setHasChanged(true);
                   }}

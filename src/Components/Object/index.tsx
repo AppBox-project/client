@@ -11,6 +11,7 @@ import {
   Grid,
   Divider,
   Hidden,
+  GridSize,
 } from "@material-ui/core";
 import { FaAngleLeft, FaEdit, FaSave, FaBomb } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -625,12 +626,11 @@ const ViewObject: React.FC<{
             <Grid container spacing={3}>
               {(factsBar || []).map((fact) => {
                 const field = appliedModel.fields[fact];
-                type ColType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
                 //@ts-ignore
-                const colsSmall: ColType = (12 / factsBar.length) * 2;
+                const colsSmall: GridSize = (12 / factsBar.length) * 2;
                 //@ts-ignore
-                const colsExtraSmall: ColType = (12 / factsBar.length) * 3;
+                const colsExtraSmall: GridSize = (12 / factsBar.length) * 3;
                 //@ts-ignore
                 const cols: ColType = 12 / factsBar.length;
                 return (

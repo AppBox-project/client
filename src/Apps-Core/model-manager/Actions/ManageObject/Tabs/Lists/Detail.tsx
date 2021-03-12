@@ -61,7 +61,7 @@ const AppActionManageObjectTabListsDetail: React.FC<{
           <Divider />
           <context.UI.Inputs.TextInput
             value={newValue.name}
-            onChange={(value) => {
+            onChange={(value: string) => {
               setNewValue({ ...newValue, name: value });
             }}
             label="List name"
