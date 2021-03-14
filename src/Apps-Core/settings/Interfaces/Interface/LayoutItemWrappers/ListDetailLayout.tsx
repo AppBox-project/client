@@ -1,29 +1,45 @@
 import { Grid, GridSize } from "@material-ui/core";
-import React, { useState } from "react";
-import { useEffect } from "reactn";
-import { AppContextType, ValueListItemType } from "../../../../../Utils/Types";
+import React, { useState, useEffect } from "react";
+import {
+  AppContextType,
+  InterfaceType,
+  ModelType,
+  ValueListItemType,
+} from "../../../../../Utils/Types";
+import { find, map } from "lodash";
 
 const LayoutItemListDetailLayout: React.FC<{
-  list?: { navWidth: GridSize; var?: string };
+  list?: {
+    navWidth: GridSize;
+    var?: string;
+    primary?: string;
+    secondary?: string;
+    dataFilter?: string;
+  };
   detail;
+  setContextVar: (key, value) => void;
   onChange: (props: {}) => void;
-  componentList;
   layout;
   path;
   context: AppContextType;
   varList;
+  children;
+  interfaceObject: InterfaceType;
 }> = ({
   list,
-  detail,
   onChange,
-  componentList,
-  layout,
-  path,
   context,
   varList,
+  children,
+  setContextVar,
+  interfaceObject,
 }) => {
   // Vars
   const [varListList, setVarList] = useState<ValueListItemType[]>();
+  const [modelFieldList, setModelFieldList] = useState<ValueListItemType[]>();
+  const contextVarName = `current${
+    list.var.charAt(0).toUpperCase() + list.var.slice(1)
+  }Item`;
 
   // Lifecycle
   useEffect(() => {
@@ -35,12 +51,39 @@ const LayoutItemListDetailLayout: React.FC<{
     );
     setVarList(nl);
   }, [varList]);
+  useEffect(() => {
+    let request;
+    if (list?.var) {
+      request = context.getModel(
+        find(varList, (o) => o.value === list?.var).args.model,
+        (response) => {
+          const nl: ValueListItemType[] = [];
+          map((response.data as ModelType).fields, (field, fKey) =>
+            nl.push({ label: field.name, value: fKey, args: field })
+          );
+          setModelFieldList(nl);
+        }
+      );
+    }
+    return () => request?.stop();
+  }, [list?.var]);
+  useEffect(() => {
+    const modelKey = interfaceObject.data.data.variables[list.var].model;
+    context.getModel(modelKey, (response) => {
+      const model: ModelType = response.data;
+      setContextVar(contextVarName, {
+        label: `(context) Selected ${model.name}`,
+        value: contextVarName,
+        args: { type: "object", model: modelKey },
+      });
+    });
+  }, [contextVarName]);
 
   // UI
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={list?.navWidth || 3}>
+      <Grid item xs={3}>
         <context.UI.Design.Card title="List">
           <context.UI.Inputs.Select
             label="Var"
@@ -58,16 +101,36 @@ const LayoutItemListDetailLayout: React.FC<{
               }
             }}
           />
+          <context.UI.Inputs.Select
+            label="Primary"
+            options={modelFieldList}
+            value={list?.primary}
+            onChange={(newVar) =>
+              onChange({ list: { ...list, primary: newVar } })
+            }
+          />
+          <context.UI.Inputs.Select
+            label="Secondary"
+            options={modelFieldList}
+            value={list?.secondary}
+            onChange={(newVar) =>
+              onChange({ list: { ...list, secondary: newVar } })
+            }
+          />
+          <context.UI.Inputs.TextInput
+            label="Data filter"
+            value={list?.dataFilter}
+            onChange={(newVar) =>
+              onChange({ list: { ...list, dataFilter: newVar } })
+            }
+          />
         </context.UI.Design.Card>
       </Grid>
-      <Grid
-        item
-        xs={
-          //@ts-ignore
-          (12 - (list || { navWidth: 3 })?.navWidth) as GridSize
-        }
-      >
-        <context.UI.Design.Card title="Detail">Right</context.UI.Design.Card>
+      <Grid item xs={9}>
+        <context.UI.Design.Card title="Detail">
+          {list?.var && `New var: ${contextVarName}`}
+          {children}
+        </context.UI.Design.Card>
       </Grid>
     </Grid>
   );

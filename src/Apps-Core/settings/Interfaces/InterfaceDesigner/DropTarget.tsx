@@ -1,11 +1,16 @@
-import React from "react";
+import React, { ReactNode, useState } from "react";
 import { useGlobal } from "reactn";
 import { useDrop } from "react-dnd";
 import styles from "./styles.module.scss";
 import { Typography, IconButton } from "@material-ui/core";
 import { FaCog } from "react-icons/fa";
 import { useDrag } from "react-dnd";
-import { AppContextType, LayoutDesignerItem } from "../../../../Utils/Types";
+import {
+  AppContextType,
+  LayoutDesignerItem,
+  ValueListItemType,
+} from "../../../../Utils/Types";
+import { findIndex } from "lodash";
 
 export interface DustbinState {
   hasDropped: boolean;
@@ -13,7 +18,6 @@ export interface DustbinState {
 }
 
 const DropTarget: React.FC<{
-  children?;
   layoutItem?: LayoutDesignerItem;
   root?: true;
   componentList?;
@@ -21,13 +25,17 @@ const DropTarget: React.FC<{
   onChangeProps?: (result) => void;
   onDelete?;
   Wrapper;
+  interfaceObject;
   layout;
   path;
   context: AppContextType;
   varList;
+  actionList;
+  contextVariables?: ValueListItemType[];
+  updateContextVariables: (key, value) => void;
+  renderChildren: (contextVariables: ValueListItemType[]) => ReactNode;
 }> = ({
   layoutItem,
-  children,
   root,
   onChange,
   componentList,
@@ -38,6 +46,11 @@ const DropTarget: React.FC<{
   path,
   context,
   varList,
+  actionList,
+  contextVariables,
+  interfaceObject,
+  updateContextVariables,
+  renderChildren,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
 
@@ -73,10 +86,13 @@ const DropTarget: React.FC<{
         path={path}
         context={context}
         varList={varList}
+        interfaceObject={interfaceObject}
+        actionList={actionList}
+        setContextVar={updateContextVariables}
       >
         <div ref={drop} className={className}>
-          {children ? (
-            <>{children}</>
+          {renderChildren ? (
+            <>{renderChildren(contextVariables)}</>
           ) : (
             <Typography variant="caption">Drop items here</Typography>
           )}
@@ -84,6 +100,7 @@ const DropTarget: React.FC<{
       </Wrapper>
     );
   const component = (componentList || {})[layoutItem.type] || {};
+
   return (
     <Wrapper
       ref={drag}
@@ -92,6 +109,9 @@ const DropTarget: React.FC<{
       path={path}
       context={context}
       varList={varList}
+      interfaceObject={interfaceObject}
+      actionList={actionList}
+      setContextVar={updateContextVariables}
       className={
         component.droppable
           ? `${styles.componentWrapper} ${className}`
@@ -103,16 +123,18 @@ const DropTarget: React.FC<{
       <div ref={drag} style={{ display: "flex", width: "100%" }}>
         {component.popup && (
           <IconButton
-            onClick={() => {
+            onClick={() =>
               componentList[layoutItem.type].popup(
                 componentList[layoutItem.type],
                 layoutItem,
                 (result) => {
                   onChangeProps(result);
                 },
-                onDelete
-              );
-            }}
+                onDelete,
+                [...varList, ...contextVariables],
+                actionList
+              )
+            }
           >
             <FaCog
               style={{
@@ -153,7 +175,7 @@ const DropTarget: React.FC<{
           >
             Drop items here
           </Typography>
-          {children && children}
+          {renderChildren && renderChildren(contextVariables)}
         </>
       )}
     </Wrapper>

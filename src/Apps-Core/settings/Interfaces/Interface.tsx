@@ -21,7 +21,7 @@ import {
   LayoutType,
   CustomFormInputType,
 } from "../../../Utils/Types";
-import { map, filter, find } from "lodash";
+import { map, filter, find, findIndex, union } from "lodash";
 import {
   FaAlignLeft,
   FaCode,
@@ -36,6 +36,7 @@ import {
   FaObjectUngroup,
   FaPlus,
   FaRandom,
+  FaSpinner,
   FaSquare,
   FaTh,
   FaThLarge,
@@ -46,7 +47,6 @@ import Component from "./InterfaceDesigner/Component";
 import { BsBoundingBoxCircles } from "react-icons/bs";
 import { remove, updateById } from "../../../Utils/Functions/General";
 import uniqid from "uniqid";
-import ObjectDesigner from "../../../Components/ObjectDesigner/Filter";
 import LayoutItemListDetailLayout from "./Interface/LayoutItemWrappers/ListDetailLayout";
 
 const AppSettingsInterfaceUI: React.FC<{
@@ -65,11 +65,13 @@ const AppSettingsInterfaceUI: React.FC<{
   setNewInterface,
   setSelectedInterface,
   Components,
+  models,
 }) => {
   // Vars
   const [varList, setVarList] = useState<ValueListItemType[]>([]);
   const [actionList, setActionList] = useState<ValueListItemType[]>([]);
   const [isMobile] = useGlobal<any>("isMobile");
+
   const componentList = {
     grid_container: {
       label: (
@@ -86,7 +88,14 @@ const AppSettingsInterfaceUI: React.FC<{
         );
       },
       droppable: true,
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit grid container",
@@ -130,7 +139,14 @@ const AppSettingsInterfaceUI: React.FC<{
           </Grid>
         );
       },
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit grid item",
@@ -191,7 +207,14 @@ const AppSettingsInterfaceUI: React.FC<{
         </>
       ),
       droppable: true,
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit card",
@@ -207,6 +230,12 @@ const AppSettingsInterfaceUI: React.FC<{
               label: "With margin",
               value: layoutItem?.withBigMargin,
               key: "withBigMargin",
+            },
+            {
+              type: "boolean",
+              label: "Without padding",
+              value: layoutItem?.withoutPadding,
+              key: "withoutPadding",
             },
           ],
           buttons: [
@@ -234,7 +263,33 @@ const AppSettingsInterfaceUI: React.FC<{
         </>
       ),
       droppable: true,
-      popup: (component, layoutItem, respond, deleteItem) => {},
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit Animation Group",
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
     },
     animation_item: {
       label: (
@@ -244,7 +299,34 @@ const AppSettingsInterfaceUI: React.FC<{
         </>
       ),
       droppable: true,
-      popup: (component, layoutItem, respond, deleteItem) => {},
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit Animation Item",
+          form: [],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
     },
     animation_single: {
       label: (
@@ -254,7 +336,33 @@ const AppSettingsInterfaceUI: React.FC<{
         </>
       ),
       droppable: true,
-      popup: (component, layoutItem, respond, deleteItem) => {},
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => (component, layoutItem, respond, deleteItem) => {
+        context.setDialog({
+          display: true,
+          title: "Edit single animation",
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        });
+      },
     },
     text: {
       label: (
@@ -263,7 +371,14 @@ const AppSettingsInterfaceUI: React.FC<{
           Text
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit text",
@@ -292,6 +407,57 @@ const AppSettingsInterfaceUI: React.FC<{
         });
       },
     },
+    fieldDisplay: {
+      label: (
+        <>
+          <FaSpinner style={{ marginRight: 15 }} />
+          Field display
+        </>
+      ),
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) =>
+        context.setDialog({
+          display: true,
+          title: "Edit field display",
+          form: [
+            {
+              type: "custom",
+              label: "fieldDisplay",
+              value: layoutItem?.fieldDisplay,
+              key: "fieldDisplay",
+              customInput: CustomInputFieldDisplay,
+              customInputProps: {
+                varList: filter(
+                  contextVarList,
+                  (o) => o.args.type === "object"
+                ),
+                models,
+                interfaceObject: newInterface,
+              },
+            },
+          ],
+          buttons: [
+            {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
+              label: "Update",
+              onClick: (form) => respond(form),
+            },
+          ],
+        }),
+    },
     input: {
       label: (
         <>
@@ -299,7 +465,14 @@ const AppSettingsInterfaceUI: React.FC<{
           Input
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit input",
@@ -396,7 +569,14 @@ const AppSettingsInterfaceUI: React.FC<{
           List
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) =>
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) =>
         context.setDialog({
           display: true,
           title: "Edit list",
@@ -438,6 +618,14 @@ const AppSettingsInterfaceUI: React.FC<{
           ],
           buttons: [
             {
+              label: (
+                <Typography style={{ color: "red" }} variant="button">
+                  Delete
+                </Typography>
+              ),
+              onClick: () => deleteItem(),
+            },
+            {
               label: "Update",
               onClick: (form) => respond(form),
             },
@@ -451,7 +639,14 @@ const AppSettingsInterfaceUI: React.FC<{
           Button
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           form: [
@@ -515,7 +710,14 @@ const AppSettingsInterfaceUI: React.FC<{
           Toggle
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit toggle",
@@ -567,7 +769,14 @@ const AppSettingsInterfaceUI: React.FC<{
           Options
         </>
       ),
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit options",
@@ -619,7 +828,14 @@ const AppSettingsInterfaceUI: React.FC<{
         </>
       ),
       wrapper: LayoutItemConditionalRendering,
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit conditional lay-out",
@@ -648,8 +864,16 @@ const AppSettingsInterfaceUI: React.FC<{
           List-Detail lay-out
         </>
       ),
+      droppable: true,
       wrapper: LayoutItemListDetailLayout,
-      popup: (component, layoutItem, respond, deleteItem) => {
+      popup: (
+        component,
+        layoutItem,
+        respond,
+        deleteItem,
+        contextVarList,
+        contextActionList
+      ) => {
         context.setDialog({
           display: true,
           title: "Edit text",
@@ -716,6 +940,10 @@ const AppSettingsInterfaceUI: React.FC<{
         context={context}
         root
         varList={varList}
+        contextVariables={[]}
+        updateContextVariables={() => {}}
+        actionList={actionList}
+        interfaceObject={newInterface}
         onChange={(response) => {
           // If there is a migration, delete the old entry first
           if (response.migration) {
@@ -748,39 +976,45 @@ const AppSettingsInterfaceUI: React.FC<{
         }}
         layout={interf}
         path=""
-      >
-        {interf.content.map((layoutItem, key) => {
-          return (
-            <LayoutItem
-              context={context}
-              key={key}
-              layoutItem={layoutItem}
-              varList={varList}
-              componentList={componentList}
-              onDrop={(newContent) => {
-                setNewInterface({
-                  ...newInterface,
-                  data: {
-                    ...newInterface.data,
-                    data: {
-                      ...newInterface.data.data,
-                      interfaces: {
-                        ...newInterface.data.data.interfaces,
-                        [selectedInterface]: {
-                          ...interf,
-                          content: newContent,
+        renderChildren={(contextVariables) => (
+          <>
+            {interf.content.map((layoutItem, key) => {
+              return (
+                <LayoutItem
+                  interfaceObject={newInterface}
+                  context={context}
+                  key={key}
+                  layoutItem={layoutItem}
+                  varList={varList}
+                  actionList={actionList}
+                  componentList={componentList}
+                  parentContextVariables={[]}
+                  onDrop={(newContent) => {
+                    setNewInterface({
+                      ...newInterface,
+                      data: {
+                        ...newInterface.data,
+                        data: {
+                          ...newInterface.data.data,
+                          interfaces: {
+                            ...newInterface.data.data.interfaces,
+                            [selectedInterface]: {
+                              ...interf,
+                              content: newContent,
+                            },
+                          },
                         },
                       },
-                    },
-                  },
-                });
-              }}
-              layout={interf.content}
-              path=""
-            />
-          );
-        })}
-      </DropTarget>
+                    });
+                  }}
+                  layout={interf.content}
+                  path=""
+                />
+              );
+            })}
+          </>
+        )}
+      />
       {Components}
     </>
   );
@@ -886,6 +1120,14 @@ export const InterfaceComponentsList: React.FC<{
           <ListItemText>Text</ListItemText>
         </ListItem>
       </Component>
+      <Component id="fieldDisplay">
+        <ListItem>
+          <ListItemIcon style={{ minWidth: 32 }}>
+            <FaSpinner />
+          </ListItemIcon>
+          <ListItemText>Field display</ListItemText>
+        </ListItem>
+      </Component>
       <Component id="input">
         <ListItem>
           <ListItemIcon style={{ minWidth: 32 }}>
@@ -965,6 +1207,9 @@ const LayoutItem: React.FC<{
   path;
   context: AppContextType;
   varList;
+  actionList;
+  parentContextVariables: ValueListItemType[];
+  interfaceObject;
 }> = ({
   key,
   layoutItem,
@@ -974,10 +1219,15 @@ const LayoutItem: React.FC<{
   path,
   context,
   varList,
+  actionList,
+  parentContextVariables,
+  interfaceObject,
 }) => {
   const Wrapper =
     ((componentList || {})[layoutItem.type] || {}).wrapper || EmptyWrapper;
-
+  const [contextVariables, setContextVariables] = useState<ValueListItemType[]>(
+    parentContextVariables
+  );
   return (
     <DropTarget
       key={key}
@@ -986,6 +1236,9 @@ const LayoutItem: React.FC<{
       componentList={componentList}
       layoutItem={layoutItem}
       varList={varList}
+      interfaceObject={interfaceObject}
+      actionList={actionList}
+      contextVariables={union(contextVariables, parentContextVariables)}
       onDelete={() => {
         remove(layout, layoutItem.id);
       }}
@@ -1011,23 +1264,46 @@ const LayoutItem: React.FC<{
       }}
       layout={layout}
       path={path}
-    >
-      {layoutItem.items &&
-        layoutItem.items.map((layoutItem, key) => {
-          return (
-            <LayoutItem
-              key={key}
-              layoutItem={layoutItem}
-              componentList={componentList}
-              onDrop={onDrop}
-              layout={layout}
-              context={context}
-              varList={varList}
-              path={path + layoutItem.id}
-            />
-          );
-        })}
-    </DropTarget>
+      updateContextVariables={(key, value) => {
+        const currentIndex = findIndex(
+          contextVariables,
+          (o) => o.value === key
+        );
+        const localContextVars = [...contextVariables];
+        if (currentIndex > -1) {
+          localContextVars[currentIndex] = value;
+        } else {
+          localContextVars.push(value);
+        }
+
+        setContextVariables([...localContextVars]);
+      }}
+      renderChildren={(localContextVariables) => (
+        <>
+          {layoutItem.items &&
+            layoutItem.items.map((layoutItem, key) => {
+              return (
+                <LayoutItem
+                  key={key}
+                  layoutItem={layoutItem}
+                  componentList={componentList}
+                  onDrop={onDrop}
+                  layout={layout}
+                  context={context}
+                  varList={varList}
+                  actionList={actionList}
+                  path={path + layoutItem.id}
+                  interfaceObject={interfaceObject}
+                  parentContextVariables={union(
+                    localContextVariables,
+                    parentContextVariables
+                  )}
+                />
+              );
+            })}
+        </>
+      )}
+    />
   );
 };
 
@@ -1108,6 +1384,8 @@ const LayoutItemConditionalRendering: React.FC<{
   path;
   context: AppContextType;
   varList;
+  actionList;
+  interfaceObject;
 }> = ({
   conditions,
   defaultCondition,
@@ -1117,6 +1395,8 @@ const LayoutItemConditionalRendering: React.FC<{
   path,
   context,
   varList,
+  actionList,
+  interfaceObject,
 }) => {
   // Vars
   const [selectedCase, setSelectedCase] = useState<number | "default" | "add">(
@@ -1218,6 +1498,8 @@ const LayoutItemConditionalRendering: React.FC<{
             layout={((conditions || {})[selectedCase] || {}).items}
             path={path}
             varList={varList}
+            interfaceObject={interfaceObject}
+            actionList={actionList}
             onChange={(response) => {
               // If there is a migration, delete the old entry first
               if (response.migration) {
@@ -1234,28 +1516,35 @@ const LayoutItemConditionalRendering: React.FC<{
               ];
               onChange({ conditions: newConditions });
             }}
-          >
-            {(((conditions || {})[selectedCase] || {}).items || []).map(
-              (layoutItem, key) => {
-                return (
-                  <LayoutItem
-                    key={key}
-                    layoutItem={layoutItem}
-                    context={context}
-                    varList={varList}
-                    layout={
-                      ((conditions || {})[selectedCase] || {}).items || []
-                    }
-                    componentList={componentList}
-                    onDrop={(newContent) => {
-                      onChange(newContent);
-                    }}
-                    path={path + layoutItem.id}
-                  />
-                );
-              }
+            updateContextVariables={(key, value) => {}}
+            renderChildren={(contextVariables) => (
+              <>
+                {(((conditions || {})[selectedCase] || {}).items || []).map(
+                  (layoutItem, key) => {
+                    return (
+                      <LayoutItem
+                        key={key}
+                        interfaceObject={interfaceObject}
+                        layoutItem={layoutItem}
+                        context={context}
+                        varList={varList}
+                        actionList={actionList}
+                        layout={
+                          ((conditions || {})[selectedCase] || {}).items || []
+                        }
+                        componentList={componentList}
+                        onDrop={(newContent) => {
+                          onChange(newContent);
+                        }}
+                        path={path + layoutItem.id}
+                        parentContextVariables={[]}
+                      />
+                    );
+                  }
+                )}
+              </>
             )}
-          </DropTarget>
+          />
         </>
       )}
       {selectedCase === "default" && (
@@ -1267,7 +1556,9 @@ const LayoutItemConditionalRendering: React.FC<{
             layout={layout}
             path={path}
             varList={varList}
+            actionList={actionList}
             context={context}
+            interfaceObject={interfaceObject}
             onChange={(response) => {
               // If there is a migration, delete the old entry first
               if (response.migration) {
@@ -1283,25 +1574,90 @@ const LayoutItemConditionalRendering: React.FC<{
               ];
               onChange({ defaultCondition: newDefaultCondition });
             }}
-          >
-            {(defaultCondition || []).map((layoutItem, key) => {
-              return (
-                <LayoutItem
-                  key={key}
-                  varList={varList}
-                  layoutItem={layoutItem}
-                  componentList={componentList}
-                  context={context}
-                  onDrop={(newContent) => {
-                    onChange(newContent);
-                  }}
-                  layout={layout?.defaultCondition || []}
-                  path={path + layoutItem.id}
-                />
-              );
-            })}
-          </DropTarget>
+            updateContextVariables={() => {}}
+            renderChildren={(contextVariables) => (
+              <>
+                {(defaultCondition || []).map((layoutItem, key) => {
+                  return (
+                    <LayoutItem
+                      key={key}
+                      varList={varList}
+                      actionList={actionList}
+                      layoutItem={layoutItem}
+                      componentList={componentList}
+                      context={context}
+                      interfaceObject={interfaceObject}
+                      onDrop={(newContent) => {
+                        onChange(newContent);
+                      }}
+                      layout={layout?.defaultCondition || []}
+                      path={path + layoutItem.id}
+                      parentContextVariables={[]}
+                    />
+                  );
+                })}
+              </>
+            )}
+          ></DropTarget>
         </>
+      )}
+    </>
+  );
+};
+
+const CustomInputFieldDisplay: React.FC<CustomFormInputType> = ({
+  label,
+  context,
+  varList,
+  value,
+  onChange,
+  inputType,
+  models,
+  interfaceObject,
+}) => {
+  // Vars
+  const [fieldOptions, setFieldOptions] = useState<ValueListItemType[]>([]);
+
+  // Lifecycle
+  useEffect(() => {
+    const varRefersTo = value?.var
+      .substr(7, value?.var.length - 11)
+      .toLowerCase();
+
+    const modelKey = (interfaceObject as InterfaceType).data.data.variables[
+      varRefersTo
+    ]?.model;
+    const model: ModelType = find(
+      models as ModelType[],
+      (o) => o.key === modelKey
+    );
+    const nl: ValueListItemType[] = [];
+    map(model?.fields || [], (field, key) =>
+      nl.push({ label: field.name, value: key })
+    );
+    setFieldOptions(nl);
+  }, [value?.var]);
+
+  // UI
+  return (
+    <>
+      <context.UI.Inputs.Select
+        label="Variable"
+        options={varList}
+        value={value?.var}
+        onChange={(newVal) => {
+          onChange({ ...value, var: newVal });
+        }}
+      />
+      {value?.var && (
+        <context.UI.Inputs.Select
+          label="Field"
+          options={fieldOptions}
+          value={value?.field}
+          onChange={(newVal) => {
+            onChange({ ...value, field: newVal });
+          }}
+        />
       )}
     </>
   );

@@ -21,6 +21,8 @@ import RenderInterfaceButton from "./InterfaceComponents/Button";
 import RenderInterfaceInput from "./InterfaceComponents/Input";
 import { GridSpacing } from "@material-ui/core";
 import RenderInterfaceSwitch from "./InterfaceComponents/Switch";
+import RenderInterfaceListDetailLayout from "./InterfaceComponents/ListDetailLayout";
+import RenderInterfaceFieldDisplay from "./InterfaceComponents/FieldDisplay";
 
 const RenderInterface: React.FC<{
   context: AppContextType;
@@ -219,8 +221,8 @@ const LayoutItem: React.FC<{
         </RenderInterfaceGridItem>
       ) : layoutItem.type === "card" ? (
         <RenderInterfaceCard
-          withBigMargin={layoutItem.withBigMargin}
-          title={layoutItem.title}
+          withBigMargin={newLayoutItem.withBigMargin}
+          title={newLayoutItem.title}
         >
           {layoutItem.items.map((child) => (
             <LayoutItem
@@ -332,6 +334,32 @@ const LayoutItem: React.FC<{
               />
             ))
           }
+        />
+      ) : layoutItem.type === "listDetail" ? (
+        <RenderInterfaceListDetailLayout
+          context={context}
+          layoutItem={layoutItem}
+          vars={vars}
+          interfaceObject={interfaceObject}
+          renderChildren={(items, vars) =>
+            items.map((child) => (
+              <LayoutItem
+                key={child.key}
+                layoutItem={child}
+                vars={vars}
+                setVars={setVars}
+                interfaceObject={interfaceObject}
+                context={context}
+              />
+            ))
+          }
+        />
+      ) : layoutItem.type === "fieldDisplay" ? (
+        <RenderInterfaceFieldDisplay
+          layoutItem={layoutItem}
+          interfaceObject={interfaceObject}
+          vars={vars}
+          context={context}
         />
       ) : (
         `Unknown layoutItem ${layoutItem.type}`
