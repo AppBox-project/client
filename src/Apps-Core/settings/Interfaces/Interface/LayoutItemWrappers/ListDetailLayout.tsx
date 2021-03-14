@@ -37,9 +37,9 @@ const LayoutItemListDetailLayout: React.FC<{
   // Vars
   const [varListList, setVarList] = useState<ValueListItemType[]>();
   const [modelFieldList, setModelFieldList] = useState<ValueListItemType[]>();
-  const contextVarName = `current${
-    list.var.charAt(0).toUpperCase() + list.var.slice(1)
-  }Item`;
+  const contextVarName =
+    list?.var &&
+    `current${list.var.charAt(0).toUpperCase() + list.var.slice(1)}Item`;
 
   // Lifecycle
   useEffect(() => {
@@ -68,15 +68,20 @@ const LayoutItemListDetailLayout: React.FC<{
     return () => request?.stop();
   }, [list?.var]);
   useEffect(() => {
-    const modelKey = interfaceObject.data.data.variables[list.var].model;
-    context.getModel(modelKey, (response) => {
-      const model: ModelType = response.data;
-      setContextVar(contextVarName, {
-        label: `(context) Selected ${model.name}`,
-        value: contextVarName,
-        args: { type: "object", model: modelKey },
+    let request;
+    if (contextVarName) {
+      const modelKey = interfaceObject.data.data.variables[list?.var]?.model;
+      request = context.getModel(modelKey, (response) => {
+        const model: ModelType = response.data;
+        setContextVar(contextVarName, {
+          label: `(context) Selected ${model.name}`,
+          value: contextVarName,
+          args: { type: "object", model: modelKey },
+        });
       });
-    });
+    }
+
+    return () => request?.stop();
   }, [contextVarName]);
 
   // UI
