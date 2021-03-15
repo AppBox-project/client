@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGlobal } from "reactn";
 import {
   AppContextType,
   ModelType,
@@ -23,20 +24,31 @@ import {
   FaCalendar,
   FaCaretSquareDown,
   FaDatabase,
+  FaDesktop,
   FaEnvelopeOpen,
   FaFlask,
   FaFont,
+  FaHtml5,
   FaImage,
   FaKey,
+  FaKeyboard,
+  FaLayerGroup,
   FaLink,
+  FaList,
   FaMapMarker,
   FaObjectGroup,
   FaObjectUngroup,
+  FaPaperclip,
   FaPhone,
   FaQrcode,
   FaRobot,
+  FaRulerHorizontal,
+  FaSignInAlt,
   FaSortNumericDown,
   FaSquare,
+  FaTh,
+  FaThLarge,
+  FaThList,
   FaTint,
   FaToggleOn,
   FaVectorSquare,
@@ -125,6 +137,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   const [componentListSelectedTab, setComponentListSelectedTab] = useState<
     "Components" | "Fields"
   >("Fields");
+  const [isMobile] = useGlobal<any>("isMobile");
+
   const componentList = {
     Field: {
       label: "Field",
@@ -970,7 +984,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <Grid container>
-        <Grid xs={8} className="scrollIndependently">
+        <Grid xs={12} md={8} className={!isMobile && "scrollIndependently"}>
           <context.UI.Design.Card withBigMargin>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -1050,7 +1064,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
             />
           </context.UI.Design.Card>
         </Grid>
-        <Grid xs={4} className="scrollIndependently">
+        <Grid xs={12} md={4} className={!isMobile && "scrollIndependently"}>
           <context.UI.Design.Card withBigMargin withoutPadding>
             <Tabs
               value={componentListSelectedTab}
@@ -1123,7 +1137,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="Field">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectGroup />
+                      <FaKeyboard />
                     </ListItemIcon>
                     <ListItemText>Field</ListItemText>
                   </ListItem>
@@ -1131,7 +1145,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="FieldGrid">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectGroup />
+                      <FaTh />
                     </ListItemIcon>
                     <ListItemText>Field grid</ListItemText>
                   </ListItem>
@@ -1139,7 +1153,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="CustomInterface">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaDesktop />
                     </ListItemIcon>
                     <ListItemText>Custom Interface</ListItemText>
                   </ListItem>
@@ -1147,7 +1161,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="Attachments">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaPaperclip />
                     </ListItemIcon>
                     <ListItemText>Attachments</ListItemText>
                   </ListItem>
@@ -1155,7 +1169,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="FactsBar">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaRulerHorizontal />
                     </ListItemIcon>
                     <ListItemText>Facts Bar</ListItemText>
                   </ListItem>
@@ -1163,7 +1177,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="Html">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaHtml5 />
                     </ListItemIcon>
                     <ListItemText>HTML</ListItemText>
                   </ListItem>
@@ -1171,7 +1185,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="RelatedList">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaList />
                     </ListItemIcon>
                     <ListItemText>Related List</ListItemText>
                   </ListItem>
@@ -1179,7 +1193,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="DetailedRelatedList">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaThList />
                     </ListItemIcon>
                     <ListItemText>Related List (Detailed)</ListItemText>
                   </ListItem>
@@ -1187,7 +1201,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="AppProvided">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaSignInAlt />
                     </ListItemIcon>
                     <ListItemText>App Provided</ListItemText>
                   </ListItem>
@@ -1197,7 +1211,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="GridContainer">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectGroup />
+                      <FaLayerGroup />
                     </ListItemIcon>
                     <ListItemText>Grid (Container)</ListItemText>
                   </ListItem>
@@ -1205,7 +1219,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="GridItem">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaThLarge />
                     </ListItemIcon>
                     <ListItemText>Grid (Item)</ListItemText>
                   </ListItem>
@@ -1213,7 +1227,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="TabContainer">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectGroup />
+                      <FaRulerHorizontal />
                     </ListItemIcon>
                     <ListItemText>Tab (Container)</ListItemText>
                   </ListItem>
@@ -1221,7 +1235,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                 <Component id="TabItem">
                   <ListItem>
                     <ListItemIcon style={{ minWidth: 32 }}>
-                      <FaObjectUngroup />
+                      <FaRulerHorizontal />
                     </ListItemIcon>
                     <ListItemText>Tab (Item)</ListItemText>
                   </ListItem>
