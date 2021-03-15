@@ -1,0 +1,51 @@
+.componentWrapper {
+  //border: 2px solid rgba(0, 0, 0, 0.3);
+  width: 100%;
+}
+
+.tray {
+  height: 100%;
+  text-align: center;
+}
+
+.designer {
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 84px; /* Compensates for spacing required above */
+}
+
+.componentWrapperSmall {
+  border: 1px solid #485263;
+  background-color: rgba(72, 82, 99, 0.9);
+  border-radius: 15px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.dropTarget {
+  border: 1px dotted rgba(0, 0, 0, 0.01);
+  box-sizing: border-box;
+  width: 97%;
+  padding: 5px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: all 0.3s;
+  min-height: 80px;
+  border-radius: 8px;
+  transition: all 0.3s;
+
+  &:hover {
+    border: 1px dotted rgba(0, 0, 0, 0.2);
+  }
+}
+
+.dropTargetActive {
+  border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0.25;
+}
+
+.draggable {
+  cursor: grab;
+}

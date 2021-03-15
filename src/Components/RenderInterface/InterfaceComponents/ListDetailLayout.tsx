@@ -29,6 +29,7 @@ const RenderInterfaceListDetailLayout: React.FC<{
   }Item`;
   const [selectedObject, setSelectedObject] = useState<ObjectType>();
   const [list, setList] = useState<ObjectType[]>([]);
+  const wideMode = vars?.interfaceWidth > 800;
 
   // Lifecycle
   useEffect(() => {
@@ -48,10 +49,15 @@ const RenderInterfaceListDetailLayout: React.FC<{
   }, [vars, layoutItem?.list?.var]);
 
   // UI
+
   return (
     <context.UI.Animations.AnimationContainer>
       <Grid container>
-        <Grid item xs={layoutItem?.list?.navWidth || 3}>
+        <Grid
+          item
+          xs={wideMode ? layoutItem?.list?.navWidth || 3 : 12}
+          className={wideMode && "scrollIndependently"}
+        >
           <context.UI.Animations.AnimationItem>
             <context.UI.Design.Card withBigMargin withoutPadding>
               <List>
@@ -85,7 +91,15 @@ const RenderInterfaceListDetailLayout: React.FC<{
           </context.UI.Animations.AnimationItem>
         </Grid>
         {selectedObject && (
-          <Grid item xs={(12 - (layoutItem?.list?.navWidth || 3)) as GridSize}>
+          <Grid
+            item
+            xs={
+              (wideMode
+                ? 12 - (layoutItem?.list?.navWidth || 3)
+                : 12) as GridSize
+            }
+            className={wideMode && "scrollIndependently"}
+          >
             {renderChildren(layoutItem.items, {
               ...vars,
               [selectedObjectVarName]: selectedObject,

@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.5-3",
-  "description": "Complex interfaces (LDL, context variables)",
+  "version": "0.2.5-4",
+  "description": "Improve lay-out editor",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

@@ -126,7 +126,15 @@ const RenderInterface: React.FC<{
   }
 
   return (
-    <>
+    <div
+      ref={(el) => {
+        if (!el) return;
+        const interfaceWidth = el.getBoundingClientRect().width;
+        if (varValues?.interfaceWidth !== interfaceWidth) {
+          setVarValues({ ...varValues, interfaceWidth });
+        }
+      }}
+    >
       {map(currentInterface.content, (contentItem, contentKey) => (
         <LayoutItem
           key={contentKey}
@@ -137,7 +145,7 @@ const RenderInterface: React.FC<{
           context={context}
         />
       ))}
-    </>
+    </div>
   );
 };
 
