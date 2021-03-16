@@ -18,6 +18,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Fab,
 } from "@material-ui/core";
 import {
   FaAlignLeft,
@@ -43,6 +44,7 @@ import {
   FaQrcode,
   FaRobot,
   FaRulerHorizontal,
+  FaSave,
   FaSignInAlt,
   FaSortNumericDown,
   FaSquare,
@@ -1268,17 +1270,8 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
               </List>
             )}
           </context.UI.Design.Card>
-          {/*<context.UI.Design.Card withBigMargin withoutPadding>
-      
-      <Divider style={{ margin: 15 }} />
-      <LayoutDesigner
-        componentList={}
-        layout={layout}
-        onChange={(newLayout) => {
-          setLayout({ ...newLayout }); // Spread operator is required to force react to redraw
-          setHasChanged(true);
-        }}
-      />
+        </Grid>
+      </Grid>
       {hasChanged && (
         <Fab
           color="primary"
@@ -1298,9 +1291,6 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
           <FaSave />
         </Fab>
       )}
-    </context.UI.Design.Card> */}
-        </Grid>
-      </Grid>
     </DndProvider>
   );
 };
@@ -1386,7 +1376,7 @@ const LayoutItem: React.FC<{
       componentList={componentList}
       layoutItem={layoutItem}
       onDelete={() => {
-        remove(layout, layoutItem.id);
+        remove(layout.layout, layoutItem.id);
       }}
       onChangeProps={(result) => {
         map(result, (change, key) => {
@@ -1398,7 +1388,7 @@ const LayoutItem: React.FC<{
       }}
       onChange={(response) => {
         if (response.migration) {
-          remove(layout, response.migration.id);
+          remove(layout.layout, response.migration.id);
         }
         if (response.id.match("field___")) {
           response.field = response.id.split("field___")[1];

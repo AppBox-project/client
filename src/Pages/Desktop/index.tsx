@@ -10,6 +10,7 @@ import {
   ListItemText,
   List,
   ListItem,
+  Divider,
 } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
@@ -27,6 +28,7 @@ import AppBarAppList from "./AppList";
 import { AppType } from "../../Utils/Types";
 import Card from "../../Components/Design/Card";
 import AppContextMenu from "./AppContextMenu";
+import RecentNotifications from "../../Components/Notifications";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -252,17 +254,17 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           vertical: "center",
           horizontal: "right",
         }}
-        style={{ marginLeft: 25, marginTop: 20 }}
+        style={{ position: "fixed", bottom: 15, left: 40 }}
         PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
       >
         <Card
           withBigMargin
           title={user.data.first_name}
           centerTitle
-          titleDivider
           titleInPrimaryColor
-          style={{ padding: 2 }}
+          style={{ padding: 2, width: 350 }}
         >
+          <RecentNotifications onClose={() => setUserMenuAnchor(undefined)} />
           <List disablePadding>
             <ListItem
               button

@@ -736,3 +736,13 @@ export interface InterfaceType extends ObjectType {
     };
   };
 }
+
+export interface NotificationType extends ObjectType {
+  data: {
+    user: string;
+    date: string;
+    title: string;
+    content: string;
+    target: string;
+  };
+}
