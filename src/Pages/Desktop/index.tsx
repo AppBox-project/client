@@ -10,7 +10,7 @@ import {
   ListItemText,
   List,
   ListItem,
-  Divider,
+  Badge,
 } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
@@ -25,7 +25,7 @@ import NavBar from "../../Components/NavBar";
 import LinkHandler from "../LinkHandler";
 import NavBarSkeleton from "./NavBarSkeleton";
 import AppBarAppList from "./AppList";
-import { AppType } from "../../Utils/Types";
+import { AppType, NotificationType } from "../../Utils/Types";
 import Card from "../../Components/Design/Card";
 import AppContextMenu from "./AppContextMenu";
 import RecentNotifications from "../../Components/Notifications";
@@ -102,6 +102,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   const [appContextMenuAnchor, setAppContextMenuAnchor] = useState<any>();
   const [appContextMenuApp, setAppContextMenuApp] = useState<AppType>();
   const [userMenuAnchor, setUserMenuAnchor] = useState<any>();
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState<
+    number
+  >(0);
 
   // Lifecycle
   useEffect(() => {
@@ -131,9 +135,33 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       }
     });
 
+    // Notifications
+    const notificationRequestId = uniqid();
+    Server.emit("listenForObjects", {
+      requestId: notificationRequestId,
+      type: "notifications",
+      filter: {},
+    });
+    Server.on(`receive-${notificationRequestId}`, (response) => {
+      let unreadCount = 0;
+      if (response.success) {
+        setNotifications(response.data);
+        response.data.map((not) => {
+          if (!not?.data?.read) {
+            unreadCount++;
+          }
+        });
+
+        setUnreadNotificationCount(unreadCount);
+      } else {
+        console.log(response);
+      }
+    });
+
     return () => {
       Server.emit("unlistenForObjects", { requestId });
       Server.emit("stopGettingUserSetting", { requestId: userRequestId });
+      Server.emit("unlistenForObjects", { requestId });
     };
   }, []);
 
@@ -264,7 +292,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
           titleInPrimaryColor
           style={{ padding: 2, width: 350 }}
         >
-          <RecentNotifications onClose={() => setUserMenuAnchor(undefined)} />
+          <RecentNotifications
+            onClose={() => setUserMenuAnchor(undefined)}
+            notifications={notifications}
+          />
           <List disablePadding>
             <ListItem
               button
@@ -386,11 +417,13 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
               event.preventDefault();
             }}
           >
-            {user.data.picture ? (
-              <Avatar src={baseUrl + user.data.picture} />
-            ) : (
-              <Avatar>{user.data.first_name}</Avatar>
-            )}
+            <Badge badgeContent={unreadNotificationCount} color="secondary">
+              {user.data.picture ? (
+                <Avatar src={baseUrl + user.data.picture} />
+              ) : (
+                <Avatar>{user.data.first_name}</Avatar>
+              )}
+            </Badge>
           </IconButton>
         </Tooltip>
       </motion.div>

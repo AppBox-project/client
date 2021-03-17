@@ -20,6 +20,8 @@ import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
 import PageOnboarding from "./Pages/Onboarding/Onboarding";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { rgbToHex } from "./Utils/Functions/General";
+import chroma from "chroma-js";
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
@@ -115,6 +117,31 @@ const App: React.FC = () => {
       }
     };
   }, []);
+  // Theme control (find complementary color)
+  useEffect(() => {
+    let hex = "#0247a1";
+    if (gTheme?.palette?.primary?.main.match("rgb")) {
+      const rgb = gTheme?.palette?.primary?.main
+        .split("(")[1]
+        .split(")")[0]
+        .split(",");
+      hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+    }
+    const main = chroma(gTheme?.palette?.primary?.main || "#0247a1")
+      .darken()
+      .hex();
+
+    setgTheme({
+      ...gTheme,
+      palette: {
+        ...gTheme?.palette,
+        secondary: {
+          ...gTheme?.palette?.secondary,
+          main,
+        },
+      },
+    });
+  }, [gTheme?.palette?.primary?.main]);
 
   // UI
   if (!user && !noDb && !noInit) return <CircularProgress className="center" />;

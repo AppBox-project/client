@@ -1384,7 +1384,7 @@ const LayoutItem: React.FC<{
         });
 
         updateById(layout, layoutItem);
-        onDrop(layout);
+        onDrop(layout.layout);
       }}
       onChange={(response) => {
         if (response.migration) {
@@ -1402,7 +1402,7 @@ const LayoutItem: React.FC<{
           id: uniqid(),
           ...response.migration,
         });
-        onDrop(layout);
+        onDrop(layout.layout);
       }}
       layout={layout}
       path={path}

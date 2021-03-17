@@ -12,37 +12,19 @@ import { useGlobal } from "reactn";
 import { NotificationType } from "../../Utils/Types";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaBellSlash } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
+import styles from "./styles.module.scss";
 
-const RecentNotifications: React.FC<{ onClose: () => void }> = ({
-  onClose,
-}) => {
+const RecentNotifications: React.FC<{
+  onClose: () => void;
+  notifications: NotificationType[];
+}> = ({ onClose, notifications }) => {
   // Vars
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [app] = useGlobal<any>("app");
   const history = useHistory();
 
   // Lifecycle
-  useEffect(() => {
-    const requestId = uniqid();
-    Server.emit("listenForObjects", {
-      requestId,
-      type: "notifications",
-      filter: {},
-    });
-    Server.on(`receive-${requestId}`, (response) => {
-      if (response.success) {
-        setNotifications(response.data);
-      } else {
-        console.log(response);
-      }
-    });
-
-    return () => {
-      Server.emit("unlistenForObjects", { requestId });
-    };
-  }, []);
 
   // UI
   return (
@@ -57,18 +39,34 @@ const RecentNotifications: React.FC<{ onClose: () => void }> = ({
             key={notification._id}
             button
             onClick={() => {
+              const requestId = uniqid();
+              Server.emit("updateObject", {
+                requestId,
+                type: "notifications",
+                objectId: notification._id,
+                toChange: { read: true },
+              });
               history.push(notification.data.target);
               onClose();
             }}
+            className={!notification?.data?.read && styles.unread}
           >
             <ListItemIcon>
               <IconButton
                 style={{
-                  backgroundColor: `rgba(${app?.data?.color?.r},${app?.data?.color?.g},${app?.data?.color?.b},1)`,
+                  backgroundColor: `rgba(${app?.data?.color?.r || 3},${
+                    app?.data?.color?.g || 71
+                  },${app?.data?.color?.b || 161},1)`,
                 }}
                 size="medium"
               >
-                <FaBell style={{ color: "white", width: 18, height: 18 }} />
+                {notification?.data?.read ? (
+                  <FaBellSlash
+                    style={{ color: "white", width: 18, height: 18 }}
+                  />
+                ) : (
+                  <FaBell style={{ color: "white", width: 18, height: 18 }} />
+                )}
               </IconButton>
             </ListItemIcon>
             <ListItemText

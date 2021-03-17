@@ -744,5 +744,6 @@ export interface NotificationType extends ObjectType {
     title: string;
     content: string;
     target: string;
+    read?: boolean;
   };
 }
