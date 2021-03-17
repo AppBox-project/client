@@ -11,8 +11,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import packageJson from "../../../../package.json";
-import { FaEye, FaPowerOff, FaRunning, FaServer } from "react-icons/fa";
+import { FaBell, FaEye, FaPowerOff, FaRunning, FaServer } from "react-icons/fa";
 import { useEffect } from "reactn";
+import SettingsSystemDetail from "./Detail";
 
 const AppSettingsSystem: React.FC<{
   match: { isExact: boolean };
@@ -26,6 +27,20 @@ const AppSettingsSystem: React.FC<{
   useEffect(() => {}, []);
   // Functions
   // UI
-  return <>{externalApps ? "Test" : <context.UI.Loading />}</>;
+  return (
+    <context.UI.Layouts.ListDetailLayout
+      title="System settings"
+      context={context}
+      baseUrl="/settings/system"
+      list={[
+        {
+          label: "Notification settings",
+          id: "notification",
+          icon: FaBell,
+        },
+      ]}
+      DetailComponent={SettingsSystemDetail}
+    />
+  );
 };
 export default AppSettingsSystem;

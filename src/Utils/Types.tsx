@@ -269,6 +269,8 @@ export interface AppContextType {
   requestServerAction: (action: string, args: {}) => Promise<any>;
   getAppSettings: (key: string) => Promise<{}>;
   setAppSettings: (key: string, value: any) => Promise<void>;
+  getSystemSettings: (key: string) => Promise<any | string>;
+  setSystemSettings: (key: string, value: any) => Promise<void>;
   formatString: (text: string, data: {}) => string;
 }
 

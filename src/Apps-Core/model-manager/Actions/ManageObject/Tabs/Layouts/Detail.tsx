@@ -1057,6 +1057,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                           setLayout(newContent); // Spread operator is required to force react to redraw
                           setHasChanged(true);
                         }}
+                        setHasChanged={setHasChanged}
                         path={""}
                       />
                     );
@@ -1364,7 +1365,17 @@ const LayoutItem: React.FC<{
   layout: LayoutType;
   path;
   context: AppContextType;
-}> = ({ key, layoutItem, componentList, onDrop, layout, path, context }) => {
+  setHasChanged;
+}> = ({
+  key,
+  layoutItem,
+  componentList,
+  onDrop,
+  layout,
+  path,
+  context,
+  setHasChanged,
+}) => {
   const Wrapper =
     ((componentList || {})[layoutItem.type] || {}).wrapper || EmptyWrapper;
 
@@ -1377,6 +1388,7 @@ const LayoutItem: React.FC<{
       layoutItem={layoutItem}
       onDelete={() => {
         remove(layout.layout, layoutItem.id);
+        setHasChanged(true);
       }}
       onChangeProps={(result) => {
         map(result, (change, key) => {
@@ -1419,6 +1431,7 @@ const LayoutItem: React.FC<{
                   layout={layout}
                   context={context}
                   path={path + layoutItem.id}
+                  setHasChanged={setHasChanged}
                 />
               );
             })}

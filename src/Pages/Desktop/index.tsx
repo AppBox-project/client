@@ -287,10 +287,12 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
       >
         <Card
           withBigMargin
-          title={user.data.first_name}
+          title={`Hi, ${user.data.first_name}`}
           centerTitle
           titleInPrimaryColor
-          style={{ padding: 2, width: 350 }}
+          style={{ width: 350, paddingTop: 15 }}
+          withoutPadding
+          hoverable
         >
           <RecentNotifications
             onClose={() => setUserMenuAnchor(undefined)}

@@ -766,11 +766,45 @@ export class AppContext {
     });
 
   setAppSettings = (key, value) =>
-    new Promise((resolve, reject) => {
+    new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       Server.emit("setAppSettings", {
         key,
         appId: this.appId,
+        requestId,
+        value,
+      });
+
+      Server.on(`receive-${requestId}`, () => {
+        resolve();
+      });
+    });
+
+  // System settings
+  getSystemSettings = (key) =>
+    new Promise<void | { success: boolean; reason: string }>(
+      (resolve, reject) => {
+        const requestId = uniqid();
+        Server.emit("getSystemSettings", {
+          key,
+          requestId,
+        });
+
+        Server.on(`receive-${requestId}`, (response) => {
+          if (response.success) {
+            resolve(response?.value);
+          } else {
+            resolve({ success: false, reason: response.reason });
+          }
+        });
+      }
+    );
+
+  setSystemSettings = (key, value) =>
+    new Promise<void>((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("setSystemSettings", {
+        key,
         requestId,
         value,
       });
