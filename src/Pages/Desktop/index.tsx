@@ -161,7 +161,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
     return () => {
       Server.emit("unlistenForObjects", { requestId });
       Server.emit("stopGettingUserSetting", { requestId: userRequestId });
-      Server.emit("unlistenForObjects", { requestId });
+      Server.emit("unlistenForObjects", { requestId: notificationRequestId });
     };
   }, []);
 

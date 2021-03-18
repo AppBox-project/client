@@ -43,7 +43,9 @@ const RecentNotifications: React.FC<{
                 objectId: notification._id,
                 toChange: { read: true },
               });
-              history.push(notification.data.target);
+              history.push(
+                notification.data.target || `/o/${notification._id}`
+              );
               onClose();
             }}
             className={!notification?.data?.read && styles.unread}
@@ -74,7 +76,9 @@ const RecentNotifications: React.FC<{
         ))
       ) : (
         <ListItem>
-          <ListItemText>No notifications</ListItemText>
+          <ListItemText style={{ textAlign: "center", fontStyle: "italic" }}>
+            No notifications
+          </ListItemText>
         </ListItem>
       )}
       <Divider />

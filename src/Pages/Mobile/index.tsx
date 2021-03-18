@@ -18,28 +18,44 @@ import {
   ListItemText,
   Divider,
   Icon,
+  Badge,
+  IconButton,
+  Collapse,
+  ListSubheader,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavBar from "../../Components/NavBar";
 import styles from "./styles.module.scss";
 import { baseUrl } from "../../Utils/Utils";
 import LinkHandler from "../LinkHandler";
+import { NotificationType } from "../../Utils/Types";
+import RecentNotifications from "../../Components/Notifications";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState<any>();
   const history = useHistory();
-
   const [isMobile, setIsMobile] = useGlobal<any>("isMobile");
   const [gUser] = useGlobal<any>("user");
   const [drawerOpen, setDrawerOpen] = useState<any>(false);
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [defaultButton, setDefaultButton] = useGlobal<any>("defaultButton");
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState<
+    number
+  >(0);
+  const [notificationsVisible, setNotificationsVisible] = useState<boolean>(
+    false
+  );
 
   // UI
   // Lifecycle
   useEffect(() => {
     const requestId = uniqid();
-    Server.emit("listenForObjects", { requestId, type: "apps", filter: {} });
+    Server.emit("listenForObjects", {
+      requestId,
+      type: "apps",
+      filter: {},
+    });
     Server.on(`receive-${requestId}`, (response) => {
       if (response.success) {
         setApps(response.data);
@@ -65,6 +81,29 @@ const MobileLayout: React.FC = () => {
       },
     });
 
+    // Notifications
+    const notificationRequestId = uniqid();
+    Server.emit("listenForObjects", {
+      requestId: notificationRequestId,
+      type: "notifications",
+      filter: {},
+    });
+    Server.on(`receive-${notificationRequestId}`, (response) => {
+      let unreadCount = 0;
+      if (response.success) {
+        setNotifications(response.data);
+        response.data.map((not) => {
+          if (!not?.data?.read) {
+            unreadCount++;
+          }
+        });
+
+        setUnreadNotificationCount(unreadCount);
+      } else {
+        console.log(response);
+      }
+    });
+
     return () => {
       setDefaultButton({
         icon: undefined,
@@ -72,6 +111,9 @@ const MobileLayout: React.FC = () => {
         function: undefined,
       });
       Server.emit("unlistenForObjects", { requestId });
+      Server.emit("unlistenForObjects", {
+        requestId: notificationRequestId,
+      });
       setIsMobile(undefined);
       setNavBar({
         ...navBar,
@@ -153,18 +195,6 @@ const MobileLayout: React.FC = () => {
             <ListItem
               button
               onClick={() => {
-                setDrawerOpen(false);
-                history.push("/settings");
-              }}
-            >
-              <ListItemIcon>
-                <icons.FaCogs style={{ width: 24, height: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("username");
                 window.location.reload();
@@ -175,6 +205,53 @@ const MobileLayout: React.FC = () => {
               </ListItemIcon>
               <ListItemText primary="Sign out" />
             </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                setDrawerOpen(false);
+                history.push("/settings");
+              }}
+            >
+              <ListItemIcon>
+                <icons.FaCogs style={{ width: 24, height: 24 }} />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+            <Collapse in={notificationsVisible} timeout="auto" unmountOnExit>
+              <Divider style={{ marginTop: 15 }} />
+              <List component="div" disablePadding>
+                <ListSubheader>Notifications</ListSubheader>
+                <RecentNotifications
+                  onClose={() => {
+                    setDrawerOpen(false);
+                    setNotificationsVisible(false);
+                  }}
+                  notifications={notifications}
+                />
+              </List>
+            </Collapse>
+            <ListItem
+              button
+              onClick={() => setNotificationsVisible(!notificationsVisible)}
+            >
+              <ListItemIcon>
+                <Badge badgeContent={unreadNotificationCount} color="secondary">
+                  <icons.FaBell style={{ width: 24, height: 24 }} />
+                </Badge>
+              </ListItemIcon>
+              <ListItemText
+                primary="Notifications"
+                secondary={
+                  unreadNotificationCount !== 0 &&
+                  `${
+                    unreadNotificationCount === 1
+                      ? `1 new notification`
+                      : `${unreadNotificationCount} new notifications`
+                  }`
+                }
+              />
+            </ListItem>
+            <Divider style={{ marginBottom: 15 }} />
             <ListItem
               button
               onClick={() => {
