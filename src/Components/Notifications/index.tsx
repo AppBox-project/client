@@ -29,9 +29,6 @@ const RecentNotifications: React.FC<{
   // UI
   return (
     <List style={{ paddingTop: 0 }}>
-      <ListSubheader style={{ textAlign: "center" }}>
-        Notifications
-      </ListSubheader>
       <Divider />
       {notifications.length > 0 ? (
         notifications.map((notification) => (

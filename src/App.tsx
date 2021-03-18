@@ -12,7 +12,7 @@ import uniqid from "uniqid";
 import LoginPage from "./Pages/Login";
 import Desktop from "./Pages/Desktop";
 import { BrowserRouter } from "react-router-dom";
-import Server from "./Utils/Server";
+import Server, { serverUrl } from "./Utils/Server";
 import MobileLayout from "./Pages/Mobile";
 import { Alert } from "@material-ui/lab";
 import { FaWifi } from "react-icons/fa";
@@ -20,7 +20,7 @@ import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
 import PageOnboarding from "./Pages/Onboarding/Onboarding";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { rgbToHex } from "./Utils/Functions/General";
+import { rgbToHex, urlBase64ToUint8Array } from "./Utils/Functions/General";
 import chroma from "chroma-js";
 
 const App: React.FC = () => {
@@ -65,6 +65,18 @@ const App: React.FC = () => {
     });
     Server.on("noInit", () => {
       setNoInit(true);
+    });
+
+    // Get VAPID public key (for push notifications)
+    const vpkRequestId = uniqid();
+    Server.emit("getVapidPublicKey", { requestId: vpkRequestId });
+    Server.on(`receive-${vpkRequestId}`, (response) => {
+      if (response.success) {
+        localStorage.setItem("vpk", response.key);
+        setUpPushNotifications(response.key);
+      } else {
+        console.log(response);
+      }
     });
 
     // Auto toggle dark / light mode
@@ -199,3 +211,31 @@ function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 export default App;
+
+const setUpPushNotifications = async (vpk) => {
+  navigator.serviceWorker.ready.then(async (registration) => {
+    if (localStorage.getItem("pushSubscriptionKey")) {
+      console.log("Already subscribed");
+    } else {
+      const subscriptionId = uniqid();
+      console.log("Registering push");
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vpk),
+      });
+      await fetch(`${serverUrl}/subscribe`, {
+        method: "POST",
+        body: JSON.stringify({
+          subscription,
+          subscriptionId,
+          username: localStorage.getItem("username"),
+          token: localStorage.getItem("token"),
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      localStorage.setItem("pushSubscriptionKey", subscriptionId);
+    }
+  });
+};

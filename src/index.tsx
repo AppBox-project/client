@@ -18,7 +18,11 @@ const global = {
   actions: {},
   theme: {
     palette: {
-      type: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+      type:
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light",
       primary: {
         main: "#0247a1",
       },
@@ -40,26 +44,21 @@ const global = {
     image: undefined,
   },
   noActions: false,
-}
+};
 
 setGlobal(global);
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
-
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-if (window.location.href.match("localhost")) {
-  serviceWorker.unregister();
-} else {
-  serviceWorker.register({
-    onUpdate: (registration) => {
-      console.log("New client version ready to use!");
-      if (registration && registration.waiting) {
-        registration.waiting.postMessage({ type: "SKIP_WAITING" });
-      }
-      window.location.reload();
-    },
-  });
-}
+serviceWorker.register({
+  onUpdate: (registration) => {
+    console.log("New client version ready to use!");
+    if (registration && registration.waiting) {
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+    window.location.reload();
+  },
+});
