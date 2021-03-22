@@ -70,7 +70,7 @@ export default class WidgetContext {
         },
       },
     };
-    this.isReady = new Promise((resolve, reject) => {
+    this.isReady = new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       this.dataListeners = [
         {
@@ -83,29 +83,33 @@ export default class WidgetContext {
         type: "apps",
         filter: { "data.id": appId },
       });
+
       Server.on(`receive-${requestId}`, (response) => {
         if (response.success) {
-          this.app = response.data[0];
-          import(
-            `../../../Apps-${this.app.data.core ? "Core" : "User"}/${
-              this.appId
-            }/Widgets/index.tsx`
-          ).then((widget) => {
-            const WidgetCode = widget.default;
-            if (WidgetCode[widgetId]) {
-              this.Widget = WidgetCode[widgetId].widget;
-              if (WidgetCode[widgetId].getSettings) {
-                WidgetCode[widgetId].getSettings(this).then((settings) => {
-                  this.availableSettings = settings;
+          if (response.data[0]) {
+            this.app = response.data[0];
+
+            import(
+              `../../../Apps-${this.app?.data?.core ? "Core" : "User"}/${
+                this.appId
+              }/Widgets/index.tsx`
+            ).then((widget) => {
+              const WidgetCode = widget.default;
+              if (WidgetCode[widgetId]) {
+                this.Widget = WidgetCode[widgetId].widget;
+                if (WidgetCode[widgetId].getSettings) {
+                  WidgetCode[widgetId].getSettings(this).then((settings) => {
+                    this.availableSettings = settings;
+                    resolve();
+                  });
+                } else {
                   resolve();
-                });
+                }
               } else {
-                resolve();
+                reject("widget-not-found-in-app");
               }
-            } else {
-              reject("widget-not-found-in-app");
-            }
-          });
+            });
+          }
         } else {
           console.log(response);
         }

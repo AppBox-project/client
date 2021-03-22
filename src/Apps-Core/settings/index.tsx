@@ -14,6 +14,7 @@ import AppSettingsAbout from "./About";
 import AppSettingsSystem from "./System";
 import AppSettingsApps from "./Apps";
 import AppSettingsInterfaces from "./Interfaces";
+import AppSettingsActions from "./Actions";
 
 export default class App {
   context: any;
@@ -40,11 +41,17 @@ export default class App {
           icon: FaCogs,
           group: "System",
         },
-
         {
           key: "automations",
           label: "Automations",
           component: AppSettingsProcesses,
+          icon: FaRobot,
+          group: "System",
+        },
+        {
+          key: "actions",
+          label: "Actions",
+          component: AppSettingsActions,
           icon: FaRobot,
           group: "System",
         },

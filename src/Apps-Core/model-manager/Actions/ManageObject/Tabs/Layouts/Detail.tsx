@@ -1054,7 +1054,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
                         layout={layout}
                         componentList={componentList}
                         onDrop={(newContent) => {
-                          setLayout(newContent); // Spread operator is required to force react to redraw
+                          setLayout({ ...layout, layout: newContent }); // Spread operator is required to force react to redraw
                           setHasChanged(true);
                         }}
                         setHasChanged={setHasChanged}

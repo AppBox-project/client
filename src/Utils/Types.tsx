@@ -512,6 +512,7 @@ export interface UIType {
       customNavItems?: [JSX.Element];
       footerComponent?: JSX.Element;
       description?: string;
+      emptyMessage?: string;
     }>;
     SortableList: React.FC<{
       items: {

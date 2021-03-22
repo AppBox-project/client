@@ -105,7 +105,7 @@ const App: React.FC = () => {
               type: "users",
               filter: { "data.username": localStorage.getItem("username") },
             });
-          }, 200); // Timeout exists to make sure we have an authenticated session. Todo: make better.
+          }, 1000); // Timeout exists to make sure we have an authenticated session. Todo: make better.
 
           Server.on(`receive-${userRequest}`, (response) => {
             if (response.success) {

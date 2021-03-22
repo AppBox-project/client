@@ -59,6 +59,7 @@ const ListDetailLayout: React.FC<{
   customNavItems?: [JSX.Element];
   footerComponent?: JSX.Element;
   description?: string;
+  emptyMessage?: string;
 }> = ({
   list,
   CustomNavComponent,
@@ -84,6 +85,7 @@ const ListDetailLayout: React.FC<{
   customNavItems,
   footerComponent,
   description,
+  emptyMessage,
 }) => {
   // Vars
   let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
@@ -161,6 +163,7 @@ const ListDetailLayout: React.FC<{
                     itemSecondary={itemSecondary}
                     customNavItems={customNavItems}
                     footerComponent={footerComponent}
+                    emptyMessage={emptyMessage}
                   />
                 )
               ) : (
@@ -222,6 +225,7 @@ const ListNav: React.FC<{
   customNavItems?: [JSX.Element];
   footerComponent?: JSX.Element;
   description?: string;
+  emptyMessage?: string;
 }> = ({
   addFunction,
   deleteFunction,
@@ -239,6 +243,7 @@ const ListNav: React.FC<{
   customNavItems,
   footerComponent,
   description,
+  emptyMessage,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
   const [isMobile] = useGlobal<any>("isMobile");
@@ -299,23 +304,29 @@ const ListNav: React.FC<{
           {customNavItems &&
             customNavItems.length > 0 &&
             customNavItems.map((item, index) => item)}
-          {(list || []).map((listItem) => {
-            return (
-              <ListItemObject
-                baseUrl={baseUrl}
-                listItem={listItem}
-                selectedItem={selectedItem}
-                navFixedIcon={navFixedIcon}
-                deleteFunction={deleteFunction}
-                key={listItem.id}
-                nestedLevel={0}
-                imageField={imageField}
-                objects={objects}
-                navDynamicIcon={navDynamicIcon}
-                itemSecondary={itemSecondary}
-              />
-            );
-          })}
+          {list?.length > 0 ? (
+            (list || []).map((listItem) => {
+              return (
+                <ListItemObject
+                  baseUrl={baseUrl}
+                  listItem={listItem}
+                  selectedItem={selectedItem}
+                  navFixedIcon={navFixedIcon}
+                  deleteFunction={deleteFunction}
+                  key={listItem.id}
+                  nestedLevel={0}
+                  imageField={imageField}
+                  objects={objects}
+                  navDynamicIcon={navDynamicIcon}
+                  itemSecondary={itemSecondary}
+                />
+              );
+            })
+          ) : (
+            <ListItem>
+              <ListItemText>{emptyMessage || "Nothing here!"}</ListItemText>
+            </ListItem>
+          )}
         </List>
       </Card>
       {footerComponent && footerComponent}
