@@ -33,6 +33,11 @@ export interface AutomationType extends ObjectType {
   };
 }
 
+export interface ActionLogicStepType {
+  label: string;
+  type: "insertObject";
+}
+
 export interface ActionType extends ObjectType {
   data: {
     name: string;
@@ -43,6 +48,7 @@ export interface ActionType extends ObjectType {
       vars: {
         [varId: string]: { type: "text" | "object" | "objects"; name: string };
       };
+      logic: ActionLogicStepType[];
     };
   };
 }

@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { AppContextType } from "../../../Utils/Types";
-import { ActionType, AutomationType } from "../Types";
+import {
+  AppContextType,
+  ModelType,
+  ValueListItemType,
+} from "../../../Utils/Types";
+import { ActionType } from "../Types";
 import { find } from "lodash";
-import { Divider, Fab, Grid, Tab, Tabs, Typography } from "@material-ui/core";
+import { Fab, Grid, Tab, Tabs } from "@material-ui/core";
 import { FaSave } from "react-icons/fa";
 import SettingsActionsAbout from "./About";
 import SettingsActionsVars from "./Variables";
+import SettingsActionsLogic from "./Logic";
+import { map } from "lodash";
 
 const SettingsActionsDetail: React.FC<{
   match: { params: { detailId } };
@@ -24,13 +30,39 @@ const SettingsActionsDetail: React.FC<{
   const [selectedLeftTab, setSelectedLeftTab] = useState<
     "About" | "Triggers" | "Logic"
   >("About");
+  const [models, setModels] = useState<ModelType[]>();
+  const [modelList, setModelList] = useState<ValueListItemType[]>();
+  const [varList, setVarList] = useState<ValueListItemType[]>();
 
   // Lifecycle
   useEffect(() => {
-    const act = find(actions, (o) => o.data.key === detailId);
+    const act: ActionType = find(actions, (o) => o.data.key === detailId);
     setAction(act);
     setOriginalAction(JSON.stringify(act));
+
+    const modelRequest = context.getModels({}, (response) => {
+      const nl: ValueListItemType[] = [];
+      response.data.map((interfaceObject: ModelType) =>
+        nl.push({
+          label: interfaceObject.name_plural,
+          value: interfaceObject.key,
+        })
+      );
+      setModelList(nl);
+      setModels(response.data);
+    });
+
+    return () => modelRequest.stop();
   }, [actions, detailId]);
+
+  useEffect(() => {
+    const nl: ValueListItemType[] = [];
+    map(action?.data?.data?.vars || [], (vari, value) =>
+      nl.push({ label: vari.label, value })
+    );
+    setVarList(nl);
+    console.log(action, nl);
+  }, [action]);
 
   // UI
   if (!action) return <context.UI.Loading />;
@@ -58,14 +90,16 @@ const SettingsActionsDetail: React.FC<{
                       setAction={setAction}
                     />
                   )}
-                  {selectedLeftTab === "Triggers" && (
-                    <SettingsActionsVars
+                  {selectedLeftTab === "Triggers" && <>Triggers</>}
+                  {selectedLeftTab === "Logic" && (
+                    <SettingsActionsLogic
                       context={context}
                       action={action}
                       setAction={setAction}
+                      modelList={modelList}
+                      varList={varList}
                     />
                   )}
-                  {selectedLeftTab === "Logic" && <>About</>}
                 </div>
               </context.UI.Design.Card>
             </context.UI.Animations.AnimationItem>
@@ -84,6 +118,7 @@ const SettingsActionsDetail: React.FC<{
                   context={context}
                   action={action}
                   setAction={setAction}
+                  modelList={modelList}
                 />
               </context.UI.Design.Card>
             </context.UI.Animations.AnimationItem>

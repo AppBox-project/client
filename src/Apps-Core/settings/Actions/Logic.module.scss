@@ -1,0 +1,55 @@
+.row {
+  width: 100%;
+  height: 125px;
+}
+
+.start {
+  width: 100px;
+  height: 50px;
+  background-color: red;
+  border-radius: 25px;
+  margin: 0 auto;
+  line-height: 50px;
+  color: white;
+  text-align: center;
+}
+
+.step {
+  width: 150px;
+  height: 75px;
+  background-color: #485263;
+  border-radius: 32px;
+  color: white;
+  text-align: center;
+  line-height: 75px;
+  margin: 0 auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.output {
+  width: 10px;
+  height: 10px;
+  background-color: #485263;
+  border-radius: 30px;
+  margin: -5px auto 0 auto;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: black;
+  }
+}
+
+.connector {
+  width: 2px;
+  height: 50px;
+  border-radius: 3px;
+  background-color: rgba(72, 82, 99, 0.3);
+  margin: 0 auto;
+  margin-top: -75px;
+  transition: all 1s;
+  cursor: pointer;
+  &:hover {
+    background-color: #485263;
+  }
+}
