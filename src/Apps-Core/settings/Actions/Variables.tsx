@@ -1,4 +1,10 @@
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
 import { AppContextType, ValueListItemType } from "../../../Utils/Types";
 import { ActionType } from "../Types";
@@ -102,6 +108,23 @@ const SettingsActionsVars: React.FC<{
               },
             ],
             buttons: [
+              {
+                label: <Typography style={{ color: "red" }}>Delete</Typography>,
+                onClick: () => {
+                  const vars = action.data.data.vars;
+                  delete vars[key];
+                  setAction({
+                    ...action,
+                    data: {
+                      ...action.data,
+                      data: {
+                        ...action.data.data,
+                        vars,
+                      },
+                    },
+                  });
+                },
+              },
               {
                 label: "Save",
                 onClick: (form) => {

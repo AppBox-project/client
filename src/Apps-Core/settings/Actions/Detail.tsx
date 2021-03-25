@@ -12,6 +12,7 @@ import SettingsActionsAbout from "./About";
 import SettingsActionsVars from "./Variables";
 import SettingsActionsLogic from "./Logic";
 import { map } from "lodash";
+import SettingsActionsTriggers from "./Triggers";
 
 const SettingsActionsDetail: React.FC<{
   match: { params: { detailId } };
@@ -89,7 +90,16 @@ const SettingsActionsDetail: React.FC<{
                       setAction={setAction}
                     />
                   )}
-                  {selectedLeftTab === "Triggers" && <>Triggers</>}
+                  {selectedLeftTab === "Triggers" && (
+                    <SettingsActionsTriggers
+                      context={context}
+                      action={action}
+                      setAction={setAction}
+                      modelList={modelList}
+                      varList={varList}
+                      models={models}
+                    />
+                  )}
                   {selectedLeftTab === "Logic" && (
                     <SettingsActionsLogic
                       context={context}

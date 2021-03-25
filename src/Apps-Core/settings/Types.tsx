@@ -51,6 +51,11 @@ export interface ActionType extends ObjectType {
         [varId: string]: { type: "text" | "object" | "objects"; name: string };
       };
       logic: ActionLogicStepType[];
+      triggers: {
+        manual: {};
+        time: {}[];
+        data: {}[];
+      };
     };
   };
 }
