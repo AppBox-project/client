@@ -58,10 +58,9 @@ const SettingsActionsDetail: React.FC<{
   useEffect(() => {
     const nl: ValueListItemType[] = [];
     map(action?.data?.data?.vars || [], (vari, value) =>
-      nl.push({ label: vari.label, value })
+      nl.push({ label: vari.label, value, args: vari })
     );
     setVarList(nl);
-    console.log(action, nl);
   }, [action]);
 
   // UI
@@ -98,6 +97,7 @@ const SettingsActionsDetail: React.FC<{
                       setAction={setAction}
                       modelList={modelList}
                       varList={varList}
+                      models={models}
                     />
                   )}
                 </div>

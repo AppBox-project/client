@@ -106,7 +106,7 @@ const SettingsActionsVars: React.FC<{
                 label: "Save",
                 onClick: (form) => {
                   const vars = action.data.data.vars;
-                  delete vars[form.key];
+                  delete vars[key];
                   vars[form.key] = form;
                   setAction({
                     ...action,
@@ -132,7 +132,7 @@ const SettingsActionsVars: React.FC<{
           {value.type === "options" && <FaList />}
           {value.type === "number" && <FaSortNumericDown />}
         </ListItemIcon>
-        <ListItemText>{value.label}</ListItemText>
+        <ListItemText primary={value.label} secondary={value.description} />
       </ListItem>
     ))}
     <ListItem
@@ -156,7 +156,7 @@ const SettingsActionsVars: React.FC<{
       <ListItemIcon style={{ minWidth: 32 }}>
         <FaPlus />
       </ListItemIcon>
-      <ListItemText>Create new variable</ListItemText>
+      <ListItemText>Create variable</ListItemText>
     </ListItem>
   </List>
 );

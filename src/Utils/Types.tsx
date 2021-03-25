@@ -357,7 +357,7 @@ export interface dialogType {
       context: AppContextType;
     }>;
     customInputProps?: {};
-    value?: string;
+    value?: string | any;
     dropdownOptions?: { label: string; value: string }[];
     xs?: GridSize;
     onlyDisplayWhen?: {};

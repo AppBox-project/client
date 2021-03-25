@@ -35,7 +35,9 @@ export interface AutomationType extends ObjectType {
 
 export interface ActionLogicStepType {
   label: string;
-  type: "insertObject";
+  type: "insertObject" | "wait" | "deleteObjects";
+  time?: number;
+  args?: {};
 }
 
 export interface ActionType extends ObjectType {
