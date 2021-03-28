@@ -36,6 +36,7 @@ const AppSettingsActions: React.FC<{
       list={actionList}
       baseUrl="/settings/actions"
       title="Actions"
+      navWidth={2}
       emptyMessage="No actions yet."
       addFunction={() => {
         context.setDialog({

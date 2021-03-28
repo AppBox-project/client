@@ -32,6 +32,7 @@ import PageLayouts from "./AppUI/PageLayouts";
 import InputCheckboxes from "../../../Components/Inputs/Checkboxes";
 import FaIcon from "../../Icons";
 import CollectionCode from "../../../Apps-Core/collections";
+import InputFindObject from "../../Inputs/FindObject";
 
 export class AppContext {
   appId: string;
@@ -107,6 +108,7 @@ export class AppContext {
         RichText: InputRichText,
         Select: InputSelect,
         Color: InputColor,
+        FindObject: InputFindObject,
       },
       Field: AppUiField,
       FieldDisplay,

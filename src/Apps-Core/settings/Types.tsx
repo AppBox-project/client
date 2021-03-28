@@ -35,9 +35,15 @@ export interface AutomationType extends ObjectType {
 
 export interface ActionLogicStepType {
   label: string;
-  type: "insertObject" | "wait" | "deleteObjects";
+  type: "insertObject" | "wait" | "deleteObjects" | "waitUntil" | "case";
   time?: number;
-  args?: {};
+  args?: { cases?: [] };
+}
+
+export interface ActionVarType {
+  type: "text" | "boolean" | "object" | "objects";
+  name: string;
+  setting_value: any;
 }
 
 export interface ActionType extends ObjectType {
@@ -48,7 +54,7 @@ export interface ActionType extends ObjectType {
     active: boolean;
     data: {
       vars: {
-        [varId: string]: { type: "text" | "object" | "objects"; name: string };
+        [varId: string]: ActionVarType;
       };
       logic: ActionLogicStepType[];
       triggers: {

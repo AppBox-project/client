@@ -13,6 +13,7 @@ import SettingsActionsVars from "./Variables";
 import SettingsActionsLogic from "./Logic";
 import { map } from "lodash";
 import SettingsActionsTriggers from "./Triggers";
+import SettingsActionsSettings from "./Settings";
 
 const SettingsActionsDetail: React.FC<{
   match: { params: { detailId } };
@@ -29,8 +30,8 @@ const SettingsActionsDetail: React.FC<{
   const [originalAction, setOriginalAction] = useState<string>();
   const [action, setAction] = useState<ActionType>();
   const [selectedLeftTab, setSelectedLeftTab] = useState<
-    "About" | "Triggers" | "Logic"
-  >("About");
+    "Settings" | "About" | "Triggers" | "Logic"
+  >("Settings");
   const [models, setModels] = useState<ModelType[]>();
   const [modelList, setModelList] = useState<ValueListItemType[]>();
   const [varList, setVarList] = useState<ValueListItemType[]>();
@@ -43,10 +44,11 @@ const SettingsActionsDetail: React.FC<{
 
     const modelRequest = context.getModels({}, (response) => {
       const nl: ValueListItemType[] = [];
-      response.data.map((interfaceObject: ModelType) =>
+      response.data.map((m: ModelType) =>
         nl.push({
-          label: interfaceObject.name_plural,
-          value: interfaceObject.key,
+          label: m.name_plural,
+          value: m.key,
+          args: m,
         })
       );
       setModelList(nl);
@@ -78,11 +80,20 @@ const SettingsActionsDetail: React.FC<{
                   onChange={(event, newValue) => setSelectedLeftTab(newValue)}
                   aria-label="Edit action"
                 >
+                  <Tab label="Settings" value="Settings" />
                   <Tab label="About" value="About" />
                   <Tab label="Triggers" value="Triggers" />
                   <Tab label="Logic" value="Logic" />
                 </Tabs>
                 <div style={{ margin: 15 }}>
+                  {selectedLeftTab === "Settings" && (
+                    <SettingsActionsSettings
+                      context={context}
+                      action={action}
+                      setAction={setAction}
+                      models={models}
+                    />
+                  )}
                   {selectedLeftTab === "About" && (
                     <SettingsActionsAbout
                       context={context}

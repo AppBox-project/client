@@ -79,7 +79,7 @@ const ObjectDesigner: React.FC<{
     <TableContainer
       component={MaybeCard}
       showCard={withCard}
-      title={`Filter ${model.name_plural}`}
+      title={`Filter ${appliedModel.name_plural}`}
       style={{ marginTop: 25 }}
     >
       <Table>
@@ -112,11 +112,22 @@ const ObjectDesigner: React.FC<{
                 />
               </TableCell>
               <TableCell style={{ width: "40%" }}>
-                {appliedModel.fields[val.key].type === "formula" ? appliedModel.fields[val.key].typeArgs.type === "boolean" ? <InputCheckbox label={appliedModel.fields[val.key].name} value={val.value as boolean} onChange={nv => {
-                  const newVal = value;
-                  newVal[rowIndex].value = nv;
-                  onChange(newVal);
-                }} /> : "still have to make this formula filter" : <context.UI.Field
+                {appliedModel.fields[val.key].type === "formula" ? (
+                  appliedModel.fields[val.key].typeArgs.type === "boolean" ? (
+                    <InputCheckbox
+                      label={appliedModel.fields[val.key].name}
+                      value={val.value as boolean}
+                      onChange={(nv) => {
+                        const newVal = value;
+                        newVal[rowIndex].value = nv;
+                        onChange(newVal);
+                      }}
+                    />
+                  ) : (
+                    "still have to make this formula filter"
+                  )
+                ) : (
+                  <context.UI.Field
                     fieldId={val.key}
                     field={appliedModel.fields[val.key]}
                     model={appliedModel}
@@ -126,8 +137,8 @@ const ObjectDesigner: React.FC<{
                       newVal[rowIndex].value = nv;
                       onChange(newVal);
                     }}
-                  />}
-
+                  />
+                )}
               </TableCell>
             </TableRow>
           ))}

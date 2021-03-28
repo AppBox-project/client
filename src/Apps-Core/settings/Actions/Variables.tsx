@@ -106,6 +106,12 @@ const SettingsActionsVars: React.FC<{
                 value: value.default,
                 onlyDisplayWhen: { type: "number" },
               },
+              {
+                label: "Setting variable",
+                key: "setting",
+                type: "boolean",
+                value: value.setting,
+              },
             ],
             buttons: [
               {

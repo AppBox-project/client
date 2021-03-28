@@ -609,6 +609,18 @@ export interface UIType {
       onChange?: (value) => void;
       style?;
     }>;
+    FindObject: React.FC<{
+      label: string;
+      modelId: string;
+      value?;
+      isLoading?: boolean;
+      onChange?: (value, args?) => void;
+      multiple?: true | boolean;
+      style?: CSSProperties;
+      display?: "select" | "radio" | "checkbox";
+      context: AppContextType;
+      primary: string;
+    }>;
   };
 }
 
