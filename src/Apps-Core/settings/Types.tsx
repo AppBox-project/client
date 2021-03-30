@@ -59,7 +59,7 @@ export interface ActionType extends ObjectType {
       logic: ActionLogicStepType[];
       triggers: {
         manual: {};
-        time: {}[];
+        time: { label: string; cron: string }[];
         data: {}[];
       };
     };

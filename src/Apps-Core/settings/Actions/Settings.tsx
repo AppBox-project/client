@@ -47,7 +47,7 @@ const SettingsActionsSettings: React.FC<{
   }, [action]);
 
   // UI
-  if (!settingList) return <context.UI.Loading />;
+  if (!settingList || !models) return <context.UI.Loading />;
 
   return (
     <>

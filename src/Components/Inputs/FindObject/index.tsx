@@ -76,7 +76,7 @@ const InputFindObject: React.FC<{
       options={options}
       value={newValue as string}
       onChange={(chosen) => {
-        setNewValue(chosen);
+        setNewValue(chosen as string);
         if (onChange) onChange(chosen);
       }}
     />

@@ -11,7 +11,7 @@ const InputSelect: React.FC<{
   options: { value; label: string }[];
   value?;
   isLoading?: boolean;
-  onChange?: (value,args?) => void;
+  onChange?: (value, args?) => void;
   multiple?: true | boolean;
   style?: CSSProperties;
   display?: "select" | "radio" | "checkbox";
@@ -60,7 +60,7 @@ const InputSelect: React.FC<{
       options={options}
       value={newValue as string}
       onChange={(chosen) => {
-        setNewValue(chosen);
+        setNewValue(chosen as string);
         if (onChange) onChange(chosen);
       }}
     />
@@ -81,11 +81,12 @@ const InputSelect: React.FC<{
             if (Array.isArray(chosen)) {
               const val = [];
               const args = [];
-              chosen.map((v) => {val.push(v.value)
-                args.push(v.args)
+              chosen.map((v) => {
+                val.push(v.value);
+                args.push(v.args);
               });
-              
-              onChange(val,args);
+
+              onChange(val, args);
             } else {
               onChange(chosen?.value);
             }

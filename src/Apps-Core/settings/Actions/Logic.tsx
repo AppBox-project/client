@@ -13,12 +13,12 @@ import ObjectDesignerFilter from "../../../Components/ObjectDesigner/Filter";
 import {
   Divider,
   Grid,
+  GridSize,
   IconButton,
-  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { map } from "lodash";
-import { FaCog } from "react-icons/fa";
+import { FaCogs, FaPlus } from "react-icons/fa";
 
 const SettingsActionsLogic: React.FC<{
   context: AppContextType;
@@ -123,38 +123,14 @@ const ActionLogicNode: React.FC<{
 }) => (
   <>
     {step.type === "case" ? (
-      <>
-        <IconButton
-          onClick={() => {
-            context.setDialog({
-              display: true,
-              title: "Edit cases",
-              form: [
-                {
-                  key: "cases",
-                  value: step.args.cases,
-                  label: "Cases",
-                  type: "custom",
-                  customInput: CustomInputCases,
-                },
-              ],
-              buttons: [
-                {
-                  label: "Update",
-                  onClick: (form) => {
-                    console.log(form);
-                  },
-                },
-              ],
-            });
-          }}
-        >
-          <Tooltip placement="right" title="Define cases">
-            <FaCog />
-          </Tooltip>
-        </IconButton>
-        <Grid container>Test</Grid>
-      </>
+      <NodeCase
+        step={step}
+        onChange={setStep}
+        context={context}
+        modelList={modelList}
+        varList={varList}
+        models={models}
+      />
     ) : (
       <>
         <div className={styles.row}>
@@ -246,13 +222,13 @@ const ActionLogicNode: React.FC<{
             </span>
           </div>
         </div>
-        <div
-          className={styles.connector}
-          title="Click to add action"
-          onClick={() => addStep(index + 1)}
-        />
       </>
     )}
+    <div
+      className={styles.connector}
+      title="Click to add action"
+      onClick={() => addStep(index + 1)}
+    />
   </>
 );
 
@@ -479,18 +455,240 @@ const CustomInputAssignValues: React.FC<CustomFormInputType> = ({
   );
 };
 
-const CustomInputCases: React.FC<CustomFormInputType> = ({
+const NodeCase: React.FC<{
+  step;
+  onChange;
+  context: AppContextType;
+  modelList;
+  varList;
+  models;
+}> = ({ step, onChange, modelList, varList, models, context }) => {
+  // Vars
+  const cases = step.cases || [
+    { criteria: "default", label: "Default case", steps: [] },
+  ];
+  let width: GridSize = Math.floor(12 / cases.length) as GridSize;
+  if (width > 12) width = 12;
+  if (width < 1) width = 1;
+  const addStep = (caseIndex, number) => {
+    const newCases = [...cases];
+    newCases[caseIndex].steps.splice(number || 0, 0, {
+      label: "New step",
+      type: "insertObject",
+    });
+
+    onChange({
+      ...step,
+      cases: newCases,
+    });
+  };
+
+  // Lifecycle
+  // UI
+  return (
+    <div style={{ marginTop: -48 }}>
+      <IconButton
+        onClick={() => {
+          if (cases.length < 6) {
+            onChange({
+              ...step,
+              cases: [
+                ...cases,
+                { criteria: [], label: `Case ${cases.length}`, steps: [] },
+              ],
+            });
+          }
+        }}
+      >
+        <FaPlus />
+      </IconButton>
+      <Grid container style={{ marginBottom: 75 }}>
+        {cases.map((c, caseIndex) => (
+          <Grid item xs={width} style={{ textAlign: "center" }}>
+            <Typography variant="h6">
+              {c.criteria !== "default" && (
+                <IconButton
+                  onClick={() =>
+                    context.setDialog({
+                      display: true,
+                      title: "Edit conditions",
+                      form: [
+                        { label: "Label", value: c.label, key: "label" },
+                        {
+                          label: "Conditions",
+                          key: "conditions",
+                          value: c.conditions,
+                          type: "custom",
+                          customInput: CustomInputCaseCriteria,
+                          customInputProps: { varList, models },
+                        },
+                      ],
+                      buttons: [
+                        {
+                          label: "Update",
+                          onClick: (form) => {
+                            const newCases = cases;
+                            newCases[caseIndex] = {
+                              ...newCases[caseIndex],
+                              ...form,
+                            };
+
+                            console.log({
+                              ...step,
+                              cases: newCases,
+                            });
+                          },
+                        },
+                      ],
+                    })
+                  }
+                >
+                  <FaCogs />
+                </IconButton>
+              )}
+              {c.label}
+            </Typography>
+            {c.steps.map((s, stepIndex) => (
+              <ActionLogicNode
+                step={s}
+                addStep={(number) => addStep(caseIndex, number)}
+                context={context}
+                modelList={modelList}
+                varList={varList}
+                models={models}
+                setStep={(newStep) => {
+                  const newCases = cases;
+                  newCases[caseIndex].steps[stepIndex] = newStep;
+
+                  onChange({
+                    ...step,
+                    cases: newCases,
+                  });
+                }}
+                deleteStep={() => {
+                  const newCases = cases;
+                  newCases[caseIndex].steps.splice(stepIndex, 1);
+
+                  onChange({
+                    ...step,
+                    cases: newCases,
+                  });
+                }}
+                index={stepIndex}
+              />
+            ))}
+            <div
+              className={styles.connector}
+              title="Click to add action"
+              onClick={() => addStep(caseIndex, cases?.steps?.length || 0)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
+
+const CustomInputCaseCriteria: React.FC<CustomFormInputType> = ({
   context,
   value,
   varList,
   modelList,
   onChange,
   models,
+  label,
 }) => {
-  // Vars
+  return (
+    <>
+      <Typography variant="h6">{label}</Typography>
+      <context.UI.Inputs.Select
+        label="Mode"
+        value={value?.mode || "simple"}
+        onChange={(mode) => onChange({ ...value, mode })}
+        options={[
+          {
+            label: "Simple",
+            value: "simple",
+          },
+          {
+            label: "Formula",
+            value: "formula",
+          },
+        ]}
+      />
+      {(!value?.mode || value?.mode === "simple") && (
+        <>
+          {(value?.criteria || []).map((crit, critIndex) => {
+            const v = find(varList, (o) => o.value === crit.var);
+            const onValueChange = (newVal) => {
+              const criteria = value.criteria;
+              criteria[critIndex].val = newVal;
+              onChange({ ...value, criteria });
+            };
 
-  // Lifecycle
-
-  // UI
-  return <>Test</>;
+            return (
+              <div
+                style={{
+                  padding: 15,
+                  margin: "5px 0",
+                  borderTop: "1px solid black",
+                  borderBottom: "1px solid black",
+                }}
+              >
+                <context.UI.Inputs.Select
+                  options={varList}
+                  label="Variable"
+                  value={crit.var}
+                  onChange={(newVar) => {
+                    const criteria = value.criteria;
+                    criteria[critIndex].var = newVar;
+                    onChange({ ...value, criteria });
+                  }}
+                />
+                {v?.args?.type === "string" && (
+                  <context.UI.Inputs.TextInput
+                    label="Value"
+                    value={crit.val}
+                    onChange={onValueChange}
+                  />
+                )}
+                {v?.args?.type === "boolean" && (
+                  <context.UI.Inputs.Switch
+                    label="Value"
+                    value={crit.val}
+                    onChange={onValueChange}
+                  />
+                )}
+                {v?.args?.type === "object" && (
+                  <ObjectDesignerFilter
+                    context={context}
+                    model={find(models, (o) => o.key === v.args.model)}
+                    value={crit.val}
+                    onChange={onValueChange}
+                  />
+                )}
+              </div>
+            );
+          })}
+          <IconButton
+            onClick={() => {
+              onChange({
+                ...(value || {}),
+                criteria: [...(value?.criteria || []), {}],
+              });
+            }}
+          >
+            <FaPlus />
+          </IconButton>
+        </>
+      )}
+      {value?.mode === "formula" && (
+        <context.UI.Inputs.TextInput
+          label="Formula"
+          value={value?.formula}
+          onChange={(formula) => onChange({ ...value, formula })}
+        />
+      )}
+    </>
+  );
 };
