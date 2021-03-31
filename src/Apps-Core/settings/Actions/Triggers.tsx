@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppContextType,
   CustomFormInputType,
@@ -8,6 +8,7 @@ import {
 } from "../../../Utils/Types";
 import { ActionType } from "../Types";
 import styles from "./Triggers.module.scss";
+import { filter, find, map } from "lodash";
 
 const cronOptions = [
   { label: "Every minute", value: "minutely", cron: "* * * * *" },
@@ -41,7 +42,7 @@ const SettingsActionsTriggers: React.FC<{
   modelList: ValueListItemType[];
   varList: ValueListItemType[];
   models: ModelType[];
-}> = ({ context, action, setAction, varList }) => (
+}> = ({ context, action, setAction, varList, modelList }) => (
   <Grid container spacing={1}>
     <Grid item xs={4}>
       <Typography variant="h6">Manual trigger</Typography>
@@ -129,6 +130,7 @@ const SettingsActionsTriggers: React.FC<{
                     label: "When",
                     key: "when",
                     type: "dropdown",
+                    value: timeTrigger.when,
                     dropdownOptions: cronOptions,
                   },
                   {
@@ -138,7 +140,36 @@ const SettingsActionsTriggers: React.FC<{
                   },
                 ],
                 buttons: [
-                  { label: "Update", onClick: (form) => console.log(form) },
+                  {
+                    label: (
+                      <Typography style={{ color: "red" }}>
+                        Delete trigger
+                      </Typography>
+                    ),
+                    onClick: () => {
+                      const newAction = { ...action };
+                      action.data.data.triggers.time.splice(triggerIndex, 1);
+                      setAction(newAction);
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (form) => {
+                      const cron = find(
+                        cronOptions,
+                        (c) => c.value === form.when
+                      );
+
+                      const newAction = { ...action };
+                      newAction.data.data.triggers.time[triggerIndex] = {
+                        ...newAction.data.data.triggers.time[triggerIndex],
+                        label: cron.label,
+                        cron: cron.cron,
+                        when: form.when,
+                      };
+                      setAction(newAction);
+                    },
+                  },
                 ],
               })
             }
@@ -171,7 +202,76 @@ const SettingsActionsTriggers: React.FC<{
       <Typography variant="h6">Data triggers</Typography>
     </Grid>
     <Grid item xs={8}>
-      <div className={styles.newTrigger}>Add data trigger</div>
+      {(action?.data?.data?.triggers?.data || []).map(
+        (dataTrigger, triggerIndex) => (
+          <div
+            key={`data-trigger-${triggerIndex}`}
+            className={styles.trigger}
+            onClick={() =>
+              context.setDialog({
+                display: true,
+                title: "Edit data trigger",
+                form: [
+                  {
+                    label: "Data",
+                    value: dataTrigger,
+                    key: "data",
+                    type: "custom",
+                    customInput: CustomInputData,
+                    customInputProps: { modelList, varList },
+                  },
+                ],
+                buttons: [
+                  {
+                    label: (
+                      <Typography style={{ color: "red" }}>
+                        Delete trigger
+                      </Typography>
+                    ),
+                    onClick: () => {
+                      const newAction = { ...action };
+                      delete action.data.data.triggers.data[triggerIndex];
+                      setAction(newAction);
+                    },
+                  },
+                  {
+                    label: "Update",
+                    onClick: (form) => {
+                      const newAction = { ...action };
+                      newAction.data.data.triggers.data[triggerIndex] = {
+                        ...newAction.data.data.triggers.data[triggerIndex],
+                        ...form.data,
+                      };
+                      setAction(newAction);
+                    },
+                  },
+                ],
+              })
+            }
+          >
+            {dataTrigger.label}
+          </div>
+        )
+      )}
+      <div
+        className={styles.newTrigger}
+        onClick={() => {
+          const data = action?.data?.data?.triggers?.data || [];
+          data.push({ label: "New trigger" });
+          setAction({
+            ...action,
+            data: {
+              ...action.data,
+              data: {
+                ...action.data.data,
+                triggers: { ...action?.data?.data?.triggers, data },
+              },
+            },
+          });
+        }}
+      >
+        Add data trigger
+      </div>
     </Grid>
   </Grid>
 );
@@ -192,3 +292,61 @@ const CustomInputManual: React.FC<CustomFormInputType> = ({
     type="checkbox"
   />
 );
+
+const CustomInputData: React.FC<CustomFormInputType> = ({
+  context,
+  varList,
+  modelList,
+  value,
+  onChange,
+}) => {
+  // Vars
+  const model: ModelType =
+    value?.model && find(modelList, (o) => o.value === value?.model)?.args;
+  const [fieldList, setFieldList] = useState<ValueListItemType[]>();
+
+  // Lifecycle
+  useEffect(() => {
+    if (model) {
+      const nl: ValueListItemType[] = [];
+      map(model.fields, (field, fieldKey) =>
+        nl.push({ label: field.name, value: fieldKey })
+      );
+      setFieldList(nl);
+    }
+  }, [model]);
+  // UI
+
+  return (
+    <>
+      <context.UI.Inputs.Select
+        label="Model"
+        value={value.model}
+        options={modelList}
+        onChange={(model) => onChange({ ...value, model, fields: [] })}
+      />
+      {fieldList && (
+        <>
+          <context.UI.Inputs.Select
+            label="Fields"
+            multiple
+            value={value.fields}
+            options={fieldList}
+            onChange={(fields) => onChange({ ...value, fields })}
+          />
+          {value.fields && (
+            <context.UI.Inputs.Select
+              label="Assign to variable"
+              value={value.var}
+              options={filter(
+                varList,
+                (o) => o.args.type === "object" && o.args.model === value.model
+              )}
+              onChange={(v) => onChange({ ...value, var: v })}
+            />
+          )}
+        </>
+      )}
+    </>
+  );
+};
