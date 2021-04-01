@@ -38,7 +38,7 @@ const SettingsActionsSettings: React.FC<{
     const no: {
       [varId: string]: ActionVarType;
     } = {};
-    map(action.data.data.vars, (v, k) => {
+    map(action?.data?.data?.vars || {}, (v, k) => {
       if (v.setting) {
         no[k] = v;
       }

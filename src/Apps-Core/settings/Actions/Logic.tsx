@@ -306,7 +306,7 @@ const CustomInputDeleteObject: React.FC<CustomFormInputType> = ({
         onChange={(mode) => onChange({ ...value, mode })}
         options={[
           { label: "Based on var", value: "var" },
-          { label: "Free delete", value: "new" },
+          { label: "Free delete", value: "free" },
         ]}
       />
       {value?.mode === "var" && (
@@ -320,7 +320,7 @@ const CustomInputDeleteObject: React.FC<CustomFormInputType> = ({
           )}
         />
       )}
-      {value?.mode === "new" && (
+      {value?.mode === "free" && (
         <>
           <context.UI.Inputs.Select
             label="Model"

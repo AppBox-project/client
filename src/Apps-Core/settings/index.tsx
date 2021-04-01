@@ -9,7 +9,6 @@ import {
   FaColumns,
 } from "react-icons/fa";
 import AppSettingsBackup from "./Backup";
-import AppSettingsProcesses from "./Automations";
 import AppSettingsAbout from "./About";
 import AppSettingsSystem from "./System";
 import AppSettingsApps from "./Apps";
@@ -41,13 +40,7 @@ export default class App {
           icon: FaCogs,
           group: "System",
         },
-        {
-          key: "automations",
-          label: "Automations",
-          component: AppSettingsProcesses,
-          icon: FaRobot,
-          group: "System",
-        },
+
         {
           key: "actions",
           label: "Actions",
