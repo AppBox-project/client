@@ -241,6 +241,7 @@ const SettingsActionsTriggers: React.FC<{
                       newAction.data.data.triggers.data[triggerIndex] = {
                         ...newAction.data.data.triggers.data[triggerIndex],
                         ...form.data,
+                        label: `Trigger for ${form.data.model}`,
                       };
                       setAction(newAction);
                     },
@@ -336,7 +337,7 @@ const CustomInputData: React.FC<CustomFormInputType> = ({
           />
           {value.fields && (
             <context.UI.Inputs.Select
-              label="Assign to variable"
+              label="Assign trigger object to variable"
               value={value.var}
               options={filter(
                 varList,
@@ -345,6 +346,17 @@ const CustomInputData: React.FC<CustomFormInputType> = ({
               onChange={(v) => onChange({ ...value, var: v })}
             />
           )}
+          <context.UI.Inputs.Checkboxes
+            type="checkbox"
+            options={[
+              { label: "Insert", value: "insert" },
+              { label: "Update", value: "update" },
+              { label: "Delete", value: "delete" },
+            ]}
+            label="Update on"
+            value={value.updateOn}
+            onChange={(v) => onChange({ ...value, updateOn: v })}
+          />
         </>
       )}
     </>

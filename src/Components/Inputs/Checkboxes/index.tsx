@@ -41,7 +41,7 @@ const InputCheckboxes: React.FC<{
                       option.value
                     )}
                     onChange={(e) => {
-                      let array = value as string[];
+                      let array = (value ? value : []) as string[];
                       if (e.target.checked) {
                         array.push(option.value);
                         onChange(array);

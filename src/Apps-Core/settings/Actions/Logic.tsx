@@ -151,6 +151,7 @@ const ActionLogicNode: React.FC<{
                     dropdownOptions: [
                       { label: "Assign values", value: "assignValues" },
                       { label: "Insert object", value: "insertObject" },
+                      { label: "Update object", value: "updateObject" },
                       { label: "Delete objects", value: "deleteObjects" },
                       { label: "Wait", value: "wait" },
                       { label: "Wait until", value: "waitUntil" },
@@ -183,6 +184,15 @@ const ActionLogicNode: React.FC<{
                     customInput: CustomInputWaitUntil,
                     customInputProps: { modelList, varList, models },
                     onlyDisplayWhen: { type: "waitUntil" },
+                  },
+                  {
+                    label: "args",
+                    key: "args",
+                    value: step.args,
+                    type: "custom",
+                    customInput: CustomInputUpdateObject,
+                    customInputProps: { modelList, varList, models },
+                    onlyDisplayWhen: { type: "updateObject" },
                   },
                   {
                     label: "args",
@@ -690,5 +700,24 @@ const CustomInputCaseCriteria: React.FC<CustomFormInputType> = ({
         />
       )}
     </>
+  );
+};
+
+const CustomInputUpdateObject: React.FC<CustomFormInputType> = ({
+  context,
+  value,
+  varList,
+  modelList,
+  onChange,
+  models,
+  label,
+}) => {
+  return (
+    <context.UI.Inputs.Select
+      options={varList}
+      label="Var to update"
+      value={value}
+      onChange={(value) => onChange(value)}
+    />
   );
 };
