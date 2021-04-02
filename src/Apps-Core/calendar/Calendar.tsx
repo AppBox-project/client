@@ -33,16 +33,16 @@ const locales = {
   enGB,
 };
 
-const localizer = dateFnsLocalizer({
+/*const localizer = dateFnsLocalizer({
   format,
   parse,
   startOfWeek,
   getDay,
   locales,
 });
-const DnDCalendar = withDragAndDrop(Calendar);
+const DnDCalendar = withDragAndDrop(Calendar);*/
 
-const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
+const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {/*
   // Vars
   const [calendars, setCalendars] = useState<AppCalCalendarType[]>([]);
   const [events, setEvents] = useState<
@@ -467,6 +467,9 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
       </context.UI.Animations.AnimationContainer>
     </div>
   );
+  */
+
+  return <>Calendar temporarily broken</>
 };
 
 export default AppCal;

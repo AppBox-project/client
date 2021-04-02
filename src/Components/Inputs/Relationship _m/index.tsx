@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select, { components } from "react-select";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import { useGlobal } from "reactn";
@@ -12,18 +12,22 @@ function arrayMove(array, from, to) {
   return array;
 }
 
-const SortableMultiValue = SortableElement((props) => {
+const SortableMultiValue = SortableElement(props => {
   // this prevents the menu from being opened/closed when the user clicks
   // on a value to begin dragging it. ideally, detecting a click (instead of
   // a drag) would still focus the control and toggle the menu, but that
   // requires some magic with refs that are out of scope for this example
-  const onMouseDown = (e) => {
+  const onMouseDown = e => {
     e.preventDefault();
     e.stopPropagation();
   };
-  const innerProps = { onMouseDown };
+  const innerProps = { ...props.innerProps, onMouseDown };
   return <components.MultiValue {...props} innerProps={innerProps} />;
 });
+
+const SortableMultiValueLabel = SortableHandle(props => (
+  <components.MultiValueLabel {...props} />
+));
 const SortableSelect = SortableContainer(Select);
 
 const InputRelationShipM: React.FC<{
@@ -114,7 +118,9 @@ const InputRelationShipM: React.FC<{
         if (onChange) onChange(result);
       }}
       components={{
+        //@ts-ignore
         MultiValue: SortableMultiValue,
+        
       }}
       closeMenuOnSelect={false}
       styles={{

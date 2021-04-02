@@ -105,7 +105,7 @@ const RenderInterface: React.FC<{
         setError("This interface has no initial trigger!");
       }
 
-      return () => requests.map((r) => r && r.stop());
+      return () => {requests.map((r) => r && r.stop());}
     }
   }, [appliedInterfaceObject, varValues, prevVarValues, premappedVariables]);
 
