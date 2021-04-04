@@ -35,6 +35,7 @@ const InputCheckboxes: React.FC<{
           <FormGroup>
             {options.map((option) => (
               <FormControlLabel
+                key={option.value}
                 control={
                   <Checkbox
                     checked={(typeof value === "object" ? value : []).includes(

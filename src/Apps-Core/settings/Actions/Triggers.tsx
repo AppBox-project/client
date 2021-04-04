@@ -62,7 +62,7 @@ const SettingsActionsTriggers: React.FC<{
                   value: action.data.data.triggers.manual,
                   type: "custom",
                   customInput: CustomInputManual,
-                  customInputProps: { varList },
+                  customInputProps: { varList, modelList },
                 },
               ],
               buttons: [
@@ -284,14 +284,71 @@ const CustomInputManual: React.FC<CustomFormInputType> = ({
   varList,
   value,
   onChange,
+  modelList,
 }) => (
-  <context.UI.Inputs.Checkboxes
-    label="Required variables"
-    options={varList}
-    value={value || []}
-    onChange={(val) => onChange(val)}
-    type="checkbox"
-  />
+  <>
+    <context.UI.Inputs.Checkboxes
+      label="Required variables"
+      options={varList}
+      value={value.vars || []}
+      onChange={(vars) => onChange({ ...value, vars })}
+      type="checkbox"
+    />
+    <context.UI.Inputs.TextInput
+      label="Success title"
+      value={value.successTitle}
+      onChange={(successTitle) => onChange({ ...value, successTitle })}
+    />
+    <context.UI.Inputs.TextInput
+      label="Success message"
+      value={value.successMessage}
+      onChange={(successMessage) => onChange({ ...value, successMessage })}
+    />
+    <context.UI.Inputs.TextInput
+      label="Error title"
+      value={value.errorTitle}
+      onChange={(errorTitle) => onChange({ ...value, errorTitle })}
+    />
+    <context.UI.Inputs.TextInput
+      label="Error message"
+      value={value.errorMessage}
+      onChange={(errorMessage) => onChange({ ...value, errorMessage })}
+    />
+    <context.UI.Inputs.Switch
+      label="Attach to model"
+      value={value.attachToModel}
+      onChange={(attachToModel) => onChange({ ...value, attachToModel })}
+    />
+    {value.attachToModel && (
+      <>
+        <context.UI.Inputs.Select
+          label="Model"
+          value={value.model}
+          onChange={(model) => onChange({ ...value, model })}
+          options={modelList}
+        />
+        {value.model && (
+          <>
+            <context.UI.Inputs.Select
+              label="On one object"
+              value={value.varSingle}
+              onChange={(varSingle) => onChange({ ...value, varSingle })}
+              options={filter(
+                varList,
+                (o) => o.args.type === "object" || o.args.type === "objects"
+              )}
+            />
+            <context.UI.Inputs.Select
+              label="On many objects"
+              value={value.varMany}
+              options={filter(varList, (o) => o.args.type === "objects")}
+              onChange={(varMany) => onChange({ ...value, varMany })}
+            />
+          </>
+        )}
+      </>
+    )}
+  </>
 );
 
 const CustomInputData: React.FC<CustomFormInputType> = ({

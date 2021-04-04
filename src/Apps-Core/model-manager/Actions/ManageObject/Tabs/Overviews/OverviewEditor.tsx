@@ -8,6 +8,7 @@ import {
   ListDetailItemType,
   ValueListItemType,
   ModelActionType,
+  ObjectType,
 } from "../../../../../../Utils/Types";
 import {
   Table,
@@ -49,8 +50,38 @@ const AppActionManageObjectOverviewEditor: React.FC<{
   // States & Hooks
   const [overview, setOverview] = useState<ModelOverviewType>();
   const [actionList, setActionList] = useState<ValueListItemType[]>([]);
+  const [serverActions, setServerActions] = useState<ValueListItemType[]>([]);
 
   // Lifecycle
+  useEffect(() => {
+    const request = context.getObjects(
+      "actions",
+      { "data.active": true },
+      (response) => {
+        const nl: ValueListItemType[] = [];
+        response.data.map((r) => {
+          if (r.data?.data?.triggers?.manual?.model === model.key) {
+            if (r.data.data.triggers.manual.varSingle)
+              nl.push({
+                label: r.data.name,
+                value: r._id,
+                args: { mode: "single" },
+              });
+
+            if (r.data.data.triggers.manual.varMany)
+              nl.push({
+                label: r.data.name,
+                value: r._id,
+                args: { mode: "multiple" },
+              });
+          }
+        });
+
+        setServerActions(nl);
+      }
+    );
+    return () => request.stop();
+  }, []);
   useEffect(() => {
     setOverview(model.overviews[detailId]);
   }, [detailId]);
@@ -58,12 +89,14 @@ const AppActionManageObjectOverviewEditor: React.FC<{
     const nl: ValueListItemType[] = [
       { label: "Delete", value: "delete", args: { mode: "single" } },
       { label: "Delete", value: "delete", args: { mode: "multiple" } },
+      ...serverActions,
     ];
     map(model.actions, (action: ModelActionType, actionKey) =>
       nl.push({ label: action.label, value: actionKey, args: { ...action } })
     );
+
     setActionList(nl);
-  }, [model]);
+  }, [model, serverActions]);
 
   if (!overview) return <UI.Loading />;
   return (

@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.5-9",
-  "description": "Action: data triggers",
+  "version": "0.2.5-10",
+  "description": "Action: manual triggers",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",
