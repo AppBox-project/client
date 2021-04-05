@@ -39,6 +39,7 @@ const RegularTable: React.FC<{
 
   // Lifecycle
   // UI
+
   return (
     <Table aria-labelledby="tableTitle" aria-label="Object overview">
       <TableHead>
@@ -137,7 +138,8 @@ const RegularTable: React.FC<{
                   </TableCell>
                 );
               })}
-              {layout.actions && layout.actions.length > 0 && (
+              {(layout.buttons?.single.length > 0 ||
+                layout.buttons?.multiple.length > 0) && (
                 <TableCell>
                   <div style={{ float: "right" }}>
                     <IconButton

@@ -1,6 +1,11 @@
 import Server from "../../../Utils/Server";
 import uniqid from "uniqid";
-import { AppType, ServerResponse } from "../../../Utils/Types";
+import {
+  AppContextType,
+  AppType,
+  ServerResponse,
+  ValueListItemType,
+} from "../../../Utils/Types";
 import Loading from "./AppUI/Loading";
 import {
   AnimationContainer,
@@ -819,6 +824,81 @@ export class AppContext {
   // Parse data
   formatString = (string, data) =>
     nunjucks.renderString(string, { ...data, TODAY: new Date() });
+
+  performAction = (action, vars, context: AppContextType, title?: string) =>
+    new Promise<string>((resolve, reject) => {
+      const requestId = uniqid();
+      Server.emit("performAction", {
+        id: action._id,
+        requestId,
+        vars,
+      });
+
+      Server.on(`receive-${requestId}`, async (response) => {
+        if (response.success) {
+        } else {
+          if (response.reason === "required-var-missing") {
+            const form = [];
+            await response.vars.reduce(async (prev, v) => {
+              await prev;
+              const vi = action.data.data.vars[v];
+              if (
+                vi.type === "text" ||
+                vi.type === "number" ||
+                vi.type === "boolean"
+              ) {
+                form.push({ label: vi.label, key: vi.key, type: vi.type });
+              }
+              if (vi.type === "object" || vi.type === "objects") {
+                await new Promise<void>((resolve) => {
+                  this.getModel(vi.model, (response) => {
+                    const model = response.data;
+                    this.getObjects(vi.model, {}, (response) => {
+                      const dropdownOptions: ValueListItemType[] = [];
+                      response.data.map((r) => {
+                        dropdownOptions.push({
+                          label: r.data[model.primary],
+                          value: r._id,
+                        });
+                      });
+                      form.push({
+                        label: vi.label,
+                        key: vi.key,
+                        type: "dropdown",
+                        dropdownOptions,
+                        dropdownMultiple: vi.type === "objects",
+                      });
+
+                      resolve();
+                    });
+                  });
+                });
+              }
+
+              return v;
+            }, response.vars[0]);
+            context.setDialog({
+              display: true,
+              title,
+              form,
+              buttons: [
+                {
+                  label: "Go",
+                  onClick: (form) => {
+                    const requestId = uniqid();
+                    Server.emit("performAction", {
+                      id: action._id,
+                      requestId,
+                      vars: { ...vars, ...form },
+                    });
+                  },
+                },
+              ],
+            });
+          }
+        }
+      });
+    });
 }
 
 // Pass this back to the app to allow cancelling listeners

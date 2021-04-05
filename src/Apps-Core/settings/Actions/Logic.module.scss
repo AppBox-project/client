@@ -45,7 +45,7 @@
   width: 2px;
   height: 50px;
   border-radius: 3px;
-  background-color: rgba(72, 82, 99, 0.3);
+  background-color: #c6cace;
   margin: 0 auto;
   margin-top: -75px;
   transition: all 1s;
@@ -53,4 +53,72 @@
   &:hover {
     background-color: #485263;
   }
+}
+
+.loop {
+  position: relative;
+  width: 100%;
+  box-sizing: content-box;
+  margin: 0 auto 80px auto;
+
+  & .loopContent {
+    width: 35%;
+    margin-left: calc(50% - 1px);
+    border-left: 2px solid #c6cace;
+    z-index: 11;
+    padding: 30px;
+  }
+
+  & .connector {
+    background-color: #a9adb1;
+    position: absolute;
+    left: 70%;
+    z-index: 12;
+    margin-top: -50px;
+    width: 3px;
+  }
+
+  & .step,
+  & .row {
+    z-index: 15 !important;
+  }
+}
+.loop::before {
+  content: "";
+  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 3px;
+  background-color: #c6cace;
+  border-radius: 50px 50px 0 50px;
+  left: 50%;
+  border-radius: 0 50px 50px 50px;
+  z-index: 10;
+}
+.loop:after {
+  content: "";
+  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  border: 3px solid #c6cace;
+  border-radius: 50px 50px 0 50px;
+  left: 70%;
+  right: 225px;
+  border-radius: 0 50px 50px 50px;
+  z-index: 10 !important;
+}
+
+.loopInfo {
+  position: absolute;
+  left: calc(50% - 75px);
+  margin-top: -35px;
+  width: 150px;
+  height: 70px;
+  line-height: 75px;
+  text-align: center;
+  text-shadow: 0 0 8px #000;
+  z-index: 50;
 }

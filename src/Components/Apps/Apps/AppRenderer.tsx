@@ -269,6 +269,7 @@ const DialogPopup: React.FC<{
                 <InputSelect
                   options={formItem.dropdownOptions}
                   label={formItem.label}
+                  multiple={formItem.dropdownMultiple}
                   value={dialogFormContent[formItem.key] || formItem.value}
                   onChange={(value) => {
                     setDialogFormContent({

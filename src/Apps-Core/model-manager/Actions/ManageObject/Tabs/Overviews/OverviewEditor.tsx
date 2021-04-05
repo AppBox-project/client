@@ -61,12 +61,18 @@ const AppActionManageObjectOverviewEditor: React.FC<{
         const nl: ValueListItemType[] = [];
         response.data.map((r) => {
           if (r.data?.data?.triggers?.manual?.model === model.key) {
-            if (r.data.data.triggers.manual.varSingle)
+            nl.push({
+              label: r.data.name,
+              value: r._id,
+              args: { mode: "free" },
+            });
+            if (r.data.data.triggers.manual.varSingle) {
               nl.push({
                 label: r.data.name,
                 value: r._id,
                 args: { mode: "single" },
               });
+            }
 
             if (r.data.data.triggers.manual.varMany)
               nl.push({

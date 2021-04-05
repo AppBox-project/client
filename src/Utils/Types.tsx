@@ -236,6 +236,12 @@ export interface AppContextType {
     filter: {},
     then: (response: ServerResponse) => void
   ) => AppRequestController;
+  performAction: (
+    id,
+    args,
+    context: AppContextType,
+    title?: string
+  ) => Promise<string>;
   addObject: (type: string, object: {}, then: (response: any) => void) => void;
   addObjects: (
     type: string,
@@ -359,6 +365,7 @@ export interface dialogType {
     customInputProps?: {};
     value?: string | any;
     dropdownOptions?: { label: string; value: string }[];
+    dropdownMultiple?: boolean;
     xs?: GridSize;
     onlyDisplayWhen?: {};
   }[];
@@ -605,7 +612,7 @@ export interface UIType {
     }>;
     Switch: React.FC<{
       label?: string;
-      value?: string;
+      value?: boolean;
       onChange?: (value) => void;
       style?;
     }>;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useGlobal } from "reactn";
 import {
   AppContextType,
   ModelType,
@@ -8,7 +9,6 @@ import { ActionType } from "../Types";
 import { find } from "lodash";
 import { Fab, Grid, Tab, Tabs } from "@material-ui/core";
 import { FaSave } from "react-icons/fa";
-import SettingsActionsAbout from "./About";
 import SettingsActionsVars from "./Variables";
 import SettingsActionsLogic from "./Logic";
 import { map } from "lodash";
@@ -30,11 +30,12 @@ const SettingsActionsDetail: React.FC<{
   const [originalAction, setOriginalAction] = useState<string>();
   const [action, setAction] = useState<ActionType>();
   const [selectedLeftTab, setSelectedLeftTab] = useState<
-    "Settings" | "About" | "Triggers" | "Logic"
+    "Settings" | "Triggers" | "Logic" | "Variables"
   >("Settings");
   const [models, setModels] = useState<ModelType[]>();
   const [modelList, setModelList] = useState<ValueListItemType[]>();
   const [varList, setVarList] = useState<ValueListItemType[]>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -72,7 +73,7 @@ const SettingsActionsDetail: React.FC<{
     <>
       <context.UI.Animations.AnimationContainer>
         <Grid container>
-          <Grid item xs={12} md={9}>
+          <Grid item xs={12} md={isMobile ? 12 : 9}>
             <context.UI.Animations.AnimationItem>
               <context.UI.Design.Card withBigMargin withoutPadding>
                 <Tabs
@@ -81,7 +82,7 @@ const SettingsActionsDetail: React.FC<{
                   aria-label="Edit action"
                 >
                   <Tab label="Settings" value="Settings" />
-                  <Tab label="About" value="About" />
+                  {isMobile && <Tab label="Variables" value="Variables" />}
                   <Tab label="Triggers" value="Triggers" />
                   <Tab label="Logic" value="Logic" />
                 </Tabs>
@@ -92,13 +93,6 @@ const SettingsActionsDetail: React.FC<{
                       action={action}
                       setAction={setAction}
                       models={models}
-                    />
-                  )}
-                  {selectedLeftTab === "About" && (
-                    <SettingsActionsAbout
-                      context={context}
-                      action={action}
-                      setAction={setAction}
                     />
                   )}
                   {selectedLeftTab === "Triggers" && (
@@ -121,29 +115,39 @@ const SettingsActionsDetail: React.FC<{
                       models={models}
                     />
                   )}
+                  {selectedLeftTab === "Variables" && (
+                    <SettingsActionsVars
+                      context={context}
+                      action={action}
+                      setAction={setAction}
+                      modelList={modelList}
+                    />
+                  )}
                 </div>
               </context.UI.Design.Card>
             </context.UI.Animations.AnimationItem>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <context.UI.Animations.AnimationItem>
-              <context.UI.Design.Card
-                withBigMargin
-                title="Variables"
-                withoutPadding
-                centerTitle
-                titleInPrimaryColor
-                titleDivider
-              >
-                <SettingsActionsVars
-                  context={context}
-                  action={action}
-                  setAction={setAction}
-                  modelList={modelList}
-                />
-              </context.UI.Design.Card>
-            </context.UI.Animations.AnimationItem>
-          </Grid>
+          {!isMobile && (
+            <Grid item xs={12} md={3}>
+              <context.UI.Animations.AnimationItem>
+                <context.UI.Design.Card
+                  withBigMargin
+                  title="Variables"
+                  withoutPadding
+                  centerTitle
+                  titleInPrimaryColor
+                  titleDivider
+                >
+                  <SettingsActionsVars
+                    context={context}
+                    action={action}
+                    setAction={setAction}
+                    modelList={modelList}
+                  />
+                </context.UI.Design.Card>
+              </context.UI.Animations.AnimationItem>
+            </Grid>
+          )}
         </Grid>
       </context.UI.Animations.AnimationContainer>
       {JSON.stringify(action) !== originalAction && (

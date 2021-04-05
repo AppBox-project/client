@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { map } from "lodash";
-import { FaCogs, FaPlus } from "react-icons/fa";
+import { FaCog, FaCogs, FaPlus } from "react-icons/fa";
 
 const SettingsActionsLogic: React.FC<{
   context: AppContextType;
@@ -110,6 +110,7 @@ const ActionLogicNode: React.FC<{
   varList: ValueListItemType[];
   models: ModelType[];
   index: number;
+  style?;
 }> = ({
   step,
   addStep,
@@ -120,6 +121,7 @@ const ActionLogicNode: React.FC<{
   models,
   deleteStep,
   index,
+  style,
 }) => (
   <>
     {step.type === "case" ? (
@@ -131,9 +133,18 @@ const ActionLogicNode: React.FC<{
         varList={varList}
         models={models}
       />
+    ) : step.type === "loop" ? (
+      <NodeLoop
+        step={step}
+        onChange={setStep}
+        context={context}
+        modelList={modelList}
+        varList={varList}
+        models={models}
+      />
     ) : (
       <>
-        <div className={styles.row}>
+        <div className={styles.row} style={style}>
           <div
             className={styles.step}
             onClick={() =>
@@ -156,6 +167,7 @@ const ActionLogicNode: React.FC<{
                       { label: "Wait", value: "wait" },
                       { label: "Wait until", value: "waitUntil" },
                       { label: "Case", value: "case" },
+                      { label: "Loop", value: "loop" },
                     ],
                   },
                   {
@@ -175,6 +187,17 @@ const ActionLogicNode: React.FC<{
                     customInput: CustomInputDeleteObject,
                     customInputProps: { modelList, varList, models },
                     onlyDisplayWhen: { type: "deleteObjects" },
+                  },
+                  {
+                    label: "Variable",
+                    key: "var",
+                    value: step.var,
+                    type: "dropdown",
+                    dropdownOptions: filter(
+                      varList,
+                      (o) => o.args.type === "objects"
+                    ),
+                    onlyDisplayWhen: { type: "loop" },
                   },
                   {
                     label: "args",
@@ -596,6 +619,82 @@ const NodeCase: React.FC<{
         ))}
       </Grid>
     </div>
+  );
+};
+
+const NodeLoop: React.FC<{
+  step;
+  onChange;
+  context: AppContextType;
+  modelList;
+  varList;
+  models;
+}> = ({ step, onChange, modelList, varList, models, context }) => {
+  // Vars
+  const model: ModelType = (
+    find(modelList, (o) => o.value === step.args.model) || { args: undefined }
+  ).args;
+
+  // Functions
+  const addStep = (number) => {
+    const newStep = { ...step };
+    if (!newStep.steps) newStep.steps = [];
+    newStep.steps.splice(number || 0, 0, {
+      label: "New step",
+      type: "insertObject",
+    });
+
+    onChange(newStep);
+  };
+
+  return (
+    <>
+      <div className={styles.loopInfo}>
+        <IconButton>
+          <FaCog />
+        </IconButton>
+        {step.label}
+      </div>
+      <div className={styles.loop}>
+        <div className={styles.loopContent}>
+          {(step.steps || []).map((s, stepIndex) => (
+            <ActionLogicNode
+              step={s}
+              addStep={(number) => addStep(number)}
+              context={context}
+              modelList={modelList}
+              varList={[
+                ...varList,
+                {
+                  label: `(loop) Current ${model.name}`,
+                  value: `loop_current_${model.key}`,
+                  args: { type: "object", model: model.key },
+                },
+              ]}
+              models={models}
+              setStep={(newStep) => {
+                const newSteps = { ...step };
+                newSteps.steps[stepIndex] = newStep;
+                onChange(newSteps);
+              }}
+              deleteStep={() => {
+                const newStep = { ...step };
+                newStep.steps.splice(stepIndex, 1);
+                onChange(newStep);
+              }}
+              index={stepIndex}
+              style={{ zIndex: 15 }}
+            />
+          ))}
+          <div
+            className={styles.connector}
+            onClick={() => addStep(step.steps?.length || 0)}
+          >
+            Add
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

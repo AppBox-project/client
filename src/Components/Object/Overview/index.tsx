@@ -17,7 +17,7 @@ import {
   Button,
   ListItemIcon,
 } from "@material-ui/core";
-import { AppContextType, ModelType } from "../../../Utils/Types";
+import { AppContextType, ModelType, ObjectType } from "../../../Utils/Types";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import { IoIosAddCircleOutline } from "react-icons/io";
@@ -73,6 +73,23 @@ const Overview: React.FC<{
   const [snackbar, setSnackbar] = useGlobal<any>("snackbar");
   const [selectedList, setSelectedList] = useState<string>();
   const [listPopupElement, setListPopupElement] = useState<any>();
+  const [actionButtons, setActionButtons] = useState<ObjectType[]>([]);
+
+  // Functions
+  const handleActionButton = (action: ObjectType, selected) => {
+    const args = {};
+    if (selected?.length === 1) {
+      args[action.data.data.triggers.manual.varSingle] = selected;
+    }
+    if (selected?.length > 1) {
+      args[action.data.data.triggers.manual.varMany] = selected;
+    }
+    context
+      .performAction(action, args, context, action.data.name)
+      .then((result) => {
+        console.log("Result");
+      });
+  };
 
   // Lifecycle
   useEffect(() => {
@@ -92,6 +109,30 @@ const Overview: React.FC<{
       setLayout(false);
     };
   }, [modelId]);
+  // Effect on layout change
+  useEffect(() => {
+    let request;
+    const array = [];
+    if (layout) {
+      [
+        ...(layout.buttons?.global || []),
+        ...(layout.buttons?.single || []),
+        ...(layout.buttons?.multiple || []),
+      ].map((button) => {
+        if (button.match(/^[a-f\d]{24}$/i) && !array.includes(button))
+          array.push(button);
+      });
+      request = context.getObjects(
+        "actions",
+        { _id: { $in: array } },
+        (response) => {
+          setActionButtons(response.data);
+        }
+      );
+    }
+
+    return () => request?.stop();
+  }, [layout]);
 
   // effect on filter change
   useEffect(() => {
@@ -395,6 +436,26 @@ const Overview: React.FC<{
                       ) : (
                         <>Unknown button type {button.type}</>
                       );
+                    } else {
+                      if (buttonInfo.match(/^[a-f\d]{24}$/i)) {
+                        const action = find(
+                          actionButtons,
+                          (o) => o._id === buttonInfo
+                        );
+                        if (action) {
+                          return (
+                            <Tooltip title={action.data.name} placement="left">
+                              <IconButton
+                                onClick={() =>
+                                  handleActionButton(action, undefined)
+                                }
+                              >
+                                <FaIcon icon={action.data.icon} />
+                              </IconButton>
+                            </Tooltip>
+                          );
+                        }
+                      }
                     }
                   })}
                   <Tooltip title="Filter and tweak list" placement="left">
@@ -449,140 +510,186 @@ const Overview: React.FC<{
       >
         {selected.length === 1
           ? layout.buttons.single.map((singleButton) => {
-              const action = (model.actions || {})[singleButton];
-              return singleButton === "delete" ? (
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null);
-                    const requestId = uniqid();
-                    Server.emit("deleteObject", {
-                      objectId: selected[0],
-                      requestId,
-                    });
-                    Server.on(`receive-${requestId}`, (response) => {
-                      if (!response.success) {
-                        setSnackbar({
-                          display: true,
-                          message: response.reason,
-                          type: "error",
-                          icon: <FaBomb />,
-                          duration: 2500,
-                          position: { horizontal: "right" },
-                        });
-                      }
-                    });
-                    setSelected([]);
-                  }}
-                >
-                  <ListItemIcon style={{ minWidth: 32 }}>
-                    <FaTrash />
-                  </ListItemIcon>
-                  Delete
-                </MenuItem>
-              ) : (
-                <MenuItem
-                  onClick={() => {
-                    switch (action.type) {
-                      case "interface":
-                        setAnchorEl(undefined);
-                        context.setDialog({
-                          display: true,
-                          title: action.label,
-                          content: (
-                            <RenderInterface
-                              context={context}
-                              interfaceId={action.interface}
-                              premappedVariables={{
-                                [action.passContextTo]: find(
-                                  objects,
-                                  (o) => o._id === selected[0]
-                                ),
-                              }}
-                            />
-                          ),
-                        });
+              if (singleButton.match(/^[a-f\d]{24}$/i)) {
+                const action = find(
+                  actionButtons,
+                  (o) => o._id === singleButton
+                );
+                if (action) {
+                  return (
+                    <MenuItem
+                      onClick={() => {
+                        setAnchorEl(null);
+                        handleActionButton(action, selected);
                         setSelected([]);
-                        break;
-                      default:
-                        console.log(`Unknown action type ${action.type}`);
-                        break;
-                    }
-                  }}
-                >
-                  <ListItemIcon style={{ minWidth: 32 }}>
-                    <FaIcon icon={action.icon} />
-                  </ListItemIcon>
-                  {action.label}
-                </MenuItem>
-              );
+                      }}
+                    >
+                      <ListItemIcon style={{ minWidth: 32 }}>
+                        <FaIcon icon={action.data.icon} />
+                      </ListItemIcon>
+                      {action.data.name}
+                    </MenuItem>
+                  );
+                }
+              } else {
+                const action = (model.actions || {})[singleButton];
+                return singleButton === "delete" ? (
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+                      const requestId = uniqid();
+                      Server.emit("deleteObject", {
+                        objectId: selected[0],
+                        requestId,
+                      });
+                      Server.on(`receive-${requestId}`, (response) => {
+                        if (!response.success) {
+                          setSnackbar({
+                            display: true,
+                            message: response.reason,
+                            type: "error",
+                            icon: <FaBomb />,
+                            duration: 2500,
+                            position: { horizontal: "right" },
+                          });
+                        }
+                      });
+                      setSelected([]);
+                    }}
+                  >
+                    <ListItemIcon style={{ minWidth: 32 }}>
+                      <FaTrash />
+                    </ListItemIcon>
+                    Delete
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    onClick={() => {
+                      switch (action.type) {
+                        case "interface":
+                          setAnchorEl(undefined);
+                          context.setDialog({
+                            display: true,
+                            title: action.label,
+                            content: (
+                              <RenderInterface
+                                context={context}
+                                interfaceId={action.interface}
+                                premappedVariables={{
+                                  [action.passContextTo]: find(
+                                    objects,
+                                    (o) => o._id === selected[0]
+                                  ),
+                                }}
+                              />
+                            ),
+                          });
+                          setSelected([]);
+                          break;
+                        default:
+                          console.log(`Unknown action type ${action.type}`);
+                          break;
+                      }
+                    }}
+                  >
+                    <ListItemIcon style={{ minWidth: 32 }}>
+                      <FaIcon icon={action.icon} />
+                    </ListItemIcon>
+                    {action.label}
+                  </MenuItem>
+                );
+              }
             })
           : layout.buttons.multiple.map((multiButton) => {
-              const action = (model.actions || {})[multiButton];
-              return multiButton === "delete" ? (
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null);
-                    const requestId = uniqid();
-                    Server.emit("deleteObjects", {
-                      objectId: selected,
-                      requestId,
-                    });
-                    Server.on(`receive-${requestId}`, (response) => {
-                      if (!response.success) {
-                        setSnackbar({
-                          display: true,
-                          message: response.reason,
-                          type: "error",
-                          icon: <FaBomb />,
-                          duration: 2500,
-                          position: { horizontal: "right" },
-                        });
-                      }
-                    });
-                    setSelected([]);
-                  }}
-                >
-                  <ListItemIcon style={{ minWidth: 32 }}>
-                    <FaTrash />
-                  </ListItemIcon>
-                  Delete
-                </MenuItem>
-              ) : (
-                <MenuItem
-                  onClick={() => {
-                    switch (action.type) {
-                      case "interface":
-                        setAnchorEl(undefined);
-                        context.setDialog({
-                          display: true,
-                          title: action.label,
-                          content: (
-                            <RenderInterface
-                              context={context}
-                              interfaceId={action.interface}
-                              premappedVariables={{
-                                [action.passContextTo]: filterLodash(
-                                  objects,
-                                  (o) => selected.includes(o._id)
-                                ),
-                              }}
-                            />
-                          ),
-                        });
+              if (multiButton.match(/^[a-f\d]{24}$/i)) {
+                const action = find(
+                  actionButtons,
+                  (o) => o._id === multiButton
+                );
+                if (action) {
+                  return (
+                    <MenuItem
+                      onClick={() => {
+                        setAnchorEl(null);
+                        handleActionButton(action, selected);
                         setSelected([]);
-                        break;
-                      default:
-                        console.log(`Unknown action type ${action.type}`);
-                        break;
-                    }
-                  }}
-                >
-                  <ListItemIcon style={{ minWidth: 32 }}>
-                    <FaIcon icon={action.icon} />
-                  </ListItemIcon>
-                  {action.label}
-                </MenuItem>
-              );
+                      }}
+                    >
+                      <ListItemIcon style={{ minWidth: 32 }}>
+                        <FaIcon icon={action.data.icon} />
+                      </ListItemIcon>
+                      {action.data.name}
+                    </MenuItem>
+                  );
+                }
+              } else {
+                const action = (model.actions || {})[multiButton];
+                return multiButton === "delete" ? (
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+                      const requestId = uniqid();
+                      Server.emit("deleteObjects", {
+                        objectId: selected,
+                        requestId,
+                      });
+                      Server.on(`receive-${requestId}`, (response) => {
+                        if (!response.success) {
+                          setSnackbar({
+                            display: true,
+                            message: response.reason,
+                            type: "error",
+                            icon: <FaBomb />,
+                            duration: 2500,
+                            position: { horizontal: "right" },
+                          });
+                        }
+                      });
+                      setSelected([]);
+                    }}
+                  >
+                    <ListItemIcon style={{ minWidth: 32 }}>
+                      <FaTrash />
+                    </ListItemIcon>
+                    Delete
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    onClick={() => {
+                      switch (action.type) {
+                        case "interface":
+                          setAnchorEl(undefined);
+                          context.setDialog({
+                            display: true,
+                            title: action.label,
+                            content: (
+                              <RenderInterface
+                                context={context}
+                                interfaceId={action.interface}
+                                premappedVariables={{
+                                  [action.passContextTo]: filterLodash(
+                                    objects,
+                                    (o) => selected.includes(o._id)
+                                  ),
+                                }}
+                              />
+                            ),
+                          });
+                          setSelected([]);
+                          break;
+                        default:
+                          console.log(`Unknown action type ${action.type}`);
+                          break;
+                      }
+                    }}
+                  >
+                    <ListItemIcon style={{ minWidth: 32 }}>
+                      <FaIcon icon={action.icon} />
+                    </ListItemIcon>
+                    {action.label}
+                  </MenuItem>
+                );
+              }
             })}
       </Menu>
       <Drawer

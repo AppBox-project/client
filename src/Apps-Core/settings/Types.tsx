@@ -35,9 +35,16 @@ export interface AutomationType extends ObjectType {
 
 export interface ActionLogicStepType {
   label: string;
-  type: "insertObject" | "wait" | "deleteObjects" | "waitUntil" | "case";
+  type:
+    | "insertObject"
+    | "wait"
+    | "deleteObjects"
+    | "waitUntil"
+    | "case"
+    | "loop";
   time?: number;
   args?: { cases?: [] };
+  var?: string;
 }
 
 export interface ActionVarType {
@@ -50,6 +57,7 @@ export interface ActionType extends ObjectType {
   data: {
     name: string;
     key: string;
+    icon?: string;
     description: string;
     active: boolean;
     data: {
