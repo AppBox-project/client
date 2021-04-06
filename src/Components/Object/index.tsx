@@ -49,6 +49,7 @@ import Picture from "../Picture";
 import ObjectLayoutItemDetailedRelatedList from "./LayoutItems/DetailedRelatedList";
 import ObjectLayoutItemInterface from "./LayoutItems/Interface";
 import RenderInterface from "../RenderInterface";
+import { ActionType } from "../../Apps-Core/settings/Types";
 
 const ViewObject: React.FC<{
   modelId: string;
@@ -104,6 +105,7 @@ const ViewObject: React.FC<{
   const [customButtonInfo, setCustomButtonInfo] = useState<{}>({});
   const history = useHistory();
   const [factsBarInLayout, setFactsBarInLayout] = useState<boolean>(false);
+  const [serverActions, setServerActions] = useState<ActionType[]>();
 
   // Functions
   const getFeedback = (feedback) => {
@@ -360,6 +362,7 @@ const ViewObject: React.FC<{
         }
       }
     });
+
     return () => {
       context?.setImage(undefined);
       context?.setColor(undefined);
@@ -368,35 +371,73 @@ const ViewObject: React.FC<{
 
   // Custom button lifecycle
   useEffect(() => {
+    let actionsRequest;
+
     if (appliedModel?.layouts && appliedObject) {
       let layout = appliedModel?.layouts[layoutId || "default"];
       if (!layout) layout = appliedModel?.layouts["default"];
       setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
-
+      const actionsToGet = [];
       (layout.buttons || []).map((button) => {
-        if (!["clone", "archive", "delete"].includes(button.key)) {
-          if (button.args.type === "extension") {
-            import(
-              `../Object/Extensions/${button.key.split("-")[0]}/index.tsx`
-            ).then(async (component) => {
-              const getInfo = component.default;
-              const extension = await getInfo(
-                appliedModel.extensions[button.key.split("-")[0]],
-                context,
-                appliedObject
-              );
-              setCustomButtonInfo({
-                ...customButtonInfo,
-                [button.key]:
-                  extension.provides.buttons[button.key.split("-")[1]],
+        if (button.key.match(/^[a-f\d]{24}$/i)) {
+          actionsToGet.push(button.key);
+        } else {
+          if (!["clone", "archive", "delete"].includes(button.key)) {
+            if (button.args.type === "extension") {
+              import(
+                `../Object/Extensions/${button.key.split("-")[0]}/index.tsx`
+              ).then(async (component) => {
+                const getInfo = component.default;
+                const extension = await getInfo(
+                  appliedModel.extensions[button.key.split("-")[0]],
+                  context,
+                  appliedObject
+                );
+                setCustomButtonInfo({
+                  ...customButtonInfo,
+                  [button.key]:
+                    extension.provides.buttons[button.key.split("-")[1]],
+                });
               });
-            });
+            }
           }
         }
       });
+
+      if (actionsToGet.length > 0)
+        actionsRequest = context.getObjects(
+          "actions",
+          { _id: { $in: actionsToGet } },
+          (response) => {
+            setServerActions(response.data);
+          }
+        );
     }
+
+    return () => actionsRequest?.stop();
   }, [appliedModel, layoutId, appliedObject]);
 
+  useEffect(() => {
+    if (serverActions) {
+      const newButtons = {};
+      serverActions.map((action) => {
+        newButtons[action._id] = {
+          variant: "text",
+          label: action.data.name,
+          onClick: (obj) => {
+            context.performAction(
+              action,
+              { [action.data.data.triggers.manual.varSingle]: obj },
+              context,
+              action.data.name
+            );
+          },
+        };
+      });
+
+      setCustomButtonInfo({ ...customButtonInfo, ...newButtons });
+    }
+  }, [serverActions]);
   // UI
 
   if (!appliedModel || (!appliedObject && objectId)) return <Loading />;
@@ -428,6 +469,7 @@ const ViewObject: React.FC<{
   const buttons = (layout.buttons || []).map((button) => {
     const buttonInfo = {
       ...customButtonInfo,
+
       clone: {
         variant: "text",
         label: "Clone",
@@ -505,6 +547,9 @@ const ViewObject: React.FC<{
         },
       },
     }[button.key];
+
+    if (!buttonInfo) return;
+
     return !button.args || button.args.type === "extension" ? (
       <Button
         color="primary"
@@ -518,7 +563,7 @@ const ViewObject: React.FC<{
             console.log("ey");
           }
         }}
-        key={buttonInfo?.label || "Test"}
+        key={buttonInfo?.label || "Error"}
         style={{
           margin: 5,
           color: !popup
@@ -576,6 +621,24 @@ const ViewObject: React.FC<{
         }}
       >
         {appliedModel.actions[button.key].label || button.key}
+      </Button>
+    ) : button.args.type === "server_action" ? (
+      <Button
+        color="primary"
+        onClick={() => {
+          //@ts-ignore
+          buttonInfo.onClick(appliedObject);
+        }}
+        style={{
+          margin: 5,
+          color: !popup
+            ? layout?.factsBar
+              ? `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`
+              : "white"
+            : `rgb(${context?.app?.data?.color?.r},${context?.app?.data?.color?.g},${context?.app?.data?.color?.b})`,
+        }}
+      >
+        {buttonInfo?.label}
       </Button>
     ) : (
       <>Unknown Button Type</>

@@ -66,7 +66,7 @@ export interface ActionType extends ObjectType {
       };
       logic: ActionLogicStepType[];
       triggers: {
-        manual: {};
+        manual: { varSingle?: string };
         time: { label: string; cron: string; when?: string }[];
         data: { label: string; model?: string; fields?: string[] }[];
       };

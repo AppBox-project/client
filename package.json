@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.5-11",
-  "description": "Integrate manual actions",
+  "version": "0.2.5-12",
+  "description": "Manual actions on detail view",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

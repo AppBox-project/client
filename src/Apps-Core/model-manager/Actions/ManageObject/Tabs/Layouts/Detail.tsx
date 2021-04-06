@@ -72,6 +72,7 @@ import DropTarget from "./DnD/DropTarget";
 import { remove, updateById } from "../../../../../../Utils/Functions/General";
 import AppObjectLayoutFieldGridEditor from "./FieldGridEditor";
 import uniqid from "uniqid";
+import { ActionType } from "../../../../../settings/Types";
 
 interface WrapperPropsType {
   title?: string;
@@ -140,6 +141,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
     "Components" | "Fields"
   >("Fields");
   const [isMobile] = useGlobal<any>("isMobile");
+  const [actions, setActions] = useState<any>();
 
   const componentList = {
     Field: {
@@ -904,6 +906,24 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
   };
   // Lifecycle
   useEffect(() => {
+    const request = context.getObjects(
+      "actions",
+      { "data.active": true },
+      (response) => {
+        const nl = [];
+
+        response.data.map((r: ActionType) => {
+          if (r.data?.data?.triggers?.manual?.varSingle) {
+            nl.push(r);
+          }
+        });
+        setActions(nl);
+      }
+    );
+
+    return () => request.stop();
+  }, []);
+  useEffect(() => {
     // Interfaces
     const nl: ValueListItemType[] = [];
     const interfaceRequest = context.getObjects(
@@ -944,6 +964,16 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
       }
     });
 
+    (actions || []).map((action) => {
+      if (action.data.data?.triggers?.manual?.model === model.key) {
+        customButtons.push({
+          label: action.data.name,
+          value: action._id,
+          args: { type: "server_action" },
+        });
+      }
+    });
+
     // Custom buttons
     map(model?.extensions || {}, (value, key) => {
       if (value.active) {
@@ -969,7 +999,7 @@ const AppActionManageObjectTabLayoutsDetail: React.FC<{
     return () => {
       interfaceRequest.stop();
     };
-  }, [model, detailId]);
+  }, [model, detailId, actions]);
 
   // UI
   if (!fieldList || !layout) return <context.UI.Loading />;

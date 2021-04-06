@@ -633,7 +633,10 @@ export interface UIType {
 
 export interface LayoutType {
   layout: LayoutDesignerItem[];
-  buttons: { key: string; args: { type?: "extension" | "action" } }[];
+  buttons: {
+    key: string;
+    args: { type?: "extension" | "action" | "server_action" };
+  }[];
   factsBar: string[];
 }
 
