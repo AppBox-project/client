@@ -631,8 +631,9 @@ const NodeLoop: React.FC<{
   models;
 }> = ({ step, onChange, modelList, varList, models, context }) => {
   // Vars
+  const v = find(varList, (o) => o.value === step.var);
   const model: ModelType = (
-    find(modelList, (o) => o.value === step.args.model) || { args: undefined }
+    find(modelList, (o) => o.value === v?.args?.model) || { args: undefined }
   ).args;
 
   // Functions
