@@ -1,9 +1,18 @@
+import { CSSProperties } from "@material-ui/styles";
 import React from "react";
-import * as icons from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
 
-const FaIcon: React.FC<{ icon: string }> = ({ icon }) => {
-  const Icon = icons[icon];
-  return Icon ? <Icon /> : <icons.FaExclamationTriangle />;
+const FaIcon: React.FC<{ icon: string; className?; style?: CSSProperties }> = ({
+  icon,
+  className,
+  style,
+}) => {
+  const Icon = require(`react-icons/fa/index`);
+  return Icon ? (
+    <Icon className={className} style={style} />
+  ) : (
+    <FaExclamationTriangle className={className} style={style} />
+  );
 };
 
 export default FaIcon;

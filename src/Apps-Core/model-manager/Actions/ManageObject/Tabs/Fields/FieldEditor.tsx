@@ -420,10 +420,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                     <UI.Inputs.Select
                       label="Type"
                       value={field.typeArgs ? field.typeArgs.type : "regular"}
-                      options={[
-                        { value: "regular", label: "Regular" },
-                        { value: "drafting", label: "Drafting" },
-                      ]}
+                      options={[{ value: "regular", label: "Regular" }]}
                       onChange={(value) => {
                         setField({
                           ...field,

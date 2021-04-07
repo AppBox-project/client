@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "reactn";
 import { AppContextType, AppType, TaskType } from "../../Utils/Types";
-import * as icons from "react-icons/fa";
 import {
   Avatar,
   Box,
@@ -15,6 +14,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { FaFileDownload } from "react-icons/fa";
+import FaIcon from "../../Components/Icons";
 
 const AppHubMyApps: React.FC<{
   match: { isExact: boolean };
@@ -97,7 +98,7 @@ const AppHubMyApps: React.FC<{
             display: "inline-block",
           }}
           fullWidth
-          startIcon={<icons.FaFileDownload />}
+          startIcon={<FaFileDownload />}
           onClick={() => {
             context.addObject(
               "system-tasks",
@@ -142,25 +143,22 @@ const AppHubMyApps: React.FC<{
       <context.UI.Animations.AnimationItem>
         <context.UI.Design.Card title="Apps" withBigMargin>
           <List>
-            {apps.map((app) => {
-              const Icon = icons[app.data.icon];
-              return (
-                <Link to={`/app-hub/browse/${app.data.id}`} key={app._id}>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Avatar
-                        style={{
-                          backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                        }}
-                      >
-                        <Icon />
-                      </Avatar>
-                    </ListItemIcon>
-                    <ListItemText primary={app.data.name} />
-                  </ListItem>
-                </Link>
-              );
-            })}
+            {apps.map((app) => (
+              <Link to={`/app-hub/browse/${app.data.id}`} key={app._id}>
+                <ListItem>
+                  <ListItemIcon>
+                    <Avatar
+                      style={{
+                        backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                      }}
+                    >
+                      <FaIcon icon={app.data.icon} />
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText primary={app.data.name} />
+                </ListItem>
+              </Link>
+            ))}
           </List>
         </context.UI.Design.Card>
       </context.UI.Animations.AnimationItem>

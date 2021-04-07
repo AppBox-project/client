@@ -2,17 +2,16 @@ import React, { useGlobal } from "reactn";
 import { ModelType } from "../../../Utils/Types";
 import Card from "../../Design/Card";
 import styles from "./styles.module.scss";
-import * as icons from "react-icons/fa";
 import { Avatar, Grid, Typography } from "@material-ui/core";
 import { baseUrl } from "../../../Utils/Utils";
 import FieldDisplay from "../FieldDisplay";
 import { Link } from "react-router-dom";
+import FaIcon from "../../Icons";
 
 const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
   model,
   object,
 }) => {
-  const Icon = icons[model.icon];
   const [theme] = useGlobal<any>("theme");
 
   const Picture =
@@ -26,7 +25,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
           backgroundColor: "white",
         }}
       >
-        <Icon style={{ width: 15, height: 15 }} />
+        <FaIcon icon={model.icon} style={{ width: 15, height: 15 }} />
       </Avatar>
     ) : object.data[model.preview.picture] ? (
       <Avatar
@@ -47,7 +46,7 @@ const ObjectPreview: React.FC<{ model: ModelType; object }> = ({
           height: 25,
         }}
       >
-        <Icon style={{ width: 15, height: 15 }} />
+        <FaIcon icon={model.icon} style={{ width: 15, height: 15 }} />
       </Avatar>
     );
 

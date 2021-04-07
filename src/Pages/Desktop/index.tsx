@@ -15,7 +15,6 @@ import {
 import { useState, useEffect } from "react";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
-import * as icons from "react-icons/fa";
 import { Link, useHistory, Switch, Route } from "react-router-dom";
 import FourOhFour from "../../Components/FourOhFour";
 import StartPage from "../../Components/Apps/StartPage";
@@ -29,6 +28,8 @@ import { AppType, NotificationType } from "../../Utils/Types";
 import Card from "../../Components/Design/Card";
 import AppContextMenu from "./AppContextMenu";
 import RecentNotifications from "../../Components/Notifications";
+import { FaBoxOpen, FaDoorOpen } from "react-icons/fa";
+import FaIcon from "../../Components/Icons";
 
 const Desktop: React.FC = () => {
   const [currentApp, setCurrentApp] = useState<any>();
@@ -103,9 +104,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
   const [appContextMenuApp, setAppContextMenuApp] = useState<AppType>();
   const [userMenuAnchor, setUserMenuAnchor] = useState<any>();
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const [unreadNotificationCount, setUnreadNotificationCount] = useState<
-    number
-  >(0);
+  const [
+    unreadNotificationCount,
+    setUnreadNotificationCount,
+  ] = useState<number>(0);
 
   // Lifecycle
   useEffect(() => {
@@ -207,7 +209,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                 event.preventDefault();
               }}
             >
-              <icons.FaBoxOpen className={styles.headerIcon} />
+              <FaBoxOpen className={styles.headerIcon} />
             </IconButton>
           </Tooltip>
         </Link>
@@ -333,7 +335,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                 color="primary"
               >
                 <Avatar style={{ width: 32, height: 32 }}>
-                  <icons.FaDoorOpen style={{ width: 20, height: 20 }} />
+                  <FaDoorOpen style={{ width: 20, height: 20 }} />
                 </Avatar>
               </ListItemIcon>
               <ListItemText>Sign Out</ListItemText>
@@ -363,7 +365,6 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
             {userAppList.map((appId) => {
               const app: AppType = apps[appId];
               if (app) {
-                const Icon = icons[app.data.icon];
                 return (
                   <div
                     className={`${styles.item} ${
@@ -392,7 +393,10 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
                                 backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
                               }}
                             >
-                              <Icon className={styles.icon} />
+                              <FaIcon
+                                icon={app.data.icon}
+                                className={styles.icon}
+                              />
                             </Avatar>
                           </IconButton>
                         </Link>

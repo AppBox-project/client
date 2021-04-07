@@ -11,10 +11,10 @@ import {
   ListItemAvatar,
   List,
 } from "@material-ui/core";
-import * as icons from "react-icons/fa";
 import { useHistory } from "react-router";
 import { ModelType } from "../../Utils/Types";
 import { find } from "lodash";
+import FaIcon from "../Icons";
 
 var debounce = require("debounce-promise");
 
@@ -95,7 +95,6 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
           },
           Option: (props, { innerProps, innerRef, selectOption }) => {
             const model: ModelType = models[props.data.obj.type];
-            const ActionIcon = icons[model.icon];
             const compatibleApps = {
               explorer: "/explorer/{model.key}/{object._id}",
               ...model.handlers,
@@ -114,7 +113,8 @@ const Search: React.FC<{ style?; setSearchExpanded? }> = ({
                         backgroundColor: `rgba(${handlerApp.data.color.r},${handlerApp.data.color.g},${handlerApp.data.color.b},${handlerApp.data.color.a})`,
                       }}
                     >
-                      <ActionIcon
+                      <FaIcon
+                        icon={model.icon}
                         style={{
                           ...(gTheme.palette.type === "dark"
                             ? { color: "white" }

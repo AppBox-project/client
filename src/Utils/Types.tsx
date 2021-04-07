@@ -277,7 +277,6 @@ export interface AppContextType {
   setAppSettings: (key: string, value: any) => Promise<void>;
   getSystemSettings: (key: string) => Promise<any | string>;
   setSystemSettings: (key: string, value: any) => Promise<void>;
-  formatString: (text: string, data: {}) => string;
 }
 
 export interface WidgetContextType {

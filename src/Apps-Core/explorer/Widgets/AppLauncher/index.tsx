@@ -2,11 +2,11 @@ import React from "react";
 import { useState, useEffect } from "reactn";
 import { Skeleton } from "@material-ui/lab";
 import styles from "./styles.module.scss";
-import * as icons from "react-icons/fa";
 import { Avatar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { AppType } from "../../../../Utils/Types";
 import WidgetContext from "../../../../Components/Apps/Apps/WidgetContext";
+import FaIcon from "../../../../Components/Icons";
 
 const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
   context,
@@ -33,31 +33,28 @@ const WidgetAppLauncher: React.FC<{ context: WidgetContext }> = ({
   if (!apps) return <LoadingSkeleton />;
   return (
     <div className={styles.root}>
-      {apps.map((app) => {
-        const Icon = icons[app.data.icon];
-        return (
-          <div className={styles.appItem}>
-            <Link className="no-link" to={`/${app.data.id}`}>
-              <Avatar
-                variant="rounded"
-                style={{
-                  backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                  textAlign: "center",
-                  width: 55,
-                  height: 55,
-                  margin: "0 auto",
-                  transition: "all 1s",
-                }}
-              >
-                <Icon className={styles.icon} />
-              </Avatar>
-              <Typography noWrap className={styles.title}>
-                {app.data.name}
-              </Typography>
-            </Link>
-          </div>
-        );
-      })}
+      {apps.map((app) => (
+        <div className={styles.appItem}>
+          <Link className="no-link" to={`/${app.data.id}`}>
+            <Avatar
+              variant="rounded"
+              style={{
+                backgroundColor: `rgb(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                textAlign: "center",
+                width: 55,
+                height: 55,
+                margin: "0 auto",
+                transition: "all 1s",
+              }}
+            >
+              <FaIcon icon={app.data.icon} className={styles.icon} />
+            </Avatar>
+            <Typography noWrap className={styles.title}>
+              {app.data.name}
+            </Typography>
+          </Link>
+        </div>
+      ))}
     </div>
   );
 };

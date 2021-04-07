@@ -10,10 +10,8 @@ import {
 import { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import LoginPage from "./Pages/Login";
-import Desktop from "./Pages/Desktop";
 import { BrowserRouter } from "react-router-dom";
 import Server, { serverUrl } from "./Utils/Server";
-import MobileLayout from "./Pages/Mobile";
 import { Alert } from "@material-ui/lab";
 import { FaWifi } from "react-icons/fa";
 import PageOnboardingNoDb from "./Pages/Onboarding/NoDB";
@@ -22,6 +20,10 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { rgbToHex, urlBase64ToUint8Array } from "./Utils/Functions/General";
 import chroma from "chroma-js";
+import asyncComponent from "./AsyncComponent";
+
+const Desktop = asyncComponent(() => import("./Pages/Desktop"));
+const Mobile = asyncComponent(() => import("./Pages/Mobile"));
 
 const App: React.FC = () => {
   const [user, setUser] = useGlobal<any>("user");
@@ -175,7 +177,7 @@ const App: React.FC = () => {
                 <Desktop />
               </Hidden>
               <Hidden smUp>
-                <MobileLayout />
+                <Mobile />
               </Hidden>
             </>
           )}

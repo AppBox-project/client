@@ -4,9 +4,9 @@ import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { Chip, Popover } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import * as icons from "react-icons/fa";
 import ObjectPreview from "../../ObjectPreview";
 import { ModelType } from "../../../../Utils/Types";
+import FaIcon from "../../../Icons";
 
 const ObjectFieldDisplayRelationshipM: React.FC<{
   modelField;
@@ -101,8 +101,6 @@ const ChipComponent: React.FC<{ size; baseUrl; object; model: ModelType }> = ({
 }) => {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
-  const Icon = icons[model.icon ? model.icon : "FaTags"];
-
   return (
     <>
       <Chip
@@ -113,7 +111,12 @@ const ChipComponent: React.FC<{ size; baseUrl; object; model: ModelType }> = ({
             baseUrl ? `${baseUrl}/${object._id}` : `/o/${object._id}`
           );
         }}
-        icon={<Icon style={{ color: "white" }} />}
+        icon={
+          <FaIcon
+            icon={model.icon ? model.icon : "FaTags"}
+            style={{ color: "white" }}
+          />
+        }
         label={object.data[model.primary]}
         style={{
           margin: 3,

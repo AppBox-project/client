@@ -2,7 +2,6 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import uniqid from "uniqid";
 import Server from "../../Utils/Server";
 import Loading from "../../Components/Loading";
-import * as icons from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { Switch, Route } from "react-router-dom";
 import StartPage from "../../Components/Apps/StartPage";
@@ -30,6 +29,8 @@ import { baseUrl } from "../../Utils/Utils";
 import LinkHandler from "../LinkHandler";
 import { NotificationType } from "../../Utils/Types";
 import RecentNotifications from "../../Components/Notifications";
+import { FaBell, FaBoxOpen, FaCogs, FaDoorOpen } from "react-icons/fa";
+import FaIcon from "../../Components/Icons";
 
 const MobileLayout: React.FC = () => {
   const [apps, setApps] = useState<any>();
@@ -40,9 +41,10 @@ const MobileLayout: React.FC = () => {
   const [navBar, setNavBar] = useGlobal<any>("navBar");
   const [defaultButton, setDefaultButton] = useGlobal<any>("defaultButton");
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const [unreadNotificationCount, setUnreadNotificationCount] = useState<
-    number
-  >(0);
+  const [
+    unreadNotificationCount,
+    setUnreadNotificationCount,
+  ] = useState<number>(0);
   const [notificationsVisible, setNotificationsVisible] = useState<boolean>(
     false
   );
@@ -150,7 +152,7 @@ const MobileLayout: React.FC = () => {
           >
             <ListItemIcon>
               <Icon color="primary">
-                <icons.FaBoxOpen style={{ width: 24, height: 24 }} />
+                <FaBoxOpen style={{ width: 24, height: 24 }} />
               </Icon>
             </ListItemIcon>
             <ListItemText>
@@ -163,30 +165,28 @@ const MobileLayout: React.FC = () => {
 
           {
             //@ts-ignore
-            apps.map((app) => {
-              const Icon = icons[app.data.icon];
-              return (
-                <ListItem
-                  key={app._id}
-                  button
-                  onClick={() => {
-                    history.push(`/${app.data.id}`);
-                    setDrawerOpen(false);
-                  }}
-                >
-                  <ListItemIcon>
-                    <Icon
-                      style={{
-                        height: 25,
-                        width: 25,
-                        color: `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
-                      }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText>{app.data.name}</ListItemText>
-                </ListItem>
-              );
-            })
+            apps.map((app) => (
+              <ListItem
+                key={app._id}
+                button
+                onClick={() => {
+                  history.push(`/${app.data.id}`);
+                  setDrawerOpen(false);
+                }}
+              >
+                <ListItemIcon>
+                  <FaIcon
+                    icon={app.data.icon}
+                    style={{
+                      height: 25,
+                      width: 25,
+                      color: `rgba(${app.data.color.r},${app.data.color.g},${app.data.color.b})`,
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText>{app.data.name}</ListItemText>
+              </ListItem>
+            ))
           }
         </List>
         <div style={{ position: "absolute", bottom: 0, width: "100%" }}>
@@ -201,7 +201,7 @@ const MobileLayout: React.FC = () => {
               }}
             >
               <ListItemIcon>
-                <icons.FaDoorOpen style={{ width: 24, height: 24 }} />
+                <FaDoorOpen style={{ width: 24, height: 24 }} />
               </ListItemIcon>
               <ListItemText primary="Sign out" />
             </ListItem>
@@ -213,7 +213,7 @@ const MobileLayout: React.FC = () => {
               }}
             >
               <ListItemIcon>
-                <icons.FaCogs style={{ width: 24, height: 24 }} />
+                <FaCogs style={{ width: 24, height: 24 }} />
               </ListItemIcon>
               <ListItemText primary="Settings" />
             </ListItem>
@@ -236,7 +236,7 @@ const MobileLayout: React.FC = () => {
             >
               <ListItemIcon>
                 <Badge badgeContent={unreadNotificationCount} color="secondary">
-                  <icons.FaBell style={{ width: 24, height: 24 }} />
+                  <FaBell style={{ width: 24, height: 24 }} />
                 </Badge>
               </ListItemIcon>
               <ListItemText

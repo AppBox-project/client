@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Grid, Typography } from "@material-ui/core";
 import { ModelFieldType } from "../../../../Utils/Types";
 import Loading from "../../../Loading";
-import InputDrafting from "../../../Inputs/Drafting";
 import InputRichText from "../../../Inputs/RichText";
 
 const FieldTypeRichText: React.FC<{

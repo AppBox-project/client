@@ -29,7 +29,6 @@ import InputRichText from "../../Inputs/RichText";
 import ConditionDesigner from "../../ConditionDesigner";
 import { baseUrl } from "../../../Utils/Utils";
 import InputSelect from "../../Inputs/Select";
-import nunjucks from "../../../Utils/Nunjucks";
 import AppComponentObjectOverviewLayout from "./AppUI/ObjectOverviewLayout";
 import Axios from "axios";
 import InputColor from "../../Inputs/Color";
@@ -822,8 +821,6 @@ export class AppContext {
     });
 
   // Parse data
-  formatString = (string, data) =>
-    nunjucks.renderString(string, { ...data, TODAY: new Date() });
 
   performAction = (action, vars, context: AppContextType, title?: string) =>
     new Promise<string>((resolve, reject) => {

@@ -23,7 +23,6 @@
     "framer-motion": "^2.9.5",
     "fuzzy-search": "^3.2.1",
     "global": "^4.4.0",
-    "nunjucks": "^3.2.2",
     "qrcode.react": "^1.0.0",
     "react": "^16.12.0",
     "react-beautiful-dnd": "^13.0.0",
@@ -59,11 +58,11 @@
     "@types/react-select": "^3.0.15",
     "@types/socket.io-client": "^1.4.34",
     "@types/uniqid": "^5.2.0",
+    "cra-bundle-analyzer": "^0.1.0",
     "node-sass": "^4.13.1",
     "prettier": "^2.0.5",
     "react-scripts": "3.4.1",
-    "typescript": "~3.9.5",
-    "webpack-bundle-analyzer": "^4.1.0"
+    "typescript": "~3.9.5"
   },
   "scripts": {
     "start": "react-scripts start",

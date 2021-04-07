@@ -14,9 +14,8 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import uniqid from "uniqid";
 import Server from "../../../../Utils/Server";
 import { useHistory } from "react-router-dom";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaPlus } from "react-icons/fa";
 import Card from "../../../Design/Card";
-import * as icons from "react-icons/fa";
 import ObjectPreview from "../../ObjectPreview";
 import FieldDisplay from "../../FieldDisplay";
 import { AppContextType, ObjectType } from "../../../../Utils/Types";
@@ -92,7 +91,7 @@ const ObjectLayoutItemRelatedList: React.FC<{
         layoutItem.addButton && [
           {
             label: "Add",
-            icon: icons.FaPlus,
+            icon: FaPlus,
             compact: true,
             onClick: () => {
               context.setDialog({
@@ -256,8 +255,6 @@ const ResultRow: React.FC<{
   object;
 }> = ({ item, history, layoutItem, key, model, object }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const Icon = icons[model.icon ? model.icon : "FaTags"];
-
   return (
     <>
       <TableRow

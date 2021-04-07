@@ -4,7 +4,7 @@ import { Skeleton } from "@material-ui/lab";
 import uniqid from "uniqid";
 import Server from "../../../Utils/Server";
 import { WidgetType } from "../../../Utils/Types";
-import * as icons from "react-icons/fa";
+import FaIcon from "../../Icons";
 
 const WidgetList: React.FC<{ onAdd: (widget: WidgetType) => void }> = ({
   onAdd,
@@ -31,7 +31,7 @@ const WidgetList: React.FC<{ onAdd: (widget: WidgetType) => void }> = ({
             newWidgets.push({
               ...widget,
               app: app.data.id,
-              icon: icons[widget.icon],
+              icon: <FaIcon icon={widget.icon} />,
               id: `${app.data.id}-${widget.key}`,
             });
           });

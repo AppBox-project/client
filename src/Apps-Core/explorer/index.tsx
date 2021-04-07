@@ -1,7 +1,8 @@
+import React from "react";
 import FourOhFour from "../../Components/FourOhFour";
 import AppActionObject from "./Object/index";
-import * as icons from "react-icons/fa";
 import { AppContextType } from "../../Utils/Types";
+import FaIcon from "../../Components/Icons";
 
 export default class App {
   context: AppContextType;
@@ -41,7 +42,7 @@ export default class App {
                   label: result.name_plural,
                   key: result.key,
                   component: AppActionObject,
-                  icon: icons[result.icon],
+                  icon: <FaIcon icon={result.icon} />,
                   group,
                 });
               });

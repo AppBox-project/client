@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import InputInput from "../../Components/Inputs/Input";
 import { Typography, Divider, Grid, Avatar } from "@material-ui/core";
 import { AppType } from "../../Utils/Types";
-import * as icons from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import styles from "./styles.module.scss";
 import Server from "../../Utils/Server";
 import Card from "../../Components/Design/Card";
+import FaIcon from "../../Components/Icons";
 
 const AppBarAppList: React.FC<{
   appList: AppType[];
@@ -36,8 +36,6 @@ const AppBarAppList: React.FC<{
 
       <Grid container style={{ overflowX: "hidden" }}>
         {appList.map((app) => {
-          const Icon = icons[app.data.icon];
-
           return (
             <Grid
               key={app._id}
@@ -83,7 +81,7 @@ const AppBarAppList: React.FC<{
                   transition: "all 1s",
                 }}
               >
-                <Icon className={styles.icon} />
+                <FaIcon icon={app.data.icon} className={styles.icon} />
               </Avatar>
               <Typography style={{ fontSize: 14 }}>{app.data.name}</Typography>
             </Grid>
