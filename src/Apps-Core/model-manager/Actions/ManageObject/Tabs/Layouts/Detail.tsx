@@ -55,7 +55,9 @@ import {
   FaToggleOn,
   FaVectorSquare,
 } from "react-icons/fa";
-import { map, find, filter } from "lodash";
+import map from "lodash/map";
+import find from "lodash/find";
+import filter from "lodash/filter";
 import {
   AnimationContainer,
   AnimationItem,

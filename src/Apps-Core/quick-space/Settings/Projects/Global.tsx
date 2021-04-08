@@ -2,7 +2,7 @@ import React from "react";
 import { AppContextType } from "../../../../Utils/Types";
 import { AppProjectType } from "../../Types";
 import { useState, useEffect } from "reactn";
-import { map } from "lodash";
+import map from "lodash/map";
 const AppQSSettingsProjectGlobal: React.FC<{
   context: AppContextType;
   projects: { [key: string]: AppProjectType };

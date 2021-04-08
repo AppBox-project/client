@@ -4,7 +4,7 @@ import {
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import AppActionManageObjectTabLayoutsDetail from "./Detail";
 
 const AppActionManageObjectTabLayouts: React.FC<{

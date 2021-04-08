@@ -15,7 +15,9 @@ import {
   Button,
 } from "@material-ui/core";
 import { useEffect } from "reactn";
-import { map, pickBy, filter } from "lodash";
+import map from "lodash/map";
+import pickBy from "lodash/pickBy";
+import filter from "lodash/filter";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
 
 const AppActionManageObjectTabPreview: React.FC<{

@@ -16,7 +16,8 @@ import { AppContext } from "./AppContext";
 import { TextInput } from "./AppUI/Forms";
 import AppUIDesktop from "./AppUI/DesktopLayout";
 import AppUIMobile from "./AppUI/MobileLayout";
-import { map, find } from "lodash";
+import map from "lodash/map";
+import find from "lodash/find";
 import Card from "../../Design/Card";
 import InputSelect from "../../Inputs/Select";
 

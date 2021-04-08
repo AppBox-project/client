@@ -2,7 +2,8 @@ import { Button, Divider, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { AppContextType, ModelType } from "../../../Utils/Types";
 import { ActionType, ActionVarType } from "../Types";
-import { map, find } from "lodash";
+import map from "lodash/map";
+import find from "lodash/find";
 import { useHistory } from "react-router-dom";
 
 const SettingsActionsSettings: React.FC<{

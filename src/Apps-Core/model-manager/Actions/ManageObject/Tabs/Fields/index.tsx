@@ -4,7 +4,7 @@ import {
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import AppActionManageObjectTabFieldsEditor from "./FieldEditor";
 
 const AppActionManageObjectTabFields: React.FC<{

@@ -9,7 +9,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { map } from "lodash";
+import map from "lodash/map";
 import Search from "../Search";
 import { FaSearch, FaSearchMinus } from "react-icons/fa";
 import { baseUrl } from "../../Utils/Utils";

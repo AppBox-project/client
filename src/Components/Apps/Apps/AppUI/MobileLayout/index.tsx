@@ -18,7 +18,7 @@ import { FaLemon, FaDropbox, FaCogs, FaEllipsisV } from "react-icons/fa";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import FuzzySearch from "fuzzy-search";
 import InputInput from "../../../../Inputs/Input";
-import { map } from "lodash";
+import map from "lodash/map";
 import styles from "./styles.module.scss";
 import { AppContext } from "../../AppContext";
 
@@ -205,8 +205,6 @@ const AppUIMobile: React.FC<{
                             </ListSubheader>
                           )}
                           {actions.map((action) => {
-                            const ActionIcon: React.FC<{ style }> = action.icon;
-
                             return (
                               <ListItem
                                 button
@@ -219,22 +217,29 @@ const AppUIMobile: React.FC<{
                                 }}
                                 className={styles.actionLink}
                               >
-                                {ActionIcon && (
-                                  <ListItemIcon>
-                                    <Icon
-                                      color={
-                                        gTheme.palette.type === "light" &&
-                                        currentPage === action.key
-                                          ? "primary"
-                                          : "inherit"
-                                      }
-                                    >
-                                      <ActionIcon
-                                        style={{ width: 18, height: 18 }}
+                                <ListItemIcon>
+                                  <Icon
+                                    color={
+                                      gTheme.palette.type === "light" &&
+                                      currentPage === action.key
+                                        ? "primary"
+                                        : "inherit"
+                                    }
+                                  >
+                                    {typeof action?.icon === "string" ? (
+                                      <FaIcon
+                                        icon={action.icon || "exclamation"}
                                       />
-                                    </Icon>
-                                  </ListItemIcon>
-                                )}
+                                    ) : (
+                                      action.icon &&
+                                      (<action.icon /> ? (
+                                        <action.icon />
+                                      ) : (
+                                        "Unknown icon case?"
+                                      ))
+                                    )}
+                                  </Icon>
+                                </ListItemIcon>
                                 <ListItemText
                                   color={
                                     gTheme.palette.type === "light"

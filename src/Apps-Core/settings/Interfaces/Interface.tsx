@@ -21,7 +21,11 @@ import {
   LayoutType,
   CustomFormInputType,
 } from "../../../Utils/Types";
-import { map, filter, find, findIndex, union } from "lodash";
+import map from "lodash/map";
+import filter from "lodash/filter";
+import find from "lodash/find";
+import findIndex from "lodash/findIndex";
+import union from "lodash/union";
 import {
   FaAlignLeft,
   FaCode,

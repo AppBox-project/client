@@ -8,7 +8,9 @@ import {
 } from "../../../Utils/Types";
 import { ActionType } from "../Types";
 import styles from "./Triggers.module.scss";
-import { filter, find, map } from "lodash";
+import filter from "lodash/filter";
+import find from "lodash/find";
+import map from "lodash/map";
 
 const cronOptions = [
   { label: "Every minute", value: "minutely", cron: "* * * * *" },

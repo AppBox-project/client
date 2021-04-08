@@ -6,12 +6,12 @@ import {
   ValueListItemType,
 } from "../../../Utils/Types";
 import { ActionType } from "../Types";
-import { find } from "lodash";
+import find from "lodash/find";
 import { Fab, Grid, Tab, Tabs } from "@material-ui/core";
 import { FaSave } from "react-icons/fa";
 import SettingsActionsVars from "./Variables";
 import SettingsActionsLogic from "./Logic";
-import { map } from "lodash";
+import map from "lodash/map";
 import SettingsActionsTriggers from "./Triggers";
 import SettingsActionsSettings from "./Settings";
 

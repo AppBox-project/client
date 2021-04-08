@@ -1,5 +1,5 @@
 import functions from "./Functions";
-import { get } from "lodash";
+import get from "lodash/get";
 
 const formula = async (input, data) =>
   new Promise(async (resolve) => {

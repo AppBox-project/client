@@ -5,7 +5,7 @@ import {
   InterfaceInterfaces,
   InterfaceType,
 } from "../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import RenderInterfaceGridContainer from "./InterfaceComponents/GridContainer";
 import RenderInterfaceGridItem from "./InterfaceComponents/GridItem";
 import RenderInterfaceCard from "./InterfaceComponents/Card";
@@ -31,16 +31,18 @@ const RenderInterface: React.FC<{
   premappedVariables?: { [varName: string]: any };
 }> = ({ context, interfaceId, interfaceObject, premappedVariables }) => {
   // Vars
-  const [appliedInterfaceObject, setInterfaceObject] = useState<
-    InterfaceType
-  >();
+  const [
+    appliedInterfaceObject,
+    setInterfaceObject,
+  ] = useState<InterfaceType>();
   const [varValues, setVarValues] = useState<{ [varKey: string]: {} }>({});
   const [prevVarValues, setPrevVarValues] = useState<{ [varKey: string]: {} }>({
     initial: true,
   });
-  const [currentInterface, setCurrentInterface] = useState<
-    InterfaceInterfaces
-  >();
+  const [
+    currentInterface,
+    setCurrentInterface,
+  ] = useState<InterfaceInterfaces>();
   const [error, setError] = useState<string>();
 
   // Lifecycle
@@ -105,7 +107,9 @@ const RenderInterface: React.FC<{
         setError("This interface has no initial trigger!");
       }
 
-      return () => {requests.map((r) => r && r.stop());}
+      return () => {
+        requests.map((r) => r && r.stop());
+      };
     }
   }, [appliedInterfaceObject, varValues, prevVarValues, premappedVariables]);
 

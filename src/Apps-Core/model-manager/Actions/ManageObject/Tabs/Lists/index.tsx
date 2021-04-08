@@ -5,7 +5,7 @@ import {
   AppContextType,
   ListDetailItemType,
 } from "../../../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import Detail from "./Detail";
 
 const AppActionManageObjectTabLists: React.FC<{

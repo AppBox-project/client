@@ -8,7 +8,7 @@ import {
   ValueListItemType,
 } from "../../../Utils/Types";
 import styles from "./Logic.module.scss";
-import { map } from "lodash";
+import map from "lodash/map";
 import uniqid from "uniqid";
 
 const AppSettingsInterfaceLogic: React.FC<{

@@ -4,7 +4,7 @@ import {
   ModelType,
   ObjectType,
 } from "../../../../../../Utils/Types";
-import { find } from "lodash";
+import find from "lodash/find";
 import { Skeleton } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
 
@@ -39,10 +39,11 @@ const AppActionManageObjectTabExtensionIDetail: React.FC<{
     setModelExtension(model.extensions[detailId]);
     // Todo: can this cause path traversal?
     setConfigureComponent(
-      React.lazy(() =>
-        import(
-          `../../../../../../Components/Object/Extensions/${detailId}/configure`
-        )
+      React.lazy(
+        () =>
+          import(
+            `../../../../../../Components/Object/Extensions/${detailId}/configure`
+          )
       )
     );
   }, [detailId, model, availableExtensions]);

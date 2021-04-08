@@ -8,18 +8,19 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  Icon,
   Divider,
   ListSubheader,
   ListItemSecondaryAction,
   Collapse,
+  Icon,
 } from "@material-ui/core";
 import { FaChevronDown, FaChevronUp, FaWrench } from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useEffect } from "reactn";
 import { AppContext } from "../../AppContext";
+import FaIcon from "../../../../Icons";
 
 const AppUIDesktop: React.FC<{
   appContext: AppContext;
@@ -330,12 +331,10 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
   gTheme,
 }) => {
   // Vars
-  const ActionIcon: React.FC<{
-    style;
-  }> = action.icon;
   const [subItemsVisible, setSubItemsVisible] = useState<boolean>(false);
 
   // UI
+
   return (
     <motion.div variants={item} key={action.key}>
       <Link
@@ -343,22 +342,26 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
         to={`/${context.app.data.id}/${action.key}`}
       >
         <ListItem button selected={currentPage === action.key}>
-          {ActionIcon && (
-            <ListItemIcon>
-              <Icon
-                style={{
-                  color: gTheme.palette.type === "dark" && "white",
-                }}
-                color={
-                  gTheme.palette.type === "light" && currentPage === action.key
-                    ? "primary"
-                    : "inherit"
-                }
-              >
-                <ActionIcon style={{ width: 18, height: 18 }} />
-              </Icon>
-            </ListItemIcon>
-          )}
+          <ListItemIcon>
+            <Icon
+              style={{
+                color: gTheme.palette.type === "dark" && "white",
+              }}
+              color={
+                gTheme.palette.type === "light" && currentPage === action.key
+                  ? "primary"
+                  : "inherit"
+              }
+            >
+              {typeof action?.icon === "string" ? (
+                <FaIcon icon={action.icon || "exclamation"} />
+              ) : (
+                action.icon &&
+                (<action.icon /> ? <action.icon /> : "Unknown icon case?")
+              )}
+            </Icon>
+          </ListItemIcon>
+
           <ListItemText>
             <Typography
               color={

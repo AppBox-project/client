@@ -10,7 +10,6 @@ import {
   LayoutDesignerItem,
   ValueListItemType,
 } from "../../../../Utils/Types";
-import { findIndex } from "lodash";
 
 export interface DustbinState {
   hasDropped: boolean;

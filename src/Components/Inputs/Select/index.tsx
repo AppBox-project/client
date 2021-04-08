@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useGlobal } from "reactn";
 import Select from "react-select";
-import { find } from "lodash";
+import find from "lodash/find";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import InputCheckboxes from "../Checkboxes";
 import { Typography } from "@material-ui/core";

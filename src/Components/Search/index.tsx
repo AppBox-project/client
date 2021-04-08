@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { ModelType } from "../../Utils/Types";
-import { find } from "lodash";
+import find from "lodash/find";
 import FaIcon from "../Icons";
 
 var debounce = require("debounce-promise");

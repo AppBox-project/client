@@ -14,7 +14,7 @@ import AppSettingsInterfaceUI, {
 import AppSettingsInterfaceVariables from "./Variables";
 import AppSettingsInterfaceLogic from "./Logic";
 import AppSettingsInterfaceActions from "./Actions";
-import { find } from "lodash";
+import find from "lodash/find";
 import { FaSave } from "react-icons/fa";
 import { DndProvider } from "react-dnd";
 import MultiBackend from "react-dnd-multi-backend";

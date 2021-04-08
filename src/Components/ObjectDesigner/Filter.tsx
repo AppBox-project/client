@@ -14,7 +14,7 @@ import {
   ModelFieldType,
 } from "../../Utils/Types";
 import Loading from "../Loading";
-import { map } from "lodash";
+import map from "lodash/map";
 import InputSelect from "../Inputs/Select";
 import MaybeCard from "../Design/MaybeCard";
 import InputCheckbox from "../Inputs/Checkbox";

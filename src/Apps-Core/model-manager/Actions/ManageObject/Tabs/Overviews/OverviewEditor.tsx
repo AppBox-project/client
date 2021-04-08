@@ -5,10 +5,8 @@ import {
   ModelFieldType,
   ModelType,
   UIType,
-  ListDetailItemType,
   ValueListItemType,
   ModelActionType,
-  ObjectType,
 } from "../../../../../../Utils/Types";
 import {
   Table,
@@ -31,7 +29,9 @@ import {
   FaAngleRight,
   FaSave,
 } from "react-icons/fa";
-import { map, filter, indexOf } from "lodash";
+import map from "lodash/map";
+import filter from "lodash/filter";
+import indexOf from "lodash/indexOf";
 
 const AppActionManageObjectOverviewEditor: React.FC<{
   match: { params: { detailId } };

@@ -8,7 +8,7 @@ import {
 } from "../../../../../../Utils/Types";
 import { useState, useEffect } from "reactn";
 import AppActionManageObjectTabExtensionIDetail from "./Detail";
-import { map } from "lodash";
+import map from "lodash/map";
 import { List, ListItemText, ListItem } from "@material-ui/core";
 
 const AppActionManageObjectTabExtensions: React.FC<{

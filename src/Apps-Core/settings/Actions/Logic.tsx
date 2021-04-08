@@ -7,7 +7,8 @@ import {
 } from "../../../Utils/Types";
 import { ActionLogicStepType, ActionType } from "../Types";
 import styles from "./Logic.module.scss";
-import { filter, find } from "lodash";
+import filter from "lodash/filter";
+import find from "lodash/find";
 import ObjectDesigner from "../../../Components/ObjectDesigner/Create";
 import ObjectDesignerFilter from "../../../Components/ObjectDesigner/Filter";
 import {
@@ -17,7 +18,7 @@ import {
   IconButton,
   Typography,
 } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import { FaCog, FaCogs, FaPlus } from "react-icons/fa";
 
 const SettingsActionsLogic: React.FC<{

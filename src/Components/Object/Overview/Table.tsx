@@ -9,7 +9,8 @@ import {
   TableHead,
   TableSortLabel,
 } from "@material-ui/core";
-import { filter, orderBy } from "lodash";
+import filter from "lodash/filter";
+import orderBy from "lodash/orderBy";
 import FieldDisplay from "../FieldDisplay";
 import { IoMdMore } from "react-icons/io";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppContextType } from "../../Utils/Types";
-import { find } from "lodash";
+import find from "lodash/find";
 
 const CollectionsDisplayObject: React.FC<{
   match: { isExact: boolean };

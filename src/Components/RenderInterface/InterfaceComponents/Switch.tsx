@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import { useEffect } from "reactn";
 import { AppContextType } from "../../../Utils/Types";
-import { get } from "lodash";
+import get from "lodash/get";
 
 const RenderInterfaceSwitch: React.FC<{
   context: AppContextType;

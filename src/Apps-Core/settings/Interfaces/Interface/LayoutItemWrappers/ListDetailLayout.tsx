@@ -6,7 +6,8 @@ import {
   ModelType,
   ValueListItemType,
 } from "../../../../../Utils/Types";
-import { find, map } from "lodash";
+import find from "lodash/find";
+import map from "lodash/map";
 
 const LayoutItemListDetailLayout: React.FC<{
   list?: {

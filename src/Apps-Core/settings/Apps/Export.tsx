@@ -16,7 +16,8 @@ import {
   ModelType,
   SelectOptionType,
 } from "../../../Utils/Types";
-import { map, find } from "lodash";
+import map from "lodash/map";
+import find from "lodash/find";
 
 const AppsDetailExport: React.FC<{
   app: AppType;

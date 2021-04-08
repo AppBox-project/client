@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppContextType, AppType } from "../../../Utils/Types";
-import { find } from "lodash";
+import find from "lodash/find";
 import AppsDetailGeneral from "./General";
 import { FaDatabase, FaStream, FaTools, FaUpload } from "react-icons/fa";
 import AppsDetailActions from "./Actions";

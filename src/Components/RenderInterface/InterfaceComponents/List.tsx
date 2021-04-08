@@ -1,7 +1,8 @@
 import { List, ListItem, ListItemText, ListSubheader } from "@material-ui/core";
 import React from "react";
 import { ObjectType } from "../../../Utils/Types";
-import { get } from "lodash";
+import get from "lodash/get";
+
 import formula from "../../../Utils/Functions/ClientFormula";
 import { useHistory } from "react-router-dom";
 

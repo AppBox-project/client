@@ -40,7 +40,9 @@ import {
   AnimationItem,
 } from "../../Apps/Apps/AppUI/Animations";
 import ObjectOverviewFilter from "./Filter";
-import { map, find, filter as filterLodash } from "lodash";
+import map from "lodash/map";
+import find from "lodash/find";
+import filterLodash from "lodash/filter";
 import RenderInterface from "../../RenderInterface";
 import FaIcon from "../../Icons";
 

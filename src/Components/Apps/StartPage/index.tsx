@@ -12,7 +12,7 @@ import Card from "../../Design/Card";
 import WidgetList from "./WidgetList";
 import WidgetRenderer from "../Apps/WidgetRenderer";
 import { WidgetType } from "../../../Utils/Types";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 
 const StartPage: React.FC = () => {
   // Vars

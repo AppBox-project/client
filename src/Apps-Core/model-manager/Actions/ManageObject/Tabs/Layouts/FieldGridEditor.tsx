@@ -16,7 +16,8 @@ import { AppContextType, ModelType } from "../../../../../../Utils/Types";
 import uniqid from "uniqid";
 import { MdBorderTop, MdBorderClear, MdDeleteForever } from "react-icons/md";
 import { BsChevronBarContract, BsChevronBarExpand } from "react-icons/bs";
-import { map, pickBy } from "lodash";
+import map from "lodash/map";
+import pickBy from "lodash/pickBy";
 import { FaPlus, FaCaretUp, FaCaretDown } from "react-icons/fa";
 
 const AppObjectLayoutFieldGridEditor: React.FC<{

@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { AppContextType, ValueListItemType } from "../../../Utils/Types";
 import { ActionType } from "../Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import {
   FaAlignJustify,
   FaList,

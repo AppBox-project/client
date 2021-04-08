@@ -14,7 +14,7 @@ import { AppContextType, ModelType } from "../../../Utils/Types";
 import { AppTodoType } from "../Types";
 import { useEffect } from "reactn";
 import { AiOutlineUp, AiOutlineDown } from "react-icons/ai";
-import { filter } from "lodash";
+import filter from "lodash/filter";
 import AppQSAddSubTodo from "./AddSubTodo";
 
 const AppQSActionTodoDetailTodo: React.FC<{

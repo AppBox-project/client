@@ -5,7 +5,7 @@ import FieldTypeBoolean from "../Object/FieldTypes/Boolean";
 import FieldTypeRelationship from "../Object/FieldTypes/Relationship";
 import FieldTypeRichText from "../Object/FieldTypes/RichText";
 import FieldTypeFormula from "../Object/FieldTypes/Formula";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import Server from "../../Utils/Server";
 import uniqid from "uniqid";
 import InputSelect from "../Inputs/Select";

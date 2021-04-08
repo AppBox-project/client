@@ -4,7 +4,7 @@ import {
   UIType,
   AppContextType,
 } from "../../../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import AppActionManageObjectActionsDetail from "./Detail";
 
 const AppActionManageObjectTabActions: React.FC<{
@@ -45,7 +45,7 @@ const AppActionManageObjectTabActions: React.FC<{
                     ...model,
                     actions: {
                       ...model.actions,
-                      [response.key]: {label: "New action"},
+                      [response.key]: { label: "New action" },
                     },
                   },
                   model._id

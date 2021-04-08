@@ -13,7 +13,7 @@ import {
   ListSubheader,
 } from "@material-ui/core";
 import formula from "../../../Utils/Functions/ClientFormula";
-import { get } from "lodash";
+import get from "lodash/get";
 
 const RenderInterfaceListDetailLayout: React.FC<{
   context: AppContextType;

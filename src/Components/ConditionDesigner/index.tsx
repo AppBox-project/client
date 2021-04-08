@@ -12,7 +12,7 @@ import {
   Grid,
   ListItemIcon,
 } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import InputSelect from "../Inputs/Select";
 import InputCheckbox from "../Inputs/Checkbox";
 

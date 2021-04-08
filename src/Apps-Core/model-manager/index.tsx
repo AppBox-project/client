@@ -41,7 +41,7 @@ export default class App {
                   label: result.name_plural,
                   key: result.key,
                   component: AppActionManageObject,
-                  icon: <FaIcon icon={result.icon} />,
+                  icon: result.icon,
                   group,
                 });
               });

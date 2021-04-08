@@ -43,7 +43,7 @@ import { baseUrl as baseAppUrl } from "../../Utils/Utils";
 import ObjectLayoutItemTabContainer from "./LayoutItems/TabContainer";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import ObjectLayoutItemAppProvided from "./LayoutItems/AppProvided";
-import { map } from "lodash";
+import map from "lodash/map";
 import ObjectLayoutItemAttachments from "./LayoutItems/Attachments";
 import Picture from "../Picture";
 import ObjectLayoutItemDetailedRelatedList from "./LayoutItems/DetailedRelatedList";

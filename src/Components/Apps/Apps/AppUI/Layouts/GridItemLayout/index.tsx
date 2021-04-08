@@ -3,7 +3,7 @@ import React from "react";
 import { ObjectType } from "../../../../../../Utils/Types";
 import Card from "../../../../../Design/Card";
 import { AnimationContainer, AnimationItem } from "../../Animations";
-import { get } from "lodash";
+import get from "lodash/get";
 import { Link } from "react-router-dom";
 
 const GridItemLayout: React.FC<{

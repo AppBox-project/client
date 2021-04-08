@@ -1,4 +1,6 @@
-import { get, filter, sortBy as sortByFunc } from "lodash";
+import get from "lodash/get";
+import filter from "lodash/filter";
+import sortByFunc from "lodash/sortBy";
 
 // This function transforms a 2d array with a property to indicate it's parent into a recursive array with limitless subItems
 const array2dTo3d = (

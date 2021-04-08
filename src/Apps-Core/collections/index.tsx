@@ -1,6 +1,4 @@
-import React from "react";
 import { AppContext } from "../../Components/Apps/Apps/AppContext";
-import FaIcon from "../../Components/Icons";
 import Todo from "../../Components/Todo";
 import CollectionsDisplayInterface from "./Interface";
 import CollectionsDisplayObject from "./ObjectDisplay";
@@ -26,7 +24,7 @@ export default class App {
           return actions.push({
             label: action.label,
             key: action.key,
-            icon: <FaIcon icon={action.icon} />,
+            icon: action.icon,
             component:
               action.page.type === "model"
                 ? CollectionsDisplayObject

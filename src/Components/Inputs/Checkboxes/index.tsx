@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
-import { remove } from "lodash";
+import remove from "lodash/remove";
 const uniqid = require("uniqid");
 
 const InputCheckboxes: React.FC<{

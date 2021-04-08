@@ -9,7 +9,8 @@ import {
 import { Fab } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { FaSave } from "react-icons/fa";
-import { map, filter } from "lodash";
+import map from "lodash/map";
+import filter from "lodash/filter";
 
 const AppActionManageObjectActionsDetail: React.FC<{
   match: { params: { detailId } };

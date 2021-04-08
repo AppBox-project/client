@@ -4,7 +4,7 @@ import {
   ModelType,
   ValueListItemType,
 } from "../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useState, useEffect } from "reactn";
 import { Grid } from "@material-ui/core";
 

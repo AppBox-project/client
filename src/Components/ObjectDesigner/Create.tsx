@@ -19,7 +19,7 @@ import {
 } from "../../Utils/Types";
 import Card from "../Design/Card";
 import Loading from "../Loading";
-import { map } from "lodash";
+import map from "lodash/map";
 import InputSelect from "../Inputs/Select";
 import InputInput from "../Inputs/Input";
 import InputCheckbox from "../Inputs/Checkbox";

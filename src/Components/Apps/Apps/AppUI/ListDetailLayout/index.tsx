@@ -25,7 +25,7 @@ import TreeViewUI from "../TreeView";
 import styles from "./styles.module.scss";
 import ListDetailLayoutSkeleton from "./LoadingSkeleton";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
-import { find } from "lodash";
+import find from "lodash/find";
 import Card from "../../../../Design/Card";
 import FaIcon from "../../../../Icons";
 

@@ -4,7 +4,7 @@ import {
   ModelType,
   ValueListItemType,
 } from "../../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 import { useState, useEffect } from "reactn";
 
 const ExtensionConfigure: React.FC<{

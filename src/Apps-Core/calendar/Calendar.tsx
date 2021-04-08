@@ -1,32 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { AppContextType, ModelType, PersonType } from "../../Utils/Types";
-import {
-  Grid,
-  List,
-  ListItemText,
-  ListItem,
-  ListItemIcon,
-  Avatar,
-  Button,
-} from "@material-ui/core";
-import styles from "./styles.module.scss";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import React from "react";
+import { AppContextType } from "../../Utils/Types";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { AppCalCalendarType, AppCalEventType } from "./Types";
-import { findIndex, find } from "lodash";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import parseISO from "date-fns/parseISO";
-import RRule from "rrule";
-import { BsCalendar, BsCalendarFill } from "react-icons/bs";
 import { nl, enGB } from "date-fns/esm/locale";
-import balloons from "./balloons.png";
-import { useHistory, Link } from "react-router-dom";
-import { FaMailBulk, FaPhone, FaPlus } from "react-icons/fa";
 
 const locales = {
   nl,
@@ -42,7 +18,8 @@ const locales = {
 });
 const DnDCalendar = withDragAndDrop(Calendar);*/
 
-const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {/*
+const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {
+  /*
   // Vars
   const [calendars, setCalendars] = useState<AppCalCalendarType[]>([]);
   const [events, setEvents] = useState<
@@ -469,7 +446,7 @@ const AppCal: React.FC<{ context: AppContextType }> = ({ context }) => {/*
   );
   */
 
-  return <>Calendar temporarily broken</>
+  return <>Calendar temporarily broken</>;
 };
 
 export default AppCal;

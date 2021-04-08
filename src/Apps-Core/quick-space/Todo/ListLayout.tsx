@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import AppQSActionTodoDetailTodo from "./Todo";
 import { FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { filter } from "lodash";
+import filter from "lodash/filter";
 
 const AppQSTodoListLayout: React.FC<{
   context: AppContextType;

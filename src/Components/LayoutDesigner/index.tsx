@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DropTarget from "./DropTarget";
 import Component from "./Component";
 import { Grid, IconButton, List, ListItem, Tooltip } from "@material-ui/core";
-import { map } from "lodash";
+import map from "lodash/map";
 import { LayoutType } from "../../Utils/Types";
 import uniqid from "uniqid";
 import {

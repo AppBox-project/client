@@ -15,7 +15,7 @@ import {
   ModelType,
   ValueListItemType,
 } from "../../../Utils/Types";
-import { map } from "lodash";
+import map from "lodash/map";
 
 const AppSettingsInterfaceVariables: React.FC<{
   newInterface: InterfaceType;

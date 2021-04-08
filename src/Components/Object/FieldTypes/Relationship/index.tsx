@@ -5,7 +5,7 @@ import Loading from "../../../Loading";
 import Select from "react-select";
 import Server from "../../../../Utils/Server";
 import uniqid from "uniqid";
-import { filter } from "lodash";
+import filter from "lodash/filter";
 import { Link } from "react-router-dom";
 
 const FieldTypeRelationship: React.FC<{

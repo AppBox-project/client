@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { useGlobal } from "reactn";
 import { useDrop } from "react-dnd";
 import styles from "./styles.module.scss";
@@ -8,9 +8,7 @@ import { useDrag } from "react-dnd";
 import {
   AppContextType,
   LayoutDesignerItem,
-  ValueListItemType,
 } from "../../../../../../../Utils/Types";
-import { findIndex } from "lodash";
 
 export interface DustbinState {
   hasDropped: boolean;

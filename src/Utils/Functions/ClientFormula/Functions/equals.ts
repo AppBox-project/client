@@ -1,4 +1,4 @@
-import { get } from "lodash";
+import get from "lodash/get";
 
 export default (fArgs, data) => {
   const left = fArgs[0].str ? fArgs[0].str : get(data, fArgs[0]);

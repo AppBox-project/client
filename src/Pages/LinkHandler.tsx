@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Loading from "../Components/Loading";
 import uniqid from "uniqid";
 import Server from "../Utils/Server";
-import { get } from "lodash";
+import get from "lodash/get";
+
 import { useHistory } from "react-router-dom";
 
 const LinkHandler: React.FC<{ match: { params: { objectId } } }> = ({

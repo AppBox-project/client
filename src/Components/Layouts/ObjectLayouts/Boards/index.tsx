@@ -7,7 +7,9 @@ import {
   DropResult,
   Draggable,
 } from "react-beautiful-dnd";
-import { map, filter, findIndex } from "lodash";
+import map from "lodash/map";
+import filter from "lodash/filter";
+import findIndex from "lodash/findIndex";
 import styles from "./styles.module.scss";
 
 const BoardLayout: React.FC<{
