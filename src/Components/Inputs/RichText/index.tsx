@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import "./ckeditor.css";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const CKEditor = React.lazy(() => import("@ckeditor/ckeditor5-react"));
-
+const ClassicEditor = React.lazy(
+  () => import("@ckeditor/ckeditor5-build-classic")
+);
 const InputRichText: React.FC<{
   placeholder?: string;
   label?: string;
