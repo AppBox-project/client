@@ -21,6 +21,7 @@ import InputInput from "../../../../Inputs/Input";
 import map from "lodash/map";
 import styles from "./styles.module.scss";
 import { AppContext } from "../../AppContext";
+import FaIcon from "../../../../Icons";
 
 const AppUIMobile: React.FC<{
   appContext: AppContext;
