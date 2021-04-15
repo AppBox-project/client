@@ -88,7 +88,14 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
           }),
         }}
       >
-        <Toolbar>
+        <Toolbar
+          style={{
+            position: "absolute",
+            width: "calc(100vw - 32px)",
+            margin: 0,
+            zIndex: 30,
+          }}
+        >
           {isMobile && searchExpanded ? (
             <Search
               style={{ flex: 10 }}
