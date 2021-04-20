@@ -6,7 +6,14 @@ const FaIcon: React.FC<{ icon: string; className?; style?: CSSProperties }> = ({
   className,
   style,
 }) => {
-  return <i className={`fas fa-${icon}`} />;
+  return (
+    <i
+      className={`fas fa-${icon}${
+        className !== undefined ? ` ${className}` : ""
+      }`}
+      style={style}
+    />
+  );
 };
 
 export default FaIcon;
