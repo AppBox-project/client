@@ -13,8 +13,16 @@ import {
   ListItemSecondaryAction,
   Collapse,
   Icon,
+  IconButton,
+  Popover,
+  Tooltip,
 } from "@material-ui/core";
-import { FaChevronDown, FaChevronUp, FaWrench } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaHistory,
+  FaWrench,
+} from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
 import FuzzySearch from "fuzzy-search";
 import map from "lodash/map";
@@ -28,6 +36,7 @@ const AppUIDesktop: React.FC<{
   setCurrentPage;
 }> = ({ appContext, currentPage, setCurrentPage }) => {
   const [noActions, setNoActions] = useGlobal<any>("noActions");
+  const [historyMenuEl, setHistoryMenuEl] = React.useState(null);
 
   // Effects
   useEffect(() => {
@@ -48,9 +57,31 @@ const AppUIDesktop: React.FC<{
     SingleAction = appContext.actions;
   return (
     <>
+      <Popover
+        id="recents"
+        open={Boolean(historyMenuEl)}
+        anchorEl={historyMenuEl}
+        onClose={(event) => {
+          setHistoryMenuEl(null);
+        }}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+      >
+        Test
+      </Popover>
       {typeof appContext.actions === "object" &&
         appContext.app.data.menu_type !== "hidden" && (
-          <ActionMenu context={appContext} currentPage={currentPage} />
+          <ActionMenu
+            context={appContext}
+            currentPage={currentPage}
+            setHistoryMenuEl={setHistoryMenuEl}
+          />
         )}
       <div
         className={styles.app}
@@ -138,7 +169,8 @@ const AppUIDesktop: React.FC<{
 const ActionMenu: React.FC<{
   context: AppContext;
   currentPage: string;
-}> = ({ context, currentPage }) => {
+  setHistoryMenuEl;
+}> = ({ context, currentPage, setHistoryMenuEl }) => {
   const [filter, setFilter] = useState<any>();
   const [gTheme] = useGlobal<any>("theme");
 
@@ -251,6 +283,7 @@ const ActionMenu: React.FC<{
                         currentPage={currentPage}
                         gTheme={gTheme}
                         key={action.key}
+                        setHistoryMenuEl={setHistoryMenuEl}
                       />
                     ))}
                   </div>
@@ -265,6 +298,7 @@ const ActionMenu: React.FC<{
                   currentPage={currentPage}
                   gTheme={gTheme}
                   key={action.key}
+                  setHistoryMenuEl={setHistoryMenuEl}
                 />
               ))}
         </List>
@@ -323,13 +357,14 @@ const ActionMenu: React.FC<{
 
 export default AppUIDesktop;
 
-const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
-  item,
-  action,
-  context,
-  currentPage,
-  gTheme,
-}) => {
+const Action: React.FC<{
+  item;
+  action;
+  context;
+  currentPage;
+  gTheme;
+  setHistoryMenuEl;
+}> = ({ item, action, context, currentPage, gTheme, setHistoryMenuEl }) => {
   // Vars
   const [subItemsVisible, setSubItemsVisible] = useState<boolean>(false);
 
@@ -346,6 +381,7 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
             <Icon
               style={{
                 color: gTheme.palette.type === "dark" && "white",
+                width: 32,
               }}
               color={
                 gTheme.palette.type === "light" && currentPage === action.key
@@ -354,7 +390,10 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
               }
             >
               {typeof action?.icon === "string" ? (
-                <FaIcon icon={action.icon || "exclamation"} />
+                <FaIcon
+                  icon={action.icon || "exclamation"}
+                  style={{ width: 24 }}
+                />
               ) : (
                 action.icon &&
                 (<action.icon /> ? <action.icon /> : "Unknown icon case?")
@@ -373,6 +412,18 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
               {action.label}
             </Typography>
           </ListItemText>
+          <Tooltip title={`Recent bla`} placement="right">
+            <ListItemSecondaryAction
+              onClick={(event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                setHistoryMenuEl(event.currentTarget);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              <FaHistory />
+            </ListItemSecondaryAction>
+          </Tooltip>
           {action.subItems && (
             <ListItemSecondaryAction
               onClick={(event) => {
@@ -402,6 +453,7 @@ const Action: React.FC<{ item; action; context; currentPage; gTheme }> = ({
                 currentPage={currentPage}
                 gTheme={gTheme}
                 item={item}
+                setHistoryMenuEl={setHistoryMenuEl}
               />
             ))}
           </List>
