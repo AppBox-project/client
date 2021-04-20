@@ -20,6 +20,7 @@ import {
   InterfaceType,
   LayoutType,
   CustomFormInputType,
+  InterfaceInterfaces,
 } from "../../../Utils/Types";
 import map from "lodash/map";
 import filter from "lodash/filter";
@@ -927,7 +928,7 @@ const AppSettingsInterfaceUI: React.FC<{
   if (!selectedInterface && isMobile)
     return (
       <List>
-        {map(newInterface.data.data.interfaces, (value, key) => (
+        {map(newInterface.data.data.interfaces.content, (value, key) => (
           <ListItem key={key} button onClick={() => setSelectedInterface(key)}>
             <ListItemText>{value.label}</ListItemText>
           </ListItem>
@@ -1034,7 +1035,7 @@ export const AppSettingsInterfaceUIOverview: React.FC<{
   setRightUITab;
 }> = ({ newInterface, setSelectedInterface, setRightUITab }) => (
   <List>
-    {map(newInterface.data.data.interfaces, (interf, key) => (
+    {map(newInterface.data.data.interfaces.content, (interf, key) => (
       <ListItem
         key={key}
         button
@@ -1636,7 +1637,7 @@ const CustomInputFieldDisplay: React.FC<CustomFormInputType> = ({
       (o) => o.key === modelKey
     );
     const nl: ValueListItemType[] = [];
-    map(model?.fields || [], (field, key) =>
+    map(model?.fields, (field, key) =>
       nl.push({ label: field.name, value: key })
     );
     setFieldOptions(nl);

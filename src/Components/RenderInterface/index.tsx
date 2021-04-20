@@ -4,6 +4,7 @@ import {
   AppContextType,
   InterfaceInterfaces,
   InterfaceType,
+  LayoutDesignerItem,
 } from "../../Utils/Types";
 import map from "lodash/map";
 import RenderInterfaceGridContainer from "./InterfaceComponents/GridContainer";
@@ -139,16 +140,20 @@ const RenderInterface: React.FC<{
         }
       }}
     >
-      {map(currentInterface.content, (contentItem, contentKey) => (
-        <LayoutItem
-          key={contentKey}
-          layoutItem={contentItem}
-          vars={varValues}
-          setVars={setVarValues}
-          interfaceObject={appliedInterfaceObject}
-          context={context}
-        />
-      ))}
+      {map(
+        currentInterface.content as LayoutDesignerItem[],
+        (contentItem, contentKey) => (
+          <LayoutItem
+            key={contentKey}
+            /* @ts-ignore */
+            layoutItem={contentItem}
+            vars={varValues}
+            setVars={setVarValues}
+            interfaceObject={appliedInterfaceObject}
+            context={context}
+          />
+        )
+      )}
     </div>
   );
 };
@@ -159,7 +164,7 @@ interface LayoutItemType {
   type: "text";
   text?: string;
   items?: LayoutItemType[];
-  key: string;
+  key?: string;
   title?: string;
   withBigMargin?: true;
   varName?: string;
@@ -420,7 +425,7 @@ const executeTrigger = async (
       case "getObjects":
         let queryVariableHasChanged = false;
         let hasQueryVariables = false;
-        const filter: {} = JSON.parse(step.args.filter);
+        const filter: { [k: string]: any } = JSON.parse(step.args.filter);
         map(filter, (v, k) => {
           if (v.var) {
             hasQueryVariables = true;

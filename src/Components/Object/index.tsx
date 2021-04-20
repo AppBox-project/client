@@ -379,7 +379,7 @@ const ViewObject: React.FC<{
       setFactsBarInLayout(JSON.stringify(layout).includes(`FactsBar`));
       const actionsToGet = [];
       (layout.buttons || []).map((button) => {
-        if (button.key.match(/^[a-f\d]{24}$/i)) {
+        if (button?.key?.match(/^[a-f\d]{24}$/i)) {
           actionsToGet.push(button.key);
         } else {
           if (!["clone", "archive", "delete"].includes(button.key)) {

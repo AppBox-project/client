@@ -190,74 +190,78 @@ const AppUIMobile: React.FC<{
               )}
               <List>
                 {appContext.appConfig?.actions?.group
-                  ? map(groupedActions, (actions, group) => {
-                      return (
-                        <div key={group}>
-                          {group !== "undefined" && (
-                            <ListSubheader
-                              color={
-                                gTheme.palette.type === "light"
-                                  ? "primary"
-                                  : "default"
-                              }
-                              className={styles.subheader}
-                            >
-                              {group ? group : "Other"}
-                            </ListSubheader>
-                          )}
-                          {actions.map((action) => {
-                            return (
-                              <ListItem
-                                button
-                                selected={currentPage === action.key}
-                                onClick={() => {
-                                  setDrawerOpen(false);
-                                  history.push(
-                                    `/${appContext.appId}/${action.key}`
-                                  );
-                                }}
-                                className={styles.actionLink}
+                  ? map(
+                      groupedActions,
+                      (actions: { [k: string]: any }[], group) => {
+                        return (
+                          <div key={group}>
+                            {group !== "undefined" && (
+                              <ListSubheader
+                                color={
+                                  gTheme.palette.type === "light"
+                                    ? "primary"
+                                    : "default"
+                                }
+                                className={styles.subheader}
                               >
-                                <ListItemIcon>
-                                  <Icon
+                                {group ? group : "Other"}
+                              </ListSubheader>
+                            )}
+                            {actions.map((action) => {
+                              return (
+                                <ListItem
+                                  button
+                                  selected={currentPage === action.key}
+                                  onClick={() => {
+                                    setDrawerOpen(false);
+                                    history.push(
+                                      `/${appContext.appId}/${action.key}`
+                                    );
+                                  }}
+                                  className={styles.actionLink}
+                                >
+                                  <ListItemIcon>
+                                    <Icon
+                                      color={
+                                        gTheme.palette.type === "light" &&
+                                        currentPage === action.key
+                                          ? "primary"
+                                          : "inherit"
+                                      }
+                                    >
+                                      {typeof action?.icon === "string" ? (
+                                        <FaIcon
+                                          icon={action.icon || "exclamation"}
+                                        />
+                                      ) : (
+                                        action.icon &&
+                                        (<action.icon /> ? (
+                                          <action.icon />
+                                        ) : (
+                                          "Unknown icon case?"
+                                        ))
+                                      )}
+                                    </Icon>
+                                  </ListItemIcon>
+                                  <ListItemText
                                     color={
-                                      gTheme.palette.type === "light" &&
-                                      currentPage === action.key
+                                      gTheme.palette.type === "light"
+                                        ? "primary"
+                                        : "default" &&
+                                          currentPage === action.key
                                         ? "primary"
                                         : "inherit"
                                     }
                                   >
-                                    {typeof action?.icon === "string" ? (
-                                      <FaIcon
-                                        icon={action.icon || "exclamation"}
-                                      />
-                                    ) : (
-                                      action.icon &&
-                                      (<action.icon /> ? (
-                                        <action.icon />
-                                      ) : (
-                                        "Unknown icon case?"
-                                      ))
-                                    )}
-                                  </Icon>
-                                </ListItemIcon>
-                                <ListItemText
-                                  color={
-                                    gTheme.palette.type === "light"
-                                      ? "primary"
-                                      : "default" && currentPage === action.key
-                                      ? "primary"
-                                      : "inherit"
-                                  }
-                                >
-                                  {action.label}
-                                </ListItemText>
-                              </ListItem>
-                            );
-                          })}
-                        </div>
-                      );
-                    })
+                                    {action.label}
+                                  </ListItemText>
+                                </ListItem>
+                              );
+                            })}
+                          </div>
+                        );
+                      }
+                    )
                   : typeof actions === "object" &&
                     actions.map((action) => {
                       const Icon = action.icon;

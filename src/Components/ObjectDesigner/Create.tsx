@@ -29,7 +29,7 @@ const ObjectDesigner: React.FC<{
   model?: ModelType;
   modelId?: string;
   context: AppContextType;
-  value: {};
+  value: { [k: string]: any };
   onChange: (value: {}) => void;
 }> = ({ model, modelId, context, value, onChange }) => {
   // Vars

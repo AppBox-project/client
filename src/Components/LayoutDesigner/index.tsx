@@ -19,7 +19,7 @@ import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch"; // or 
 const LayoutDesigner: React.FC<{
   layout: LayoutType;
   onChange: (layout) => void;
-  componentList: {};
+  componentList: { [k: string]: any };
 }> = ({ layout, onChange, componentList }) => {
   // Vars
   const [expandTray, setExpandTray] = useState<any>(false);

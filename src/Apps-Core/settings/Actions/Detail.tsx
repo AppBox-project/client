@@ -5,7 +5,7 @@ import {
   ModelType,
   ValueListItemType,
 } from "../../../Utils/Types";
-import { ActionType } from "../Types";
+import { ActionType, ActionVarType } from "../Types";
 import find from "lodash/find";
 import { Fab, Grid, Tab, Tabs } from "@material-ui/core";
 import { FaSave } from "react-icons/fa";
@@ -61,7 +61,7 @@ const SettingsActionsDetail: React.FC<{
 
   useEffect(() => {
     const nl: ValueListItemType[] = [];
-    map(action?.data?.data?.vars || [], (vari, value) =>
+    map(action?.data?.data?.vars || [], (vari: ActionVarType, value) =>
       nl.push({ label: vari.label, value, args: vari })
     );
     setVarList(nl);

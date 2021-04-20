@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AppContextType, ModelType } from "../../../../Utils/Types";
+import { AppContextType, ModelType, ObjectType } from "../../../../Utils/Types";
 import { Typography, Divider, List } from "@material-ui/core";
 import {
   DragDropContext,
@@ -21,7 +21,7 @@ const BoardLayout: React.FC<{
   customItem?: (listItem) => JSX.Element;
 }> = ({ context, objects, model, boardField, onItemClick, customItem }) => {
   // Vars
-  const [newObjects, setNewObjects] = useState<any>(objects);
+  const [newObjects, setNewObjects] = useState<ObjectType[]>(objects);
   const noGroup = filter(newObjects, (o) => {
     return !o.data[boardField];
   });

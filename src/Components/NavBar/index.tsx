@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import map from "lodash/map";
 import Search from "../Search";
 import { FaSearch, FaSearchMinus } from "react-icons/fa";
-import { baseUrl } from "../../Utils/Utils";
 
 const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
   // Vars
@@ -91,9 +90,10 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
         <Toolbar
           style={{
             position: "absolute",
-            width: "calc(100vw - 32px)",
+            width: "100vw",
             margin: 0,
             zIndex: 30,
+            padding: 0,
           }}
         >
           {isMobile && searchExpanded ? (
@@ -102,70 +102,99 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
               setSearchExpanded={setSearchExpanded}
             />
           ) : (
-            <>
-              {navBar.backButton &&
-              navBar.backButton.icon &&
-              navBar.backButton.url ? (
-                <Link to={navBar.backButton.url} style={{ color: "white" }}>
-                  <IconButton edge="start" color="inherit" aria-label="menu">
+            <div
+              style={{
+                display: "flex",
+                width: isMobile ? "100%" : "calc(100% - 304px)",
+                height: 64,
+              }}
+            >
+              <div style={{ flex: 1, display: "flex" }}>
+                {navBar.backButton &&
+                navBar.backButton.icon &&
+                navBar.backButton.url ? (
+                  <Link to={navBar.backButton.url} style={{ color: "white" }}>
+                    <IconButton
+                      edge="start"
+                      color="inherit"
+                      aria-label="menu"
+                      style={{ height: "100%", marginLeft: 4 }}
+                    >
+                      {navBar.backButton.icon}
+                    </IconButton>
+                  </Link>
+                ) : navBar.backButton.function ? (
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={navBar.backButton.function}
+                  >
                     {navBar.backButton.icon}
                   </IconButton>
-                </Link>
-              ) : navBar.backButton.function ? (
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={navBar.backButton.function}
+                ) : (
+                  <Icon>{navBar.backButton.icon}</Icon>
+                )}
+                <Typography
+                  variant="h6"
+                  style={{
+                    color: "white",
+                    cursor: "default",
+                    flex: 1,
+                    lineHeight: "64px",
+                  }}
+                  noWrap
                 >
-                  {navBar.backButton.icon}
-                </IconButton>
-              ) : (
-                <Icon>{navBar.backButton.icon}</Icon>
-              )}
-              <Typography
-                variant="h6"
-                style={{ color: "white", flex: 1, cursor: "default" }}
-                noWrap
+                  {navBar.title
+                    ? navBar.title
+                    : currentApp
+                    ? app
+                      ? app.data.name
+                      : ""
+                    : "AppBox"}
+                </Typography>
+              </div>
+              <div
+                style={{
+                  flex: 2,
+                  height: "100%",
+                  padding: "15px 0",
+                  zIndex: 50,
+                  position: "relative",
+                }}
               >
-                {navBar.title
-                  ? navBar.title
-                  : currentApp
-                  ? app
-                    ? app.data.name
-                    : ""
-                  : "AppBox"}
-              </Typography>
-              {!isMobile && (
-                <Search style={{ flex: 4, maxWidth: 650, margin: "0 35px" }} />
-              )}
-              <div style={{ flex: 1 }} />
-              {actions &&
-                map(actions, (button, key) => {
-                  if (button) {
-                    return button.label ? (
-                      <Button
-                        key={key}
-                        startIcon={button.icon}
-                        style={{ color: "white" }}
-                        onClick={button.function}
-                        variant={button.variant ? button.variant : "text"}
-                        color="primary"
-                      >
-                        {button.label}
-                      </Button>
-                    ) : (
-                      <IconButton
-                        key={key}
-                        onClick={button.function}
-                        style={{ color: "white" }}
-                      >
-                        {button.icon}
-                      </IconButton>
-                    );
-                  }
-                })}
-            </>
+                {!isMobile && (
+                  <Search style={{ width: "100%", height: "100%" }} />
+                )}
+              </div>
+              <div style={{ flex: 1, textAlign: "right", padding: 10 }}>
+                {actions &&
+                  map(actions, (button, key) => {
+                    if (button) {
+                      return button.label ? (
+                        <Button
+                          key={key}
+                          startIcon={button.icon}
+                          style={{ color: "white" }}
+                          onClick={button.function}
+                          variant={button.variant ? button.variant : "text"}
+                          color="primary"
+                        >
+                          {button.label}
+                        </Button>
+                      ) : (
+                        <IconButton
+                          key={key}
+                          onClick={button.function}
+                          style={{ color: "white" }}
+                        >
+                          {button.icon}
+                        </IconButton>
+                      );
+                    }
+                  })}{" "}
+              </div>
+            </div>
           )}
           {isMobile && (
             <IconButton

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styles from "./styles.module.scss";
-import "./ckeditor.css";
-const CKEditor = React.lazy(() => import("@ckeditor/ckeditor5-react"));
-const ClassicEditor = React.lazy(
-  () => import("@ckeditor/ckeditor5-build-classic")
-);
+import React, { useState, useEffect, Suspense } from "react";
+import "react-quill/dist/quill.snow.css";
+import Loading from "../../Loading";
+const ReactQuill = React.lazy(() => import("react-quill"));
+
 const InputRichText: React.FC<{
   placeholder?: string;
   label?: string;
@@ -22,20 +20,16 @@ const InputRichText: React.FC<{
 
   // UI
   return (
-    <CKEditor
-      style={{ backgroundColor: "red" }}
-      editor={ClassicEditor}
-      config={{ contentCss: `body{background-color:red;}` }}
-      className={styles.editor}
-      data={newValue}
-      onChange={(event, editor) => {
-        const data = editor.getData();
-        if (data !== value) {
-          setNewValue(data);
-          if (onChange) onChange(data);
-        }
-      }}
-    />
+    <Suspense fallback={<Loading />}>
+      <ReactQuill
+        theme="snow"
+        value={newValue}
+        onChange={(val) => {
+          setNewValue(val);
+          if (onChange) onChange(val);
+        }}
+      />
+    </Suspense>
   );
 };
 

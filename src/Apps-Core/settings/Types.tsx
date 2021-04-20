@@ -48,9 +48,15 @@ export interface ActionLogicStepType {
 }
 
 export interface ActionVarType {
-  type: "text" | "boolean" | "object" | "objects";
+  type: "text" | "boolean" | "object" | "objects" | "options" | "number";
   name: string;
+  label?: string;
   setting_value: any;
+  setting?;
+  model?: string;
+  description?;
+  default?: boolean;
+  options?;
 }
 
 export interface ActionType extends ObjectType {

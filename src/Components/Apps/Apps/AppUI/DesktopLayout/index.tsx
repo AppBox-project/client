@@ -226,7 +226,7 @@ const ActionMenu: React.FC<{
         <Divider style={{ margin: 15 }} />
         <List style={{ margin: 10 }}>
           {context.appConfig?.actions?.group
-            ? map(groupedActions, (actions, group) => {
+            ? map(groupedActions, (actions: { [k: string]: any }[], group) => {
                 return (
                   <div key={group}>
                     <motion.div variants={item}>

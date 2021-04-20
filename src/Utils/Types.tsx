@@ -53,6 +53,7 @@ export interface ModelFieldType {
     readonly?: boolean;
     asBanner?: boolean;
     numberType?: "regular" | "currency";
+    asColor?;
   };
 }
 
@@ -141,7 +142,7 @@ export interface ModelType {
   actions: {
     [name: string]: ModelActionType;
   };
-  extensions?: { [key: string]: {} };
+  extensions?: { [key: string]: { name: string; active?: boolean } };
   api?: {
     read?: ModelApiType;
     create?: ModelApiType;
@@ -751,8 +752,10 @@ export interface InterfaceType extends ObjectType {
       variables: {
         [key: string]: {
           type;
+          var?: string;
           label: string;
           model?: string;
+          default?;
           input_var?: boolean;
         };
       };

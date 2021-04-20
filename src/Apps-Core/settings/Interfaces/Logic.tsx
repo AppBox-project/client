@@ -295,9 +295,9 @@ const LogicStepTypeGetObjects: React.FC<{
   // Lifecycle
   useEffect(() => {
     const nl: ValueListItemType[] = [];
-    map(newInterface.data.data.variables, (v) => {
+    map(newInterface.data.data.variables, (v, key) => {
       if (v.type === "objects") {
-        nl.push({ label: v.label, value: v.key });
+        nl.push({ label: v.label, value: key });
       }
     });
     setAssignedVarOptions(nl);
@@ -348,10 +348,10 @@ const LogicStepTypeshowInterface: React.FC<{
   // Lifecycle
   useEffect(() => {
     const nl: ValueListItemType[] = [];
-    map(newInterface.data.data.interfaces, (v, k) => {
+    map(newInterface.data.data.interfaces.content, (v, k) => {
       nl.push({
         label: v.label,
-        value: k,
+        value: `${k}`,
       });
     });
     setLayoutOptions(nl);

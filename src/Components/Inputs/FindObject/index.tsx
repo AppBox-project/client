@@ -51,6 +51,7 @@ const InputFindObject: React.FC<{
           setNewValue(nv);
         } else {
           // Single
+          //@ts-ignore
           setNewValue(find(options, (o) => o.value === value));
         }
       }

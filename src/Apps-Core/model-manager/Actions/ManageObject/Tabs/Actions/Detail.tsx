@@ -167,10 +167,12 @@ const AppActionManageObjectActionsDetail: React.FC<{
               {action?.mode === "single" && (
                 <context.UI.Inputs.Select
                   label="Variable to pass current object to"
-                  options={filter(
-                    selectedInterfaceVarList,
-                    (o) => o.args.type === "object" && o.args.input_var
-                  )}
+                  options={
+                    filter(
+                      selectedInterfaceVarList,
+                      (o) => o.args.type === "object" && o.args.input_var
+                    ) as { value: any; label: string }[]
+                  }
                   value={action.passContextTo}
                   onChange={(value) => {
                     setAction({ ...action, passContextTo: value });
@@ -181,10 +183,12 @@ const AppActionManageObjectActionsDetail: React.FC<{
               {action?.mode === "multiple" && (
                 <context.UI.Inputs.Select
                   label="Variable to pass selected objects to"
-                  options={filter(
-                    selectedInterfaceVarList,
-                    (o) => o.args.type === "objects" && o.args.input_var
-                  )}
+                  options={
+                    filter(
+                      selectedInterfaceVarList,
+                      (o) => o.args.type === "objects" && o.args.input_var
+                    ) as { value: any; label: string }[]
+                  }
                   value={action.passContextTo}
                   onChange={(value) => {
                     setAction({ ...action, passContextTo: value });
