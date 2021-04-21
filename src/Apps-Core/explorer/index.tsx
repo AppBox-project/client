@@ -42,6 +42,12 @@ export default class App {
                   component: AppActionObject,
                   icon: result.icon,
                   group,
+                  shortcuts: {
+                    type: "recents",
+                    model: result.key,
+                    title: `Recent ${result.name_plural.toLowerCase()}`,
+                    url: `/explorer/${result.key}/`,
+                  },
                 });
               });
               resolve(actions);

@@ -13,14 +13,14 @@ import {
   ListItemSecondaryAction,
   Collapse,
   Icon,
-  IconButton,
   Popover,
   Tooltip,
+  IconButton,
 } from "@material-ui/core";
 import {
+  FaAngleRight,
   FaChevronDown,
   FaChevronUp,
-  FaHistory,
   FaWrench,
 } from "react-icons/fa";
 import InputInput from "../../../../Inputs/Input";
@@ -29,6 +29,8 @@ import map from "lodash/map";
 import { useEffect } from "reactn";
 import { AppContext } from "../../AppContext";
 import FaIcon from "../../../../Icons";
+import Card from "../../../../Design/Card";
+import RecentList from "../../../../RecentList";
 
 const AppUIDesktop: React.FC<{
   appContext: AppContext;
@@ -37,6 +39,12 @@ const AppUIDesktop: React.FC<{
 }> = ({ appContext, currentPage, setCurrentPage }) => {
   const [noActions, setNoActions] = useGlobal<any>("noActions");
   const [historyMenuEl, setHistoryMenuEl] = React.useState(null);
+  const [shortcuts, setShortcuts] = useState<{
+    title: string;
+    shortcuts: string | [];
+    model?: string;
+    url?: string;
+  }>();
 
   // Effects
   useEffect(() => {
@@ -72,8 +80,25 @@ const AppUIDesktop: React.FC<{
           vertical: "center",
           horizontal: "left",
         }}
+        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
       >
-        Test
+        <Card
+          title={shortcuts?.title}
+          withBigMargin
+          centerTitle
+          titleDivider
+          titleInPrimaryColor
+        >
+          {shortcuts?.model ? (
+            <RecentList
+              modelId={shortcuts?.model}
+              url={shortcuts?.url}
+              onClose={() => setHistoryMenuEl(null)}
+            />
+          ) : (
+            "Todo: custom recents"
+          )}
+        </Card>
       </Popover>
       {typeof appContext.actions === "object" &&
         appContext.app.data.menu_type !== "hidden" && (
@@ -81,6 +106,7 @@ const AppUIDesktop: React.FC<{
             context={appContext}
             currentPage={currentPage}
             setHistoryMenuEl={setHistoryMenuEl}
+            setShortcuts={setShortcuts}
           />
         )}
       <div
@@ -170,7 +196,8 @@ const ActionMenu: React.FC<{
   context: AppContext;
   currentPage: string;
   setHistoryMenuEl;
-}> = ({ context, currentPage, setHistoryMenuEl }) => {
+  setShortcuts;
+}> = ({ context, currentPage, setHistoryMenuEl, setShortcuts }) => {
   const [filter, setFilter] = useState<any>();
   const [gTheme] = useGlobal<any>("theme");
 
@@ -284,6 +311,7 @@ const ActionMenu: React.FC<{
                         gTheme={gTheme}
                         key={action.key}
                         setHistoryMenuEl={setHistoryMenuEl}
+                        setShortcuts={setShortcuts}
                       />
                     ))}
                   </div>
@@ -299,6 +327,7 @@ const ActionMenu: React.FC<{
                   gTheme={gTheme}
                   key={action.key}
                   setHistoryMenuEl={setHistoryMenuEl}
+                  setShortcuts={setShortcuts}
                 />
               ))}
         </List>
@@ -364,7 +393,16 @@ const Action: React.FC<{
   currentPage;
   gTheme;
   setHistoryMenuEl;
-}> = ({ item, action, context, currentPage, gTheme, setHistoryMenuEl }) => {
+  setShortcuts;
+}> = ({
+  item,
+  action,
+  context,
+  currentPage,
+  gTheme,
+  setHistoryMenuEl,
+  setShortcuts,
+}) => {
   // Vars
   const [subItemsVisible, setSubItemsVisible] = useState<boolean>(false);
 
@@ -377,7 +415,7 @@ const Action: React.FC<{
         to={`/${context.app.data.id}/${action.key}`}
       >
         <ListItem button selected={currentPage === action.key}>
-          <ListItemIcon>
+          <ListItemIcon style={{ minWidth: 16 }}>
             <Icon
               style={{
                 color: gTheme.palette.type === "dark" && "white",
@@ -392,7 +430,8 @@ const Action: React.FC<{
               {typeof action?.icon === "string" ? (
                 <FaIcon
                   icon={action.icon || "exclamation"}
-                  style={{ width: 24 }}
+                  style={{ width: 12 }}
+                  size="xs"
                 />
               ) : (
                 action.icon &&
@@ -412,18 +451,35 @@ const Action: React.FC<{
               {action.label}
             </Typography>
           </ListItemText>
-          <Tooltip title={`Recent bla`} placement="right">
-            <ListItemSecondaryAction
-              onClick={(event) => {
-                event.stopPropagation();
-                event.preventDefault();
-                setHistoryMenuEl(event.currentTarget);
-              }}
-              style={{ cursor: "pointer" }}
+          {action.shortcuts && (
+            <Tooltip
+              title={action.shortcuts.title || "View shortcuts"}
+              placement="right"
             >
-              <FaHistory />
-            </ListItemSecondaryAction>
-          </Tooltip>
+              <ListItemSecondaryAction style={{ cursor: "pointer" }}>
+                <IconButton
+                  size="small"
+                  color={currentPage === action.key ? "primary" : "inherit"}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    setHistoryMenuEl(event.currentTarget);
+                    setShortcuts({
+                      title: action.shortcuts.title || "View shortcuts",
+                      shortcuts:
+                        action.shortcuts.type === "recents" ? "recents" : [],
+                      ...(action.shortcuts.type === "recents"
+                        ? { model: action.shortcuts.model }
+                        : {}),
+                      url: action.shortcuts.url,
+                    });
+                  }}
+                >
+                  <FaAngleRight />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </Tooltip>
+          )}
           {action.subItems && (
             <ListItemSecondaryAction
               onClick={(event) => {
@@ -454,6 +510,7 @@ const Action: React.FC<{
                 gTheme={gTheme}
                 item={item}
                 setHistoryMenuEl={setHistoryMenuEl}
+                setShortcuts={setShortcuts}
               />
             ))}
           </List>
