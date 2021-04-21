@@ -1,7 +1,7 @@
 {
   "name": "appbox-client",
-  "version": "0.2.6-2",
-  "description": "Object recents",
+  "version": "0.2.6-3",
+  "description": "Context menu: sort by frequency used.",
   "author": {
     "email": "hi@appbox.com",
     "name": "Vic van Cooten",

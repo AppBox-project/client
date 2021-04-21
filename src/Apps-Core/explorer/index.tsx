@@ -14,6 +14,9 @@ export default class App {
       filter: true,
       group: true,
       mobile: { displayAs: "menu" },
+      context: {
+        sortBy: "frequent",
+      },
     },
   };
 

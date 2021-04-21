@@ -88,6 +88,8 @@ const AppUIDesktop: React.FC<{
           centerTitle
           titleDivider
           titleInPrimaryColor
+          withoutPadding
+          hoverable
         >
           {shortcuts?.model ? (
             <RecentList
@@ -283,7 +285,7 @@ const ActionMenu: React.FC<{
       </div>
       <div className={styles.menuBottom}>
         <Divider style={{ margin: 15 }} />
-        <List style={{ margin: 10 }}>
+        <List disablePadding>
           {context.appConfig?.actions?.group
             ? map(groupedActions, (actions: { [k: string]: any }[], group) => {
                 return (
@@ -386,7 +388,7 @@ const ActionMenu: React.FC<{
 
 export default AppUIDesktop;
 
-const Action: React.FC<{
+export const Action: React.FC<{
   item;
   action;
   context;
@@ -394,6 +396,7 @@ const Action: React.FC<{
   gTheme;
   setHistoryMenuEl;
   setShortcuts;
+  onActionSelect?: () => void;
 }> = ({
   item,
   action,
@@ -402,6 +405,7 @@ const Action: React.FC<{
   gTheme,
   setHistoryMenuEl,
   setShortcuts,
+  onActionSelect,
 }) => {
   // Vars
   const [subItemsVisible, setSubItemsVisible] = useState<boolean>(false);
@@ -413,6 +417,7 @@ const Action: React.FC<{
       <Link
         className={styles.actionLink}
         to={`/${context.app.data.id}/${action.key}`}
+        onClick={() => onActionSelect && onActionSelect()}
       >
         <ListItem button selected={currentPage === action.key}>
           <ListItemIcon style={{ minWidth: 16 }}>
@@ -459,7 +464,11 @@ const Action: React.FC<{
               <ListItemSecondaryAction style={{ cursor: "pointer" }}>
                 <IconButton
                   size="small"
-                  color={currentPage === action.key ? "primary" : "inherit"}
+                  color={
+                    currentPage === action.key && gTheme.palette.type !== "dark"
+                      ? "primary"
+                      : "inherit"
+                  }
                   onClick={(event) => {
                     event.stopPropagation();
                     event.preventDefault();

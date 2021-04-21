@@ -124,8 +124,7 @@ const Card: React.FC<CardProps> = ({
               }
               style={{
                 textAlign: centerTitle ? "center" : "left",
-                marginTop: withoutPadding && 10,
-                marginBottom: withoutPadding && 10,
+                margin: withoutPadding && 10,
               }}
             >
               {title}

@@ -254,10 +254,12 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         }}
         transformOrigin={{
           vertical: "center",
-          horizontal: "right",
+          horizontal: "left",
         }}
-        style={{ marginLeft: 25 }}
-        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
+        PaperProps={{
+          elevation: 0,
+          style: { backgroundColor: "transparent", width: 200 },
+        }}
       >
         {appContextMenuApp && (
           <AppContextMenu

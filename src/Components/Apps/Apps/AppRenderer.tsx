@@ -116,6 +116,29 @@ const App: React.FC<{
   useEffect(() => {
     if (appContext) appContext.sessionVariables = gPage;
   }, [gPage]);
+  useEffect(() => {
+    if (currentPage) {
+      // Check if sort mode is frequency
+      const sortBy = appContext?.appCode?.appConfig?.actions?.context?.sortBy;
+      if (sortBy === "frequent") {
+        // Since we need to sort our actions by frequency used, let's log the fact that this action was opened just now.
+        const currentAppFrequencies = localStorage.getItem(
+          `app-action-frequency-${appContext.appId}`
+        )
+          ? JSON.parse(
+              localStorage.getItem(`app-action-frequency-${appContext.appId}`)
+            )
+          : { [currentPage]: 0 };
+        currentAppFrequencies[currentPage] =
+          currentAppFrequencies[currentPage] + 1;
+
+        localStorage.setItem(
+          `app-action-frequency-${appContext.appId}`,
+          JSON.stringify(currentAppFrequencies)
+        );
+      }
+    }
+  }, [currentPage, appContext]);
 
   //UI
   if (!appContext) {

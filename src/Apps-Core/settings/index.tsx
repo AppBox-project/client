@@ -47,6 +47,11 @@ export default class App {
           component: AppSettingsActions,
           icon: FaRobot,
           group: "System",
+          shortcuts: {
+            type: "recents",
+            model: "actions",
+            title: `Recent actions`,
+          },
         },
         {
           key: "apps",
@@ -54,6 +59,11 @@ export default class App {
           component: AppSettingsApps,
           icon: FaThLarge,
           group: "Apps",
+          shortcuts: {
+            type: "recents",
+            model: "apps",
+            title: `Recent apps`,
+          },
         },
         {
           key: "interfaces",
@@ -61,6 +71,11 @@ export default class App {
           component: AppSettingsInterfaces,
           icon: FaColumns,
           group: "Apps",
+          shortcuts: {
+            type: "recents",
+            model: "interfaces",
+            title: `Recent interfaces`,
+          },
         },
         {
           key: "update",
