@@ -112,11 +112,12 @@ const AppUIMobile: React.FC<{
         )}
       <div
         style={{
-          height: "100%",
-          overflow: "auto",
-          paddingBottom:
+          height:
             appContext.appConfig?.actions?.mobile?.displayAs ===
-              "bottom-navigation" && 54,
+            "bottom-navigation"
+              ? "calc(100% - 112px)"
+              : "100%",
+          overflow: "auto",
         }}
       >
         {SingleAction ? (
@@ -285,121 +286,121 @@ const AppUIMobile: React.FC<{
             </div>
           </SwipeableDrawer>
         )}
-        {appContext.appConfig?.actions?.mobile?.displayAs ===
-          "bottom-navigation" &&
-          appContext.actions.length >
-            (appContext?.appConfig?.settings ? 3 : 4) && (
-            <Popover
-              id="more-options"
-              open={Boolean(anchorElMoreNav)}
-              anchorEl={anchorElMoreNav}
-              onClose={() => setAnchorElMoreNav(null)}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-              transformOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-            >
-              <List>
-                {appContext.actions
-                  .slice(3, appContext.actions.length)
-                  .map((action) => {
-                    const Icon: React.FC<{ style }> = action.icon;
-                    return (
-                      <ListItem
-                        key={action.key}
-                        button
-                        selected={currentAction === action.key}
-                        onClick={() => {
-                          history.push(`/${appContext.appId}/${action.key}`);
-                          setAnchorElMoreNav(undefined);
-                        }}
-                      >
-                        <ListItemIcon style={{ minWidth: 32 }}>
-                          {Icon ? (
-                            <Icon style={{ height: 20, width: 20 }} />
-                          ) : (
-                            <FaLemon />
-                          )}
-                        </ListItemIcon>
-                        <ListItemText>{action.label}</ListItemText>
-                      </ListItem>
-                    );
-                  })}
-              </List>
-            </Popover>
-          )}
-        {appContext.appConfig?.actions?.mobile?.displayAs ===
-          "bottom-navigation" && (
-          <BottomNavigation
-            value={currentAction}
-            showLabels
-            onChange={(event, newValue) => {
-              if (newValue === "more") {
-                //@ts-ignore
-                setAnchorElMoreNav(event.currentTarget);
-              } else {
-                history.push(`/${appContext.appId}/${newValue}`);
-              }
+      </div>
+
+      {appContext.appConfig?.actions?.mobile?.displayAs ===
+        "bottom-navigation" &&
+        appContext.actions.length >
+          (appContext?.appConfig?.settings ? 3 : 4) && (
+          <Popover
+            id="more-options"
+            open={Boolean(anchorElMoreNav)}
+            anchorEl={anchorElMoreNav}
+            onClose={() => setAnchorElMoreNav(null)}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "center",
             }}
-            style={{
-              bottom: 0,
-              position: "absolute",
-              width: "100%",
-              zIndex: 101,
+            transformOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
             }}
           >
-            {typeof actions === "object" &&
-              //@ts-ignore
-              (appContext.actions.length >
-              (appContext?.appConfig?.settings ? 3 : 4)
-                ? [
-                    ...appContext.actions.slice(0, 3),
-                    { icon: FaEllipsisV, key: "more", label: "More" },
-                  ]
-                : appContext.actions
-              ).map((action) => {
-                const Icon: React.FC<{ style }> = action.icon;
-                return (
-                  <BottomNavigationAction
-                    key={action.key}
-                    label={action.label}
-                    value={action.key}
-                    color={
-                      currentAction === action.key &&
-                      gTheme.palette.type === "light" &&
-                      "primary"
-                    }
-                    style={{
-                      color:
-                        currentAction === action.key &&
-                        gTheme.palette.type !== "light" &&
-                        "#fff",
-                    }}
-                    icon={
-                      Icon ? (
-                        <Icon style={{ height: 20, width: 20 }} />
-                      ) : (
-                        <FaLemon />
-                      )
-                    }
-                  />
-                );
-              })}
-            {appContext?.appConfig?.settings && (
-              <BottomNavigationAction
-                key="settings"
-                label="Settings"
-                value="settings"
-                icon={<FaCogs style={{ height: 20, width: 20 }} />}
-              />
-            )}
-          </BottomNavigation>
+            <List>
+              {appContext.actions
+                .slice(3, appContext.actions.length)
+                .map((action) => {
+                  const Icon: React.FC<{ style }> = action.icon;
+                  return (
+                    <ListItem
+                      key={action.key}
+                      button
+                      selected={currentAction === action.key}
+                      onClick={() => {
+                        history.push(`/${appContext.appId}/${action.key}`);
+                        setAnchorElMoreNav(undefined);
+                      }}
+                    >
+                      <ListItemIcon style={{ minWidth: 32 }}>
+                        {Icon ? (
+                          <Icon style={{ height: 20, width: 20 }} />
+                        ) : (
+                          <FaLemon />
+                        )}
+                      </ListItemIcon>
+                      <ListItemText>{action.label}</ListItemText>
+                    </ListItem>
+                  );
+                })}
+            </List>
+          </Popover>
         )}
-      </div>
+      {appContext.appConfig?.actions?.mobile?.displayAs ===
+        "bottom-navigation" && (
+        <BottomNavigation
+          value={currentAction}
+          showLabels
+          onChange={(event, newValue) => {
+            if (newValue === "more") {
+              //@ts-ignore
+              setAnchorElMoreNav(event.currentTarget);
+            } else {
+              history.push(`/${appContext.appId}/${newValue}`);
+            }
+          }}
+          style={{
+            position: "absolute",
+            width: "100vw",
+            zIndex: 101,
+          }}
+        >
+          {typeof actions === "object" &&
+            //@ts-ignore
+            (appContext.actions.length >
+            (appContext?.appConfig?.settings ? 3 : 4)
+              ? [
+                  ...appContext.actions.slice(0, 3),
+                  { icon: FaEllipsisV, key: "more", label: "More" },
+                ]
+              : appContext.actions
+            ).map((action) => {
+              const Icon: React.FC<{ style }> = action.icon;
+              return (
+                <BottomNavigationAction
+                  key={action.key}
+                  label={action.label}
+                  value={action.key}
+                  color={
+                    currentAction === action.key &&
+                    gTheme.palette.type === "light" &&
+                    "primary"
+                  }
+                  style={{
+                    color:
+                      currentAction === action.key &&
+                      gTheme.palette.type !== "light" &&
+                      "#fff",
+                  }}
+                  icon={
+                    Icon ? (
+                      <Icon style={{ height: 20, width: 20 }} />
+                    ) : (
+                      <FaLemon />
+                    )
+                  }
+                />
+              );
+            })}
+          {appContext?.appConfig?.settings && (
+            <BottomNavigationAction
+              key="settings"
+              label="Settings"
+              value="settings"
+              icon={<FaCogs style={{ height: 20, width: 20 }} />}
+            />
+          )}
+        </BottomNavigation>
+      )}
     </>
   );
 };

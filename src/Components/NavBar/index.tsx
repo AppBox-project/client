@@ -95,10 +95,11 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
             zIndex: 30,
             padding: 0,
           }}
+          className={styles.bar}
         >
           {isMobile && searchExpanded ? (
             <Search
-              style={{ flex: 10 }}
+              style={{ flex: 10, height: "100%", width: "100%" }}
               setSearchExpanded={setSearchExpanded}
             />
           ) : (
@@ -154,19 +155,19 @@ const NavBar: React.FC<{ currentApp? }> = ({ currentApp }) => {
                     : "AppBox"}
                 </Typography>
               </div>
-              <div
-                style={{
-                  flex: 2,
-                  height: "100%",
-                  padding: "15px 0",
-                  zIndex: 50,
-                  position: "relative",
-                }}
-              >
-                {!isMobile && (
+              {!isMobile && (
+                <div
+                  style={{
+                    flex: 2,
+                    height: "100%",
+                    padding: "15px 0",
+                    zIndex: 50,
+                    position: "relative",
+                  }}
+                >
                   <Search style={{ width: "100%", height: "100%" }} />
-                )}
-              </div>
+                </div>
+              )}
               <div style={{ flex: 1, textAlign: "right", padding: 10 }}>
                 {actions &&
                   map(actions, (button, key) => {
