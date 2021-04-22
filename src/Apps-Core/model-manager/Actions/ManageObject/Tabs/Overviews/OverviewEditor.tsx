@@ -95,6 +95,7 @@ const AppActionManageObjectOverviewEditor: React.FC<{
     const nl: ValueListItemType[] = [
       { label: "Delete", value: "delete", args: { mode: "single" } },
       { label: "Delete", value: "delete", args: { mode: "multiple" } },
+      { label: "Merge", value: "merge", args: { mode: "multiple" } },
       ...serverActions,
     ];
     map(model.actions, (action: ModelActionType, actionKey) =>
@@ -133,9 +134,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
                 <context.UI.Design.Card
-                  hoverable
                   withBigMargin
                   title="Available"
+                  shadow="diffuse"
                 >
                   <List>
                     {map(model.fields, (field, key: string) => {
@@ -170,9 +171,9 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             <Grid item xs={12} md={6}>
               <UI.Animations.AnimationItem>
                 <context.UI.Design.Card
-                  hoverable
                   withBigMargin
                   title="Selected"
+                  shadow="diffuse"
                 >
                   <List>
                     {overview.fields.map((fieldId) => {
@@ -248,7 +249,11 @@ const AppActionManageObjectOverviewEditor: React.FC<{
             </Grid>
             <Grid item xs={12}>
               <UI.Animations.AnimationItem>
-                <context.UI.Design.Card hoverable withBigMargin title="Buttons">
+                <context.UI.Design.Card
+                  withBigMargin
+                  title="Buttons"
+                  shadow="diffuse"
+                >
                   <Grid container spacing={3}>
                     <Grid item xs={4}>
                       <context.UI.Inputs.Select

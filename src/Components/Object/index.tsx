@@ -347,23 +347,27 @@ const ViewObject: React.FC<{
 
   useEffect(() => {
     if (appliedObject && appliedModel) {
-      setPageTitle((appliedObject?.data || {})[appliedModel.primary]);
-      // Register as recently accessed
-      let currentRecents = localStorage.getItem(
-        `recents-${appliedObject.objectId}`
-      )
-        ? JSON.parse(localStorage.getItem(`recents-${appliedObject.objectId}`))
-        : {};
-      currentRecents[appliedObject._id] = {
-        lastAccessed: new Date(),
-        primary: appliedObject.data[appliedModel.primary],
-        key: appliedObject._id,
-      };
+      if (appliedObject._id) {
+        setPageTitle((appliedObject?.data || {})[appliedModel.primary]);
+        // Register as recently accessed
+        let currentRecents = localStorage.getItem(
+          `recents-${appliedObject.objectId}`
+        )
+          ? JSON.parse(
+              localStorage.getItem(`recents-${appliedObject.objectId}`)
+            )
+          : {};
+        currentRecents[appliedObject._id] = {
+          lastAccessed: new Date(),
+          primary: appliedObject.data[appliedModel.primary],
+          key: appliedObject._id,
+        };
 
-      localStorage.setItem(
-        `recents-${appliedObject.objectId}`,
-        JSON.stringify(currentRecents)
-      );
+        localStorage.setItem(
+          `recents-${appliedObject.objectId}`,
+          JSON.stringify(currentRecents)
+        );
+      }
     }
 
     map(appliedModel?.fields || {}, (field, key) => {

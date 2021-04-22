@@ -45,6 +45,8 @@ import find from "lodash/find";
 import filterLodash from "lodash/filter";
 import RenderInterface from "../../RenderInterface";
 import FaIcon from "../../Icons";
+import { MdMergeType } from "react-icons/md";
+import MergeUI from "../Merge/MergeUI";
 
 const Overview: React.FC<{
   layoutId?: string;
@@ -654,6 +656,32 @@ const Overview: React.FC<{
                       <FaTrash />
                     </ListItemIcon>
                     Delete
+                  </MenuItem>
+                ) : multiButton === "merge" ? (
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+
+                      context.setDialog({
+                        display: true,
+                        title: `Merge ${model.name_plural}`,
+                        size: "xl",
+                        content: (
+                          <MergeUI
+                            context={context}
+                            model={model}
+                            ids={selected}
+                          />
+                        ),
+                      });
+
+                      setSelected([]);
+                    }}
+                  >
+                    <ListItemIcon style={{ minWidth: 32 }}>
+                      <MdMergeType />
+                    </ListItemIcon>
+                    Merge
                   </MenuItem>
                 ) : (
                   <MenuItem

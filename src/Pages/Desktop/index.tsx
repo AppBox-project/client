@@ -258,7 +258,7 @@ const AppBar: React.FC<{ currentApp: string }> = ({ currentApp }) => {
         }}
         PaperProps={{
           elevation: 0,
-          style: { backgroundColor: "transparent", width: 200 },
+          style: { backgroundColor: "transparent", width: 300 },
         }}
       >
         {appContextMenuApp && (

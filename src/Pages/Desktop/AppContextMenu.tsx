@@ -5,7 +5,6 @@ import { useGlobal } from "reactn";
 import Card from "../../Components/Design/Card";
 import { AppType } from "../../Utils/Types";
 import { AppContext } from "../../Components/Apps/Apps/AppContext";
-import { useHistory } from "react-router-dom";
 import { Action } from "../../Components/Apps/Apps/AppUI/DesktopLayout";
 import Loading from "../../Components/Loading";
 import RecentList from "../../Components/RecentList";
@@ -24,7 +23,6 @@ const AppContextMenu: React.FC<{ app: AppType; onClose: () => void }> = ({
   // Vars
   const [list, setList] = useState<Action[]>();
   const [gUser] = useGlobal<any>("user");
-  const history = useHistory();
   const [context, setContext] = useState<AppContext>();
   const [gTheme] = useGlobal<any>("theme");
   const [historyMenuEl, setHistoryMenuEl] = React.useState(null);
@@ -84,6 +82,7 @@ const AppContextMenu: React.FC<{ app: AppType; onClose: () => void }> = ({
                       .map((action) => nl.push(action));
                   } else {
                     // No frquency data available, use first 5 entries
+                    actions.slice(0, 5).map((action) => nl.push(action));
                   }
                 }
 
@@ -143,7 +142,14 @@ const AppContextMenu: React.FC<{ app: AppType; onClose: () => void }> = ({
           )}
         </Card>
       </Popover>
-      <Card title={app.data.name} centerTitle titleDivider withoutPadding>
+      <Card
+        title={app.data.name}
+        withBigMargin
+        centerTitle
+        titleDivider
+        titleInPrimaryColor
+        withoutPadding
+      >
         <List disablePadding>
           {list ? (
             list.length > 0 ? (

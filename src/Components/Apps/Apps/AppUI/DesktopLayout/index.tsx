@@ -89,7 +89,8 @@ const AppUIDesktop: React.FC<{
           titleDivider
           titleInPrimaryColor
           withoutPadding
-          hoverable
+          shadow="diffuse"
+          style={{ width: 200 }}
         >
           {shortcuts?.model ? (
             <RecentList

@@ -25,6 +25,7 @@ export interface CardProps {
   image?: string;
   onClick?: () => void;
   overflow?: "none" | "auto" | "visible";
+  shadow?: "default" | "sharp" | "diffuse" | "dreamy" | "short" | "long";
 }
 interface button {
   label: string;
@@ -49,6 +50,7 @@ const Card: React.FC<CardProps> = ({
   onClick,
   image,
   overflow,
+  shadow,
 }) => {
   const [gTheme] = useGlobal<any>("theme");
 
@@ -71,7 +73,9 @@ const Card: React.FC<CardProps> = ({
     <div
       className={`Card ${styles.root} ${
         hoverable && styles.hoverable
-      } ${className} `}
+      } ${className} ${
+        shadow !== undefined && shadow !== "default" && styles[shadow]
+      }`}
       onClick={onClick}
       style={{
         ...margins,
