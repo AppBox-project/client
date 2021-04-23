@@ -671,6 +671,9 @@ const Overview: React.FC<{
                             context={context}
                             model={model}
                             ids={selected}
+                            onComplete={() =>
+                              context.setDialog({ display: false })
+                            }
                           />
                         ),
                       });

@@ -503,7 +503,7 @@ export class AppContext {
   };
 
   deleteObjects = (type, filter) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       Server.emit("appDeletesObject", {
         requestId,
@@ -561,7 +561,7 @@ export class AppContext {
   };
 
   updateModel = (modelType, newData, modelId) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       Server.emit("appUpdatesModel", {
         newModel: newData,
@@ -582,7 +582,7 @@ export class AppContext {
   };
 
   updateObject = (type, newObject, id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const requestId = uniqid();
       Server.emit("appUpdatesObject", {
         requestId,

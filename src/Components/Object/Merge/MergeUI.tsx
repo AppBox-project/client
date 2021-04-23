@@ -15,12 +15,14 @@ import FieldDisplay from "../FieldDisplay";
 import styles from "./styles.module.scss";
 import find from "lodash/find";
 import set from "lodash/set";
+import filter from "lodash/filter";
 
 const MergeUI: React.FC<{
   context: AppContextType;
   model: ModelType;
   ids: string[];
-}> = ({ context, model, ids }) => {
+  onComplete?: () => void;
+}> = ({ context, model, ids, onComplete }) => {
   // Vars
   const [objects, setObjects] = useState<ObjectType[]>();
   const [primaryId, setPrimaryId] = useState<string>();
@@ -146,7 +148,15 @@ const MergeUI: React.FC<{
               );
             }
           });
-          console.log(newObject);
+          context
+            .updateObject(model.key, newObject["data"], newObject._id)
+            .then(() => {
+              context
+                .deleteObjects(model.key, {
+                  _id: { $in: filter(ids, (v) => v !== newObject._id) },
+                })
+                .then(() => onComplete && onComplete());
+            });
         }}
       >
         Merge
