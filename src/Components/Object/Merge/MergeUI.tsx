@@ -128,11 +128,9 @@ const MergeUI: React.FC<{
         color="primary"
         style={{ float: "right" }}
         onClick={() => {
-          const newObject = {};
-
-          // _id
-          const objId = fieldSelections["_id"] || primaryId || objects[0]._id;
-          newObject["_id"] = objId;
+          const newObject = {
+            _id: fieldSelections["_id"] || primaryId || objects[0]._id,
+          };
 
           // Data
           // Default to primary
@@ -140,11 +138,13 @@ const MergeUI: React.FC<{
 
           // Selected fields
           map(fieldSelections, (select, key) => {
-            set(
-              newObject,
-              `data.${key}`,
-              find(objects, (o) => o._id === select).data[key]
-            );
+            if (key !== "_idd") {
+              set(
+                newObject,
+                `data.${key}`,
+                find(objects, (o) => o._id === select).data[key]
+              );
+            }
           });
           console.log(newObject);
         }}

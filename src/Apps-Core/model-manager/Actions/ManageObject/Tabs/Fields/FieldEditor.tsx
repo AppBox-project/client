@@ -19,7 +19,6 @@ import {
 } from "@material-ui/core";
 import { FaPlus, FaTrashAlt, FaSave } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
-import { baseUrl } from "../../../../../../Utils/Utils";
 
 const AppActionManageObjectTabFieldsEditor: React.FC<{
   match: { params: { detailId } };
@@ -190,7 +189,7 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
               title="Data type"
               overflow="visible"
             >
-              <Grid container>
+              <Grid container spacing={3}>
                 <Grid
                   item
                   xs={12}
@@ -416,19 +415,41 @@ const AppActionManageObjectTabFieldsEditor: React.FC<{
                   </>
                 )}
                 {field.type === "richtext" && (
-                  <Grid item xs={6}>
-                    <UI.Inputs.Select
-                      label="Type"
-                      value={field.typeArgs ? field.typeArgs.type : "regular"}
-                      options={[{ value: "regular", label: "Regular" }]}
-                      onChange={(value) => {
-                        setField({
-                          ...field,
-                          typeArgs: { ...field.typeArgs, type: value },
-                        });
-                      }}
-                    />
-                  </Grid>
+                  <>
+                    <Grid item xs={6}>
+                      <UI.Inputs.Select
+                        label="Variant"
+                        value={field?.typeArgs?.variant || "regular"}
+                        options={[
+                          { value: "regular", label: "Regular" },
+                          { value: "inline", label: "Inline" },
+                        ]}
+                        onChange={(value) => {
+                          setField({
+                            ...field,
+                            typeArgs: { ...field.typeArgs, variant: value },
+                          });
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <UI.Inputs.Select
+                        label="Toolbar"
+                        value={field?.typeArgs?.toolbar || "default"}
+                        options={[
+                          { value: "default", label: "Default" },
+                          { value: "full", label: "Full" },
+                          { value: "minimal", label: "Minimal" },
+                        ]}
+                        onChange={(value) => {
+                          setField({
+                            ...field,
+                            typeArgs: { ...field.typeArgs, toolbar: value },
+                          });
+                        }}
+                      />
+                    </Grid>
+                  </>
                 )}
                 {field.type === "formula" && (
                   <Grid item xs={12}>

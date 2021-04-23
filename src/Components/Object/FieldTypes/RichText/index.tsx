@@ -31,6 +31,8 @@ const FieldTypeRichText: React.FC<{
       onChange={(value) => {
         onChange(value);
       }}
+      variant={field.typeArgs?.variant}
+      toolbar={field?.typeArgs?.toolbar}
     />
   );
 };

@@ -266,6 +266,8 @@ const ObjectLayoutItemField: React.FC<{
                 }}
                 placeholder={modelField.name}
                 value={objectField}
+                variant={modelField.typeArgs?.variant}
+                toolbar={modelField?.typeArgs?.toolbar}
               />
             )}
             {modelField.type === "color" && (

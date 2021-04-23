@@ -54,6 +54,8 @@ export interface ModelFieldType {
     asBanner?: boolean;
     numberType?: "regular" | "currency";
     asColor?;
+    variant?: "regular" | "inline";
+    toolbar?: "regular" | "minimal" | "full";
   };
 }
 
