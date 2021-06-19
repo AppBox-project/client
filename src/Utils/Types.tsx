@@ -133,6 +133,11 @@ export interface ModelType {
   overviews: [ModelOverviewType];
   lists?: { [key: string]: ModelListType };
   rules?: { [key: string]: ModelRuleType };
+  duplicate_rules: {
+    label: string;
+    required?: string[];
+    optional?: string[];
+  }[];
   preview?: {
     enabled: boolean;
     ModelListTypepicture: string;
