@@ -26,7 +26,7 @@ const AppSettingsInterfaceVariables: React.FC<{
 }> = ({ newInterface, context, setNewInterface, modelList }) => {
   return (
     <List>
-      {map(newInterface.data.data.variables.actions, (value, key) => (
+      {map(newInterface.data.data.variables, (value, key) => (
         <ListItem
           key={key}
           button

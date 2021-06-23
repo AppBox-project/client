@@ -1035,7 +1035,7 @@ export const AppSettingsInterfaceUIOverview: React.FC<{
   setRightUITab;
 }> = ({ newInterface, setSelectedInterface, setRightUITab }) => (
   <List>
-    {map(newInterface.data.data.interfaces.content, (interf, key) => (
+    {map(newInterface.data.data.interfaces, (interf, key) => (
       <ListItem
         key={key}
         button
