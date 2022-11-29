@@ -58,7 +58,7 @@
     "@types/socket.io-client": "^1.4.34",
     "@types/uniqid": "^5.2.0",
     "cra-bundle-analyzer": "^0.1.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "prettier": "^2.0.5",
     "react-scripts": "^4.0.3",
     "typescript": "~3.9.5"
